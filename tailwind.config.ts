@@ -11,6 +11,11 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        celeste: "#0176DE",
+        azul: "#173F8A",
+        azul_oscuro: "#03122E",
+        amarillo: "#FEC60D",
+        amarillo_oscuro: "#E3AE00"
       },
     },
   },
