@@ -1,8 +1,40 @@
 import Image from "next/image";
+import { Card } from "./components/Card"
 
 export default function Home() {
   return (
-      <main className="flex gap-8 row-start-2 items-center sm:items-start pt-5 px-10">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-2 row-start-2 items-center sm:items-start">
+
+        <div className="h-50 grid grid-cols-2 p-8">
+          <div className="text-stonecol-span-1">
+            <Card
+              team="FrontEnd"
+              image="https://nextjs.org/icons/next.svg"
+              people={5}
+            ></Card>
+          </div>
+          <div className="text-stone col-span-1">
+            <Card
+              team="BackEnd"
+              image="https://nextjs.org/icons/next.svg"
+              people={15}
+            ></Card>
+          </div>
+        </div>
+
+        <div>
+      </div>
+        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+          <li className="mb-2">
+            Biba osuc{" "}
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
+              app/page.tsx
+            </code>
+            .
+          </li>
+          <li>Biba osuc</li>
+        </ol>
 
       <section className="w-1/2 flex justify-left items-start ">
       <p>
