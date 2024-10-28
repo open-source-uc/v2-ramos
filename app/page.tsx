@@ -1,53 +1,44 @@
 import Image from "next/image";
-import { Card } from "./components/Card"
+import { Card } from "./components/Card";
+import TarCurso from "./components/TarjetaCurso";
 
 export default function Home() {
+  const ofgs: Array<string> = ["Curso de Python", "Curso de JavaScript", "Curso de React", "Curso de Next.js"];
+  const ofgs2: Array<string> = [
+    "Historia de Grecia, Roma y Egipto",
+    "Historia de la Edad Media",
+    "Historia de la Edad Moderna",
+    "Historia de la Edad Contemporánea",
+  ];
+  const ofgs3: Array<string> = ["Algebra Lineal", "Calculo Diferencial", "Calculo Integral", "Calculo Vectorial"];
+  const cursos: Record<string, Array<string>> = { Programacion: ofgs, Historia: ofgs2, Matematicas: ofgs3 };
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-2 row-start-2 items-center sm:items-start">
-
+    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
+      <main className="row-start-2 flex flex-col items-center gap-2 sm:items-start">
         <div className="h-50 grid grid-cols-2 p-8">
           <div className="text-stonecol-span-1">
-            <Card
-              team="FrontEnd"
-              image="https://nextjs.org/icons/next.svg"
-              people={5}
-            ></Card>
+            <Card team="FrontEnd" image="https://nextjs.org/icons/next.svg" people={5}></Card>
           </div>
           <div className="text-stone col-span-1">
-            <Card
-              team="BackEnd"
-              image="https://nextjs.org/icons/next.svg"
-              people={15}
-            ></Card>
+            <Card team="BackEnd" image="https://nextjs.org/icons/next.svg" people={15}></Card>
           </div>
         </div>
 
-        <div>
-      </div>
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+        <div></div>
+        <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left">
           <li className="mb-2">
             Biba osuc{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
+            <code className="rounded bg-black/[.05] px-1 py-0.5 font-semibold dark:bg-white/[.06]">app/page.tsx</code>.
           </li>
           <li>Biba osuc</li>
         </ol>
 
-      <section className="w-1/2 flex justify-left items-start ">
-      <p>
-      Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas "Letraset", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.
-
-      </p>
-        
-      </section>  
-        
-      <section className="w-1/2 flex justify-center items-start">
-      <Image src="/assets/cuadrado.png" alt="Logo" width={200} height={200} />
-
-      </section>
+        <section className="grid grid-cols-3 gap-4">
+          {Object.keys(cursos).map((curso, index) => (
+            <TarCurso key={index} titulo={curso} cursos={cursos[curso]} />
+          ))}
+        </section>
       </main>
+    </div>
   );
 }
