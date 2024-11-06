@@ -15,7 +15,7 @@ const config: Config = {
         azul: "#173F8A",
         azul_oscuro: "#03122E",
         amarillo: "#FEC60D",
-        amarillo_oscuro: "#E3AE00"
+        amarillo_oscuro: "#E3AE00",
       },
     },
   },
