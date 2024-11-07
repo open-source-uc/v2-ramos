@@ -3,10 +3,14 @@ export default function Home() {
     <header className="flex h-10 w-full items-center justify-between bg-celeste px-4">
       <div className="flex items-center space-x-2">
         <img src="/assets/logo.jpg" alt="Logo" className="h-6 w-6" />
-        <h1 className="font-bold text-white">Ramos UC</h1>
+        <a href="/"> 
+        <h1 className="text-white font-bold">Ramos UC</h1>
+        </a>
       </div>
 
-      <button className="rounded bg-amarillo px-2 py-1 text-sm text-white">Login</button>
+      <button className="bg-amarillo text-white text-sm px-2 py-1 rounded hover:bg-orange-200">
+        Login
+      </button>
     </header>
   );
 }
