@@ -16,8 +16,9 @@ export default function TarCurso({ titulo, cursos }: TarCursoProps) {
 
   return (
     <div 
-      className="m-2 h-full w-full rounded-lg border p-8 hover:bg-slate-100"
+      className="m-2 h-full w-full rounded-lg border p-8 hover:bg-slate-100 cursor-pointer"
       onClick={() => goToCurso(titulo)}
+      
     >
       <div className="relative h-full w-full">
         <div className="flex h-full w-full flex-col justify-end">
