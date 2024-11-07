@@ -14,14 +14,6 @@ export default function Home() {
   return (
     <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
       <main className="row-start-2 flex flex-col items-center gap-2 sm:items-start">
-        <div className="h-50 grid grid-cols-2 p-8">
-          <div className="text-stonecol-span-1">
-            <Card team="FrontEnd" image="https://nextjs.org/icons/next.svg" people={5} />
-          </div>
-          <div className="text-stone col-span-1">
-            <Card team="BackEnd" image="https://nextjs.org/icons/next.svg" people={15} />
-          </div>
-        </div>
 
         <div />
         <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm text-black sm:text-left dark:text-white">
