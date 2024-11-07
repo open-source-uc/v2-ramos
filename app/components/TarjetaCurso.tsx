@@ -23,7 +23,7 @@ export default function TarCurso({ titulo, cursos }: TarCursoProps) {
       <div className="relative h-full w-full">
         <div className="flex h-full w-full flex-col justify-end">
           <h2 className="pb-4 text-center text-lg">{titulo}</h2>
-          <hr className="m-3 pb-2"></hr>
+          <hr className="m-3 pb-2" />
           <div>
             <ol className="list-outside list-decimal">
               {cursos.map((curso, index) => (

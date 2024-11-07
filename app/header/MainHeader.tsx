@@ -1,7 +1,6 @@
 export default function Home() {
   return (
-    <header className="w-full bg-celeste h-10 flex items-center justify-between px-4">
-
+    <header className="flex h-10 w-full items-center justify-between bg-celeste px-4">
       <div className="flex items-center space-x-2">
         <img src="/assets/logo.jpg" alt="Logo" className="h-6 w-6" />
         <a href="/"> 
