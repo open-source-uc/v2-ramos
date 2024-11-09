@@ -1,4 +1,3 @@
-import { Card } from "./components/Card";
 import TarCurso from "./components/TarjetaCurso";
 
 export default function Home() {
