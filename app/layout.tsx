@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-light-2 dark:bg-dark-4 antialiased`}>
         <div className="h-dvh w-full flex-col justify-center">
           <MainHeader />
 

@@ -15,7 +15,7 @@ export default function Home() {
       <main className="row-start-2 flex flex-col items-center gap-2 sm:items-start">
 
         <div />
-        <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left">
+        <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm text-black sm:text-left dark:text-white">
           <li className="mb-2">
             Biba osuc{" "}
             <code className="rounded bg-black/[.05] px-1 py-0.5 font-semibold dark:bg-white/[.06]">app/page.tsx</code>.
