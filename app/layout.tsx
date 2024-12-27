@@ -28,7 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-light-2 dark:bg-dark-4 antialiased`}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Ramos Uc</title>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-light-2 antialiased dark:bg-dark-4`}>
         <div className="h-dvh w-full flex-col justify-center">
           <MainHeader />
 
