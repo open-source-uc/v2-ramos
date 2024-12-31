@@ -11,7 +11,7 @@ export default function TarCurso({ titulo, cursos }: TarCursoProps) {
   const router = useRouter();
 
   const goToCurso = (nombreC: string) => {
-    // split '-' 
+    // split '-'
     nombreC = nombreC.split(" ")[0];
     router.push(`/cursos/${nombreC}`);
   };
@@ -23,9 +23,7 @@ export default function TarCurso({ titulo, cursos }: TarCursoProps) {
     >
       <div className="relative h-full w-full">
         <div className="flex h-full w-full flex-col justify-end text-gray-800 dark:text-gray-200">
-          <h2 className="pb-4 text-center text-2xl font-semibold text-cyan-600 dark:text-cyan-400">
-            {titulo}
-          </h2>
+          <h2 className="pb-4 text-center text-2xl font-semibold text-cyan-600 dark:text-cyan-400">{titulo}</h2>
           <hr className="m-3 border-t-2 border-gray-300 dark:border-gray-600" />
           <div>
             <ol className="list-outside list-decimal pl-5">
