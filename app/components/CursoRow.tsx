@@ -4,43 +4,30 @@ import { useRouter } from "next/navigation";
 type CursoRowProps = {
   curso?: Curso;
   isLogged?: boolean;
+  categoria: string;
 };
 
-export default function CursoRow({ curso, isLogged }: CursoRowProps) {
+export default function CursoRow({ curso, isLogged, categoria }: CursoRowProps) {
   const router = useRouter();
   if (!curso) {
     return null;
   }
 
-
   const handleRowClick = () => {
-    router.push(`/cursos/ARTS/${curso.nrc}`);
+    router.push(`/cursos/${categoria}/${curso.nrc}`);
   };
 
   return (
     <tr
       onClick={handleRowClick}
-      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 
-                 hover:bg-slate-100 dark:hover:bg-gray-700 cursor-pointer"
+      className="cursor-pointer border-b bg-white hover:bg-slate-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
-      <td className="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white">
-        {curso.nrc}
-      </td>
-      <td className="px-2 py-4 text-black dark:text-white text-center">
-        {curso.nombre_curso}
-      </td>
-      <td className="px-2 py-4 text-black dark:text-white text-center">
-        {curso.creditos}
-      </td>
-      <td className="px-6 py-4 text-cyan-600 font-bold text-center">
-        {curso.mas}
-      </td>
-      <td className="px-6 py-4 text-red-500 font-bold text-center">
-        {curso.menos}
-      </td>
-      <td className="px-6 py-4 text-black dark:text-white text-center">
-        {curso.promedio}
-      </td>
+      <td className="whitespace-nowrap px-6 py-4 text-center font-medium text-gray-900 dark:text-white">{curso.nrc}</td>
+      <td className="px-2 py-4 text-center text-black dark:text-white">{curso.nombre_curso}</td>
+      <td className="px-2 py-4 text-center text-black dark:text-white">{curso.creditos}</td>
+      <td className="px-6 py-4 text-center font-bold text-cyan-600">{curso.mas}</td>
+      <td className="px-6 py-4 text-center font-bold text-red-500">{curso.menos}</td>
+      <td className="px-6 py-4 text-center text-black dark:text-white">{curso.promedio}</td>
     </tr>
   );
 }
