@@ -1,4 +1,5 @@
 import { SeverAPIClient } from "../api/RPC";
+import CourseInfo from "../components/CourseInfo";
 
 type Params = Promise<{ sigle: string }>;
 export default async function page({ params }: { params: Params }) {
@@ -17,7 +18,9 @@ export default async function page({ params }: { params: Params }) {
   }
   const data = await res.json();
 
-  return <h1>{data.course.name}</h1>;
+  return (
+    <CourseInfo course={data.course}></CourseInfo>
+  );
 }
 
 export const runtime = "edge";

@@ -25,7 +25,7 @@ export const UserAPIClient = async () => {
     throw new Error("No token found");
   }
 
-  hc<AppType>(OSUC_API_URL ?? "http://localhost:8787/", {
+  return hc<AppType>(OSUC_API_URL ?? "http://localhost:8787/", {
     headers: {
       Authorization: `Bearer ${token.value}`,
       "X-User-Agent": "hc",
