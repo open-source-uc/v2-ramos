@@ -4,6 +4,187 @@ declare const app: import("@hono/zod-openapi").OpenAPIHono<{
 declare const routes: import("@hono/zod-openapi").OpenAPIHono<{
     Bindings: import("./lib/honoBase").Bindings;
 }, import("hono/types").MergeSchemaPath<{
+    "/list": {
+        $get: {
+            input: {};
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {};
+            output: {
+                permissions: {
+                    id: number;
+                    permission_name: string;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $get: {
+            input: {};
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {};
+            output: {
+                users: {
+                    nickname: string;
+                    admission_year: number;
+                    password: string;
+                    email_hash: string;
+                    career_id: number;
+                    token_version: string;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        } | {
+            input: {};
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 404;
+        };
+    };
+} & {
+    "/:email": {
+        $get: {
+            input: {
+                param: {
+                    email: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                param: {
+                    email: string;
+                };
+            };
+            output: {
+                user: {
+                    nickname: string;
+                    admission_year: number;
+                    password: string;
+                    email_hash: string;
+                    career_id: number;
+                    token_version: string;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        } | {
+            input: {
+                param: {
+                    email: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 404;
+        };
+    };
+}, "/admin/user/manager"> & import("hono/types").MergeSchemaPath<{
+    "/:email_hash": {
+        $get: {
+            input: {
+                param: {
+                    email_hash: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                param: {
+                    email_hash: string;
+                };
+            };
+            output: {
+                permissions: {
+                    permission_id: number;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    email_hash: string;
+                    permission_id: number;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 201;
+        } | {
+            input: {
+                json: {
+                    email_hash: string;
+                    permission_id: number;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        };
+    };
+} & {
+    "/": {
+        $delete: {
+            input: {
+                json: {
+                    email_hash: string;
+                    permission_id: number;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                json: {
+                    email_hash: string;
+                    permission_id: number;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+}, "/admin/user/permission"> & import("hono/types").MergeSchemaPath<{
     "/course": {
         $post: {
             input: {
@@ -327,176 +508,6 @@ declare const routes: import("@hono/zod-openapi").OpenAPIHono<{
         };
     };
 }, "/user/panel"> & import("hono/types").MergeSchemaPath<{
-    "/": {
-        $get: {
-            input: {
-                query: {
-                    start_promedio?: string | undefined;
-                    school_id?: string | undefined;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 500;
-        } | {
-            input: {
-                query: {
-                    start_promedio?: string | undefined;
-                    school_id?: string | undefined;
-                };
-            };
-            output: {
-                courses: {
-                    name: string;
-                    school_id: number;
-                    course_id: number;
-                    sigle: string;
-                    category_id: number;
-                    area_id: number;
-                    credits: number;
-                    promedio: number;
-                    promedio_creditos_est: number;
-                }[];
-            };
-            outputFormat: "json";
-            status: 200;
-        };
-    };
-} & {
-    "/ofg": {
-        $get: {
-            input: {
-                query: {
-                    area_id: string;
-                    start_promedio?: string | undefined;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 500;
-        } | {
-            input: {
-                query: {
-                    area_id: string;
-                    start_promedio?: string | undefined;
-                };
-            };
-            output: {
-                courses: {
-                    name: string;
-                    school_id: number;
-                    course_id: number;
-                    sigle: string;
-                    category_id: number;
-                    area_id: number;
-                    credits: number;
-                    promedio: number;
-                    promedio_creditos_est: number;
-                }[];
-            };
-            outputFormat: "json";
-            status: 200;
-        };
-    };
-} & {
-    "/course_id/:course_id": {
-        $get: {
-            input: {
-                param: {
-                    course_id: string;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 500;
-        } | {
-            input: {
-                param: {
-                    course_id: string;
-                };
-            };
-            output: {
-                course: {
-                    name: string;
-                    school_id: number;
-                    course_id: number;
-                    sigle: string;
-                    category_id: number;
-                    area_id: number;
-                    credits: number;
-                    promedio: number;
-                    promedio_creditos_est: number;
-                };
-            };
-            outputFormat: "json";
-            status: 200;
-        } | {
-            input: {
-                param: {
-                    course_id: string;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 404;
-        };
-    };
-} & {
-    "/sigle/:sigle": {
-        $get: {
-            input: {
-                param: {
-                    sigle: string;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 500;
-        } | {
-            input: {
-                param: {
-                    sigle: string;
-                };
-            };
-            output: {
-                course: {
-                    name: string;
-                    school_id: number;
-                    course_id: number;
-                    sigle: string;
-                    category_id: number;
-                    area_id: number;
-                    credits: number;
-                    promedio: number;
-                    promedio_creditos_est: number;
-                };
-            };
-            outputFormat: "json";
-            status: 200;
-        } | {
-            input: {
-                param: {
-                    sigle: string;
-                };
-            };
-            output: {
-                message: string;
-            };
-            outputFormat: "json";
-            status: 404;
-        };
-    };
-}, "/course"> & import("hono/types").MergeSchemaPath<{
     "/": {
         $get: {
             input: {
@@ -886,6 +897,176 @@ declare const routes: import("@hono/zod-openapi").OpenAPIHono<{
             status: 401;
         };
     };
-}, "/auth">, "/">;
+}, "/auth"> & import("hono/types").MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {
+                query: {
+                    start_promedio?: string | undefined;
+                    school_id?: string | undefined;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                query: {
+                    start_promedio?: string | undefined;
+                    school_id?: string | undefined;
+                };
+            };
+            output: {
+                courses: {
+                    name: string;
+                    school_id: number;
+                    course_id: number;
+                    sigle: string;
+                    category_id: number;
+                    area_id: number;
+                    credits: number;
+                    promedio: number;
+                    promedio_creditos_est: number;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/ofg": {
+        $get: {
+            input: {
+                query: {
+                    area_id: string;
+                    start_promedio?: string | undefined;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                query: {
+                    area_id: string;
+                    start_promedio?: string | undefined;
+                };
+            };
+            output: {
+                courses: {
+                    name: string;
+                    school_id: number;
+                    course_id: number;
+                    sigle: string;
+                    category_id: number;
+                    area_id: number;
+                    credits: number;
+                    promedio: number;
+                    promedio_creditos_est: number;
+                }[];
+            };
+            outputFormat: "json";
+            status: 200;
+        };
+    };
+} & {
+    "/course_id/:course_id": {
+        $get: {
+            input: {
+                param: {
+                    course_id: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                param: {
+                    course_id: string;
+                };
+            };
+            output: {
+                course: {
+                    name: string;
+                    school_id: number;
+                    course_id: number;
+                    sigle: string;
+                    category_id: number;
+                    area_id: number;
+                    credits: number;
+                    promedio: number;
+                    promedio_creditos_est: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        } | {
+            input: {
+                param: {
+                    course_id: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 404;
+        };
+    };
+} & {
+    "/sigle/:sigle": {
+        $get: {
+            input: {
+                param: {
+                    sigle: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 500;
+        } | {
+            input: {
+                param: {
+                    sigle: string;
+                };
+            };
+            output: {
+                course: {
+                    name: string;
+                    school_id: number;
+                    course_id: number;
+                    sigle: string;
+                    category_id: number;
+                    area_id: number;
+                    credits: number;
+                    promedio: number;
+                    promedio_creditos_est: number;
+                };
+            };
+            outputFormat: "json";
+            status: 200;
+        } | {
+            input: {
+                param: {
+                    sigle: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: 404;
+        };
+    };
+}, "/course">, "/">;
 export default app;
 export type AppType = typeof routes;

@@ -1,25 +1,22 @@
+import { SeverAPIClient } from "./api/RPC";
 
-import Client from "./api/clientRpc";
 
 type SearchParams = Promise<{ page?: number }>;
 export default async function page({ searchParams }: { searchParams: SearchParams }) {
-    const OSUC_API_TOKEN = process.env.OSUC_API_TOKEN;
 
-    const query = await searchParams;
-    const res = await Client.course.$get({
+    const res = await SeverAPIClient.course.$get({
         query: {
-            start_promedio: '0'
-        },
-    }, {
-        headers: {
-            'Authorization': `Bearer ${OSUC_API_TOKEN}`
+            start_promedio: '2'
         }
     })
+
     if (!res.ok) {
         console.log(res)
-        return
+        return <div>Failed to load</div>
     }
-    const data = await res.json();
+
+    const data = await res.json()
+
     return (
         <>
             <div className="w-full py-5 text-center">
@@ -54,7 +51,7 @@ export default async function page({ searchParams }: { searchParams: SearchParam
                             </div>
                         </section>
                         <section>
-                            <a href={`/${course.course_id}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <a href={`/${course.sigle}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Ver Críticas
                             </a>
                         </section>
