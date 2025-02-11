@@ -1,76 +1,70 @@
-"use client";
-import TarCurso from "./components/TarjetaCurso";
-import { useEffect, useState } from "react";
 
-// Aqui hay que hacer el fetch a la lista de OFGS
-// seria algo asi como  api/ofgs -> [ cursos : {nombre : "ARTES", id = 0 ....}]
-// despues para hacer el fetch de los cursos del ofg [en la tabla]
-// api/ofgs/0 -> [ cursos : {nombre : "Dibujo", nrc = 2001, creditos: 10  ....}]
+import Client from "./api/clientRpc";
 
-export default function Home() {
-  const [cursos, setCursos] = useState<Record<string, Array<string>>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type SearchParams = Promise<{ page?: number }>;
+export default async function page({ searchParams }: { searchParams: SearchParams }) {
+    const OSUC_API_TOKEN = process.env.OSUC_API_TOKEN;
 
-  useEffect(() => {
-    const fetchCursos = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("assets/cursosdummy.json");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    const query = await searchParams;
+    const res = await Client.course.$get({
+        query: {
+            start_promedio: '0'
+        },
+    }, {
+        headers: {
+            'Authorization': `Bearer ${OSUC_API_TOKEN}`
         }
-        const data = await response.json();
-        setCursos(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error fetching courses");
-        console.error("Error fetching courses:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCursos();
-  }, []);
-
-  if (loading) {
+    })
+    if (!res.ok) {
+        console.log(res)
+        return
+    }
+    const data = await res.json();
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
-      </div>
-    );
-  }
+        <>
+            <div className="w-full py-5 text-center">
+                <h2 className="text-4xl font-extrabold dark:text-white">Ramos UC | Top OFGs</h2>
 
-  if (error) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-red-600">Error loading courses: {error}</div>
-      </div>
-    );
-  }
-  return (
-    <>
-      <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-        {/* <main className="row-start-2 flex flex-col items-center gap-2 sm:items-start"> */}
-        <div className="mx-auto mb-3">
-          <img
-            src="assets/logo.jpg"
-            alt=""
-            style={{ overflow: "hidden", borderRadius: "50%", mixBlendMode: "multiply" }}
-          />
-        </div>
-        {Object.keys(cursos).length > 0 ? (
-          <section className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Object.keys(cursos).map((curso) => (
-              <TarCurso key={curso} titulo={curso} cursos={cursos[curso]} />
-            ))}
-          </section>
-        ) : (
-          <div className="text-center text-gray-500">No courses found</div>
-        )}
+            </div>
+            <section className="flex w-full gap-5 flex-wrap justify-center">
+                {data.courses.map((course, index) => (
+                    <article
+                        key={index}
+                        className="max-w-sm w-full p-6 order border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-between min-h-[250px] gap-3"
+                    >
+                        <section>
+                            <a href="#">
+                                <h4 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    {course.sigle} - {course.name}
+                                </h4>
+                            </a>
+                            <div className="flex flex-col text-gray-500 list-disc list-inside dark:text-gray-400 text-lg font-semibold">
+                                <p>Promedio: <span className="font-bold">{course.promedio === -1 ? 'N/A' : course.promedio}</span></p>
+                                <p>Créditos estimados: <span className="font-bold">{course.promedio_creditos_est === 0 ? 'N/A' : course.promedio_creditos_est}</span></p>
+                            </div>
+                        </section>
+                        <section className="flex justify-between items-start gap-4 text-lg">
+                            <div>
+                                <h5 className="text-lg font-semibold text-gray-900 dark:text-white">Detalles:</h5>
+                                <ul className="text-gray-500 list-disc list-inside dark:text-gray-400">
+                                    <li><span className="font-medium text-gray-700 dark:text-gray-300">Área:</span> {course.area_id}</li>
+                                    <li><span className="font-medium text-gray-700 dark:text-gray-300">Créditos:</span> {course.credits}</li>
+                                    <li><span className="font-medium text-gray-700 dark:text-gray-300">Escuela:</span> {course.school_id}</li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section>
+                            <a href={`/${course.course_id}`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Ver Críticas
+                            </a>
+                        </section>
 
-        {/* </main> */}
-      </div>
-    </>
-  );
+                    </article>
+                ))}
+            </section>
+
+        </>
+    );
 }
+
+

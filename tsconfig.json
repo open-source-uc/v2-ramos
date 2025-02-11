@@ -24,9 +24,15 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@hono/zod-openapi": [
+        "./node_modules/@hono/zod-openapi"
+      ],
+      "hono/": [
+        "./node_modules/hono/"
       ]
     },
-    "target": "ES2017"
+    "target": "ES2017",
   },
   "include": [
     "next-env.d.ts",
@@ -36,5 +42,5 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
 }
