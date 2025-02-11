@@ -19,3 +19,5 @@ export default async function page({ params }: { params: Params }) {
 
   return <h1>{data.course.name}</h1>;
 }
+
+export const runtime = 'edge';
