@@ -18,9 +18,7 @@ export default async function page({ params }: { params: Params }) {
   }
   const data = await res.json();
 
-  return (
-    <CourseInfo course={data.course}></CourseInfo>
-  );
+  return <CourseInfo course={data.course} />;
 }
 
 export const runtime = "edge";

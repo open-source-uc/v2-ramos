@@ -26,7 +26,7 @@ export default async function page({ searchParams }: { searchParams: SearchParam
       </div>
       <section className="flex w-full flex-wrap justify-center gap-5">
         {data.courses.map((course, index) => (
-          <CourseCard course={course} key={index}></CourseCard>
+          <CourseCard course={course} key={index} />
         ))}
       </section>
     </>
