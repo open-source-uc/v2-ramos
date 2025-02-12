@@ -22,7 +22,9 @@ export async function ActionLogin(prev: {
         json: body
     })
 
+    //@ts-ignore
     if (res.status === 400) {
+        //@ts-ignore
         const data = await res.json()
         return {
             errors: prev.errors + 1,
@@ -86,7 +88,9 @@ export async function ActionRegister(prev: any, formData: FormData) {
         json: body
     })
 
+    //@ts-ignore
     if (res.status === 400) {
+        //@ts-ignore
         const data = await res.json()
         return {
             errors: prev.errors + 1,
