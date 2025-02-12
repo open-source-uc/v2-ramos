@@ -25,14 +25,12 @@ export async function ActionLogin(
     json: body,
   });
 
-  //@ts-ignore
   if (res.status === 400) {
-    //@ts-ignore
     const data = await res.json();
     return {
       errors: prev.errors + 1,
       success: 0,
-      message: JSON.stringify(data),
+      message: data.message,
       body: body,
     };
   }
@@ -89,14 +87,12 @@ export async function ActionRegister(prev: any, formData: FormData) {
     json: body,
   });
 
-  //@ts-ignore
   if (res.status === 400) {
-    //@ts-ignore
     const data = await res.json();
     return {
       errors: prev.errors + 1,
       success: 0,
-      message: JSON.stringify(data),
+      message: data.message,
       body: body,
     };
   }
