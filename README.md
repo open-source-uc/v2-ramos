@@ -15,7 +15,7 @@ Para configurar el proyecto, sigue estos pasos:
 > [!IMPORTANT]
 > Debe llamarse **`.env.local`**
    ```env
-   OSUC_API_URL= // Obligatorio en desarrollo y producción
+   NEXT_PUBLIC_OSUC_API_URL= // Obligatorio en desarrollo y producción
    OSUC_API_TOKEN= // Obligatorio en desarrollo y producción
    ```
 
