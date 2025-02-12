@@ -1,94 +1,127 @@
-"use server";
-import { cookies } from "next/headers";
+"use server"
 
-export async function createUser(prev: any, formData: FormData) {
-  const body = {
-    email: formData.get("email")?.toString() ?? "",
-    password: formData.get("password")?.toString() ?? "",
-    nickname: formData.get("nickname")?.toString() ?? "",
-    admission_year: parseInt(formData.get("admission_year")?.toString() || "") || "",
-    carrer_name: formData.get("carrer_name")?.toString() ?? "",
-  };
-  const OSUC_API_URL = process.env.OSUC_API_URL;
-  if (!OSUC_API_URL) {
+import { SeverAPIClient } from "../api/RPC"
+import { cookies } from 'next/headers'
+
+export async function ActionLogin(prev: {
+    errors: number,
+    success: number,
+    message: string,
+    body: {
+        email: string,
+        password: string
+    }
+}, formData: FormData) {
+
+    const body = {
+        email: formData.get("email")?.toString() ?? '',
+        password: formData.get("password")?.toString() ?? ''
+    }
+
+    const res = await SeverAPIClient.auth.login.$post({
+        json: body
+    })
+
+    if (res.status === 400) {
+        const data = await res.json()
+        return {
+            errors: prev.errors + 1,
+            success: 0,
+            message: JSON.stringify(data),
+            body: body
+        }
+    }
+
+    if (res.status === 200) {
+        const data = await res.json()
+        const cookieStore = await cookies()
+        cookieStore.set('token', data.token)
+
+        return {
+            errors: 0,
+            success: prev.success + 1,
+            message: 'Login success',
+            body: body
+        }
+    }
+    if (res.status === 401) {
+        const data = await res.json()
+        return {
+            errors: prev.errors + 1,
+            success: 0,
+            message: data.message,
+            body: body
+        }
+    }
+
+    if (res.status === 500) {
+        return {
+            errors: prev.errors + 1,
+            success: 0,
+            message: 'Internal server error',
+            body: body
+        }
+    }
+
     return {
-      errors: prev.errors + 1,
-      success: 0,
-      message: "API URL not set",
-      data: body,
-    };
-  }
+        errors: prev.errors + 1,
+        success: 0,
+        message: 'Unknown error',
+        body: body
+    }
 
-  const response = await fetch(`${OSUC_API_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    console.log("hola");
-    return {
-      errors: prev.errors + 1,
-      success: 0,
-      message: data.message,
-      data: body,
-    };
-  }
-  console.log(data);
-  return {
-    errors: 0,
-    success: 1,
-    message: data.message,
-    data: body,
-  };
 }
 
-export async function loginUser(prev: any, formData: FormData) {
-  const body = {
-    email: formData.get("email")?.toString() ?? "",
-    password: formData.get("password")?.toString() ?? "",
-  };
+export async function ActionRegister(prev: any, formData: FormData) {
 
-  const OSUC_API_URL = process.env.OSUC_API_URL;
-  if (!OSUC_API_URL) {
+    const body = {
+        nickname: formData.get("nickname")?.toString() ?? '',
+        admission_year: parseInt(formData.get("admission_year")?.toString() ?? '0'),
+        password: formData.get("password")?.toString() ?? '',
+        email: formData.get("email")?.toString() ?? '',
+        career_id: parseInt(formData.get("career_id")?.toString() ?? '0'),
+    }
+
+    const res = await SeverAPIClient.auth.register.$post({
+        json: body
+    })
+
+    if (res.status === 400) {
+        const data = await res.json()
+        return {
+            errors: prev.errors + 1,
+            success: 0,
+            message: JSON.stringify(data),
+            body: body
+        }
+    }
+
+    if (res.status === 201) {
+        const data = await res.json()
+        const cookieStore = await cookies()
+        cookieStore.set('token', data.token)
+
+        return {
+            errors: 0,
+            success: prev.success + 1,
+            message: 'Login success',
+            body: body
+        }
+    }
+
+    if (res.status === 500) {
+        return {
+            errors: prev.errors + 1,
+            success: 0,
+            message: 'Internal server error',
+            body: body
+        }
+    }
+
     return {
-      errors: prev.errors + 1,
-      success: 0,
-      message: "API URL not set",
-      data: body,
-    };
-  }
-
-  const response = await fetch(`${OSUC_API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    return {
-      errors: prev.errors + 1,
-      success: 0,
-      message: data.message,
-      data: body,
-    };
-  }
-  const cookieStore = await cookies();
-
-  await cookieStore.set("osuctoken", data.token);
-
-  return {
-    errors: 0,
-    success: 1,
-    message: data.message,
-    data: body,
-  };
+        errors: prev.errors + 1,
+        success: 0,
+        message: 'Unknown error',
+        body: body
+    }
 }

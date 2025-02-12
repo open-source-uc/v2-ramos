@@ -13,7 +13,6 @@ export default async function page({ params }: { params: Params }) {
   });
 
   if (!res.ok) {
-    console.log(res);
     return <div>Failed to load</div>;
   }
   const data = await res.json();
