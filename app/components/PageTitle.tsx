@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 
 import { Home } from "lucide-react"; // Puedes cambiar el icono si lo prefieres
 
@@ -8,7 +8,7 @@ type PageTitleProps = {
   icon?: boolean; // Opción para incluir un icono antes del título
 };
 
-const PageTitle: FC<PageTitleProps> = ({ children, size = "md", icon = false }) => {
+export default function PageTitle({ children, size = "md", icon = false }: PageTitleProps) {
   const sizeClasses = {
     sm: "text-2xl",
     md: "text-4xl",
@@ -28,6 +28,4 @@ const PageTitle: FC<PageTitleProps> = ({ children, size = "md", icon = false }) 
       </h1>
     </div>
   );
-};
-
-export default PageTitle;
+}

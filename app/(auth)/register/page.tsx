@@ -1,10 +1,9 @@
 import FormRegister from "@/app/components/forms/FormRegister";
 
 export default async function Page() {
-    return (
-        <div className="flex justify-center items-center h-screen bg-gray-900">
-            <FormRegister>
-            </FormRegister>
-        </div>
-    )
+  return (
+    <div className="flex h-screen items-center justify-center bg-gray-900">
+      <FormRegister />
+    </div>
+  );
 }

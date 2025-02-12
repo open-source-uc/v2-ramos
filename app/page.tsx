@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { SeverAPIClient } from "./api/RPC";
 import CourseCard from "./components/CourseCard";
 import PageTitle from "./components/PageTitle";
