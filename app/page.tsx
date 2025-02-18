@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-import { SeverAPIClient } from "./api/RPC";
+import { ServerAPIClient } from "./api/RPC";
 import CourseCard from "./components/CourseCard";
 import PageTitle from "./components/PageTitle";
 
 type SearchParams = Promise<{ page?: number }>;
 export default async function page({ searchParams }: { searchParams: SearchParams }) {
-  const res = await SeverAPIClient.course.$get({
+  const res = await ServerAPIClient.course.$get({
     query: {
       start_promedio: "2",
     },

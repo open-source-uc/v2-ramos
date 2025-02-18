@@ -1,5 +1,5 @@
 import { Book, Star } from "lucide-react";
-type Course = {
+export type Course = {
   name: string;
   school_id: number;
   course_id: number;
@@ -82,7 +82,7 @@ export default function CourseInfo({ course }: { course: Course }) {
       {/* CTA Button */}
       <div className="mt-auto">
         <a
-          href={`/${course.sigle}/criticar`}
+          href={`/${course.sigle}/review`}
           className="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg md:w-auto"
         >
           Escribir reseña

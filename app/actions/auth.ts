@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-import { SeverAPIClient } from "../api/RPC";
+import { ServerAPIClient } from "../api/RPC";
 
 export async function ActionLogin(
   prev: {
@@ -21,7 +21,7 @@ export async function ActionLogin(
     password: formData.get("password")?.toString() ?? "",
   };
 
-  const res = await SeverAPIClient.auth.login.$post({
+  const res = await ServerAPIClient.auth.login.$post({
     json: body,
   });
 
@@ -83,7 +83,7 @@ export async function ActionRegister(prev: any, formData: FormData) {
     career_id: parseInt(formData.get("career_id")?.toString() ?? "0"),
   };
 
-  const res = await SeverAPIClient.auth.register.$post({
+  const res = await ServerAPIClient.auth.register.$post({
     json: body,
   });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 import { ActionRegister } from "@/app/actions/auth";
 
@@ -21,6 +21,9 @@ export default function FormRegister() {
       admission_year: 2025,
     },
   });
+
+  useEffect(() => {
+  }, [])
 
   return (
     <Form action={action}>
