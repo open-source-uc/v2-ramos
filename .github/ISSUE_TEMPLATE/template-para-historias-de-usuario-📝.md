@@ -1,7 +1,7 @@
 ---
 name: "Template para Historias de Usuario \U0001F4DD"
 about: Utiliza este template para crear historias de usuario
-title: "[User Story] Nombre descriptivo"
+title: "Nombre descriptivo"
 labels: "user story \U0001F4DD"
 assignees: ''
 
