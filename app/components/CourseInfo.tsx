@@ -17,7 +17,7 @@ export default function CourseInfo({ course }: { course: Course }) {
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:justify-between">
         <div>
           <h3 className="mb-2 font-[Inter] text-2xl font-bold text-gray-900">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {course.name}
             </span>
           </h3>
@@ -47,7 +47,7 @@ export default function CourseInfo({ course }: { course: Course }) {
           </div>
           <div className="h-2 w-full rounded-full bg-gray-100">
             <div
-              className="h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600"
+              className="h-2 rounded-full bg-linear-to-r from-amber-400 to-amber-600"
               style={{ width: `${course.promedio * 100}%` }}
             />
           </div>
@@ -63,7 +63,7 @@ export default function CourseInfo({ course }: { course: Course }) {
           </div>
           <div className="h-2 w-full rounded-full bg-gray-100">
             <div
-              className="h-2 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600"
+              className="h-2 rounded-full bg-linear-to-r from-indigo-400 to-indigo-600"
               style={{ width: `${course.promedio_creditos_est * 100}%` }}
             />
           </div>
@@ -83,7 +83,7 @@ export default function CourseInfo({ course }: { course: Course }) {
       <div className="mt-auto">
         <a
           href={`/${course.sigle}/review`}
-          className="inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg md:w-auto"
+          className="inline-flex w-full items-center justify-center rounded-lg bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg md:w-auto"
         >
           Escribir reseña
           <Star className="ml-2 h-4 w-4" />

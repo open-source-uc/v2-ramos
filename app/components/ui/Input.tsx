@@ -13,7 +13,7 @@ export default function Input({ label, name, type = "text", ...props }: InputPro
         id={name}
         name={name}
         type={type}
-        className="w-full rounded-lg border-2 border-gray-600 bg-gray-700 p-4 text-white focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+        className="w-full rounded-lg border-2 border-gray-600 bg-gray-700 p-4 text-white focus:border-red-500 focus:outline-hidden focus:ring-2 focus:ring-red-500"
         {...props}
       />
     </div>
