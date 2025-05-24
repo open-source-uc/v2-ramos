@@ -3,6 +3,9 @@
 @custom-variant dark (&:where(class, class *));
 
 @theme {
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1154px;
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
@@ -34,6 +37,8 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
+
+  --font-sans: var(--font-instrument-sans);
 
   --color-chart-1: hsl(var(--chart-1));
   --color-chart-2: hsl(var(--chart-2));

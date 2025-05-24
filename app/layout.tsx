@@ -1,5 +1,13 @@
+import { Instrument_Sans } from "next/font/google";
+
 import { Metadata } from "next";
 import "./globals.css";
+
+const instrument_sans = Instrument_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-instrument-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -12,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es" className={instrument_sans.variable}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Ramos Uc</title>
+        <title>Ramos UC</title>
       </head>
       <body>
         <main className="flex w-full flex-col">{children}</main>

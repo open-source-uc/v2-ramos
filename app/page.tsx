@@ -22,7 +22,7 @@ export default async function page({ searchParams }: { searchParams: SearchParam
     <>
       <div className="flex gap-5">
         <PageTitle size="lg" icon>
-          Ramos
+          Ramos UC
         </PageTitle>
         <Link href={"/login"}>IR A Login</Link>
         <Link href={"/register"}>IR A Registro</Link>
