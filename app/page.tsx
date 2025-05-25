@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ServerAPIClient } from "./api/RPC";
 import CourseCard from "./components/CourseCard";
 import PageTitle from "./components/PageTitle";
+import Header from "./components/Header";
 
 type SearchParams = Promise<{ page?: number }>;
 export default async function page({ searchParams }: { searchParams: SearchParams }) {
@@ -20,6 +21,7 @@ export default async function page({ searchParams }: { searchParams: SearchParam
 
   return (
     <>
+      <Header />
       <div className="flex gap-5">
         <PageTitle size="lg" icon>
           Ramos UC

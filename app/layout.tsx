@@ -26,7 +26,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Ramos UC</title>
       </head>
-      <body>
+      <body className="bg-background text-foreground">
         <main className="flex w-full flex-col">{children}</main>
       </body>
     </html>

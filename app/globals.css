@@ -1,59 +1,12 @@
 @import 'tailwindcss';
 
+/* Define a dark mode variant that applies to classes and their children */
 @custom-variant dark (&:where(class, class *));
-
-@theme {
-  --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1154px;
-
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-
-  --font-sans: var(--font-instrument-sans);
-
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
-}
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
 */
 @layer base {
   *,
@@ -61,107 +14,150 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--border-color, currentcolor);
   }
 }
 
-@layer utilities {
-  :root {
-    --primary: #2563eb;
-    /* Blue */
-    --secondary: #9333ea;
-    /* Purple */
-    --accent: #f59e0b;
-    /* Amber */
-    /* Light Gray */
-    /* Dark Gray */
-    --muted: #9ca3af;
-    /* Gray */
-    --text-light: #d1d5db;
-    /* Light Gray for text */
-    --error: #ef4444;
-    /* Red */
-    --success: #10b981;
-    /* Green */
+/* 
+ * Theme Configuration using @theme directive for Tailwind v4
+ * This creates utility classes and CSS variables from the theme values
+ */
+@theme {
+  /* Brand colors */
+  --color-blue-ramos: oklch(0.58 0.22 260);
+  --color-blue-clarito: oklch(0.96 0.03 260);
+  --color-black: #000000;
+  --color-white-bg: #fdfdfd;
+  --color-white-fg: #fafafa;
+  --color-gray-dark: #646363;
+  --color-gray-medium: #c6c6c6;
+  --color-gray-light: #eaeaea;
+  --color-red: #ec0b43;
+  --color-red-light: #feecf0;
+  --color-green: #37a000;
+  --color-green-light: #f1ffeb;
+  --color-purple: #ed14ff;
+  --color-purple-light: #fdebff;
+  --color-pink: #f51aa4;
+  --color-pink-light: #feecf8;
+  --color-orange: #fa5a2e;
+  --color-orange-light: #feefeb;
 
-    --ramos-uc-blue: #072ac8;
-    /* Ramos UC Blue */
-    --ramos-uc-blue-clarito: #ebeffe;
-    /* Ramos UC Blue Clarito */
-    --black: #000000;
-    /* Black */
-    --white-foreground: #fdfdfd;
-    /* White Foreground */
-    --white-background: #fafafa;
-    /* White Background */
-    --gray-oscuro: #646363;
-    /* Gray Oscuro */
-    --gray-mediano: #c6c6c6;
-    /* Gray Mediano */
-    --gray-clarito: #eaeaea;
-    /* Gray Clarito */
-    --red: #ec0b43;
-    /* Red */
-    --red-clarito: #feecf0;
-    /* Red Clarito */
-    --green: #37a000;
-    /* Green */
-    --green-clarito: #f1ffeb;
-    /* Green Clarito */
-    --purple: #ed14ff;
-    /* Purple */
-    --purple-clarito: #fdebff;
-    /* Purple Clarito */
-    --pink: #f51aa4;
-    /* Pink */
-    --pink-clarito: #feecf8;
-    /* Pink Clarito */
-    --orange: #fa5a2e;
-    /* Orange */
-    --orange-clarito: #feefeb;
-    /* Orange Clarito */
-  }
+  /* Chart colors for data visualization */
+  --color-chart-1: oklch(0.76 0.16 12);
+  --color-chart-2: oklch(0.58 0.15 173);
+  --color-chart-3: oklch(0.37 0.07 197);
+  --color-chart-4: oklch(0.74 0.18 43);
+  --color-chart-5: oklch(0.67 0.21 27);
+
+  /* Custom breakpoints */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1154px;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* Typography */
+  --font-sans: var(--font-instrument-sans);
 }
 
-
-
-@layer base {
-  :root {
-        --background: var(--white-background);
-        --foreground: var(--white-foreground);
-        --card: var(--white-background);
-        --card-foreground: var(--white-foreground);
-        --popover: var(--white-background);
-        --popover-foreground: var(--white-foreground);
-        --primary: var(--gray-oscuro);
-        --primary-foreground: var(--white-foreground);
-        --secondary: var(--gray-mediano);
-        --secondary-foreground: var(--primary-foreground);
-        --muted: var(--gray-clarito);
-        --muted-foreground: var(--primary-foreground);
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: var(--gray-mediano);
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem
-    }
+/* 
+ * Light Theme Variables 
+ * These are set on :root by default
+ */
+:root {
+  /* Base colors */
+  --background: var(--color-white-bg);
+  --foreground: var(--color-black);
+  
+  /* Component colors */
+  --card: var(--color-white-fg);
+  --card-foreground: var(--color-black);
+  --popover: var(--color-white-fg);
+  --popover-foreground: var(--color-black);
+  
+  /* Primary colors */
+  --primary: var(--color-blue-ramos);
+  --primary-foreground: var(--color-white);
+  
+  /* Secondary colors */
+  --secondary: var(--color-gray-medium);
+  --secondary-foreground: var(--color-black);
+  
+  /* Muted colors */
+  --muted: var(--color-gray-light);
+  --muted-foreground: var(--color-gray-dark);
+  
+  /* Accent colors */
+  --accent: var(--color-blue-clarito);
+  --accent-foreground: var(--color-blue-ramos);
+  
+  /* Destructive colors */
+  --destructive: var(--color-red);
+  --destructive-foreground: var(--color-white);
+  
+  /* Border, input, and ring colors */
+  --border: var(--color-gray-medium);
+  --border-color: var(--color-gray-medium);
+  --input: var(--color-gray-light);
+  --ring: var(--color-blue-ramos);
 }
 
+/* 
+ * Dark Theme Variables 
+ * Applied when .dark class is present
+ */
+.dark {
+  /* Base colors */
+  --background: #1a1a1a;
+  --foreground: var(--color-white);
+  
+  /* Component colors */
+  --card: #1e1e1e;
+  --card-foreground: var(--color-white);
+  --popover: #1e1e1e;
+  --popover-foreground: var(--color-white);
+  
+  /* Primary colors */
+  --primary: var(--color-blue-ramos);
+  --primary-foreground: var(--color-white);
+  
+  /* Secondary colors */
+  --secondary: #2c2c2c;
+  --secondary-foreground: var(--color-white);
+  
+  /* Muted colors */
+  --muted: #2c2c2c;
+  --muted-foreground: #a1a1aa;
+  
+  /* Accent colors */
+  --accent: #2c2c2c;
+  --accent-foreground: var(--color-white);
+  
+  /* Destructive colors */
+  --destructive: var(--color-red);
+  --destructive-foreground: var(--color-white);
+  
+  /* Border, input, and ring colors */
+  --border: #2c2c2c;
+  --border-color: #2c2c2c;
+  --input: #2c2c2c;
+  --ring: var(--color-blue-ramos);
+}
 
-
+/* 
+ * Base styles 
+ */
 @layer base {
   * {
-    @apply border-border;
-    }
+    border-color: var(--border-color);
+  }
+  
   body {
-    @apply bg-background text-foreground;
-    }
+    background-color: var(--background);
+    color: var(--foreground);
+  }
 }
