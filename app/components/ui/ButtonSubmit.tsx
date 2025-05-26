@@ -14,7 +14,7 @@ export default function ButtonSubmit({ children, processing }: ButtonSubmitProps
     <button
       type="submit"
       disabled={status.pending}
-      className={`w-full rounded-lg p-4 font-semibold text-white ${status.pending ? "bg-gray-600" : "bg-red-500 hover:bg-red-600"} focus:outline-hidden focus:ring-2 focus:ring-red-500`}
+      className={`w-full rounded-lg p-4 font-semibold text-white ${status.pending ? "bg-gray-600" : "bg-red-500 hover:bg-red-600"} focus:ring-2 focus:ring-red-500 focus:outline-hidden`}
     >
       {status.pending ? processing : children}
     </button>

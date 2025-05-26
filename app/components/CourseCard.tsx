@@ -70,7 +70,7 @@ export default function CourseCard({ course }: { course: Course }) {
         {/* Botón de acción */}
         <a
           href={`/${course.sigle}`}
-          className="mt-4 flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-white transition-all hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
+          className="mt-4 flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-white transition-all hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 focus:outline-hidden dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
         >
           Ver más detalles
         </a>

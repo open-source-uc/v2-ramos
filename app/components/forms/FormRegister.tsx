@@ -22,8 +22,7 @@ export default function FormRegister() {
     },
   });
 
-  useEffect(() => {
-  }, [])
+  useEffect(() => {}, []);
 
   return (
     <Form action={action}>

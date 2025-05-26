@@ -1,8 +1,5 @@
-import Link from "next/link";
-
 import { ServerAPIClient } from "./api/RPC";
 import CourseCard from "./components/CourseCard";
-import PageTitle from "./components/PageTitle";
 import Header from "./components/Header";
 
 type SearchParams = Promise<{ page?: number }>;
