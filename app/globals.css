@@ -22,16 +22,21 @@
  * Theme Configuration using @theme directive for Tailwind v4
  * This creates utility classes and CSS variables from the theme values
  */
-@theme {
+@theme static inline {
+   --color-*: initial;
+
   /* Brand colors */
-  --color-blue-ramos: oklch(0.58 0.22 260);
-  --color-blue-clarito: oklch(0.96 0.03 260);
-  --color-black: #000000;
-  --color-white-bg: #fdfdfd;
-  --color-white-fg: #fafafa;
-  --color-gray-dark: #646363;
-  --color-gray-medium: #c6c6c6;
-  --color-gray-light: #eaeaea;
+  --color-primary: oklch(0.58 0.22 260);
+  --color-primary-light: oklch(0.96 0.03 260);
+
+  --color-background: #fdfdfd;
+  --color-background-elements: #fafafa;
+  
+  --color-foreground: #000000;
+  --color-foreground-muted-dark: #646363;
+  --color-foreground-muted-medium: #c6c6c6;
+  --color-foreground-muted-light: #eaeaea;
+  
   --color-red: #ec0b43;
   --color-red-light: #feecf0;
   --color-green: #37a000;
@@ -42,13 +47,6 @@
   --color-pink-light: #feecf8;
   --color-orange: #fa5a2e;
   --color-orange-light: #feefeb;
-
-  /* Chart colors for data visualization */
-  --color-chart-1: oklch(0.76 0.16 12);
-  --color-chart-2: oklch(0.58 0.15 173);
-  --color-chart-3: oklch(0.37 0.07 197);
-  --color-chart-4: oklch(0.74 0.18 43);
-  --color-chart-5: oklch(0.67 0.21 27);
 
   /* Custom breakpoints */
   --breakpoint-tablet: 768px;
@@ -62,102 +60,4 @@
 
   /* Typography */
   --font-sans: var(--font-instrument-sans);
-}
-
-/* 
- * Light Theme Variables 
- * These are set on :root by default
- */
-:root {
-  /* Base colors */
-  --background: var(--color-white-bg);
-  --foreground: var(--color-black);
-  
-  /* Component colors */
-  --card: var(--color-white-fg);
-  --card-foreground: var(--color-black);
-  --popover: var(--color-white-fg);
-  --popover-foreground: var(--color-black);
-  
-  /* Primary colors */
-  --primary: var(--color-blue-ramos);
-  --primary-foreground: var(--color-white);
-  
-  /* Secondary colors */
-  --secondary: var(--color-gray-medium);
-  --secondary-foreground: var(--color-black);
-  
-  /* Muted colors */
-  --muted: var(--color-gray-light);
-  --muted-foreground: var(--color-gray-dark);
-  
-  /* Accent colors */
-  --accent: var(--color-blue-clarito);
-  --accent-foreground: var(--color-blue-ramos);
-  
-  /* Destructive colors */
-  --destructive: var(--color-red);
-  --destructive-foreground: var(--color-white);
-  
-  /* Border, input, and ring colors */
-  --border: var(--color-gray-medium);
-  --border-color: var(--color-gray-medium);
-  --input: var(--color-gray-light);
-  --ring: var(--color-blue-ramos);
-}
-
-/* 
- * Dark Theme Variables 
- * Applied when .dark class is present
- */
-.dark {
-  /* Base colors */
-  --background: #1a1a1a;
-  --foreground: var(--color-white);
-  
-  /* Component colors */
-  --card: #1e1e1e;
-  --card-foreground: var(--color-white);
-  --popover: #1e1e1e;
-  --popover-foreground: var(--color-white);
-  
-  /* Primary colors */
-  --primary: var(--color-blue-ramos);
-  --primary-foreground: var(--color-white);
-  
-  /* Secondary colors */
-  --secondary: #2c2c2c;
-  --secondary-foreground: var(--color-white);
-  
-  /* Muted colors */
-  --muted: #2c2c2c;
-  --muted-foreground: #a1a1aa;
-  
-  /* Accent colors */
-  --accent: #2c2c2c;
-  --accent-foreground: var(--color-white);
-  
-  /* Destructive colors */
-  --destructive: var(--color-red);
-  --destructive-foreground: var(--color-white);
-  
-  /* Border, input, and ring colors */
-  --border: #2c2c2c;
-  --border-color: #2c2c2c;
-  --input: #2c2c2c;
-  --ring: var(--color-blue-ramos);
-}
-
-/* 
- * Base styles 
- */
-@layer base {
-  * {
-    border-color: var(--border-color);
-  }
-  
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-  }
 }
