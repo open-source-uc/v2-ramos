@@ -43,7 +43,7 @@ export default function Header() {
             <Image src="assets/UC_Logo_Small.svg" alt="UC Logo" width={200} height={200} className="h-20 w-auto hidden tablet:block" />
 
             <nav className="hidden space-y-3 w-full tablet:block">
-                <div className="flex space-x-4 border-b border-foreground-muted-dark w-full py-2">
+                <div className="flex space-x-4 border-b border-foreground-muted-dark w-full justify-between py-2">
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
@@ -96,7 +96,12 @@ export default function Header() {
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
+                    <div className="flex items-center space-x-2">
+                        <ButtonNavbar text="Login" url="/login" />
+                        <ButtonNavbar text="Registrarse" url="/register" />
+                    </div>
                 </div>
+            
                 <div className="flex w-full space-x-2">
                     <ButtonNavbar text="MIS CURSOS FAVORITOS" url="/404" />
                     <ButtonNavbar text="MIS RESEÑAS" url="/404" />
