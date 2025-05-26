@@ -8,7 +8,7 @@ export default function Header() {
             <Image src="assets/UC_Logo_Small.svg" alt="UC Logo" width={200} height={200} className="h-20 w-auto hidden tablet:block" />
 
             <nav className="hidden space-y-3 w-full tablet:block">
-                <ul className="flex space-x-4 border-b border-foreground w-full py-2">
+                <ul className="flex space-x-4 border-b border-foreground-muted-dark w-full py-2">
                     <li>
                         <a href="/" className="hover:text-gray-400">
                         Home
