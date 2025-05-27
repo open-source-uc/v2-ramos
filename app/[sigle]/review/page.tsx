@@ -24,3 +24,5 @@ export default async function page({ params }: { params: Params }) {
     </section>
   );
 }
+
+export const runtime = "edge";

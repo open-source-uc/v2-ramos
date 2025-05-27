@@ -23,3 +23,5 @@ export default function Criticar({ course }: { course: Course }) {
 
   return <FormReview state={state} action={action} />;
 }
+
+export const runtime = "edge";
