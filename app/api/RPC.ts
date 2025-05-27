@@ -15,7 +15,7 @@ export const ServerAPIClient = hc<AppType>(NEXT_PUBLIC_OSUC_API_URL ?? "http://l
 
 // Cliente para usar en las consultas del usuario, tipo para editar datos del usuario, ver sus reviews, ver su panel de usuario,
 // cambiar su contraseña, crear reviews, etc.
-export const UserAPIClient = async (token: string) => {
+export const UserAPIClient = async (token: string = "mierda") => {
   "use client";
 
   if (!token) {
