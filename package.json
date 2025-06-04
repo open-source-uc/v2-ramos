@@ -1,14 +1,21 @@
 {
-  "name": "ramos-uc-v2",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^5.8.2"
-  }
+	"name": "ramos-uc-v2",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro build && wrangler pages dev",
+		"astro": "astro",
+		"deploy": "astro build && wrangler pages deploy",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^12.5.3",
+		"astro": "^5.8.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.29",
+		"wrangler": "^4.19.1"
+	}
 }
