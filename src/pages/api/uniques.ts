@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request, locals }) => {
-    const key = "valores_unicos.json";
+    const key = "2025-1.json";
 
     // Obtener metadata del objeto
     const head = await locals.runtime.env.R2.head(key);
@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         return new Response("Not Found", { status: 404 });
     }
 
-    const etag = head.etag;
+    const etag = `"${head.etag}"`;
 
     // Verificar si el cliente ya tiene esta versión
     const ifNoneMatch = request.headers.get("if-none-match");
@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
             status: 304,
             headers: {
                 "Cache-Control": "private, max-age=86400, must-revalidate",
-                "ETag": `"${etag}"`,
+                "ETag": etag,
             },
         });
     }
