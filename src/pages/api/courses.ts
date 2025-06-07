@@ -19,6 +19,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
             headers: {
                 "Cache-Control": "private, max-age=86400, must-revalidate",
                 "ETag": etag,
+                "Vary": "Accept-Encoding"
             },
         });
     }
