@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request, locals }) => {
-    const key = "2025-1.json";
+    const key = "valores_unicos.json";
 
     // Obtener metadata del objeto
     const head = await locals.runtime.env.R2.head(key);

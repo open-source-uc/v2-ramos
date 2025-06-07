@@ -16,14 +16,14 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "ramosuc",
-			"database_id": "afa63abe-ba61-4adb-8600-57eeabe3fc08"
+			"database_name": "v2-ramos",
+			"database_id": "f97d5385-033e-4ade-aaf7-bb5736b4027c"
 		}
 	],
 	"r2_buckets": [
 		{
 			"binding": "R2",
-			"bucket_name": "ramos-uc"
+			"bucket_name": "v2-ramos"
 		}
 	]
 	/**
