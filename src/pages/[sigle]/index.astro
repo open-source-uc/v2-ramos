@@ -9,6 +9,10 @@ if (!sigle || !courses[sigle]) {
 }
 
 const course = courses[sigle];
+
+if (!course) {
+    return Astro.redirect("/404");
+}
 ---
 
 <Layout>
@@ -21,7 +25,7 @@ const course = courses[sigle];
             <li><strong>Escuela:</strong> {course.school}</li>
             <li><strong>Área:</strong> {course.area}</li>
             <li><strong>Categoría:</strong> {course.category}</li>
-            <li><strong>Categoría:</strong> {course.credits}</li>
+            <li><strong>Creditos:</strong> {course.credits}</li>
         </ul>
     </div>
 </Layout>
