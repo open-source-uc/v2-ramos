@@ -17,6 +17,10 @@ CREATE TABLE course_summary (
     votes_medium_workload INTEGER DEFAULT 0,
     votes_high_workload INTEGER DEFAULT 0,
 
+    votes_mandatory_attendance INTEGER DEFAULT 0,
+    votes_optional_attendance INTEGER DEFAULT 0,
+    votes_no_attendance INTEGER DEFAULT 0,
+
     avg_weekly_hours REAL DEFAULT 0.0,
     sort_index INTEGER DEFAULT 0
 );
@@ -82,6 +86,18 @@ BEGIN
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND workload_vote = 2
     ),
+    votes_mandatory_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 0
+    ),
+    votes_optional_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 1
+    ),
+    votes_no_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 2
+    ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND weekly_hours IS NOT NULL
@@ -132,6 +148,18 @@ BEGIN
     votes_high_workload = (
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND workload_vote = 2
+    ),
+    votes_mandatory_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 0
+    ),
+    votes_optional_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 1
+    ),
+    votes_no_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = NEW.course_sigle AND attendance_type = 2
     ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
@@ -184,6 +212,18 @@ BEGIN
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = OLD.course_sigle AND workload_vote = 2
     ),
+    votes_mandatory_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = OLD.course_sigle AND attendance_type = 0
+    ),
+    votes_optional_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = OLD.course_sigle AND attendance_type = 1
+    ),
+    votes_no_attendance = (
+      SELECT COUNT(*) FROM course_reviews
+      WHERE course_sigle = OLD.course_sigle AND attendance_type = 2
+    ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
       WHERE course_sigle = OLD.course_sigle AND weekly_hours IS NOT NULL
@@ -216,6 +256,11 @@ CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
 CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours DESC);
 CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index DESC);
 
+-- Nuevos índices para los votos de asistencia
+CREATE INDEX idx_course_summary_mandatory_attendance ON course_summary(votes_mandatory_attendance DESC);
+CREATE INDEX idx_course_summary_optional_attendance ON course_summary(votes_optional_attendance DESC);
+CREATE INDEX idx_course_summary_no_attendance ON course_summary(votes_no_attendance DESC);
+
 -- Índices compuestos para consultas más complejas
 CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);
 CREATE INDEX idx_course_summary_area_sort ON course_summary(area_id, sort_index DESC);
@@ -232,4 +277,5 @@ CREATE INDEX idx_course_reviews_user_id ON course_reviews(user_id);
 CREATE INDEX idx_course_reviews_sigle_updated ON course_reviews(course_sigle, updated_at DESC);
 CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike DESC);
 CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DESC);
+CREATE INDEX idx_course_reviews_attendance_type ON course_reviews(attendance_type DESC);
 CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);
