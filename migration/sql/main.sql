@@ -1,17 +1,37 @@
 DROP TABLE IF EXISTS course_reviews;
 DROP TABLE IF EXISTS course_summary;
 
+-- Primero se crea course_summary
+CREATE TABLE course_summary (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sigle TEXT UNIQUE,  -- "UNIQUE KEY" no es válido en SQLite; solo usa UNIQUE
+    school_id INTEGER,
+    area_id INTEGER,
+    category_id INTEGER,
 
+    likes INTEGER DEFAULT 0,
+    superlikes INTEGER DEFAULT 0,
+    dislikes INTEGER DEFAULT 0,
+
+    votes_low_workload INTEGER DEFAULT 0,
+    votes_medium_workload INTEGER DEFAULT 0,
+    votes_high_workload INTEGER DEFAULT 0,
+
+    avg_weekly_hours REAL DEFAULT 0.0,
+    sort_index INTEGER DEFAULT 0
+);
+
+-- Luego se crea course_reviews
 CREATE TABLE course_reviews ( 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     course_sigle TEXT NOT NULL,
 
-    like_dislike INTEGER CHECK (like_dislike IN (0, 1, 2)), -- 0=dislike, 1=like, 2=superlike
-    workload_vote INTEGER CHECK (workload_vote IN (0, 1, 2)), -- 0=low, 1=medium, 2=high
-    attendance_type INTEGER CHECK (attendance_type IN (0, 1, 2)), -- 0=none, 1=optional, 2=mandatory
+    like_dislike INTEGER CHECK (like_dislike IN (0, 1, 2)),
+    workload_vote INTEGER CHECK (workload_vote IN (0, 1, 2)),
+    attendance_type INTEGER CHECK (attendance_type IN (0, 1, 2)),
 
-    weekly_hours INTEGER CHECK (weekly_hours >= 0), -- horas semanales estimadas
+    weekly_hours INTEGER CHECK (weekly_hours >= 0),
 
     year_taken INTEGER,
     semester_taken INTEGER CHECK (semester_taken IN (1, 2)),
@@ -32,27 +52,6 @@ BEGIN
   SET updated_at = CURRENT_TIMESTAMP
   WHERE id = OLD.id;
 END;
-
-
-CREATE TABLE course_summary (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sigle TEXT UNIQUE KEY,
-    school_id INTEGER,
-    area_id INTEGER,
-    category_id INTEGER,
-
-    likes INTEGER DEFAULT 0,
-    superlikes INTEGER DEFAULT 0,  -- Agregado para manejar superlikes
-    dislikes INTEGER DEFAULT 0,
-
-    votes_low_workload INTEGER DEFAULT 0,
-    votes_medium_workload INTEGER DEFAULT 0,
-    votes_high_workload INTEGER DEFAULT 0,
-
-    avg_weekly_hours REAL DEFAULT 0.0, -- promedio de horas semanales desde las reviews
-
-    sort_index INTEGER DEFAULT 0
-);
 
 CREATE TRIGGER trg_course_reviews_after_insert
 AFTER INSERT ON course_reviews
@@ -207,14 +206,15 @@ BEGIN
   WHERE sigle = OLD.course_sigle;
 END;
 
+-- Índices simples para course_summary (orden descendente para métricas numéricas)
 CREATE INDEX idx_course_summary_school_id ON course_summary(school_id);
 CREATE INDEX idx_course_summary_area_id ON course_summary(area_id);
 CREATE INDEX idx_course_summary_category_id ON course_summary(category_id);
-CREATE INDEX idx_course_summary_likes ON course_summary(likes);
-CREATE INDEX idx_course_summary_superlikes ON course_summary(superlikes);
-CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes);
-CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours);
-CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index);
+CREATE INDEX idx_course_summary_likes ON course_summary(likes DESC);
+CREATE INDEX idx_course_summary_superlikes ON course_summary(superlikes DESC);
+CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
+CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours DESC);
+CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index DESC);
 
 -- Índices compuestos para consultas más complejas
 CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);
@@ -222,10 +222,14 @@ CREATE INDEX idx_course_summary_area_sort ON course_summary(area_id, sort_index 
 CREATE INDEX idx_course_summary_category_sort ON course_summary(category_id, sort_index DESC);
 CREATE INDEX idx_course_summary_superlikes_likes ON course_summary(superlikes DESC, likes DESC);
 
+-- Índices con id como segundo criterio de ordenamiento
+CREATE INDEX idx_course_summary_sort_index_id ON course_summary(sort_index DESC, id DESC);
+CREATE INDEX idx_course_summary_sigle_id ON course_summary(sigle, id DESC);
+
 -- Índices para la tabla course_reviews
 CREATE INDEX idx_course_reviews_course_sigle ON course_reviews(course_sigle);
 CREATE INDEX idx_course_reviews_user_id ON course_reviews(user_id);
 CREATE INDEX idx_course_reviews_sigle_updated ON course_reviews(course_sigle, updated_at DESC);
-CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike);
-CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote);
-CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken, semester_taken);
+CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike DESC);
+CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DESC);
+CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);

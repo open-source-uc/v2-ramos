@@ -1,8 +1,12 @@
 ---
+import { getCourseBySigle } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
 import CoursesRaw from "../../../migration/json/2025-1.json";
+import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+
 const { sigle } = Astro.params;
 const courses = CoursesRaw as Record<string, CourseStaticInfo>;
+const id2Name = Id2NameRaw as Record<string, string>;
 
 if (!sigle || !courses[sigle]) {
     return Astro.redirect("/404");
@@ -13,19 +17,196 @@ const course = courses[sigle];
 if (!course) {
     return Astro.redirect("/404");
 }
+
+const c = await getCourseBySigle(Astro.locals, sigle);
 ---
 
 <Layout>
-    <h1 class="text-3xl font-bold mb-4">Curso: {course.name}</h1>
-    <div>
-        <ul class="space-y-2">
-            <li><strong>Sigla:</strong> {course.sigle}</li>
-            <li><strong>Nombre:</strong> {course.name}</li>
-            <li><strong>Descripción:</strong> {course.program}</li>
-            <li><strong>Escuela:</strong> {course.school}</li>
-            <li><strong>Área:</strong> {course.area}</li>
-            <li><strong>Categoría:</strong> {course.category}</li>
-            <li><strong>Creditos:</strong> {course.credits}</li>
-        </ul>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header del curso -->
+        <div class="bg-blue-600 text-white rounded-lg p-6 mb-8">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
+                    <p class="text-xl opacity-90">{course.sigle}</p>
+                </div>
+                <div class="bg-white/20 rounded-lg px-4 py-2 text-center">
+                    <div class="text-2xl font-bold">{course.credits}</div>
+                    <div class="text-sm">Créditos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid principal -->
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Información general -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6 border">
+                    <h2
+                        class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2"
+                    >
+                        Información General
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    class="block text-sm font-semibold text-gray-600 mb-1"
+                                    >Escuela</label
+                                >
+                                <p class="text-gray-900 bg-gray-50 p-2 rounded">
+                                    {course.school}
+                                </p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-semibold text-gray-600 mb-1"
+                                    >Área</label
+                                >
+                                <p class="text-gray-900 bg-gray-50 p-2 rounded">
+                                    {course.area}
+                                </p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-semibold text-gray-600 mb-1"
+                                    >Categoría</label
+                                >
+                                <p class="text-gray-900 bg-gray-50 p-2 rounded">
+                                    {course.category}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-semibold text-gray-600 mb-1"
+                                >Descripción</label
+                            >
+                            <p
+                                class="text-gray-900 bg-gray-50 p-3 rounded leading-relaxed"
+                            >
+                                {course.program}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas de la comunidad -->
+                <div class="bg-white rounded-lg shadow-md p-6 border">
+                    <h2
+                        class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2"
+                    >
+                        Estadísticas de la Comunidad
+                    </h2>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div
+                                class="flex justify-between p-3 bg-gray-50 rounded"
+                            >
+                                <span class="font-semibold text-gray-700"
+                                    >Horas semanales:</span
+                                >
+                                <span class="text-gray-900 font-bold"
+                                    >{c.avg_weekly_hours.toFixed(1)}h</span
+                                >
+                            </div>
+                            <div
+                                class="flex justify-between p-3 bg-gray-50 rounded"
+                            >
+                                <span class="font-semibold text-gray-700"
+                                    >Índice:</span
+                                >
+                                <span class="text-gray-900">{c.sort_index}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar con métricas -->
+            <div class="space-y-6">
+                <!-- Valoraciones -->
+                <div class="bg-white rounded-lg shadow-md p-6 border">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">
+                        Valoraciones
+                    </h3>
+                    <div class="space-y-3">
+                        <div
+                            class="flex items-center justify-between p-3 bg-green-50 rounded border-l-4 border-green-400"
+                        >
+                            <span class="font-semibold text-green-700"
+                                >Superlikes</span
+                            >
+                            <span class="text-2xl font-bold text-green-600"
+                                >{c.superlikes}</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-3 bg-blue-50 rounded border-l-4 border-blue-400"
+                        >
+                            <span class="font-semibold text-blue-700"
+                                >Likes</span
+                            >
+                            <span class="text-2xl font-bold text-blue-600"
+                                >{c.likes}</span
+                            >
+                        </div>
+                        <div
+                            class="flex items-center justify-between p-3 bg-red-50 rounded border-l-4 border-red-400"
+                        >
+                            <span class="font-semibold text-red-700"
+                                >Dislikes</span
+                            >
+                            <span class="text-2xl font-bold text-red-600"
+                                >{c.dislikes}</span
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carga de trabajo -->
+                <div class="bg-white rounded-lg shadow-md p-6 border">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800">
+                        Carga de Trabajo
+                    </h3>
+                    <div class="space-y-3">
+                        <div
+                            class="flex justify-between items-center p-2 bg-green-50 rounded"
+                        >
+                            <span class="text-sm font-medium text-green-700"
+                                >Baja</span
+                            >
+                            <span class="font-bold text-green-600"
+                                >{c.votes_low_workload}</span
+                            >
+                        </div>
+                        <div
+                            class="flex justify-between items-center p-2 bg-yellow-50 rounded"
+                        >
+                            <span class="text-sm font-medium text-yellow-700"
+                                >Media</span
+                            >
+                            <span class="font-bold text-yellow-600"
+                                >{c.votes_medium_workload}</span
+                            >
+                        </div>
+                        <div
+                            class="flex justify-between items-center p-2 bg-red-50 rounded"
+                        >
+                            <span class="text-sm font-medium text-red-700"
+                                >Alta</span
+                            >
+                            <span class="font-bold text-red-600"
+                                >{c.votes_high_workload}</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </Layout>

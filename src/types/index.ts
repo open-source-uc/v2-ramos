@@ -1,4 +1,5 @@
 interface CourseSummary {
+    id: number;
     sigle: string;
     school_id: number;
     area_id: number;
