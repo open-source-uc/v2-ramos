@@ -1,3 +1,6 @@
+# Resumen
+Proyecto de **prensa** academica para una comunidad informada :D
+
 # Astro Starter Kit: Basics
 
 ```sh
