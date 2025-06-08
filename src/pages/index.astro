@@ -1,11 +1,67 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { getCourses } from "../services/courses";
+import rawId2Name from "../../migration/json/valores_unicos.json";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const courses = await getCourses(Astro.locals);
+const id2name = Object.fromEntries(
+	Object.entries(rawId2Name).map(([k, v]) => [k, v]),
+) as Record<string, string>;
 ---
 
 <Layout>
-	<Welcome />
+	<h1 class="text-3xl font-bold mb-4">Resumen de Cursos</h1>
+
+	<div class="grid gap-4">
+		{
+			courses.map((c) => (
+				<div class="bg-white text-black dark:bg-gray-800 dark:text-white p-4 rounded-xl shadow-md border border-gray-300 dark:border-gray-700">
+					<h2 class="text-xl font-semibold">
+						<a href={`/${c.sigle}`} class="text-blue-600 underline">
+							{c.sigle}
+						</a>
+					</h2>
+					<ul class="mt-2 space-y-1 text-sm">
+						<li>
+							<strong>Escuela:</strong> {id2name[c.school_id]}
+						</li>
+						<li>
+							<strong>Área:</strong> {id2name[c.area_id]}
+						</li>
+						<li>
+							<strong>Categoría:</strong> {id2name[c.category_id]}
+						</li>
+						<li>
+							<strong>Superlikes:</strong> {c.superlikes}
+						</li>
+						<li>
+							<strong>Likes:</strong> {c.likes}
+						</li>
+						<li>
+							<strong>Dislikes:</strong> {c.dislikes}
+						</li>
+						<li>
+							<strong>Votos baja carga:</strong>{" "}
+							{c.votes_low_workload}
+						</li>
+						<li>
+							<strong>Votos media carga:</strong>{" "}
+							{c.votes_medium_workload}
+						</li>
+						<li>
+							<strong>Votos alta carga:</strong>{" "}
+							{c.votes_high_workload}
+						</li>
+						<li>
+							<strong>Horas semanales promedio:</strong>{" "}
+							{c.avg_weekly_hours}
+						</li>
+						<li>
+							<strong>Índice de orden:</strong> {c.sort_index}
+						</li>
+					</ul>
+				</div>
+			))
+		}
+	</div>
 </Layout>

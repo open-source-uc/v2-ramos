@@ -35,7 +35,8 @@ END;
 
 
 CREATE TABLE course_summary (
-    sigle TEXT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sigle TEXT UNIQUE KEY,
     school_id INTEGER,
     area_id INTEGER,
     category_id INTEGER,

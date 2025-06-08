@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "ramos-uc-v2",
+	"name": "v2-ramos",
 	"compatibility_date": "2025-06-04",
 	"compatibility_flags": [
 		"nodejs_compat"

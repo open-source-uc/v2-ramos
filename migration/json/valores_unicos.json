@@ -1,260 +1,64 @@
 {
-  "area": [
-    {
-      "nombre": "",
-      "id": 66136261
-    },
-    {
-      "nombre": "Artes",
-      "id": 29413674
-    },
-    {
-      "nombre": "Ciencia y Tecnologia",
-      "id": 24122135
-    },
-    {
-      "nombre": "Ciencias Sociales",
-      "id": 62193533
-    },
-    {
-      "nombre": "Ecolog Integra y Sustentabilid",
-      "id": 20491684
-    },
-    {
-      "nombre": "Formacion Filosofica",
-      "id": 79464654
-    },
-    {
-      "nombre": "Formacion Teologica",
-      "id": 51078414
-    },
-    {
-      "nombre": "Humanidades",
-      "id": 92033042
-    },
-    {
-      "nombre": "Pensamiento Matematico",
-      "id": 66781270
-    },
-    {
-      "nombre": "Salud y Bienestar",
-      "id": 19916096
-    }
-  ],
-  "category": [
-    {
-      "nombre": "",
-      "id": 66136261
-    },
-    {
-      "nombre": "Aprendizaje Servicio",
-      "id": 86633250
-    },
-    {
-      "nombre": "Aprendizaje ServicioFormación Teológica",
-      "id": 82191603
-    },
-    {
-      "nombre": "Cursos orientados a la Investi",
-      "id": 6781444
-    },
-    {
-      "nombre": "Formación Teológica",
-      "id": 7635278
-    },
-    {
-      "nombre": "Metodología Aprendizaje Activo",
-      "id": 68594356
-    }
-  ],
-  "school": [
-    {
-      "nombre": "Actividades Universitarias",
-      "id": 89927009
-    },
-    {
-      "nombre": "Actuación",
-      "id": 66811756
-    },
-    {
-      "nombre": "Agronomía Y Sistemas Naturales",
-      "id": 77214951
-    },
-    {
-      "nombre": "Antropología",
-      "id": 22971880
-    },
-    {
-      "nombre": "Arquitectura",
-      "id": 3920939
-    },
-    {
-      "nombre": "Arte",
-      "id": 91105853
-    },
-    {
-      "nombre": "Astrofísica",
-      "id": 74312905
-    },
-    {
-      "nombre": "Bachillerato Inicia",
-      "id": 3095322
-    },
-    {
-      "nombre": "CARA",
-      "id": 55525312
-    },
-    {
-      "nombre": "Ciencia Política",
-      "id": 22437146
-    },
-    {
-      "nombre": "Ciencias Biológicas",
-      "id": 58094274
-    },
-    {
-      "nombre": "College",
-      "id": 46859170
-    },
-    {
-      "nombre": "Comunicaciones",
-      "id": 92091329
-    },
-    {
-      "nombre": "Construcción Civil",
-      "id": 26881196
-    },
-    {
-      "nombre": "Cursos Deportivos",
-      "id": 26171977
-    },
-    {
-      "nombre": "Cursos y Test de Inglés",
-      "id": 4102736
-    },
-    {
-      "nombre": "Derecho",
-      "id": 61715665
-    },
-    {
-      "nombre": "Desarrollo Sustentable",
-      "id": 90271032
-    },
-    {
-      "nombre": "Diseño",
-      "id": 10529390
-    },
-    {
-      "nombre": "Economía Y Administración",
-      "id": 81548326
-    },
-    {
-      "nombre": "Educación",
-      "id": 26852794
-    },
-    {
-      "nombre": "Escuela Ciencias De La Salud",
-      "id": 65006033
-    },
-    {
-      "nombre": "Escuela De Enfermería",
-      "id": 13649180
-    },
-    {
-      "nombre": "Escuela De Gobierno",
-      "id": 80588637
-    },
-    {
-      "nombre": "Escuela De Graduados",
-      "id": 49817922
-    },
-    {
-      "nombre": "Escuela De Medicina",
-      "id": 13457286
-    },
-    {
-      "nombre": "Escuela De Odontología",
-      "id": 29642679
-    },
-    {
-      "nombre": "Estudios Urbanos",
-      "id": 55144357
-    },
-    {
-      "nombre": "Estética",
-      "id": 1731565
-    },
-    {
-      "nombre": "Filosofía",
-      "id": 30926925
-    },
-    {
-      "nombre": "Física",
-      "id": 90112516
-    },
-    {
-      "nombre": "Geografía",
-      "id": 4330166
-    },
-    {
-      "nombre": "Historia",
-      "id": 90171114
-    },
-    {
-      "nombre": "Ing Matemática Y Computacional",
-      "id": 70642379
-    },
-    {
-      "nombre": "Ingeniería",
-      "id": 3200862
-    },
-    {
-      "nombre": "Ingeniería Biológica Y Médica",
-      "id": 19155191
-    },
-    {
-      "nombre": "Instituto De Éticas Aplicadas",
-      "id": 12204788
-    },
-    {
-      "nombre": "Letras",
-      "id": 79433048
-    },
-    {
-      "nombre": "Matemáticas",
-      "id": 75348842
-    },
-    {
-      "nombre": "Medicina Veterinaria",
-      "id": 51327427
-    },
-    {
-      "nombre": "Música",
-      "id": 39249702
-    },
-    {
-      "nombre": "Psicología",
-      "id": 55179675
-    },
-    {
-      "nombre": "Química",
-      "id": 34089012
-    },
-    {
-      "nombre": "Sociología",
-      "id": 20224756
-    },
-    {
-      "nombre": "Teología",
-      "id": 33753901
-    },
-    {
-      "nombre": "Trabajo Social",
-      "id": 13369707
-    },
-    {
-      "nombre": "Villarrica",
-      "id": 84063978
-    }
-  ]
+  "66136261": "",
+  "29413674": "Artes",
+  "24122135": "Ciencia y Tecnologia",
+  "62193533": "Ciencias Sociales",
+  "20491684": "Ecolog Integra y Sustentabilid",
+  "79464654": "Formacion Filosofica",
+  "51078414": "Formacion Teologica",
+  "92033042": "Humanidades",
+  "66781270": "Pensamiento Matematico",
+  "19916096": "Salud y Bienestar",
+  "86633250": "Aprendizaje Servicio",
+  "82191603": "Aprendizaje ServicioFormación Teológica",
+  "6781444": "Cursos orientados a la Investi",
+  "7635278": "Formación Teológica",
+  "68594356": "Metodología Aprendizaje Activo",
+  "89927009": "Actividades Universitarias",
+  "66811756": "Actuación",
+  "77214951": "Agronomía Y Sistemas Naturales",
+  "22971880": "Antropología",
+  "3920939": "Arquitectura",
+  "91105853": "Arte",
+  "74312905": "Astrofísica",
+  "3095322": "Bachillerato Inicia",
+  "55525312": "CARA",
+  "22437146": "Ciencia Política",
+  "58094274": "Ciencias Biológicas",
+  "46859170": "College",
+  "92091329": "Comunicaciones",
+  "26881196": "Construcción Civil",
+  "26171977": "Cursos Deportivos",
+  "4102736": "Cursos y Test de Inglés",
+  "61715665": "Derecho",
+  "90271032": "Desarrollo Sustentable",
+  "10529390": "Diseño",
+  "81548326": "Economía Y Administración",
+  "26852794": "Educación",
+  "65006033": "Escuela Ciencias De La Salud",
+  "13649180": "Escuela De Enfermería",
+  "80588637": "Escuela De Gobierno",
+  "49817922": "Escuela De Graduados",
+  "13457286": "Escuela De Medicina",
+  "29642679": "Escuela De Odontología",
+  "55144357": "Estudios Urbanos",
+  "1731565": "Estética",
+  "30926925": "Filosofía",
+  "90112516": "Física",
+  "4330166": "Geografía",
+  "90171114": "Historia",
+  "70642379": "Ing Matemática Y Computacional",
+  "3200862": "Ingeniería",
+  "19155191": "Ingeniería Biológica Y Médica",
+  "12204788": "Instituto De Éticas Aplicadas",
+  "79433048": "Letras",
+  "75348842": "Matemáticas",
+  "51327427": "Medicina Veterinaria",
+  "39249702": "Música",
+  "55179675": "Psicología",
+  "34089012": "Química",
+  "20224756": "Sociología",
+  "33753901": "Teología",
+  "13369707": "Trabajo Social",
+  "84063978": "Villarrica"
 }

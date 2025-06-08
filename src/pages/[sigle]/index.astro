@@ -1,0 +1,27 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CoursesRaw from "../../../migration/json/2025-1.json";
+const { sigle } = Astro.params;
+const courses = CoursesRaw as Record<string, CourseStaticInfo>;
+
+if (!sigle || !courses[sigle]) {
+    return Astro.redirect("/404");
+}
+
+const course = courses[sigle];
+---
+
+<Layout>
+    <h1 class="text-3xl font-bold mb-4">Curso: {course.name}</h1>
+    <div>
+        <ul class="space-y-2">
+            <li><strong>Sigla:</strong> {course.sigle}</li>
+            <li><strong>Nombre:</strong> {course.name}</li>
+            <li><strong>Descripción:</strong> {course.program}</li>
+            <li><strong>Escuela:</strong> {course.school}</li>
+            <li><strong>Área:</strong> {course.area}</li>
+            <li><strong>Categoría:</strong> {course.category}</li>
+            <li><strong>Categoría:</strong> {course.credits}</li>
+        </ul>
+    </div>
+</Layout>
