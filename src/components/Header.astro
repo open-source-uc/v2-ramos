@@ -1,0 +1,103 @@
+---
+// Import necessary components and utilities
+import Image from "astro/components/Image.astro";
+import { cn } from "@/lib/utils";
+import ButtonNavbar from "./ui/ButtonNavbar.astro";
+import NavigationMenu from "./ui/NavigationMenu.astro";
+
+// Data for navigation menu
+const components = [
+  {
+    title: "Descubre Cursos",
+    href: "/404",
+    description: "Descubre los cursos más populares y recomendados.",
+  },
+  {
+    title: "Optativos de Formación General",
+    href: "/docs/primitives/hover-card",
+    description: "For sighted users to preview content available behind a link.",
+  },
+  {
+    title: "Progress",
+    href: "/docs/primitives/progress",
+    description:
+      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+  },
+];
+---
+
+<header class="space-between tablet:space-x-8 flex w-full items-center py-8">
+  <Image
+    src="/assets/UC_Logo_Big.svg"
+    alt="UC Logo"
+    width={200}
+    height={200}
+    class="tablet:hidden h-20 w-auto"
+  />
+  <Image
+    src="/assets/UC_Logo_Small.svg"
+    alt="UC Logo"
+    width={200}
+    height={200}
+    class="tablet:block hidden h-20 w-auto"
+  />
+
+  <nav class="tablet:block hidden w-full space-y-3">
+    <div class="border-foreground-muted-dark flex w-full justify-between space-x-4 border-b py-2">
+      <NavigationMenu
+        items={[
+          {
+            trigger: "CURSOS",
+            content: components.map(component => ({
+              title: component.title,
+              href: component.href,
+              description: component.description
+            }))
+          },
+          {
+            trigger: "ACERCA",
+            content: [
+              {
+                type: "featured",
+                title: "Creado por Open Source UC",
+                description: "Beautifully designed components built with Radix UI and Tailwind CSS.",
+                href: "/"
+              },
+              {
+                title: "Introduction",
+                href: "/docs",
+                description: "Re-usable components built using Radix UI and Tailwind CSS."
+              },
+              {
+                title: "Installation",
+                href: "/docs/installation",
+                description: "How to install dependencies and structure your apap."
+              },
+              {
+                title: "Typography",
+                href: "/docs/primitives/typography",
+                description: "Styles for headings, paragraphs, lists...etc"
+              }
+            ]
+          }
+        ]}
+      />
+      
+      <div class="flex items-center space-x-2">
+        <ButtonNavbar text="Login" url="/login" />
+        <ButtonNavbar text="Registrarse" url="/register" />
+      </div>
+    </div>
+
+    <div class="flex w-full space-x-2">
+      <ButtonNavbar text="MIS CURSOS FAVORITOS" url="/404" />
+      <ButtonNavbar text="MIS RESEÑAS" url="/404" />
+      <ButtonNavbar text="ORGANIZACIONES QUE SIGO" url="/404" />
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Client-side interactivity can be added here if needed
+  // This will only run in the browser
+</script>
