@@ -1,0 +1,44 @@
+---
+import type { Course } from "./table/columns";
+import { columns } from "./table/columns";
+import { DataTable } from "./table/data-table";
+
+import { getCourses } from "../services/courses";
+import rawId2Name from "../../migration/json/valores_unicos.json";
+
+const courses = await getCourses(Astro.locals);
+const id2name: Record<string, string> = rawId2Name as Record<string, string>;   
+
+// Transform the data to add the readable names for school, area, and category
+const coursesWithNames = courses.map(course => ({
+  ...course,
+  school: id2name[course.school_id.toString()] || 'No disponible',
+  area: id2name[course.area_id.toString()] || 'No disponible',
+  category: id2name[course.category_id.toString()] || 'No disponible'
+})) as Course[];
+---
+
+<div class="container mx-auto py-8">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">Catálogo de Cursos</h1>
+    <p class="text-gray-600">Explora todos los cursos disponibles, filtra por sigla y ordena por diferentes criterios</p>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+    <DataTable columns={columns} data={coursesWithNames} client:load />
+  </div>
+
+  <div class="mt-8 bg-gray-50 rounded-lg p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-3">Instrucciones de uso</h2>
+    <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div>
+        <h3 class="font-semibold mb-2">Búsqueda</h3>
+        <p>Utiliza el campo de búsqueda para filtrar cursos por sigla.</p>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">Ordenamiento</h3>
+        <p>Haz clic en los encabezados de las columnas para ordenar los resultados por ese criterio.</p>
+      </div>
+    </div>
+  </div>
+</div>
