@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import Header from "../components/Header.astro";
+import Header from "../components/Header";
 ---
 
 <!doctype html>
@@ -13,7 +13,7 @@ import Header from "../components/Header.astro";
 		<title>Ramos UC</title>
 	</head>
 	<body class="bg-background text-foreground space-y-12 px-4 tablet:px-8">
-		<Header />
+		<Header client:visible />
 		<slot />
 	</body>
 </html>
