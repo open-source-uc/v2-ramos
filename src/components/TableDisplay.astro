@@ -3,18 +3,22 @@ import type { Course } from "./table/columns";
 import { columns } from "./table/columns";
 import { DataTable } from "./table/data-table";
 
-import { getCourses } from "../services/courses";
-import rawId2Name from "../../migration/json/valores_unicos.json";
+// Import direct data from JSON instead of using the database query
+import CoursesRaw from "../../migration/json/2025-1.json";
+import Id2NameRaw from "../../migration/json/valores_unicos.json";
 
-const courses = await getCourses(Astro.locals);
-const id2name: Record<string, string> = rawId2Name as Record<string, string>;   
+// Prepare data
+const coursesData = CoursesRaw as Record<string, any>;
+const id2name: Record<string, string> = Id2NameRaw as Record<string, string>;
 
-// Transform the data to add the readable names for school, area, and category
-const coursesWithNames = courses.map(course => ({
-  ...course,
-  school: id2name[course.school_id.toString()] || 'No disponible',
-  area: id2name[course.area_id.toString()] || 'No disponible',
-  category: id2name[course.category_id.toString()] || 'No disponible'
+// Transform the JSON data directly into the format needed by the table
+const coursesWithNames = Object.entries(coursesData).map(([sigle, details]) => ({
+  sigle: sigle,
+  name: details.name || 'Nombre no disponible',
+  credits: details.credits || 0,
+  school: details.school || 'No disponible',
+  area: details.area || 'No disponible',
+  category: details.category || 'No disponible'
 })) as Course[];
 ---
 
@@ -25,7 +29,7 @@ const coursesWithNames = courses.map(course => ({
   </div>
   
   <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
-    <DataTable columns={columns} data={coursesWithNames} client:load />
+    <DataTable columns={columns} data={coursesWithNames} client:only="react" />
   </div>
 
   <div class="mt-8 bg-gray-50 rounded-lg p-6">

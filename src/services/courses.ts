@@ -47,3 +47,19 @@ export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
   console.log('getCourseBySigle', result.meta);
   return result.results[0] ?? null;
 };
+
+export const getAllCoursesBasicInfo = async (locals: App.Locals) => {
+  const result = await locals.runtime.env.DB.prepare(`
+    SELECT 
+      id,
+      sigle,
+      school_id,
+      area_id,
+      category_id,
+      sort_index
+    FROM course_summary
+  `).all<CourseSummary>()
+
+  console.log('getCourseBySigle', result.meta);
+  return result.results[0] ?? null;
+};
