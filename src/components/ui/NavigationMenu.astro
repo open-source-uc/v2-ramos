@@ -1,0 +1,79 @@
+---
+// Navigation Menu component for Astro
+const { items } = Astro.props;
+---
+
+<div class="navigation-menu">
+  <ul class="navigation-menu-list">
+    {items.map((item) => (
+      <li class="navigation-menu-item">
+        <button class="navigation-menu-trigger hover:bg-primary-light hover:text-primary">
+          {item.trigger}
+        </button>
+        <div class="navigation-menu-content hidden">
+          <ul class="grid gap-3 p-4 md:w-[400px] lg:w-[500px]">
+            {item.content.map((contentItem) => (
+              <li>
+                {contentItem.type === 'featured' ? (
+                  <a 
+                    href={contentItem.href}
+                    class="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none select-none focus:shadow-md"
+                  >
+                    <div class="mt-4 mb-2 text-lg font-medium">
+                      {contentItem.title}
+                    </div>
+                    <p class="text-muted-foreground text-sm leading-tight">
+                      {contentItem.description}
+                    </p>
+                  </a>
+                ) : (
+                  <a 
+                    href={contentItem.href}
+                    class="hover:bg-primary-light hover:text-primary block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                  >
+                    <div class="text-sm leading-none font-medium">{contentItem.title}</div>
+                    <p class="text-muted-foreground line-clamp-2 text-sm leading-snug">{contentItem.description}</p>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  // Client-side functionality for navigation menus
+  document.addEventListener('DOMContentLoaded', () => {
+    const triggers = document.querySelectorAll('.navigation-menu-trigger');
+    
+    triggers.forEach(trigger => {
+      trigger.addEventListener('mouseenter', () => {
+        const content = trigger.nextElementSibling;
+        if (content) {
+          content.classList.remove('hidden');
+        }
+      });
+      
+      trigger.parentElement?.addEventListener('mouseleave', () => {
+        const content = trigger.nextElementSibling;
+        if (content) {
+          content.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Add any additional styles needed */
+  .navigation-menu-content {
+    position: absolute;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 50;
+  }
+</style>

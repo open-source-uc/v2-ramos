@@ -12,15 +12,26 @@
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^12.5.3",
+		"@astrojs/react": "^4.3.0",
 		"@astrojs/svelte": "^7.1.0",
-		"@tailwindcss/vite": "^4.1.8",
+		"@fontsource-variable/instrument-sans": "^5.2.6",
+		"@tailwindcss/vite": "^4.1.10",
+		"@types/react": "^19.1.8",
+		"@types/react-dom": "^19.1.6",
 		"astro": "^5.8.2",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.516.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
 		"svelte": "^5.33.17",
-		"tailwindcss": "^4.1.8",
+		"tailwind-merge": "^3.3.1",
+		"tailwindcss": "^4.1.10",
 		"typescript": "^5.8.3"
 	},
 	"devDependencies": {
 		"@types/node": "^22.15.29",
+		"tw-animate-css": "^1.3.4",
 		"wrangler": "^4.19.1"
 	}
 }
