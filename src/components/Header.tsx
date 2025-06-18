@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-import ButtonNavbar from "./ui/ButtonNavbar";
+import ButtonNavbar from "./ui/button-navbar";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,7 +12,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "./ui/NavigationMenu";
+} from "./ui/navigation-menu";
 
 const components: { title: string; href: string; description: string }[] = [
   {

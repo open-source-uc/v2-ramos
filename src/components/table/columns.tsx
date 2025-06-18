@@ -32,9 +32,5 @@ export const columns: ColumnDef<Course>[] = [
     {
         accessorKey: "area",
         header: "Área",
-    },
-    {
-        accessorKey: "category",
-        header: "Categoría"
-    },
+    }
 ]

@@ -17,8 +17,7 @@ const coursesWithNames = Object.entries(coursesData).map(([sigle, details]) => (
   name: details.name || 'Nombre no disponible',
   credits: details.credits || 0,
   school: details.school || 'No disponible',
-  area: details.area || 'No disponible',
-  category: details.category || 'No disponible'
+  area: details.area || 'No disponible'
 })) as Course[];
 ---
 
