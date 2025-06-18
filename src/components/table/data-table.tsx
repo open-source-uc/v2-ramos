@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
+import { columns, type Course } from "./columns"
 
 import {
   flexRender,
@@ -26,15 +26,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+interface DataTableProps {
+  data: Course[]
 }
 
-export function DataTable<TData, TValue>({
-  columns,
+export function DataTable({
   data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   
