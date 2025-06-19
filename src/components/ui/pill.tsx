@@ -8,7 +8,7 @@ const pillVariants = cva(
   {
     variants: {
       variant: {
-        blue: "bg-primary-light text-primary border-primary/20",
+        blue: "bg-primary-foreground text-primary border-primary/20",
         pink: "bg-pink-light text-pink border-pink/20",
         green: "bg-green-light text-green border-green/20",
         purple: "bg-purple-light text-purple border-purple/20",
