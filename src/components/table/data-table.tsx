@@ -25,6 +25,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
+// Utility function to normalize text by removing accents and converting to lowercase
+const normalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .normalize("NFD") // Decompose accented characters
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
+    .replace(/[^\w\s]/g, "") // Remove special characters except word characters and spaces
+}
+
 interface DataTableProps {
   data: Course[]
   externalSearchValue?: string
@@ -53,10 +62,10 @@ export function DataTable({
     globalFilterFn: (row, columnId, value) => {
       const name = row.getValue("name") as string
       const sigle = row.getValue("sigle") as string
-      const searchValue = value.toLowerCase()
+      const searchValue = normalizeText(value)
       
-      return name.toLowerCase().includes(searchValue) || 
-             sigle.toLowerCase().includes(searchValue)
+      return normalizeText(name).includes(searchValue) || 
+             normalizeText(sigle).includes(searchValue)
     },
     onGlobalFilterChange: setGlobalFilter,
     state: {
