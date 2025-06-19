@@ -1,0 +1,52 @@
+---
+import { record } from "astro:schema";
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const recommendations = await getCollection("recommendations");
+console.log(recommendations);
+---
+
+<Layout>
+  <main>
+    <section class="flex flex-col gap-8">
+      <h1 class="text-2xl font-bold">Recommendations</h1>
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          recommendations.map((rec) => {
+            const { data } = rec;
+            const {
+              title,
+              initiative,
+              period,
+              faculty,
+              qualification,
+              resume,
+            } = data;
+            return (
+              <article>
+                <h2>{title}</h2>
+                <p>Initiative: {initiative}</p>
+                <p>Period: {period}</p>
+                <p>Faculty: {faculty}</p>
+                <p>Qualification: {qualification}</p>
+                <div class="flex gap-3">
+                  <p>Tags: </p>
+                  <div>
+                    <ul class="list-disc pl-4">
+                      {data.tags.map((tag) => (
+                        <li>{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <p>Resumen de la recomendación:</p>
+                <p>{resume}</p>
+              </article>
+            );
+          })
+        }
+      </div>
+    </section>
+  </main>
+</Layout>
