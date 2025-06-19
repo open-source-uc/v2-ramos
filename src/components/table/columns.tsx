@@ -2,6 +2,8 @@
  
 import type { ColumnDef } from "@tanstack/react-table"
 import { Pill } from "../ui/pill"
+import { Button } from "../ui/button"
+import { SwapVert } from "../icons/icons"
  
 export type Course = {
   id: number,
@@ -16,8 +18,17 @@ export type Course = {
 export const columns: ColumnDef<Course>[] = [
     {
         accessorKey: "sigle",
-        header: () => {
-            return <div className="text-left font-semibold">Sigla</div>
+        header: ({column}) => {
+            return (
+            <Button 
+                className="font-semibold flex gap-1 items-center my-2" 
+                variant="ghost" 
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Sigla
+                    <SwapVert />
+            </Button>
+            )
         },
         cell: ({ row }) => {
             return <div>{row.original.sigle}</div>
@@ -25,8 +36,17 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "name",
-        header: () => {
-            return <div className="text-left font-semibold">Nombre</div>
+        header: ({column}) => {
+            return (
+            <Button 
+                className="font-semibold flex gap-1 items-center my-2" 
+                variant="ghost" 
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Nombre
+                    <SwapVert />
+            </Button>
+            )
         },
         cell: ({ row }) => {
             return <div className="font-medium">{row.original.name}</div>
@@ -43,8 +63,17 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "school",
-        header: () => {
-            return <div className="text-left font-semibold">Facultad</div>
+        header: ({column}) => {
+           return (
+            <Button 
+                className="font-semibold flex gap-1 items-center my-2" 
+                variant="ghost" 
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Facultad
+                    <SwapVert />
+            </Button>
+            )
         },
         cell: ({ row }) => {
             return <Pill variant="blue">{row.original.school}</Pill>
@@ -52,8 +81,17 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "area",
-        header: () => {
-            return <div className="text-left font-semibold">Área de Formación General</div>
+        header: ({column}) => {
+           return (
+            <Button 
+                className="font-semibold flex gap-1 items-center my-2" 
+                variant="ghost" 
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Área de Formación General
+                    <SwapVert />
+            </Button>
+            )
         },
         cell: ({ row }) => {
             if (row.original.area !== "Ninguna") {

@@ -16,3 +16,9 @@ export function Search({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function SwapVert({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} height="20" viewBox="0 -960 960 960" width="20" fill="000000"><path d="M328.31-461.69v-282.46L215.54-631.38 168-677.69 361.31-872l193.31 194.31-47.54 46.31-112.77-112.77v282.46h-66ZM597.92-88l-193.3-194.31 47.53-46.31 112.77 112.77v-282.46h66v282.46l112.77-112.77 47.54 46.31L597.92-88Z"/></svg>
+  );
+}
