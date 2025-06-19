@@ -53,10 +53,12 @@ export const columns: ColumnDef<Course>[] = [
     {
         accessorKey: "area",
         header: () => {
-            return <div className="text-left font-semibold">Área</div>
+            return <div className="text-left font-semibold">Área de Formación General</div>
         },
         cell: ({ row }) => {
-            return <Pill variant="green">{row.original.area}</Pill>
+            if (row.original.area !== "Ninguna") {
+                return <Pill variant="green">{row.original.area}</Pill>
+            }
         }
     }
 ]
