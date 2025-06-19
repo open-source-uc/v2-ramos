@@ -10,7 +10,9 @@ console.log(recommendations);
 <Layout>
   <main>
     <section class="flex flex-col gap-8">
-      <h1 class="text-2xl font-bold">Recommendations</h1>
+      <header>
+        <h1 class="text-2xl font-bold">Recommendations</h1>
+      </header>
       <div class="grid gap-6 md:grid-cols-2">
         {
           recommendations.map((rec) => {
@@ -24,24 +26,38 @@ console.log(recommendations);
               resume,
             } = data;
             return (
-              <article>
-                <h2>{title}</h2>
-                <p>Initiative: {initiative}</p>
-                <p>Period: {period}</p>
-                <p>Faculty: {faculty}</p>
-                <p>Qualification: {qualification}</p>
-                <div class="flex gap-3">
-                  <p>Tags: </p>
+              <article class="bg-white p-6 rounded-lg shadow-md flex flex-col gap-2">
+                <header>
+                  <h2 class="text-xl font-bold">
+                    {title} - {initiative}
+                  </h2>
+                </header>
+                <dl class="space-y-2">
                   <div>
-                    <ul class="list-disc pl-4">
-                      {data.tags.map((tag) => (
-                        <li>{tag}</li>
-                      ))}
-                    </ul>
+                    <dt class="font-semibold">Period:</dt>
+                    <dd>{period}</dd>
                   </div>
-                </div>
-                <p>Resumen de la recomendación:</p>
-                <p>{resume}</p>
+                  <div>
+                    <dt class="font-semibold">Faculty:</dt>
+                    <dd>{faculty}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Qualification:</dt>
+                    <dd>{qualification}</dd>
+                  </div>
+                </dl>
+                <section class="flex gap-3">
+                  <h3 class="font-semibold">Tags:</h3>
+                  <ul class="list-disc pl-4">
+                    {data.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                </section>
+                <section>
+                  <h3 class="font-semibold">Resumen de la recomendación:</h3>
+                  <p>{resume}</p>
+                </section>
               </article>
             );
           })
