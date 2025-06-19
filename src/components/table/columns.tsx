@@ -16,35 +16,45 @@ export type Course = {
 export const columns: ColumnDef<Course>[] = [
     {
         accessorKey: "sigle",
-        header: "Sigla",
+        header: () => {
+            return <div className="text-left font-semibold">Sigla</div>
+        },
         cell: ({ row }) => {
             return <div>{row.original.sigle}</div>
         }
     },
     {
         accessorKey: "name",
-        header: "Nombre",
+        header: () => {
+            return <div className="text-left font-semibold">Nombre</div>
+        },
         cell: ({ row }) => {
-            return <div>{row.original.name}</div>
+            return <div className="font-medium">{row.original.name}</div>
         }
     },
     {
         accessorKey: "credits",
-        header: "Créditos",
+        header: () => {
+            return <div className="text-left font-semibold">Créditos</div>
+        },
         cell: ({ row }) => {
             return <div>{row.original.credits}</div>
         }
     },
     {
         accessorKey: "school",
-        header: "Facultad",
+        header: () => {
+            return <div className="text-left font-semibold">Facultad</div>
+        },
         cell: ({ row }) => {
             return <Pill variant="blue">{row.original.school}</Pill>
         }
     },
     {
         accessorKey: "area",
-        header: "Área",
+        header: () => {
+            return <div className="text-left font-semibold">Área</div>
+        },
         cell: ({ row }) => {
             return <Pill variant="green">{row.original.area}</Pill>
         }

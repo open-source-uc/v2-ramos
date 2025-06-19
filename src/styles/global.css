@@ -1,32 +1,3 @@
-@import 'tailwindcss';
-@import '@fontsource-variable/instrument-sans';
-
-/* Define a dark mode variant that applies to classes and their children */
-@custom-variant dark (&:where(class, class *));
-
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--border-color, currentcolor);
-  }
-}
-
-body {
-  font-family: 'Instrument Sans Variable', sans-serif;
-}
-
-/* 
- * Theme Configuration using @theme directive for Tailwind v4
- * This creates utility classes and CSS variables from the theme values
- */
 @theme static inline {
    --color-*: initial;
 
@@ -34,35 +5,120 @@ body {
   --color-primary: oklch(0.58 0.22 260);
   --color-primary-light: oklch(0.96 0.03 260);
 
-  --color-background: #fdfdfd;
-  --color-background-elements: #fafafa;
+  --color-background: oklch(0.994 0 0);
+  --color-background-elements: oklch(0.9851 0 0);
 
-  --color-foreground: #000000;
-  --color-foreground-muted-dark: #646363;
-  --color-foreground-muted-medium: #c6c6c6;
-  --color-foreground-muted-light: #eaeaea;
+  --color-foreground: oklch(0 0 0);
+  --color-foreground-muted-dark: oklch(0.235 0 0);
+  --color-foreground-muted-medium: oklch(0.535 0 0);
+  --color-foreground-muted-light: oklch(0.935 0 0);
 
-  --color-red: #ec0b43;
-  --color-red-light: #feecf0;
-  --color-green: #37a000;
-  --color-green-light: #f1ffeb;
-  --color-purple: #ed14ff;
-  --color-purple-light: #fdebff;
-  --color-pink: #f51aa4;
-  --color-pink-light: #feecf8;
-  --color-orange: #fa5a2e;
-  --color-orange-light: #feefeb;
+  --color-red: oklch(0.5995 0.2372 19);
+  --color-red-light: oklch(0.95 0.2372 19);
+  --color-green: oklch(0.6202 0.196479 139.2308);
+  --color-green-light: oklch(0.95 0.196479 139.2308);
+  --color-purple: oklch(0.6783 0.3121 324.31)
+  --color-purple-light: oklch(0.95 0.3121 324.31)
+  --color-pink: oklch(0.6459 0.26 349.85)
+  --color-pink-light: oklch(0.95 0.26 349.85)
+  --color-orange: oklch(0.6754 0.2034 35.74)
+  --color-orange-light: oklch(0.95 0.2034 35.74);
+}
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import '@fontsource-variable/instrument-sans';
+
+@theme static inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--red);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-red: var(--red);
+  --color-red-light: var(--red-light);
+  --color-green: var(--green);
+  --color-green-light: var(--green-light);
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --color-pink: var(--pink);
+  --color-pink-light: var(--pink-light);
+  --color-orange: var(--orange);
+  --color-orange-light: var(--orange-light);
 
   /* Custom breakpoints */
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1154px;
+}
 
-  /* Border radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.994 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(0.9851 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(0.9851 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0.58 0.22 260);
+  --primary-foreground: oklch(0.98 0.22 260);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.235 0 0);
+  --accent: oklch(0.935 0 0);
+  --accent-foreground: oklch(0.235 0 0);
+  --border: oklch(0.935 0 0);
+  --input: oklch(0.535 0 0);
+  --ring: oklch(0.58 0.22 260);
+  --red: oklch(0.5995 0.2372 19);
+  --red-light: oklch(0.95 0.2372 19);
+  --green: oklch(0.6202 0.196479 139.2308);
+  --green-light: oklch(0.95 0.196479 139.2308);
+  --purple: oklch(0.6783 0.3121 324.31);
+  --purple-light: oklch(0.95 0.3121 324.31);
+  --pink: oklch(0.6459 0.26 349.85);
+  --pink-light: oklch(0.95 0.26 349.85);
+  --orange: oklch(0.6754 0.2034 35.74);
+  --orange-light: oklch(0.95 0.2034 35.74);
+}.dark { /* Dark mode styles NOT IMPLEMENTED */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
 
-  /* Typography */
-  --font-sans: var(--font-instrument-sans);
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Instrument Sans Variable', sans-serif;
+  }
 }

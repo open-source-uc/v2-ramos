@@ -69,9 +69,27 @@ export function DataTable({
             table.getColumn("sigle")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />  
+        />
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Anterior
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Siguiente
+          </Button>
+        </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border border-foreground-muted-dark">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -116,7 +134,7 @@ export function DataTable({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex-1 text-sm text-foreground-muted-dark">
           {table.getFilteredRowModel().rows.length} cursos encontrados
         </div>
         <div className="space-x-2">
