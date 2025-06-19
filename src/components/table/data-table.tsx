@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { columns, type Course } from "./columns"
 
 import {
@@ -27,13 +27,20 @@ import { Button } from "@/components/ui/button"
 
 interface DataTableProps {
   data: Course[]
+  externalSearchValue?: string
 }
 
 export function DataTable({
   data,
+  externalSearchValue = "",
 }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
-  const [globalFilter, setGlobalFilter] = useState("")
+  const [globalFilter, setGlobalFilter] = useState(externalSearchValue)
+  
+  // Update internal filter when external search value changes
+  useEffect(() => {
+    setGlobalFilter(externalSearchValue)
+  }, [externalSearchValue])
   
   const table = useReactTable({
     data,
@@ -60,19 +67,11 @@ export function DataTable({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-4">
-        <Input
-          placeholder="Buscar por nombre o sigla..."
-          value={globalFilter ?? ""}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setGlobalFilter(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex items-center gap-4">
         <div className="space-x-2">
         </div>
       </div>
-      <div className="rounded-md border border-foreground-muted-dark">
+      <div className="rounded-md border border-border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

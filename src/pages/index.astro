@@ -2,12 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import { getCourses } from "../services/courses";
 import rawId2Name from "../../migration/json/valores_unicos.json";
+import { LandingSearch } from "@/components/LandingSearch";
 
 const courses = await getCourses(Astro.locals);
 const id2name: Record<string, string> = rawId2Name as Record<string, string>;
 ---
 
 <Layout>
+	<LandingSearch client:only="react" />
 	<div class="max-w-7xl mx-auto px-4 py-8">
 
 		<!-- Grid de cursos -->
