@@ -21,7 +21,7 @@ export const columns: ColumnDef<Course>[] = [
         header: ({column}) => {
             return (
             <Button 
-                className="font-semibold flex gap-1 items-center my-2" 
+                className="font-semibold flex gap-2 items-center my-2" 
                 variant="ghost" 
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -39,7 +39,7 @@ export const columns: ColumnDef<Course>[] = [
         header: ({column}) => {
             return (
             <Button 
-                className="font-semibold flex gap-1 items-center my-2" 
+                className="font-semibold flex gap-2 items-center my-2" 
                 variant="ghost" 
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -66,7 +66,7 @@ export const columns: ColumnDef<Course>[] = [
         header: ({column}) => {
            return (
             <Button 
-                className="font-semibold flex gap-1 items-center my-2" 
+                className="font-semibold flex gap-2 items-center my-2" 
                 variant="ghost" 
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Course>[] = [
         header: ({column}) => {
            return (
             <Button 
-                className="font-semibold flex gap-1 items-center my-2" 
+                className="font-semibold flex gap-2 items-center my-2" 
                 variant="ghost" 
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >

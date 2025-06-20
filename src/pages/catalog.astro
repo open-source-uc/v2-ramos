@@ -15,12 +15,14 @@ const coursesData = CoursesRaw as Record<string, any>;
 const id2name: Record<string, string> = Id2NameRaw as Record<string, string>;
 
 // Transform the JSON data directly into the format needed by the table
-const coursesWithNames = Object.entries(coursesData).map(([sigle, details]) => ({
+const coursesWithNames = Object.entries(coursesData).map(([sigle, details], index) => ({
+  id: index + 1, // Generate a simple id
   sigle: sigle,
-  name: details.name || 'Nombre no disponible',
-  credits: details.credits || 0,
-  school: details.school || 'No disponible',
-  area: details.area || 'No disponible'
+  name: details.name,
+  credits: details.credits,
+  school: details.school,
+  area: details.area,
+  category: details.category,
 })) as Course[];
 ---
 

@@ -29,7 +29,7 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function Header() {
   return (
-    <header className="space-between tablet:space-x-8 flex w-full items-center py-8">
+    <header className="space-between tablet:space-x-8 flex w-full items-center py-8 px-4">
       <a href="/">
       <img
         src="logos/UC_Logo_Big.svg"
@@ -107,9 +107,9 @@ export default function Header() {
       </div>
 
       <div className="flex w-full space-x-2">
-        <ButtonNavbar text="MIS CURSOS FAVORITOS" url="/404" />
-        <ButtonNavbar text="MIS RESEÑAS" url="/404" />
-        <ButtonNavbar text="ORGANIZACIONES QUE SIGO" url="/404" />
+        <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
+        <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
+        <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
       </div>
       </nav>
     </header>
