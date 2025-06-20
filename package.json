@@ -15,6 +15,7 @@
 		"@astrojs/react": "^4.3.0",
 		"@astrojs/svelte": "^7.1.0",
 		"@fontsource-variable/instrument-sans": "^5.2.6",
+		"@radix-ui/react-navigation-menu": "^1.2.13",
 		"@tailwindcss/vite": "^4.1.10",
 		"@types/react": "^19.1.8",
 		"@types/react-dom": "^19.1.6",
