@@ -16,9 +16,10 @@ console.log(recommendations);
       <div class="grid gap-6 md:grid-cols-2">
         {
           recommendations.map((rec) => {
-            const { data } = rec;
+            const { slug, data } = rec;
             const {
               title,
+              code,
               initiative,
               period,
               faculty,
@@ -26,16 +27,23 @@ console.log(recommendations);
               resume,
             } = data;
             return (
-              <article class="bg-white p-6 rounded-lg shadow-md flex flex-col gap-2">
-                <header>
+              <article class="bg-white rounded-lg shadow-md flex flex-col gap-2 hover:shadow-lg transition-shadow duration-200 [&>*:not(:first-child)]:px-6 [&>*:not(:first-child)]:py-4">
+                <header class="mb-4 bg-blue-600 text-white p-8 rounded-t-lg flex flex-col md:flex-row justify-between">
                   <h2 class="text-xl font-bold">
                     {title} - {initiative}
                   </h2>
+                  <span class="text-sm bg-white/20 px-2 py-1 rounded">
+                    Recomendado por una iniciativa estudiantil
+                  </span>
                 </header>
-                <dl class="space-y-2">
+                <dl class="grid grid-cols-2">
                   <div>
                     <dt class="font-semibold">Period:</dt>
                     <dd>{period}</dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Code:</dt>
+                    <dd>{code}</dd>
                   </div>
                   <div>
                     <dt class="font-semibold">Faculty:</dt>
@@ -45,18 +53,31 @@ console.log(recommendations);
                     <dt class="font-semibold">Qualification:</dt>
                     <dd>{qualification}</dd>
                   </div>
+                  <div>
+                    <dt class="font-semibold">Tags:</dt>
+                    <dd>
+                      <ul class="pl-4">
+                        {data.tags.map((tag) => (
+                          <li>- {tag}</li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
                 </dl>
-                <section class="flex gap-3">
-                  <h3 class="font-semibold">Tags:</h3>
-                  <ul class="list-disc pl-4">
-                    {data.tags.map((tag) => (
-                      <li>{tag}</li>
-                    ))}
-                  </ul>
-                </section>
-                <section>
-                  <h3 class="font-semibold">Resumen de la recomendación:</h3>
-                  <p>{resume}</p>
+                <section class="flex flex-col lg:flex-row">
+                  <div class="flex-1">
+                    <h3 class="font-semibold">Resumen de la recomendación:</h3>
+                    <p>{resume}</p>
+                  </div>
+                  {/* Mover link al lado derecho de facultad y calificación */}
+                  <div class="flex flex-col justify-end">
+                    <a
+                      href={`/recommendations/${code}-${initiative.replace(/\s/g, "")}`}
+                      class="text-blue-600 border-blue-600 border-solid px-5 py-2 border-2 rounded hover:bg-blue-600 hover:text-white transition-colors"
+                    >
+                      Leer la recomendación completa
+                    </a>
+                  </div>
                 </section>
               </article>
             );

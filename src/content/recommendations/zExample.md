@@ -1,12 +1,13 @@
 ---
 title: "Nombre del curso" # ej: IIC2413
+code: "IDK2025"
 initiative: "Nombre de la iniciativa"
 period: "2025-1" # Período académico (ej: 2024-1, 2025-1)
 faculty: "Agronomia" # Facultad o departamento
 qualification: 5.2 # Calificación o nota obtenida
 tags: # Etiquetas descriptivas (ej: [matemáticas, programación, obligatorio])
     - Agronomía
-resume: "Lorem ipsum dolor sit amet" # Un Resumen de la Recomendación
+resume: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." # Un Resumen de la Recomendación
 ---
 
 <!-- Ejemplo de recomendacion de curso -->

@@ -3,6 +3,7 @@ import { defineCollection, z } from "astro:content";
 const recommendations = defineCollection({
     schema: z.object({
         title: z.string(),
+        code: z.string(),
         initiative: z.string(),
         period: z.string(),
         faculty: z.string(),
