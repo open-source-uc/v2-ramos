@@ -23,7 +23,8 @@ const components: { title: string; href: string; description: string }[] = [
   {
     title: "Optativos de Formación General",
     href: "/docs/primitives/hover-card",
-    description: "For sighted users to preview content available behind a link.",
+    description:
+      "For sighted users to preview content available behind a link.",
   },
   {
     title: "Progress",
@@ -62,7 +63,11 @@ export default function Header() {
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {components.map((component) => (
-                      <ListItem key={component.title} title={component.title} href={component.href}>
+                      <ListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                      >
                         {component.description}
                       </ListItem>
                     ))}
@@ -85,18 +90,23 @@ export default function Header() {
                             Creado por <br /> Open Source UC
                           </div>
                           <p className="text-muted-foreground text-sm leading-tight">
-                            Beautifully designed components built with Radix UI and Tailwind CSS.
+                            Beautifully designed components built with Radix UI
+                            and Tailwind CSS.
                           </p>
                         </a>
                       </NavigationMenuLink>
                     </li>
                     <ListItem href="/docs" title="Introduction">
-                      Re-usable components built using Radix UI and Tailwind CSS.
+                      Re-usable components built using Radix UI and Tailwind
+                      CSS.
                     </ListItem>
                     <ListItem href="/docs/installation" title="Installation">
                       How to install dependencies and structure your apap.
                     </ListItem>
-                    <ListItem href="/docs/primitives/typography" title="Typography">
+                    <ListItem
+                      href="/docs/primitives/typography"
+                      title="Typography"
+                    >
                       Styles for headings, paragraphs, lists...etc
                     </ListItem>
                   </ul>
@@ -120,26 +130,29 @@ export default function Header() {
   );
 }
 
-const ListItem = React.forwardRef<React.ElementRef<typeof Link>, React.ComponentPropsWithoutRef<typeof Link>>(
-  ({ className, title, children, href, ...props }, ref) => {
-    return (
-      <li>
-        <NavigationMenuLink asChild>
-          <a
-            ref={ref}
-            href={href}
-            className={cn(
-              "hover:bg-primary-light hover:text-primary block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none",
-              className,
-            )}
-            {...props}
-          >
-            <div className="text-sm leading-none font-medium">{title}</div>
-            <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">{children}</p>
-          </a>
-        </NavigationMenuLink>
-      </li>
-    );
-  },
-);
+const ListItem = React.forwardRef<
+  React.ElementRef<typeof Link>,
+  React.ComponentPropsWithoutRef<typeof Link>
+>(({ className, title, children, href, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          href={href}
+          className={cn(
+            "hover:bg-primary-light hover:text-primary block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm leading-none font-medium">{title}</div>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
 ListItem.displayName = "ListItem";

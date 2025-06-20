@@ -4,11 +4,11 @@ code: "IIC2413" # Codigo del curso
 initiative: "Copilot" # Nombre de la iniciativa
 period: "2025-1" # Período académico (ej: 2024-1, 2025-1)
 faculty: "DCC" # Facultad o departamento
-qualification: 1.6 # Calificación o nota obtenida
+qualification: 1 # Calificación o nota obtenida
 tags: # Etiquetas descriptivas (ej: [matemáticas, programación, obligatorio])
     - Licenciatura en Ingeniería en Ciencia de la Computación
     - Base de Datos
-resume: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. GJKLWALJKGAWLJKGLAWKJ JKLGAWJKLGLAWJK:GJK:AWLJK:G :GJKLWAJKL:GL:AWJK L:KJGL:WKAJ GLK:AWJGL:KAWJGLAW JGLK:JGWKL:AJGL:" # Un Resumen de la Recomendación
+resume: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor :" # Un Resumen de la Recomendación
 ---
 
 <!-- Ejemplo de recomendacion de curso -->

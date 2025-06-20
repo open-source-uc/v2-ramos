@@ -14,20 +14,22 @@ export async function getStaticPaths() {
 }
 
 const { rec } = Astro.props;
-const { data, slug } = rec;
-const { title, initiative, period, faculty, qualification, resume } = data;
+const { data } = rec;
+const { title, initiative, period, faculty, qualification, tags, resume } =
+  data;
 
 const { Content } = await render(rec);
+export const prerender = true;
 ---
 
 <Layout>
   <main>
     <section class="[&>*:not(:first-child)]:px-8 flex flex-col gap-8">
-      <header class="bg-blue-600 px-8 py-4 rounded-t-lg">
+      <header class="text-white bg-blue-600 px-8 py-4 rounded-t-lg">
         {title} - {initiative}
       </header>
-      <div class="flex">
-        <dl class="w-1/2">
+      <div class="flex flex-col lg:flex-row">
+        <dl class="w-2xl">
           <div>
             <dt class="font-semibold">Period:</dt>
             <dd>{period}</dd>
@@ -38,13 +40,13 @@ const { Content } = await render(rec);
           </div>
           <div>
             <dt class="font-semibold">Qualification:</dt>
-            <dd>{qualification}</dd>
+            <dd>{qualification} ⭐</dd>
           </div>
           <div>
             <dt class="font-semibold">Tags:</dt>
             <dd>
               <ul class="list-disc pl-4">
-                {data.tags.map((tag) => <li>{tag}</li>)}
+                {tags.map((tag: unknown) => <li>{tag}</li>)}
               </ul>
             </dd>
           </div>
