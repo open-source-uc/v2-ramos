@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 
 export function LandingSearch() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -18,31 +17,21 @@ export function LandingSearch() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto mb-12">
-      <div className="text-center mb-8">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">
-          Encuentra tu curso ideal
+    <div className="max-w-2xl w-full mx-auto my-16">
+        <h1 className="text-4xl font-semibold text-foreground mb-4 text-center mb-8">
+          ¿En qué curso estás pensando?
         </h1>
-        <p className="text-xl text-gray-600">
-          Explora miles de cursos y encuentra el que mejor se adapte a tus necesidades
-        </p>
-      </div>
       
-      <form onSubmit={handleSearch} className="flex gap-4">
+      <form onSubmit={handleSearch} className="relative">
         <Input
+          variant="search"
+          inputSize="lg"
           type="text"
           placeholder="Buscar por nombre o sigla del curso..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 h-12 text-lg"
+          className="text-lg pl-10"
         />
-        <Button 
-          type="submit" 
-          size="lg"
-          className="h-12 px-8 text-lg font-semibold"
-        >
-          Buscar
-        </Button>
       </form>
       
       <div className="mt-4 text-center">

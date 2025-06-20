@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Pill } from "../ui/pill"
 import { Button } from "../ui/button"
-import { SwapVert } from "../icons/icons"
+import { SwapVertIcon } from "../icons/icons"
  
 export type Course = {
   id: number,
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Course>[] = [
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Sigla
-                    <SwapVert />
+                    <SwapVertIcon />
             </Button>
             )
         },
@@ -44,7 +44,7 @@ export const columns: ColumnDef<Course>[] = [
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Nombre
-                    <SwapVert />
+                    <SwapVertIcon />
             </Button>
             )
         },
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Course>[] = [
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Facultad
-                    <SwapVert />
+                    <SwapVertIcon />
             </Button>
             )
         },
@@ -89,7 +89,7 @@ export const columns: ColumnDef<Course>[] = [
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Área de Formación General
-                    <SwapVert />
+                    <SwapVertIcon />
             </Button>
             )
         },

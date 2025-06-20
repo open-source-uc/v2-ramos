@@ -33,6 +33,7 @@ export function Search({
     <div className={`flex items-center gap-2 ${className}`}>
       <div className="relative flex-1">
         <Input
+          variant="search"
           type="text"
           placeholder={placeholder}
           value={searchTerm}
