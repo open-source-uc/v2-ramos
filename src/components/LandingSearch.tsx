@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
+import { Button } from "./ui/button"
 
 export function LandingSearch() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -22,25 +23,50 @@ export function LandingSearch() {
           ¿En qué curso estás pensando?
         </h1>
       
-      <form onSubmit={handleSearch} className="relative">
+      <form onSubmit={handleSearch} className="relative" role="search" aria-label="Buscar cursos">
+        <label htmlFor="course-search" className="sr-only">
+          Buscar por nombre o sigla del curso
+        </label>
         <Input
+          id="course-search"
           variant="search"
           inputSize="lg"
           type="text"
           placeholder="Buscar por nombre o sigla del curso..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="text-lg pl-10"
+          className="text-lg pl-10 shadow-sm"
+          aria-describedby="search-instructions"
+          autoComplete="off"
         />
+        <div id="search-instructions" className="sr-only">
+          Escribe el nombre o sigla del curso que buscas y presiona Enter para buscar
+        </div>
+        <button type="submit" className="sr-only">
+          Buscar cursos
+        </button>
       </form>
       
-      <div className="mt-4 text-center">
-        <a 
-          href="/catalog" 
-          className="text-blue-600 hover:text-blue-800 underline"
+      <div className="flex mt-4 justify-center gap-4" role="group" aria-label="Acciones de navegación">
+        <Button
+          variant="ghost"
+          size="lg"
+          className="text-sm border border-muted"
+          onClick={() => window.location.href = '/catalog'}
+          aria-label="Ver todos los cursos disponibles en el catálogo"
         >
-          Ver todos los cursos
-        </a>
+          Ver todos los cursos 
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="lg"
+          className="text-sm border border-muted"
+          onClick={() => window.location.href = '/404'}
+          aria-label="Conocer más información acerca de nosotros"
+        >
+          Conocer más acerca de nosotros
+        </Button>
       </div>
     </div>
   )
