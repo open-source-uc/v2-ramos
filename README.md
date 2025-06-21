@@ -1,59 +1,71 @@
-# Resumen
-Proyecto de **prensa** academica para una comunidad informada :D
+# 📚 Proyecto Ramos UC
 
-Crear un `.env.local` con 
-```
-	MODE_ENV: "development" | "production";
-	API_SECRET: string; // secret de la api, cuado genera siempre 6000 lecturas, por cada build
-	USER_TOKEN: string; // JAMAS SUBIR A PRODUCCION ES SUPER PELIGROSOS ES SOLO PARA DESARROLLO, EL TOKEN SACARLO DE LOS TOKENS DEL PANEL DE Auth Osuc
-```
+Este es un proyecto de estudiantes de la Pontificia Universidad Católica de Chile (UC) que busca revolucionar la forma en la que interactúa la comunidad estudiantil al momento de inscribir cursos.
 
+## 🚀 Pasos para empezar
 
-# Astro Starter Kit: Basics
+Para levantar el proyecto en tu máquina local, sigue estos pasos:
 
-```sh
-npm create astro@latest -- --template basics
-```
+### 1. Instalar Dependencias
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Primero, instala todas las dependencias del proyecto.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm install
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### 2. Configurar Variables de Entorno
 
-## 🧞 Commands
+Crea un archivo `.env.local` en la raíz del proyecto. Este archivo es **crucial** para que la aplicación funcione correctamente.
 
-All commands are run from the root of the project, from a terminal:
+Copia y pega el siguiente contenido en tu archivo `.env.local`:
 
-| Command                   | Action                                           |
+```env
+MODE_ENV="development"
+
+API_SECRET="tu_secreto_aqui"
+
+# ¡IMPORTANTE! Este token es SOLO para desarrollo. Obtén este token desde el panel de Auth Osuc.
+USER_TOKEN="tu_token_de_usuario_aqui"
+```
+
+**Notas:**
+*   `API_SECRET`: Puedes usar un generador de contraseñas seguras para crear este valor.
+*   `USER_TOKEN`: Este token es para simular un usuario autenticado en desarrollo. Asegúrate de no exponerlo.
+
+### 3. Ejecutar las Migraciones
+
+El siguiente paso es poblar tu base de datos local. El script `setup.sh` se encargará de todo.
+
+Desde la raíz del proyecto, ejecuta:
+
+```bash
+bash migration/setup.sh
+```
+
+Cuando el script te pregunte, selecciona la opción **1) Local**.
+
+### 4. Iniciar el Servidor de Desarrollo
+
+¡Ya casi estás! Ahora, inicia el servidor de desarrollo de Astro.
+
+```bash
+npm run dev
+```
+
+La aplicación estará disponible en `http://localhost:4321`.
+
+## 🧞 Comandos Disponibles
+
+Todos los comandos se ejecutan desde la raíz del proyecto:
+
+| Comando                   | Acción                                           |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | Instala las dependencias.                            |
+| `npm run dev`             | Inicia el servidor de desarrollo en `localhost:4321`.      |
+| `npm run build`           | Compila el sitio para producción en la carpeta `./dist/`.          |
+| `npm run preview`         | Previsualiza tu compilación de producción localmente.     |
 
-## 👀 Want to learn more?
+## 👀 ¿Quieres saber más?
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Revisa la [documentación de Astro](https://docs.astro.build).

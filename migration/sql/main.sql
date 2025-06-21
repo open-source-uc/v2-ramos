@@ -1,5 +1,5 @@
-DROP TABLE course_reviews;
-DROP TABLE course_summary;
+DROP TABLE IF EXISTS course_reviews;
+DROP TABLE IF EXISTS course_summary;
 
 -- Primero se crea course_summary
 CREATE TABLE course_summary (
