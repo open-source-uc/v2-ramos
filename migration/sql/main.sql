@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS course_reviews;
-DROP TABLE IF EXISTS course_summary;
+DROP TABLE course_reviews;
+DROP TABLE course_summary;
 
 -- Primero se crea course_summary
 CREATE TABLE course_summary (
@@ -19,7 +19,6 @@ CREATE TABLE course_summary (
 
     votes_mandatory_attendance INTEGER DEFAULT 0,
     votes_optional_attendance INTEGER DEFAULT 0,
-    votes_no_attendance INTEGER DEFAULT 0,
 
     avg_weekly_hours REAL DEFAULT 0.0,
     sort_index INTEGER DEFAULT 0
@@ -33,7 +32,7 @@ CREATE TABLE course_reviews (
 
     like_dislike INTEGER CHECK (like_dislike IN (0, 1, 2)),
     workload_vote INTEGER CHECK (workload_vote IN (0, 1, 2)),
-    attendance_type INTEGER CHECK (attendance_type IN (0, 1, 2)),
+    attendance_type INTEGER CHECK (attendance_type IN (0, 1)),  -- Solo 0 (mandatory) y 1 (optional)
 
     weekly_hours INTEGER CHECK (weekly_hours >= 0),
 
@@ -94,10 +93,6 @@ BEGIN
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND attendance_type = 1
     ),
-    votes_no_attendance = (
-      SELECT COUNT(*) FROM course_reviews
-      WHERE course_sigle = NEW.course_sigle AND attendance_type = 2
-    ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND weekly_hours IS NOT NULL
@@ -156,10 +151,6 @@ BEGIN
     votes_optional_attendance = (
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = NEW.course_sigle AND attendance_type = 1
-    ),
-    votes_no_attendance = (
-      SELECT COUNT(*) FROM course_reviews
-      WHERE course_sigle = NEW.course_sigle AND attendance_type = 2
     ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
@@ -220,10 +211,6 @@ BEGIN
       SELECT COUNT(*) FROM course_reviews
       WHERE course_sigle = OLD.course_sigle AND attendance_type = 1
     ),
-    votes_no_attendance = (
-      SELECT COUNT(*) FROM course_reviews
-      WHERE course_sigle = OLD.course_sigle AND attendance_type = 2
-    ),
     avg_weekly_hours = (
       SELECT AVG(weekly_hours * 1.0) FROM course_reviews
       WHERE course_sigle = OLD.course_sigle AND weekly_hours IS NOT NULL
@@ -256,10 +243,9 @@ CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
 CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours DESC);
 CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index DESC);
 
--- Nuevos índices para los votos de asistencia
+-- Índices para los votos de asistencia (solo mandatory y optional)
 CREATE INDEX idx_course_summary_mandatory_attendance ON course_summary(votes_mandatory_attendance DESC);
 CREATE INDEX idx_course_summary_optional_attendance ON course_summary(votes_optional_attendance DESC);
-CREATE INDEX idx_course_summary_no_attendance ON course_summary(votes_no_attendance DESC);
 
 -- Índices compuestos para consultas más complejas
 CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);

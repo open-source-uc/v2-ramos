@@ -36,15 +36,15 @@ export function SearchableTableDisplay({ data, initialSearchValue = "" }: Search
   // Filter data based on both search and area selection
   const filteredData = useMemo(() => {
     let filtered = data
-    
+
     if (selectedArea !== "all") {
       filtered = filtered.filter(course => course.area === selectedArea)
     }
-    
+
     if (selectedSchool !== "all") {
       filtered = filtered.filter(course => course.school === selectedSchool)
     }
-    
+
     return filtered
   }, [data, selectedArea, selectedSchool])
 
@@ -65,54 +65,54 @@ export function SearchableTableDisplay({ data, initialSearchValue = "" }: Search
 
       {/* Search Component */}
       <div className="mb-6 flex flex-col w-full gap-4 items-center justify-between tablet:flex-row">
-        <Search 
+        <Search
           onSearch={handleSearch}
           placeholder="Buscar por nombre o sigla..."
           className="w-full max-w-md"
           initialValue={initialSearchValue}
         />
-        
+
         <div className="flex flex-col-reverse items-center gap-4 w-full tablet:flex-row-reverse">
 
-            {/* Area Filter */}
-            <Select value={selectedArea} onValueChange={handleAreaChange}>
-              <SelectTrigger className={cn("w-full tablet:max-w-[300px]", selectedArea !== "all" && "bg-primary-foreground text-primary border border-primary")}>
-                <SelectValue placeholder="Áreas de Formación General" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Filtrar por Área de Formación General</SelectLabel>
-                  <SelectItem value="all">Todas las áreas de formación general</SelectItem>
-                  {uniqueAreas.map((area) => (
-                    <SelectItem key={area} value={area}>
-                      {area}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+          {/* Area Filter */}
+          <Select value={selectedArea} onValueChange={handleAreaChange}>
+            <SelectTrigger className={cn("w-full tablet:max-w-[300px]", selectedArea !== "all" && "bg-primary-foreground text-primary border border-primary")}>
+              <SelectValue placeholder="Áreas de Formación General" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Filtrar por Área de Formación General</SelectLabel>
+                <SelectItem value="all">Todas las áreas de formación general</SelectItem>
+                {uniqueAreas.map((area) => (
+                  <SelectItem key={area} value={area}>
+                    {area}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-            {/* School Filter */}
-            <Select value={selectedSchool} onValueChange={handleSchoolChange}>
-              <SelectTrigger className={cn("w-full tablet:max-w-[300px]", selectedSchool !== "all" && "bg-primary-foreground text-primary border border-primary")}>
-                <SelectValue placeholder="Facultades" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Filtrar por Facultad</SelectLabel>
-                  <SelectItem value="all">Todas las facultades</SelectItem>
-                  {uniqueSchools.map((school) => (
-                    <SelectItem key={school} value={school}>
-                      {school}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+          {/* School Filter */}
+          <Select value={selectedSchool} onValueChange={handleSchoolChange}>
+            <SelectTrigger className={cn("w-full tablet:max-w-[300px]", selectedSchool !== "all" && "bg-primary-foreground text-primary border border-primary")}>
+              <SelectValue placeholder="Facultades" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Filtrar por Facultad</SelectLabel>
+                <SelectItem value="all">Todas las facultades</SelectItem>
+                {uniqueSchools.map((school) => (
+                  <SelectItem key={school} value={school}>
+                    {school}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
         </div>
       </div>
-    
+
       {/* Data Table */}
       <DataTable data={filteredData} externalSearchValue={searchValue} />
 

@@ -1,4 +1,5 @@
 import { defineCollection, z } from "astro:content";
+import { Vote } from "lucide-react";
 
 const recommendations = defineCollection({
     schema: z.object({
@@ -15,6 +16,11 @@ const recommendations = defineCollection({
 const coursesScore = defineCollection({
     loader: async () => {
         console.log("=== SI PASA MUCHO ES MUY MALO ===");
+        console.log("=== SI PASA MUCHO ES MUY MALO ===");
+        console.log("=== SI PASA MUCHO ES MUY MALO ===");
+        console.log("=== SI PASA MUCHO ES MUY MALO ===");
+        console.log("=== SI PASA MUCHO ES MUY MALO ===");
+
         const response = await fetch("https://v2-ramos.pages.dev/api/courses", {
             method: "GET",
             headers: {
@@ -22,7 +28,6 @@ const coursesScore = defineCollection({
             }
         });
         const data = await response.json() as CourseSummary[];
-
         return data.map((c) => ({
             id: c.id + "", // debe ser texto why, idk xd
             sigle: c.sigle,
@@ -36,7 +41,9 @@ const coursesScore = defineCollection({
             votes_medium_workload: c.votes_medium_workload,
             votes_high_workload: c.votes_high_workload,
             avg_weekly_hours: c.avg_weekly_hours,
-            sort_index: c.sort_index
+            sort_index: c.sort_index,
+            votes_mandatory_attendance: c.votes_mandatory_attendance,
+            votes_optional_attendance: c.votes_optional_attendance,
         }))
     },
     schema: z.object({
@@ -52,7 +59,9 @@ const coursesScore = defineCollection({
         votes_medium_workload: z.number(),
         votes_high_workload: z.number(),
         avg_weekly_hours: z.number(),
-        sort_index: z.number()
+        sort_index: z.number(),
+        votes_mandatory_attendance: z.number(),
+        votes_optional_attendance: z.number(),
     })
 })
 

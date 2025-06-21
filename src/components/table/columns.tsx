@@ -1,37 +1,49 @@
 "use client"
- 
+
 import type { ColumnDef } from "@tanstack/react-table"
 import { Pill } from "../ui/pill"
 import { Button } from "../ui/button"
 import { SwapVertIcon } from "../icons/icons"
 import { Sentiment } from "../icons/sentiment"
- 
+
 export type Course = {
-  id: number,
-  sigle: string,
-  name: string,
-  credits: number,
-  school: string,
-  area: string,
-  category: string,
-  superlikes: number,
-  likes: number,
-  dislikes: number
+    id: string,
+    sigle: string,
+
+    name: string,
+    credits: number,
+
+    school: string,
+    area: string,
+    category: string,
+
+    likes: number,
+    superlikes: number,
+    dislikes: number
+
+    votes_low_workload: number,
+    votes_medium_workload: number,
+    votes_high_workload: number,
+
+    votes_mandatory_attendance: number,
+    votes_optional_attendance: number,
+    avg_weekly_hours: number,
+    sort_index: number
 }
 
 export const columns: ColumnDef<Course>[] = [
     {
         accessorKey: "sigle",
-        header: ({column}) => {
+        header: ({ column }) => {
             return (
-            <Button 
-                className="font-semibold flex gap-2 items-center my-2" 
-                variant="ghost" 
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                <Button
+                    className="font-semibold flex gap-2 items-center my-2"
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Sigla
                     <SwapVertIcon />
-            </Button>
+                </Button>
             )
         },
         cell: ({ row }) => {
@@ -40,16 +52,16 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "name",
-        header: ({column}) => {
+        header: ({ column }) => {
             return (
-            <Button 
-                className="font-semibold flex gap-2 items-center my-2" 
-                variant="ghost" 
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                <Button
+                    className="font-semibold flex gap-2 items-center my-2"
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Nombre
                     <SwapVertIcon />
-            </Button>
+                </Button>
             )
         },
         cell: ({ row }) => {
@@ -67,16 +79,16 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "school",
-        header: ({column}) => {
-           return (
-            <Button 
-                className="font-semibold flex gap-2 items-center my-2" 
-                variant="ghost" 
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        header: ({ column }) => {
+            return (
+                <Button
+                    className="font-semibold flex gap-2 items-center my-2"
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Facultad
                     <SwapVertIcon />
-            </Button>
+                </Button>
             )
         },
         cell: ({ row }) => {
@@ -85,16 +97,16 @@ export const columns: ColumnDef<Course>[] = [
     },
     {
         accessorKey: "area",
-        header: ({column}) => {
-           return (
-            <Button 
-                className="font-semibold flex gap-2 items-center my-2" 
-                variant="ghost" 
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        header: ({ column }) => {
+            return (
+                <Button
+                    className="font-semibold flex gap-2 items-center my-2"
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Área de Formación General
                     <SwapVertIcon />
-            </Button>
+                </Button>
             )
         },
         cell: ({ row }) => {
@@ -110,19 +122,19 @@ export const columns: ColumnDef<Course>[] = [
         },
         cell: ({ row }) => {
             const { superlikes, likes, dislikes } = row.original
-            const totalReviews = 2*superlikes + likes + dislikes
-            
+            const totalReviews = 2 * superlikes + likes + dislikes
+
             if (totalReviews === 0) {
                 return (
                     <Sentiment sentiment="question" size="sm" />
                 )
             }
-            
-            const positiveReviews = 2*superlikes + likes
+
+            const positiveReviews = 2 * superlikes + likes
             const positivePercentage = (positiveReviews / totalReviews) * 100
-            
+
             let sentimentType: "veryHappy" | "happy" | "neutral" | "sad" | "verySad"
-            
+
             if (positivePercentage >= 80) {
                 sentimentType = "veryHappy"
             } else if (positivePercentage >= 60) {
@@ -134,10 +146,10 @@ export const columns: ColumnDef<Course>[] = [
             } else {
                 sentimentType = "verySad"
             }
-            
+
             return (
-                <Sentiment 
-                    sentiment={sentimentType} 
+                <Sentiment
+                    sentiment={sentimentType}
                     size="sm"
                     ariaLabel={`${Math.round(positivePercentage)}% de reseñas positivas de ${totalReviews} total`}
                 />

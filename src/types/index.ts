@@ -12,7 +12,6 @@ interface CourseSummary {
     votes_high_workload: number;
     votes_mandatory_attendance: number;
     votes_optional_attendance: number;
-    votes_no_attendance: number;
     avg_weekly_hours: number;
     sort_index: number;
 }
@@ -37,7 +36,4 @@ interface CourseStaticInfo {
     name: string;
     credits: number;
     program: string;
-    school: string;
-    area: string;
-    category: string;
 }
