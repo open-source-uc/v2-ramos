@@ -10,6 +10,7 @@ type Runtime = import("@astrojs/cloudflare").Runtime<Env>;
 interface ImportMetaEnv {
 	readonly MODE_ENV: "development" | "production";
 	readonly API_SECRET: string;
+	readonly USER_TOKEN: string;
 }
 
 interface ImportMeta {

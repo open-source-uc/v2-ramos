@@ -1,0 +1,421 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCourseReviewByUserIdAndSigle } from "@/services/courses";
+import { actions, isInputError } from "astro:actions";
+import { getUserDataByToken } from "@/services/auth";
+
+const result = Astro.getActionResult(actions.createCourseReview);
+
+const { sigle } = Astro.params;
+
+if (!sigle) {
+    return Astro.redirect("/404");
+}
+
+const user = await getUserDataByToken(
+    Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
+);
+
+if (!user) {
+    return Astro.redirect("/404");
+}
+
+const defaultData = await getCourseReviewByUserIdAndSigle(
+    Astro.locals,
+    sigle,
+    user.id,
+);
+let text = "";
+
+if (defaultData.comment) {
+    const res = await Astro.locals.runtime.env.R2.get(defaultData.comment);
+    if (res) {
+        text = await res.text();
+    }
+}
+
+const inputErrors = isInputError(result?.error) ? result.error.fields : {};
+const currentYear = new Date().getFullYear();
+---
+
+<Layout>
+    <div class="max-w-2xl mx-auto mt-8 mb-12">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                Crear Reseña de Curso
+            </h1>
+            <p class="text-gray-600">
+                Comparte tu experiencia con otros estudiantes
+            </p>
+        </div>
+
+        <!-- Mensaje de éxito -->
+        {
+            result && result.data?.message && (
+                <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                    <p class="font-medium">{result.data.message}</p>
+                    {result.data.wasUpdated && (
+                        <p class="text-sm mt-1">
+                            Tu reseña anterior ha sido sobrescrita.
+                        </p>
+                    )}
+                </div>
+            )
+        }
+
+        <form
+            method="POST"
+            action={actions.createCourseReview}
+            class="bg-white shadow-lg rounded-xl p-8 space-y-6"
+        >
+            <!-- Sigla del Curso -->
+            <div>
+                <input type="hidden" name="course_sigle" value={sigle} />
+            </div>
+
+            <!-- Valoración General -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">
+                    Valoración General *
+                </label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="like_dislike"
+                            value="0"
+                            checked={defaultData.like_dislike === 0}
+                            required
+                            class="mr-2 text-red-600 focus:ring-red-500"
+                            transition:persist
+                        />
+                        <span class="text-red-600 flex items-center">
+                            👎 No me gustó
+                        </span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="like_dislike"
+                            value="1"
+                            checked={defaultData.like_dislike === 1}
+                            required
+                            class="mr-2 text-blue-600 focus:ring-blue-500"
+                            transition:persist
+                        />
+                        <span class="text-blue-600 flex items-center">
+                            👍 Me gustó
+                        </span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="like_dislike"
+                            value="2"
+                            checked={defaultData.like_dislike === 2}
+                            required
+                            class="mr-2 text-green-600 focus:ring-green-500"
+                            transition:persist
+                        />
+                        <span class="text-green-600 flex items-center">
+                            ⭐ Me encantó
+                        </span>
+                    </label>
+                </div>
+                {
+                    inputErrors.like_dislike && (
+                        <p class="text-red-600 text-sm mt-1">
+                            {inputErrors.like_dislike}
+                        </p>
+                    )
+                }
+            </div>
+
+            <!-- Carga de Trabajo -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">
+                    Carga de Trabajo *
+                </label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="workload_vote"
+                            value="0"
+                            checked={defaultData.workload_vote === 0}
+                            required
+                            class="mr-2 text-green-600 focus:ring-green-500"
+                            transition:persist
+                        />
+                        <span class="text-green-600">📚 Baja</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="workload_vote"
+                            value="1"
+                            checked={defaultData.workload_vote === 1}
+                            required
+                            class="mr-2 text-yellow-600 focus:ring-yellow-500"
+                            transition:persist
+                        />
+                        <span class="text-yellow-600">📖 Media</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="workload_vote"
+                            value="2"
+                            checked={defaultData.workload_vote === 2}
+                            required
+                            class="mr-2 text-red-600 focus:ring-red-500"
+                            transition:persist
+                        />
+                        <span class="text-red-600">📚📚 Alta</span>
+                    </label>
+                </div>
+                {
+                    inputErrors.workload_vote && (
+                        <p class="text-red-600 text-sm mt-1">
+                            {inputErrors.workload_vote}
+                        </p>
+                    )
+                }
+            </div>
+
+            <!-- Asistencia -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">
+                    Tipo de Asistencia *
+                </label>
+                <div class="flex space-x-4">
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="attendance_type"
+                            value="0"
+                            checked={defaultData.attendance_type === 0}
+                            required
+                            class="mr-2 text-red-600 focus:ring-red-500"
+                            transition:persist
+                        />
+                        <span class="text-red-600">🚫 Obligatoria</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input
+                            type="radio"
+                            name="attendance_type"
+                            value="1"
+                            checked={defaultData.attendance_type === 1}
+                            required
+                            class="mr-2 text-green-600 focus:ring-green-500"
+                            transition:persist
+                        />
+                        <span class="text-green-600">✅ Opcional</span>
+                    </label>
+                </div>
+                {
+                    inputErrors.attendance_type && (
+                        <p class="text-red-600 text-sm mt-1">
+                            {inputErrors.attendance_type}
+                        </p>
+                    )
+                }
+            </div>
+
+            <!-- Grid para campos numéricos -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Horas Semanales -->
+                <div>
+                    <label
+                        for="weekly_hours"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        Horas Semanales *
+                    </label>
+                    <input
+                        type="number"
+                        id="weekly_hours"
+                        name="weekly_hours"
+                        required
+                        min="0"
+                        max="168"
+                        placeholder="Ej: 8"
+                        value={defaultData.weekly_hours || ""}
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                        transition:persist
+                    />
+                    {
+                        inputErrors.weekly_hours && (
+                            <p class="text-red-600 text-sm mt-1">
+                                {inputErrors.weekly_hours}
+                            </p>
+                        )
+                    }
+                </div>
+
+                <!-- Año -->
+                <div>
+                    <label
+                        for="year_taken"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        Año Cursado *
+                    </label>
+                    <input
+                        type="number"
+                        id="year_taken"
+                        name="year_taken"
+                        required
+                        min="2000"
+                        max={currentYear}
+                        placeholder={currentYear.toString()}
+                        value={defaultData.year_taken || ""}
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                        transition:persist
+                    />
+                    {
+                        inputErrors.year_taken && (
+                            <p class="text-red-600 text-sm mt-1">
+                                {inputErrors.year_taken}
+                            </p>
+                        )
+                    }
+                </div>
+
+                <!-- Semestre -->
+                <div>
+                    <label
+                        for="semester_taken"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                        Semestre *
+                    </label>
+                    <select
+                        id="semester_taken"
+                        name="semester_taken"
+                        required
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                        transition:persist
+                    >
+                        <option value="">Seleccionar</option>
+                        <option
+                            value="1"
+                            selected={defaultData.semester_taken === 1}
+                            >1° Semestre</option
+                        >
+                        <option
+                            value="2"
+                            selected={defaultData.semester_taken === 2}
+                            >2° Semestre</option
+                        >
+                        <option
+                            value="3"
+                            selected={defaultData.semester_taken === 3}
+                            >TAV</option
+                        >
+                    </select>
+                    {
+                        inputErrors.semester_taken && (
+                            <p class="text-red-600 text-sm mt-1">
+                                {inputErrors.semester_taken}
+                            </p>
+                        )
+                    }
+                </div>
+            </div>
+
+            <!-- Comentario -->
+            <div>
+                <label
+                    for="comment"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                    Comentario (Opcional)
+                </label>
+                <p class="text-sm text-gray-500 mb-2">
+                    Comparte tu experiencia, consejos para futuros estudiantes,
+                    o cualquier información útil.
+                </p>
+                <textarea
+                    id="comment"
+                    name="comment"
+                    rows="6"
+                    maxlength="10000"
+                    placeholder="Escribe tu comentario aquí... Puedes incluir información sobre el profesor, metodología, evaluaciones, consejos para el curso, etc."
+                    class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 resize-vertical field-sizing-content text-sm resize-none min-h-20"
+                    transition:persist>{text || ""}</textarea
+                >
+                <div class="flex justify-between mt-1">
+                    <div>
+                        {
+                            inputErrors.comment && (
+                                <p class="text-red-600 text-sm">
+                                    {inputErrors.comment}
+                                </p>
+                            )
+                        }
+                    </div>
+                    <p class="text-xs text-gray-400">
+                        Máximo 10,000 caracteres
+                    </p>
+                </div>
+            </div>
+
+            <!-- Error general -->
+            {
+                !isInputError(result?.error) && result?.error?.message && (
+                    <div class="p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                        <p class="font-medium">{result.error.message}</p>
+                    </div>
+                )
+            }
+
+            <!-- Botones -->
+            <div class="flex justify-between items-center pt-6 border-t">
+                <a
+                    href={`/${sigle}/`}
+                    class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition"
+                >
+                    ← Volver
+                </a>
+                <button
+                    type="submit"
+                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring focus:ring-blue-200 transition"
+                >
+                    Guardar Reseña
+                </button>
+                {
+                    defaultData.id && (
+                        <a
+                            href={`/${sigle}/delete/${defaultData.id}`}
+                            class="px-6 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:ring focus:ring-red-200 transition"
+                        >
+                            Borrar Reseña
+                        </a>
+                    )
+                }
+            </div>
+        </form>
+
+        <!-- Información adicional -->
+        <div class="mt-8 p-4 bg-blue-50 rounded-md">
+            <h3 class="font-medium text-blue-900 mb-2">
+                💡 Consejos para una buena reseña:
+            </h3>
+            <ul class="text-sm text-blue-800 space-y-1">
+                <li>• Sé honesto y constructivo en tu valoración</li>
+                <li>• Incluye información útil para futuros estudiantes</li>
+                <li>
+                    • Menciona aspectos específicos del curso que te gustaron o
+                    no
+                </li>
+                <li>
+                    • Si ya tienes una reseña para este curso, será actualizada
+                    automáticamente
+                </li>
+            </ul>
+        </div>
+    </div>
+</Layout>

@@ -37,7 +37,7 @@ CREATE TABLE course_reviews (
     weekly_hours INTEGER CHECK (weekly_hours >= 0),
 
     year_taken INTEGER,
-    semester_taken INTEGER CHECK (semester_taken IN (1, 2)),
+    semester_taken INTEGER CHECK (semester_taken IN (1, 2, 3)), -- 1: Spring, 2: Summer, 3: TAV
 
     comment TEXT,
 

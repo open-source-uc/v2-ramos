@@ -33,6 +33,7 @@ if (!sigle) {
 }
 
 import { getEntry } from "astro:content";
+import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -254,6 +255,10 @@ const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
             </div>
         </section>
 
+        <a
+            class="h-56 w-full p-5 bg-amber-200 underline"
+            href=`/${sigle}/review`>MI RESEÑA ssssssssssssssssssssssssss</a
+        >
         <!-- Sección de Reseñas -->
         {
             reviews && reviews.length > 0 && (
@@ -318,9 +323,10 @@ const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
 
                                         {/* Comentario */}
                                         {review.comment && (
-                                            <blockquote class="">
-                                                "{review.comment}"
-                                            </blockquote>
+                                            <MarkdownReviewView
+                                                path={review.comment}
+                                                client:only="react"
+                                            />
                                         )}
 
                                         {/* Tags informativos */}

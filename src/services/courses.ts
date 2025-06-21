@@ -19,7 +19,6 @@ export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
     FROM course_summary WHERE sigle = ?
   `).bind(sigle).all<CourseSummary>()
 
-  console.log('getCourseBySigle', result.meta);
   return result.results[0] ?? null;
 };
 
@@ -47,3 +46,38 @@ export const getCourseReviews = async (locals: App.Locals, sigle: string, limit:
   console.log('getCourseReviews', result.meta);
   return result.results;
 };
+
+export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle: string, userId: string) => {
+  const result = await locals.runtime.env.DB.prepare(`
+    SELECT 
+      id,
+      user_id,
+      course_sigle,
+      like_dislike,
+      workload_vote,
+      attendance_type,
+      weekly_hours,
+      year_taken,
+      semester_taken,
+      comment,
+      created_at,
+      updated_at
+    FROM course_reviews 
+    WHERE course_sigle = ? AND user_id = ?
+  `).bind(sigle, userId).first<CourseReview>()
+
+  return result ?? {
+    id: null,
+    user_id: userId,
+    course_sigle: sigle,
+    like_dislike: null,
+    workload_vote: null,
+    attendance_type: null,
+    weekly_hours: null,
+    year_taken: null,
+    semester_taken: null,
+    comment: null,
+    created_at: null,
+    updated_at: null
+  };
+}
