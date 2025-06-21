@@ -3,10 +3,11 @@ import { getCourseBySigle, getCourseReviews } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
 import CoursesRaw from "../../../migration/json/2025-1.json";
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
-import { HourglassIcon, BuildingIcon, AreaIcon, ClockIcon, ThumbUpIcon, ThumbDownIcon, AttendanceIcon, WorkloadIcon } from "../../components/icons/icons";
+import { HourglassIcon, CalendarIcon, LinkIcon, BuildingIcon, AreaIcon, ClockIcon, ThumbUpIcon, ThumbDownIcon, AttendanceIcon, WorkloadIcon } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
 import { calculateSentiment, calculatePositivePercentage, getWorkloadLabel, getAttendanceLabel, formatWeeklyHours, getSentimentLabel } from "../../lib/courseStats";
+import { Button } from "@/components/ui/button";
 
 const { sigle } = Astro.params;
 const courses = CoursesRaw as Record<string, CourseStaticInfo>;
@@ -38,6 +39,7 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
     
     <div class="max-w-6xl mx-auto px-4 py-8">
 
+        <!-- Información Fundamental del Curso -->
         <section class="border border-border rounded-md px-6 py-8">
             <p class="text-sm">{course.sigle}</p>
 
@@ -70,9 +72,9 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
             </div>
         </section>
 
-        <!-- Course Statistics Section -->
+        <!-- Estadísticas del Curso -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-            <!-- Overall Sentiment -->
+            <!-- Sentimiento General -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <Sentiment sentiment={sentiment} size="default" />
@@ -88,7 +90,7 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                 )}
             </div>
 
-            <!-- Workload -->
+            <!-- Carga de Trabajo -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
@@ -104,7 +106,7 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                 </div>
             </div>
 
-            <!-- Attendance -->
+            <!-- Asistencia -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
@@ -122,7 +124,7 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                 )}
             </div>
 
-            <!-- Reviews Count -->
+            <!-- Total de Reseñas -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
@@ -142,59 +144,110 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
             </div>
         </section>
 
-        <!-- Reviews Section -->
+        <!-- Links de Interés -->
+        <section class="mt-8">
+            <div class="border border-border rounded-md p-6">
+                <h2 class="text-2xl font-semibold mb-6">Links de Interés</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button 
+                        variant="outline" 
+                        href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full"
+                        icon={LinkIcon}
+                        aria-label="Ver Secciones del Curso en Busca Cursos"
+                    >
+                        Ver Secciones
+                    </Button>
+
+                    <Button 
+                        variant="outline" 
+                        href={`https://catalogo.uc.cl/index.php?tmpl=component&option=com_catalogo&view=programa&sigla=${course.sigle}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-full"
+                        icon={LinkIcon}
+                        aria-label="Ver Programa del Curso en Catálogo UC"
+                    >
+                        Ver Programa
+                    </Button>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Reseñas -->
         {reviews && reviews.length > 0 && (
             <section class="mt-8">
-                <div class="border border-border rounded-md p-6">
-                    <h2 class="text-2xl font-bold mb-6">Reseñas de Estudiantes</h2>
-                    
-                    <div class="space-y-6">
-                        {reviews.map((review) => (
-                            <div class="border-b border-border pb-6 last:border-b-0 last:pb-0">
-                                <div class="flex items-start justify-between mb-3">
-                                    <div class="flex items-center gap-3">
-                                        {/* Sentiment based on like_dislike */}
-                                        <Sentiment 
-                                            sentiment={review.like_dislike === 2 ? 'veryHappy' : review.like_dislike === 1 ? 'happy' : 'sad'} 
-                                            size="sm" 
-                                        />
-                                        <div class="flex gap-2">
-                                            <Pill variant="purple" className="text-xs">
-                                                {review.workload_vote === 0 ? 'Carga Baja' : review.workload_vote === 1 ? 'Carga Media' : 'Carga Alta'}
-                                            </Pill>
-                                            <Pill variant="blue" className="text-xs">
-                                                {review.attendance_type === 0 ? 'Asistencia Obligatoria' : review.attendance_type === 1 ? 'Asistencia Opcional' : 'Sin Asistencia'}
-                                            </Pill>
-                                        </div>
-                                    </div>
-                                    <div class="text-sm text-muted-foreground">
-                                        {review.year_taken} - {review.semester_taken === 1 ? '1er' : '2do'} semestre
-                                    </div>
-                                </div>
-                                
-                                {review.weekly_hours && (
-                                    <div class="flex items-center gap-2 mb-3">
-                                        <ClockIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span class="text-sm text-muted-foreground">
-                                            {formatWeeklyHours(review.weekly_hours)} por semana
-                                        </span>
-                                    </div>
-                                )}
-                                
-                                {review.comment && (
-                                    <p class="text-gray-700 leading-relaxed">{review.comment}</p>
-                                )}
+                <div class="border border-border rounded-md overflow-hidden">
+                    <div class="border-b border-border px-6 py-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-semibold text-foreground">Reseñas de Estudiantes</h2>
+                                <p class="text-sm text-muted-foreground mt-1">
+                                    Cónoce las experiencias de otros estudiantes con este curso.
+                                </p>
                             </div>
-                        ))}
+                            <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
+                                <span class="font-medium text-muted-foreground">{reviews.length}</span>
+                                <span class="text-muted-foreground">reseñas mostradas</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    {totalReviews > reviews.length && (
-                        <div class="mt-6 text-center">
-                            <p class="text-sm text-muted-foreground">
-                                Mostrando {reviews.length} de {totalReviews} reseñas
-                            </p>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            {reviews.map((review, index) => (
+                                <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
+                                    {/* Número de reviews */}
+                                    <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
+                                        {index + 1}
+                                    </div>
+                                    
+                                    {/* Header con sentiment y metadata */}
+                                    <div class="items-start justify-between pr-8 gap-2">
+                                            <div class="flex items-center gap-2">
+                                                <Sentiment 
+                                                    sentiment={review.like_dislike === 2 ? 'veryHappy' : review.like_dislike === 1 ? 'happy' : 'sad'} 
+                                                    size="default" 
+                                                />
+                                                <span class="text-md font-medium text-foreground">
+                                                    {review.like_dislike === 2 ? 'Excelente' : review.like_dislike === 1 ? 'Bueno' : 'Malo'}
+                                                </span>
+                                            </div>
+
+                                    </div>
+                                    
+                                    {/* Comentario */}
+                                    {review.comment && (
+                                        <blockquote class="">
+                                            "{review.comment}"
+                                        </blockquote>
+                                    )}
+
+                                    {/* Tags informativos */}
+                                    <div class="flex flex-wrap gap-2">
+                                        <Pill variant="ghost_green" size="sm" icon={CalendarIcon}>
+                                            {review.year_taken} - {review.semester_taken === 1 ? '1er' : '2do'} sem
+                                        </Pill>
+                                        <Pill variant="ghost_blue" size="sm" icon={WorkloadIcon}>
+                                            {review.workload_vote === 0 ? 'Carga Baja' : review.workload_vote === 1 ? 'Carga Media' : 'Carga Alta'}
+                                        </Pill>
+                                        <Pill variant="ghost_purple" size="sm" icon={AttendanceIcon}>
+                                            {review.attendance_type === 0 ? 'Asistencia Obligatoria' : review.attendance_type === 1 ? 'Asistencia Opcional' : 'Sin Asistencia'}
+                                        </Pill>
+                                        {review.weekly_hours && (
+                                            <Pill variant="ghost_orange" size="sm" icon={ClockIcon}>
+                                                {formatWeeklyHours(review.weekly_hours)}/sem
+                                            </Pill>
+                                        )}
+                                    </div>
+
+                                </div>
+                            ))}
                         </div>
-                    )}
+                    </div>
                 </div>
             </section>
         )}
