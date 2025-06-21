@@ -7,15 +7,13 @@
 		"build": "astro build",
 		"preview": "astro build && wrangler pages dev",
 		"astro": "astro",
-		"deploy": "astro build && wrangler pages deploy --keep-vars",
+		"deploy": "astro build && wrangler pages deploy",
 		"cf-typegen": "wrangler types"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^12.5.3",
-		"@astrojs/svelte": "^7.1.0",
 		"@tailwindcss/vite": "^4.1.8",
 		"astro": "^5.8.2",
-		"svelte": "^5.33.17",
 		"tailwindcss": "^4.1.8",
 		"typescript": "^5.8.3"
 	},
