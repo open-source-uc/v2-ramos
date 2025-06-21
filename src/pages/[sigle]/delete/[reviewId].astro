@@ -10,6 +10,7 @@ if (!sigle || !reviewId) {
 
 const result = Astro.getActionResult(actions.deleteCourseReview);
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
+const successMessage = result?.data?.message;
 ---
 
 <Layout>
@@ -25,7 +26,16 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
             >?
         </p>
 
-        <!-- Mensaje de error general -->
+        {/* Mensaje de éxito */}
+        {
+            successMessage && (
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                    <p class="font-medium">{successMessage}</p>
+                </div>
+            )
+        }
+
+        {/* Mensaje de error general */}
         {
             !isInputError(result?.error) && result?.error?.message && (
                 <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
@@ -41,7 +51,7 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
         >
             <input type="hidden" name="review_id" value={parseInt(reviewId)} />
 
-            <!-- Error del campo review_id -->
+            {/* Error del campo review_id */}
             {
                 inputErrors.review_id && (
                     <p class="text-sm text-red-600 mt-1">
@@ -55,7 +65,7 @@ const inputErrors = isInputError(result?.error) ? result.error.fields : {};
                     href={`/${sigle}/`}
                     class="text-gray-600 hover:text-gray-800 transition font-medium"
                 >
-                    ← Cancelar
+                    ← Regresar al curso
                 </a>
                 <button
                     type="submit"

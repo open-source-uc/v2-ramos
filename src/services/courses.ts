@@ -43,7 +43,6 @@ export const getCourseReviews = async (locals: App.Locals, sigle: string, limit:
     LIMIT ?
   `).bind(sigle, limit).all<CourseReview>()
 
-  console.log('getCourseReviews', result.meta);
   return result.results;
 };
 
