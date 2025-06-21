@@ -1,7 +1,8 @@
 ---
-import { getCourseBySigle, getCourseReviews } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+import { getUserDataByToken } from "../../services/auth";
 import {
     HourglassIcon,
     CalendarIcon,
@@ -10,9 +11,10 @@ import {
     AreaIcon,
     ClockIcon,
     ThumbUpIcon,
-    ThumbDownIcon,
     AttendanceIcon,
     WorkloadIcon,
+    PlusIcon,
+    EditIcon
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
@@ -70,6 +72,13 @@ const weeklyHoursLabel = c
     ? formatWeeklyHours(c.avg_weekly_hours)
     : "Sin datos";
 const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
+
+// Check if user has an existing review
+const user = await getUserDataByToken(
+    Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
+);
+const userReview = user ? await getCourseReviewByUserIdAndSigle(Astro.locals, sigle, user.id) : null;
+const hasExistingReview = userReview && userReview.id !== null;
 ---
 
 <Layout>
@@ -112,7 +121,7 @@ const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
                 }
                 {
                     id2NameData[c.area_id] &&
-                        id2NameData[c.area_id] !== "Ninguna" && (
+                        id2NameData[c.area_id] !== "Sin Área Asignada" && (
                             <Pill variant="pink" icon={AreaIcon}>
                                 {id2NameData[c.area_id]}
                             </Pill>
@@ -255,10 +264,6 @@ const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
             </div>
         </section>
 
-        <a
-            class="h-56 w-full p-5 bg-amber-200 underline"
-            href=`/${sigle}/review`>MI RESEÑA ssssssssssssssssssssssssss</a
-        >
         <!-- Sección de Reseñas -->
         {
             reviews && reviews.length > 0 && (
@@ -275,13 +280,24 @@ const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
                                         estudiantes con este curso.
                                     </p>
                                 </div>
-                                <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
-                                    <span class="font-medium text-muted-foreground">
-                                        {reviews.length}
-                                    </span>
-                                    <span class="text-muted-foreground">
-                                        reseñas mostradas
-                                    </span>
+                                <div class="flex items-center gap-4">
+                                    <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
+                                        <span class="font-medium text-muted-foreground">
+                                            {reviews.length}
+                                        </span>
+                                        <span class="text-muted-foreground">
+                                            reseñas mostradas
+                                        </span>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        href={`/${sigle}/review`}
+                                        icon={hasExistingReview ? EditIcon : PlusIcon}
+                                        size="sm"
+                                        aria-label={hasExistingReview ? "Editar reseña" : "Dejar una reseña"}
+                                    >
+                                        {hasExistingReview ? "Editar Reseña" : "Dejar una Reseña"}
+                                    </Button>
                                 </div>
                             </div>
                         </div>

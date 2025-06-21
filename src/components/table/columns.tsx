@@ -110,7 +110,7 @@ export const columns: ColumnDef<Course>[] = [
             )
         },
         cell: ({ row }) => {
-            if (row.original.area !== "Ninguna") {
+            if (row.original.area !== "Sin Área Asignada") {
                 return <Pill variant="pink">{row.original.area}</Pill>
             }
         }
