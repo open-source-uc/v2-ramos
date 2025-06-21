@@ -72,7 +72,7 @@ async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, f
 // Función helper para generar path único
 function generateReviewPath(userId: string, courseId: string, reviewId: number) {
     const timestamp = Date.now();
-    return `reviews/${courseId}/${userId}/${reviewId}_${timestamp}.md`;
+    return `reviews/${courseId}/${userId}/${reviewId}-${timestamp}.md`;
 }
 
 export const server = {

@@ -1,7 +1,7 @@
 # Resumen
 Proyecto de **prensa** academica para una comunidad informada :D
 
-Crear un `.env` con 
+Crear un `.dev.vars` con 
 ```
 	MODE_ENV: "development" | "production";
 	API_SECRET: string; // secret de la api, cuado genera siempre 6000 lecturas, por cada build
