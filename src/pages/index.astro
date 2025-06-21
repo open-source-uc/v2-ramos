@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 
 import { getCourses } from "../services/courses";
 import rawId2Name from "../../migration/json/valores_unicos.json";
+import DemoComponent from "../components/hello";
 
 const id2name: Record<string, string> = rawId2Name as Record<string, string>;
 const courses = await getCollection("coursesScore");
@@ -59,4 +60,5 @@ const courses = await getCollection("coursesScore");
 			</div>
 		</div>
 	</div>
+	<DemoComponent client:load />
 </Layout>

@@ -15,14 +15,16 @@ const recommendations = defineCollection({
 
 const coursesScore = defineCollection({
     loader: async () => {
-        const response = await fetch("http://localhost:4321/api/courses", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${import.meta.env.API_SECRET}`,
-            }
-        });
-        const data = await response.json() as CourseSummary[];
-        console.log("Courses loaded:", data.length);
+        // const response = await fetch("http://localhost:4321/api/courses", {
+        //     method: "GET",
+        //     headers: {
+        //         "Authorization": `Bearer ${import.meta.env.API_SECRET}`,
+        //     }
+        // });
+        // const data = await response.json() as CourseSummary[];
+        // console.log("Courses loaded:", data.length);
+        const data = []
+
         return data.map((c) => ({
             id: c.id + "", // debe ser texto why, idk xd
             sigle: c.sigle,
