@@ -14,6 +14,7 @@ const recommendations = defineCollection({
 })
 const coursesScore = defineCollection({
     loader: async () => {
+        console.log("=== SI PASA MUCHO ES MUY MALO ===");
         const response = await fetch("https://v2-ramos.pages.dev/api/courses", {
             method: "GET",
             headers: {
@@ -21,7 +22,6 @@ const coursesScore = defineCollection({
             }
         });
         const data = await response.json() as CourseSummary[];
-        console.log("Courses loaded:", data.length);
 
         return data.map((c) => ({
             id: c.id + "", // debe ser texto why, idk xd
@@ -57,4 +57,4 @@ const coursesScore = defineCollection({
 })
 
 
-export const collections = { recommendations }
+export const collections = { recommendations, coursesScore }

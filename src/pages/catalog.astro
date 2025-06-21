@@ -5,6 +5,7 @@ import { SearchableTableDisplay } from "../components/SearchableTableDisplay";
 // Import direct data from JSON
 import CoursesRaw from "../../migration/json/2025-1.json";
 import Id2NameRaw from "../../migration/json/valores_unicos.json";
+import { getCollection } from "astro:content";
 
 // Get search parameter from URL
 const searchParam = Astro.url.searchParams.get("search") || "";
@@ -18,6 +19,9 @@ const id2name: Record<string, string> = Id2NameRaw as Record<string, string>;
 // Create a map for quick lookup of course summaries by sigle
 
 // Transform the JSON data directly into the format needed by the table
+const coursesScore = await getCollection("coursesScore");
+// console.log("coursesScore", coursesScore[0]);
+
 const coursesWithNames = Object.entries(coursesData).map(
   ([sigle, details], index) => {
     return {
