@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const numericInputVariants = cva(
-  "w-full rounded-md border shadow-sm transition-colors focus:ring focus:ring-opacity-50",
+  "w-full rounded-md border transition-colors focus:ring focus:ring-opacity-50",
   {
     variants: {
       variant: {
@@ -15,7 +15,7 @@ const numericInputVariants = cva(
       },
       size: {
         sm: "px-3 py-2 text-sm",
-        default: "px-3 py-3",
+        default: "px-3 py-3 text-sm",
         lg: "px-4 py-4 text-lg",
       },
     },

@@ -61,7 +61,7 @@ export function SelectInput({
       {label && (
         <label
           htmlFor={selectProps?.id}
-          className="block text-md font-medium text-foreground"
+          className="block text-sm font-medium text-foreground"
         >
           {label}
           {selectProps?.required && <span className="text-destructive ml-1">*</span>}
@@ -77,7 +77,7 @@ export function SelectInput({
         
         <select
           className={cn(
-            'w-full rounded-md border shadow-sm focus:ring focus:ring-opacity-50 transition-colors appearance-none bg-white',
+            'w-full rounded-md border focus:ring focus:ring-opacity-50 transition-colors appearance-none bg-background',
             selectInputVariants.variant[finalVariant],
             selectInputVariants.size[size],
             Icon ? 'pl-10' : 'pl-3',

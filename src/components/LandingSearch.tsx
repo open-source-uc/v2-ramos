@@ -47,9 +47,9 @@ export function LandingSearch() {
         </button>
       </form>
       
-      <div className="flex mt-4 justify-center gap-4" role="group" aria-label="Acciones de navegación">
+      <div className="flex mt-4 justify-center gap-4 pt-4" role="group" aria-label="Acciones de navegación">
         <Button
-          variant="ghost"
+          variant="outline"
           size="lg"
           className="text-sm border border-muted"
           onClick={() => window.location.href = '/catalog'}
@@ -59,7 +59,7 @@ export function LandingSearch() {
         </Button>
 
         <Button
-          variant="ghost"
+          variant="outline"
           size="lg"
           className="text-sm border border-muted"
           onClick={() => window.location.href = '/404'}
