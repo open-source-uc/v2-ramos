@@ -1,5 +1,4 @@
 import { defineCollection, z } from "astro:content";
-import { Vote } from "lucide-react";
 
 const recommendations = defineCollection({
     schema: z.object({

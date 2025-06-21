@@ -21,7 +21,6 @@ const id2NameData = Id2NameRaw as Record<string, string>;
 
 // Transform the JSON data directly into the format needed by the table
 const coursesScore = await getCollection("coursesScore");
-console.log("coursesScore", coursesScore[0]);
 
 const coursesWithNames = Object.entries(coursesScore).map(
   ([sigle, details], index) => {

@@ -14,7 +14,6 @@ export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
       votes_high_workload,
       votes_mandatory_attendance,
       votes_optional_attendance,
-      votes_no_attendance,
       avg_weekly_hours,
       sort_index
     FROM course_summary WHERE sigle = ?
