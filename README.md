@@ -1,6 +1,13 @@
 # Resumen
 Proyecto de **prensa** academica para una comunidad informada :D
 
+Crear un `.env` con 
+```
+	readonly MODE_ENV: "development" | "production";
+	readonly API_SECRET: string;
+```
+
+
 # Astro Starter Kit: Basics
 
 ```sh
