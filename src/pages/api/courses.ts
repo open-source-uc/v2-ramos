@@ -43,8 +43,8 @@ import type { APIRoute } from "astro";
 // };
 
 export const GET: APIRoute = async ({ request, locals }) => {
-    const API_SECRET = locals.runtime.env.API_SECRET;
-
+    const API_SECRET = import.meta.env.API_SECRET;
+    console.log("API_SECRET", API_SECRET);
     if (!API_SECRET) {
         return new Response("Internal Server Error", { status: 500 });
     }
@@ -76,7 +76,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
         FROM course_summary ORDER BY sort_index DESC, id
     `).all<CourseSummary>();
 
-    return new Response(JSON.stringify(result), {
+    return new Response(JSON.stringify(result.results), {
         status: 200,
         headers: {
             "Content-Type": "application/json",
