@@ -3,6 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import { getCourseReviewByUserIdAndSigle } from "@/services/courses";
 import { actions, isInputError } from "astro:actions";
 import { getUserDataByToken } from "@/services/auth";
+import RedirectLogin from "@/components/reviews/RedirectLogin";
 
 const result = Astro.getActionResult(actions.createCourseReview);
 
@@ -16,14 +17,12 @@ const user = await getUserDataByToken(
     Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
 );
 
-if (!user) {
-    return Astro.redirect("/404");
-}
+const userIsNull = !user;
 
 const defaultData = await getCourseReviewByUserIdAndSigle(
     Astro.locals,
     sigle,
-    user.id,
+    user?.id ?? "-1",
 );
 let text = "";
 
@@ -418,4 +417,5 @@ const currentYear = new Date().getFullYear();
             </ul>
         </div>
     </div>
+    <RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>
