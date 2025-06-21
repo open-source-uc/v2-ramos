@@ -265,142 +265,165 @@ const hasExistingReview = userReview && userReview.id !== null;
         </section>
 
         <!-- Sección de Reseñas -->
-        {
-            reviews && reviews.length > 0 && (
-                <section class="mt-8">
-                    <div class="border border-border rounded-md overflow-hidden">
-                        <div class="border-b border-border px-6 py-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <h2 class="text-2xl font-semibold text-foreground">
-                                        Reseñas de Estudiantes
-                                    </h2>
-                                    <p class="text-sm text-muted-foreground mt-1">
-                                        Cónoce las experiencias de otros
-                                        estudiantes con este curso.
-                                    </p>
-                                </div>
-                                <div class="flex items-center gap-4">
-                                    <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
-                                        <span class="font-medium text-muted-foreground">
-                                            {reviews.length}
-                                        </span>
-                                        <span class="text-muted-foreground">
-                                            reseñas mostradas
-                                        </span>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        href={`/${sigle}/review`}
-                                        icon={hasExistingReview ? EditIcon : PlusIcon}
-                                        size="sm"
-                                        aria-label={hasExistingReview ? "Editar reseña" : "Dejar una reseña"}
-                                    >
-                                        {hasExistingReview ? "Editar Reseña" : "Dejar una Reseña"}
-                                    </Button>
-                                </div>
-                            </div>
+        <section class="mt-8">
+            <div class="border border-border rounded-md overflow-hidden">
+                <div class="border-b border-border px-6 py-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-foreground">
+                                Reseñas de Estudiantes
+                            </h2>
+                            <p class="text-sm text-muted-foreground mt-1">
+                                Conoce las experiencias de otros estudiantes con este curso.
+                            </p>
                         </div>
-
-                        <div class="p-6">
-                            <div class="space-y-6">
-                                {reviews.map((review, index) => (
-                                    <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
-                                        {/* Número de reviews */}
-                                        <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
-                                            {index + 1}
-                                        </div>
-
-                                        {/* Header con sentiment y metadata */}
-                                        <div class="items-start justify-between pr-8 gap-2">
-                                            <div class="flex items-center gap-2">
-                                                <Sentiment
-                                                    sentiment={
-                                                        review.like_dislike ===
-                                                        2
-                                                            ? "veryHappy"
-                                                            : review.like_dislike ===
-                                                                1
-                                                              ? "happy"
-                                                              : "sad"
-                                                    }
-                                                    size="default"
-                                                />
-                                                <span class="text-md font-medium text-foreground">
-                                                    {review.like_dislike === 2
-                                                        ? "Excelente"
-                                                        : review.like_dislike ===
-                                                            1
-                                                          ? "Bueno"
-                                                          : "Malo"}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Comentario */}
-                                        {review.comment && (
-                                            <MarkdownReviewView
-                                                path={review.comment}
-                                                client:only="react"
-                                            />
-                                        )}
-
-                                        {/* Tags informativos */}
-                                        <div class="flex flex-wrap gap-2">
-                                            <Pill
-                                                variant="ghost_green"
-                                                size="sm"
-                                                icon={CalendarIcon}
-                                            >
-                                                {review.year_taken} -{" "}
-                                                {review.semester_taken === 1
-                                                    ? "1er"
-                                                    : "2do"}{" "}
-                                                sem
-                                            </Pill>
-                                            <Pill
-                                                variant="ghost_blue"
-                                                size="sm"
-                                                icon={WorkloadIcon}
-                                            >
-                                                {review.workload_vote === 0
-                                                    ? "Carga Baja"
-                                                    : review.workload_vote === 1
-                                                      ? "Carga Media"
-                                                      : "Carga Alta"}
-                                            </Pill>
-                                            <Pill
-                                                variant="ghost_purple"
-                                                size="sm"
-                                                icon={AttendanceIcon}
-                                            >
-                                                {review.attendance_type === 0
-                                                    ? "Asistencia Obligatoria"
-                                                    : review.attendance_type ===
-                                                        1
-                                                      ? "Asistencia Opcional"
-                                                      : "Sin Asistencia"}
-                                            </Pill>
-                                            {review.weekly_hours && (
-                                                <Pill
-                                                    variant="ghost_orange"
-                                                    size="sm"
-                                                    icon={ClockIcon}
-                                                >
-                                                    {formatWeeklyHours(
-                                                        review.weekly_hours,
-                                                    )}
-                                                    /sem
-                                                </Pill>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                        <div class="flex items-center gap-4">
+                            {reviews && reviews.length > 0 && (
+                                <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
+                                    <span class="font-medium text-muted-foreground">
+                                        {reviews.length}
+                                    </span>
+                                    <span class="text-muted-foreground">
+                                        reseñas mostradas
+                                    </span>
+                                </div>
+                                <Button
+                                variant="outline"
+                                href={`/${sigle}/review`}
+                                icon={hasExistingReview ? EditIcon : PlusIcon}
+                                size="sm"
+                                aria-label={hasExistingReview ? "Editar reseña" : "Dejar una reseña"}
+                            >
+                                {hasExistingReview ? "Editar Reseña" : "Dejar una Reseña"}
+                            </Button>
+                            )}
                         </div>
                     </div>
-                </section>
-            )
-        }
+                </div>
+
+                {reviews && reviews.length > 0 ? (
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            {reviews.map((review, index) => (
+                                <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
+                                    {/* Número de reviews */}
+                                    <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
+                                        {index + 1}
+                                    </div>
+
+                                    {/* Header con sentiment y metadata */}
+                                    <div class="items-start justify-between pr-8 gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <Sentiment
+                                                sentiment={
+                                                    review.like_dislike ===
+                                                    2
+                                                        ? "veryHappy"
+                                                        : review.like_dislike ===
+                                                            1
+                                                          ? "happy"
+                                                          : "sad"
+                                                }
+                                                size="default"
+                                            />
+                                            <span class="text-md font-medium text-foreground">
+                                                {review.like_dislike === 2
+                                                    ? "Excelente"
+                                                    : review.like_dislike ===
+                                                        1
+                                                      ? "Bueno"
+                                                      : "Malo"}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Comentario */}
+                                    {review.comment && (
+                                        <MarkdownReviewView
+                                            path={review.comment}
+                                            client:only="react"
+                                        />
+                                    )}
+
+                                    {/* Tags informativos */}
+                                    <div class="flex flex-wrap gap-2">
+                                        <Pill
+                                            variant="ghost_green"
+                                            size="sm"
+                                            icon={CalendarIcon}
+                                        >
+                                            {review.year_taken} -{" "}
+                                            {review.semester_taken === 1
+                                                ? "1er"
+                                                : "2do"}{" "}
+                                            sem
+                                        </Pill>
+                                        <Pill
+                                            variant="ghost_blue"
+                                            size="sm"
+                                            icon={WorkloadIcon}
+                                        >
+                                            {review.workload_vote === 0
+                                                ? "Carga Baja"
+                                                : review.workload_vote === 1
+                                                  ? "Carga Media"
+                                                  : "Carga Alta"}
+                                        </Pill>
+                                        <Pill
+                                            variant="ghost_purple"
+                                            size="sm"
+                                            icon={AttendanceIcon}
+                                        >
+                                            {review.attendance_type === 0
+                                                ? "Asistencia Obligatoria"
+                                                : review.attendance_type ===
+                                                    1
+                                                  ? "Asistencia Opcional"
+                                                  : "Sin Asistencia"}
+                                        </Pill>
+                                        {review.weekly_hours && (
+                                            <Pill
+                                                variant="ghost_orange"
+                                                size="sm"
+                                                icon={ClockIcon}
+                                            >
+                                                {formatWeeklyHours(
+                                                    review.weekly_hours,
+                                                )}
+                                                /sem
+                                            </Pill>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div class="p-6 text-center">
+                        <div class="py-12">
+                            <div class="mb-4">
+                                <div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <PlusIcon className="h-8 w-8 text-muted-foreground" />
+                                </div>
+                            </div>
+                            <p class="text-lg font-medium text-muted-foreground mb-2">
+                                Este curso aún no tiene reseñas
+                            </p>
+                            <p class="text-sm text-muted-foreground mb-6">
+                                Comparte tu experiencia y ayuda a otros estudiantes
+                            </p>
+                            <Button
+                                variant="default"
+                                href={`/${sigle}/review`}
+                                icon={PlusIcon}
+                                aria-label="Ser el primero en dejar una reseña"
+                            >
+                                Ser el Primero en Reseñar
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </section>
     </div>
 </Layout>
