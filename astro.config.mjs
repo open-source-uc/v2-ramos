@@ -12,7 +12,6 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-
   adapter: cloudflare({
     platformProxy: {
       enabled: true
@@ -22,6 +21,5 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-
   integrations: [svelte(), react()]
 });

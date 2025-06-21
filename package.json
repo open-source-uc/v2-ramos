@@ -7,7 +7,7 @@
 		"build": "astro build",
 		"preview": "astro build && wrangler pages dev",
 		"astro": "astro",
-		"deploy": "astro build && wrangler pages deploy",
+		"deploy": "astro build && wrangler pages deploy --keep-vars",
 		"cf-typegen": "wrangler types"
 	},
 	"dependencies": {
