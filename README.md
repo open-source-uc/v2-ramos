@@ -3,8 +3,9 @@ Proyecto de **prensa** academica para una comunidad informada :D
 
 Crear un `.env` con 
 ```
-	readonly MODE_ENV: "development" | "production";
-	readonly API_SECRET: string;
+	MODE_ENV: "development" | "production";
+	API_SECRET: string; // secret de la api, cuado genera siempre 6000 lecturas, por cada build
+	USER_TOKEN: string; // JAMAS SUBIR A PRODUCCION ES SUPER PELIGROSOS ES SOLO PARA DESARROLLO, EL TOKEN SACARLO DE LOS TOKENS DEL PANEL DE Auth Osuc
 ```
 
 

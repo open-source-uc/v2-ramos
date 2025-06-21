@@ -31,9 +31,7 @@ const courseReviewSchema = z.object({
         .max(168, "No puede haber más de 168 horas en una semana"),
 
     year_taken: z.number()
-        .int("El año debe ser un número entero")
-        .min(2000, "El año debe ser mayor a 2000")
-        .max(new Date().getFullYear(), `El año no puede ser mayor a ${new Date().getFullYear()}`),
+        .int("El año debe ser un número entero"),
 
     semester_taken: z.number()
         .int("El semestre debe ser un número entero")
@@ -85,7 +83,15 @@ export const server = {
         input: courseReviewSchema,
         handler: async (state, ctx) => {
             const { locals, cookies } = ctx;
+            const min_year = new Date().getFullYear() - 6
+            const max_year = new Date().getFullYear();
 
+            if (state.year_taken < min_year || state.year_taken > max_year) {
+                throw new ActionError({
+                    code: "BAD_REQUEST",
+                    message: `El año debe estar entre ${min_year} y ${max_year}`
+                });
+            }
             // Verificar autenticación
             const token = cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "";
             const user = await getUserDataByToken(token);
