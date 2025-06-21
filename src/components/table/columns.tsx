@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Pill } from "../ui/pill"
 import { Button } from "../ui/button"
 import { SwapVertIcon } from "../icons/icons"
+import { Sentiment } from "../icons/sentiment"
  
 export type Course = {
   id: number,
@@ -12,7 +13,10 @@ export type Course = {
   credits: number,
   school: string,
   area: string,
-  category: string
+  category: string,
+  superlikes: number,
+  likes: number,
+  dislikes: number
 }
 
 export const columns: ColumnDef<Course>[] = [
@@ -95,8 +99,49 @@ export const columns: ColumnDef<Course>[] = [
         },
         cell: ({ row }) => {
             if (row.original.area !== "Ninguna") {
-                return <Pill variant="green">{row.original.area}</Pill>
+                return <Pill variant="pink">{row.original.area}</Pill>
             }
+        }
+    },
+    {
+        accessorKey: "reviews",
+        header: () => {
+            return <div className="text-left font-semibold">Reseñas</div>
+        },
+        cell: ({ row }) => {
+            const { superlikes, likes, dislikes } = row.original
+            const totalReviews = 2*superlikes + likes + dislikes
+            
+            if (totalReviews === 0) {
+                return (
+                    <Sentiment sentiment="question" size="sm" />
+                )
+            }
+            
+            const positiveReviews = 2*superlikes + likes
+            const positivePercentage = (positiveReviews / totalReviews) * 100
+            
+            let sentimentType: "veryHappy" | "happy" | "neutral" | "sad" | "verySad"
+            
+            if (positivePercentage >= 80) {
+                sentimentType = "veryHappy"
+            } else if (positivePercentage >= 60) {
+                sentimentType = "happy"
+            } else if (positivePercentage >= 40) {
+                sentimentType = "neutral"
+            } else if (positivePercentage >= 20) {
+                sentimentType = "sad"
+            } else {
+                sentimentType = "verySad"
+            }
+            
+            return (
+                <Sentiment 
+                    sentiment={sentimentType} 
+                    size="sm"
+                    ariaLabel={`${Math.round(positivePercentage)}% de reseñas positivas de ${totalReviews} total`}
+                />
+            )
         }
     }
 ]

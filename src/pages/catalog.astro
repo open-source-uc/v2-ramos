@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { SearchableTableDisplay } from "../components/SearchableTableDisplay";
+import { getCourses } from "../services/courses";
 
 // Import direct data from JSON
 import CoursesRaw from "../../migration/json/2025-1.json";
@@ -14,16 +15,29 @@ const searchParam = Astro.url.searchParams.get('search') || '';
 const coursesData = CoursesRaw as Record<string, any>;
 const id2name: Record<string, string> = Id2NameRaw as Record<string, string>;
 
+// Get dynamic course data from database
+const courseSummaries = await getCourses(Astro.locals, 10000); // Get all courses
+
+// Create a map for quick lookup of course summaries by sigle
+const summaryMap = new Map(courseSummaries.map(summary => [summary.sigle, summary]));
+
 // Transform the JSON data directly into the format needed by the table
-const coursesWithNames = Object.entries(coursesData).map(([sigle, details], index) => ({
-  id: index + 1, // Generate a simple id
-  sigle: sigle,
-  name: details.name,
-  credits: details.credits,
-  school: details.school,
-  area: details.area,
-  category: details.category,
-})) as Course[];
+const coursesWithNames = Object.entries(coursesData).map(([sigle, details], index) => {
+  const summary = summaryMap.get(sigle);
+  
+  return {
+    id: index + 1, // Generate a simple id
+    sigle: sigle,
+    name: details.name,
+    credits: details.credits,
+    school: details.school,
+    area: details.area,
+    category: details.category,
+    superlikes: summary?.superlikes || 0,
+    likes: summary?.likes || 0,
+    dislikes: summary?.dislikes || 0,
+  };
+}) as Course[];
 ---
 
 <Layout title="Catálogo de Cursos">

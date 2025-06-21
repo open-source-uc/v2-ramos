@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const pillVariants = cva(
-  "inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm font-medium",
+  "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium",
   {
     variants: {
       variant: {
@@ -25,7 +25,7 @@ const pillVariants = cva(
 export interface PillProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof pillVariants> {
-  icon?: React.ComponentType
+  icon?: React.ComponentType<{ className?: string }>
 }
 
 const Pill = React.forwardRef<HTMLDivElement, PillProps>(
@@ -36,7 +36,7 @@ const Pill = React.forwardRef<HTMLDivElement, PillProps>(
         ref={ref}
         {...props}
       >
-        {Icon && <Icon />}
+        {Icon && <Icon className="h-4 w-4 fill-current" />}
         {children}
       </div>
     )
