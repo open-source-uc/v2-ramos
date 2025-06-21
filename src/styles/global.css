@@ -27,6 +27,8 @@
   --color-red-light: var(--red-light);
   --color-green: var(--green);
   --color-green-light: var(--green-light);
+  --color-blue: var(--blue);
+  --color-blue-light: var(--blue-light);
   --color-purple: var(--purple);
   --color-purple-light: var(--purple-light);
   --color-pink: var(--pink);
@@ -60,6 +62,8 @@
   --red-light: oklch(0.95 0.2372 19 / 30%);
   --green: oklch(0.6202 0.196479 139.2308);
   --green-light: oklch(0.95 0.196479 139.2308 / 30%);
+  --blue: oklch(0.58 0.22 260);
+  --blue-light: oklch(0.95 0.22 260 / 30%);
   --purple: oklch(0.6783 0.3121 324.31);
   --purple-light: oklch(0.95 0.3121 324.31 / 30%);
   --pink: oklch(0.6459 0.26 349.85);

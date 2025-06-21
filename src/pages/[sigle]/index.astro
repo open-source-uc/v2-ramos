@@ -1,10 +1,12 @@
 ---
-import { getCourseBySigle } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
 import CoursesRaw from "../../../migration/json/2025-1.json";
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
-import { HourglassIcon, BuildingIcon, AreaIcon } from "../../components/icons/icons";
+import { HourglassIcon, BuildingIcon, AreaIcon, ClockIcon, ThumbUpIcon, ThumbDownIcon, AttendanceIcon, WorkloadIcon } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
+import { Sentiment } from "../../components/icons/sentiment";
+import { calculateSentiment, calculatePositivePercentage, getWorkloadLabel, getAttendanceLabel, formatWeeklyHours, getSentimentLabel } from "../../lib/courseStats";
 
 const { sigle } = Astro.params;
 const courses = CoursesRaw as Record<string, CourseStaticInfo>;
@@ -21,6 +23,15 @@ if (!course) {
 }
 
 const c = await getCourseBySigle(Astro.locals, sigle);
+const reviews = await getCourseReviews(Astro.locals, sigle, 10);
+
+// Calculate statistics
+const sentiment = c ? calculateSentiment(c.likes, c.superlikes, c.dislikes) : 'question';
+const positivePercentage = c ? calculatePositivePercentage(c.likes, c.superlikes, c.dislikes) : 0;
+const workloadLabel = c ? getWorkloadLabel(c.votes_low_workload, c.votes_medium_workload, c.votes_high_workload) : "Sin datos";
+const attendanceLabel = c ? getAttendanceLabel(c.votes_mandatory_attendance, c.votes_optional_attendance, c.votes_no_attendance) : "Sin datos";
+const weeklyHoursLabel = c ? formatWeeklyHours(c.avg_weekly_hours) : "Sin datos";
+const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
 ---
 
 <Layout>
@@ -58,6 +69,135 @@ const c = await getCourseBySigle(Astro.locals, sigle);
                 )}
             </div>
         </section>
+
+        <!-- Course Statistics Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            <!-- Overall Sentiment -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <Sentiment sentiment={sentiment} size="default" />
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Opinión General</h3>
+                        <p class="text-lg font-semibold">{getSentimentLabel(sentiment)}</p>
+                    </div>
+                </div>
+                {totalReviews > 0 && (
+                    <div class="text-sm text-muted-foreground">
+                        {positivePercentage}% positivas de {totalReviews} reseñas
+                    </div>
+                )}
+            </div>
+
+            <!-- Workload -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                        <WorkloadIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Carga de Trabajo</h3>
+                        <p class="text-lg font-semibold">{workloadLabel}</p>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    {weeklyHoursLabel} semanales
+                </div>
+            </div>
+
+            <!-- Attendance -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                        <AttendanceIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Asistencia</h3>
+                        <p class="text-lg font-semibold">{attendanceLabel}</p>
+                    </div>
+                </div>
+                {c && (
+                    <div class="text-sm text-muted-foreground">
+                        Basado en {c.votes_mandatory_attendance + c.votes_optional_attendance + c.votes_no_attendance} votos
+                    </div>
+                )}
+            </div>
+
+            <!-- Reviews Count -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                        <ThumbUpIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Total Reseñas</h3>
+                        <p class="text-lg font-semibold">{totalReviews}</p>
+                    </div>
+                </div>
+                {c && (
+                    <div class="flex gap-2 text-sm">
+                        <span class="text-green-600">{c.likes + c.superlikes} ↑</span>
+                        <span class="text-red-600">{c.dislikes} ↓</span>
+                    </div>
+                )}
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        {reviews && reviews.length > 0 && (
+            <section class="mt-8">
+                <div class="border border-border rounded-md p-6">
+                    <h2 class="text-2xl font-bold mb-6">Reseñas de Estudiantes</h2>
+                    
+                    <div class="space-y-6">
+                        {reviews.map((review) => (
+                            <div class="border-b border-border pb-6 last:border-b-0 last:pb-0">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        {/* Sentiment based on like_dislike */}
+                                        <Sentiment 
+                                            sentiment={review.like_dislike === 2 ? 'veryHappy' : review.like_dislike === 1 ? 'happy' : 'sad'} 
+                                            size="sm" 
+                                        />
+                                        <div class="flex gap-2">
+                                            <Pill variant="purple" className="text-xs">
+                                                {review.workload_vote === 0 ? 'Carga Baja' : review.workload_vote === 1 ? 'Carga Media' : 'Carga Alta'}
+                                            </Pill>
+                                            <Pill variant="blue" className="text-xs">
+                                                {review.attendance_type === 0 ? 'Asistencia Obligatoria' : review.attendance_type === 1 ? 'Asistencia Opcional' : 'Sin Asistencia'}
+                                            </Pill>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-muted-foreground">
+                                        {review.year_taken} - {review.semester_taken === 1 ? '1er' : '2do'} semestre
+                                    </div>
+                                </div>
+                                
+                                {review.weekly_hours && (
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <ClockIcon className="h-4 w-4 text-muted-foreground" />
+                                        <span class="text-sm text-muted-foreground">
+                                            {formatWeeklyHours(review.weekly_hours)} por semana
+                                        </span>
+                                    </div>
+                                )}
+                                
+                                {review.comment && (
+                                    <p class="text-gray-700 leading-relaxed">{review.comment}</p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {totalReviews > reviews.length && (
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-muted-foreground">
+                                Mostrando {reviews.length} de {totalReviews} reseñas
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </section>
+        )}
 
         
     </div>
