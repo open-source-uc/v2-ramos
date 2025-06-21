@@ -5,7 +5,7 @@ import path from 'path';
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
   const user = {
-    name: "Chatgipiti",
+    name: "Osuc",
   }
   const tags = ["astro", "javascript", "typescript"]
   const code = formData.get("code");
@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
   
   const fileContent = `---
-title: "${code}-${user.name}"
+title: "${code} - ${user.name}"
 code: "${code}"
 initiative: "${user.name}"
 period: "2025-1"

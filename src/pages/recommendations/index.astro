@@ -1,11 +1,9 @@
 ---
-import { record } from "astro:schema";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
 const recommendations = await getCollection("recommendations");
-console.log(recommendations);
-export const prerender = true;
+const search = Astro.url.searchParams.get("search") || "";
 ---
 
 <Layout>
@@ -17,6 +15,26 @@ export const prerender = true;
           >New Recommendation</a
         >
       </header>
+      <!-- Crea un buscador que redireccione a /recommendations?search= -->
+      <form
+        class="flex items-center gap-4"
+        action="/recommendations"
+        method="GET"
+      >
+        <input
+          type="text"
+          name="search"
+          placeholder="Buscar por iniciativa..."
+          class="border rounded p-2 w-full md:w-1/3"
+          value={search}
+        />
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:cursor-pointer"
+        >
+          Buscar
+        </button>
+      </form>
       <div class="grid gap-6 lg:grid-cols-2">
         {
           recommendations.map((rec) => {
@@ -31,12 +49,16 @@ export const prerender = true;
               tags,
               resume,
             } = data;
+            if (
+              search &&
+              !initiative.toLowerCase().includes(search.toLowerCase())
+            ) {
+              return null; // Skip this recommendation if it doesn't match the search
+            }
             return (
               <article class="bg-white rounded-lg shadow-md flex flex-col gap-2 hover:shadow-lg transition-shadow duration-200 [&>*:not(:first-child)]:px-6 [&>*:not(:first-child)]:py-4">
                 <header class="mb-4 bg-blue-600 text-white p-8 rounded-t-lg flex flex-col md:flex-row justify-between">
-                  <h2 class="text-xl font-bold">
-                    {title} - {initiative}
-                  </h2>
+                  <h2 class="text-xl font-bold">{title}</h2>
                   <span class="text-sm bg-white/20 px-2 py-1 rounded">
                     Recomendado por una iniciativa estudiantil
                   </span>
@@ -69,8 +91,8 @@ export const prerender = true;
                     </dd>
                   </div>
                 </dl>
-                <section class="flex flex-col xl:flex-row">
-                  <div class="flex-1">
+                <section class="flex flex-col justify-end xl:align-baseline xl:flex-row h-full">
+                  <div class="flex-1 flex flex-col justify-end">
                     <h3 class="font-semibold">Resumen de la recomendación:</h3>
                     <p>{resume}</p>
                   </div>

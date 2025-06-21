@@ -1,5 +1,5 @@
 ---
-title: "Base de Datos" # Nombre del curso 
+title: "Base de Datos - Copilot" # Nombre del curso 
 code: "IIC2413" # Codigo del curso
 initiative: "Copilot" # Nombre de la iniciativa
 period: "2025-1" # Período académico (ej: 2024-1, 2025-1)

@@ -1,5 +1,5 @@
 ---
-title: "Nombre del curso" # ej: IIC2413
+title: "Nombre del curso - Nombre de la iniciativa" # ej: IIC2413
 code: "IDK2025"
 initiative: "Nombre de la iniciativa"
 period: "2025-1" # Período académico (ej: 2024-1, 2025-1)
