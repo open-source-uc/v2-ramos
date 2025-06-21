@@ -1,0 +1,60 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const recommendations = await getCollection("recommendations");
+
+  return recommendations.map((rec) => ({
+    params: {
+      id: `${rec.data.code}-${rec.data.initiative.replace(/\s/g, "")}`,
+    },
+    props: { rec },
+  }));
+}
+
+const { rec } = Astro.props;
+const { data } = rec;
+const { title, initiative, period, faculty, qualification, tags, resume } =
+  data;
+
+const { Content } = await render(rec);
+export const prerender = true;
+---
+
+<Layout>
+  <main>
+    <section class="[&>*:not(:first-child)]:px-8 flex flex-col gap-8">
+      <header class="text-white bg-blue-600 px-8 py-4 rounded-t-lg">
+        {title} - {initiative}
+      </header>
+      <div class="flex flex-col lg:flex-row">
+        <dl class="w-2xl">
+          <div>
+            <dt class="font-semibold">Period:</dt>
+            <dd>{period}</dd>
+          </div>
+          <div>
+            <dt class="font-semibold">Faculty:</dt>
+            <dd>{faculty}</dd>
+          </div>
+          <div>
+            <dt class="font-semibold">Qualification:</dt>
+            <dd>{qualification} ⭐</dd>
+          </div>
+          <div>
+            <dt class="font-semibold">Tags:</dt>
+            <dd>
+              <ul class="list-disc pl-4">
+                {tags.map((tag: unknown) => <li>{tag}</li>)}
+              </ul>
+            </dd>
+          </div>
+        </dl>
+        <div class="">
+          <Content />
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
