@@ -12,7 +12,7 @@ import Header from "../components/Header";
 		<meta name="generator" content={Astro.generator} />
 		<title>Ramos UC</title>
 	</head>
-	<body class="bg-background text-foreground space-y-12 px-4 tablet:px-8">
+	<body class="bg-background text-foreground flex flex-col gap-8 px-4 tablet:px-8">
 		<Header client:only="react" />
 		<slot />
 	</body>
