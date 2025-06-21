@@ -14,11 +14,14 @@ import {
     PlusIcon,
     HourglassIcon,
     BuildingIcon,
-    AreaIcon
+    AreaIcon,
+    SadIcon,
+    HappyIcon,
+    VeryHappyIcon
 } from "@/components/icons/icons";
-import { Sentiment } from "@/components/icons/sentiment";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
+import { ButtonInput } from "@/components/ui/button-input";
 
 const result = Astro.getActionResult(actions.createCourseReview);
 
@@ -155,79 +158,52 @@ const isEditMode = defaultData && defaultData.id !== null;
                     <div class="border border-border rounded-md p-6">
                         <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
                             <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
-                                <Sentiment sentiment="happy" size="sm" />
+                                <HappyIcon className="h-4 w-4 fill-current" />
                             </div>
                             Valoración General
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="relative cursor-pointer group">
-                                <input
-                                    type="radio"
-                                    name="like_dislike"
-                                    value="0"
-                                    checked={defaultData.like_dislike === 0}
-                                    required
-                                    class="absolute opacity-0 peer"
-                                    transition:persist
-                                />
-                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300 group-hover:bg-red-25">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-red-light text-red border border-red/20 rounded-lg">
-                                            <Sentiment sentiment="sad" size="sm" />
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-foreground">No me gustó</div>
-                                            <div class="text-sm text-muted-foreground">El curso no cumplió expectativas</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
+                            <ButtonInput 
+                                variant="red"
+                                icon={SadIcon}
+                                title="No me gustó"
+                                subtitle="El curso no cumplió expectativas"
+                                inputProps={{
+                                    type: "radio",
+                                    name: "like_dislike",
+                                    value: "0",
+                                    checked: defaultData.like_dislike === 0,
+                                    required: true
+                                }}
+                            />
 
-                            <label class="relative cursor-pointer group">
-                                <input
-                                    type="radio"
-                                    name="like_dislike"
-                                    value="1"
-                                    checked={defaultData.like_dislike === 1}
-                                    required
-                                    class="absolute opacity-0 peer"
-                                    transition:persist
-                                />
-                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:border-blue-300 group-hover:bg-blue-25">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
-                                            <Sentiment sentiment="happy" size="sm" />
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-foreground">Me gustó</div>
-                                            <div class="text-sm text-muted-foreground">Curso recomendable</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
+                            <ButtonInput 
+                                variant="blue"
+                                icon={HappyIcon}
+                                title="Me gustó"
+                                subtitle="Curso recomendable"
+                                inputProps={{
+                                    type: "radio",
+                                    name: "like_dislike",
+                                    value: "1",
+                                    checked: defaultData.like_dislike === 1,
+                                    required: true
+                                }}
+                            />
 
-                            <label class="relative cursor-pointer group">
-                                <input
-                                    type="radio"
-                                    name="like_dislike"
-                                    value="2"
-                                    checked={defaultData.like_dislike === 2}
-                                    required
-                                    class="absolute opacity-0 peer"
-                                    transition:persist
-                                />
-                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300 group-hover:bg-green-25">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
-                                            <Sentiment sentiment="veryHappy" size="sm" />
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-foreground">Me encantó</div>
-                                            <div class="text-sm text-muted-foreground">Excelente experiencia</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
+                            <ButtonInput 
+                                variant="green"
+                                icon={VeryHappyIcon}
+                                title="Me encantó"
+                                subtitle="Excelente experiencia"
+                                inputProps={{
+                                    type: "radio",
+                                    name: "like_dislike",
+                                    value: "2",
+                                    checked: defaultData.like_dislike === 2,
+                                    required: true
+                                }}
+                            />
                         </div>
                         {
                             inputErrors.like_dislike && (
@@ -249,74 +225,50 @@ const isEditMode = defaultData && defaultData.id !== null;
                                 Carga de Trabajo
                             </h3>
                             <div class="space-y-3">
-                                <label class="relative cursor-pointer group">
-                                    <input
-                                        type="radio"
-                                        name="workload_vote"
-                                        value="0"
-                                        checked={defaultData.workload_vote === 0}
-                                        required
-                                        class="absolute opacity-0 peer"
-                                        transition:persist
-                                    />
-                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 bg-green-light text-green border border-green/20 rounded-lg flex items-center justify-center text-xs font-medium">
-                                                B
-                                            </div>
-                                            <div>
-                                                <div class="font-medium">Baja</div>
-                                                <div class="text-sm text-muted-foreground">Pocas horas de estudio</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
+                                <ButtonInput 
+                                    variant="green"
+                                    size="sm"
+                                    icon={ClockIcon}
+                                    title="Baja"
+                                    subtitle="Pocas horas de estudio"
+                                    inputProps={{
+                                        type: "radio",
+                                        name: "workload_vote",
+                                        value: "0",
+                                        checked: defaultData.workload_vote === 0,
+                                        required: true
+                                    }}
+                                />
 
-                                <label class="relative cursor-pointer group">
-                                    <input
-                                        type="radio"
-                                        name="workload_vote"
-                                        value="1"
-                                        checked={defaultData.workload_vote === 1}
-                                        required
-                                        class="absolute opacity-0 peer"
-                                        transition:persist
-                                    />
-                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-orange-300">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 bg-orange-light text-orange border border-orange/20 rounded-lg flex items-center justify-center text-xs font-medium">
-                                                M
-                                            </div>
-                                            <div>
-                                                <div class="font-medium">Media</div>
-                                                <div class="text-sm text-muted-foreground">Carga de trabajo estándar</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
+                                <ButtonInput 
+                                    variant="orange"
+                                    size="sm"
+                                    icon={HourglassIcon}
+                                    title="Media"
+                                    subtitle="Carga de trabajo estándar"
+                                    inputProps={{
+                                        type: "radio",
+                                        name: "workload_vote",
+                                        value: "1",
+                                        checked: defaultData.workload_vote === 1,
+                                        required: true
+                                    }}
+                                />
 
-                                <label class="relative cursor-pointer group">
-                                    <input
-                                        type="radio"
-                                        name="workload_vote"
-                                        value="2"
-                                        checked={defaultData.workload_vote === 2}
-                                        required
-                                        class="absolute opacity-0 peer"
-                                        transition:persist
-                                    />
-                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 bg-red-light text-red border border-red/20 rounded-lg flex items-center justify-center text-xs font-medium">
-                                                A
-                                            </div>
-                                            <div>
-                                                <div class="font-medium">Alta</div>
-                                                <div class="text-sm text-muted-foreground">Muchas horas de estudio</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
+                                <ButtonInput 
+                                    variant="red"
+                                    size="sm"
+                                    icon={WorkloadIcon}
+                                    title="Alta"
+                                    subtitle="Muchas horas de estudio"
+                                    inputProps={{
+                                        type: "radio",
+                                        name: "workload_vote",
+                                        value: "2",
+                                        checked: defaultData.workload_vote === 2,
+                                        required: true
+                                    }}
+                                />
                             </div>
                             {
                                 inputErrors.workload_vote && (
@@ -336,51 +288,35 @@ const isEditMode = defaultData && defaultData.id !== null;
                                 Tipo de Asistencia
                             </h3>
                             <div class="space-y-3">
-                                <label class="relative cursor-pointer group">
-                                    <input
-                                        type="radio"
-                                        name="attendance_type"
-                                        value="0"
-                                        checked={defaultData.attendance_type === 0}
-                                        required
-                                        class="absolute opacity-0 peer"
-                                        transition:persist
-                                    />
-                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 bg-red-light text-red border border-red/20 rounded-lg flex items-center justify-center text-xs font-medium">
-                                                OB
-                                            </div>
-                                            <div>
-                                                <div class="font-medium">Obligatoria</div>
-                                                <div class="text-sm text-muted-foreground">Asistencia requerida</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
+                                <ButtonInput 
+                                    variant="red"
+                                    size="sm"
+                                    icon={AttendanceIcon}
+                                    title="Obligatoria"
+                                    subtitle="Asistencia requerida"
+                                    inputProps={{
+                                        type: "radio",
+                                        name: "attendance_type",
+                                        value: "0",
+                                        checked: defaultData.attendance_type === 0,
+                                        required: true
+                                    }}
+                                />
 
-                                <label class="relative cursor-pointer group">
-                                    <input
-                                        type="radio"
-                                        name="attendance_type"
-                                        value="1"
-                                        checked={defaultData.attendance_type === 1}
-                                        required
-                                        class="absolute opacity-0 peer"
-                                        transition:persist
-                                    />
-                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 bg-green-light text-green border border-green/20 rounded-lg flex items-center justify-center text-xs font-medium">
-                                                OP
-                                            </div>
-                                            <div>
-                                                <div class="font-medium">Opcional</div>
-                                                <div class="text-sm text-muted-foreground">Puedes faltar sin problemas</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
+                                <ButtonInput 
+                                    variant="green"
+                                    size="sm"
+                                    icon={ClockIcon}
+                                    title="Opcional"
+                                    subtitle="Puedes faltar sin problemas"
+                                    inputProps={{
+                                        type: "radio",
+                                        name: "attendance_type",
+                                        value: "1",
+                                        checked: defaultData.attendance_type === 1,
+                                        required: true
+                                    }}
+                                />
                             </div>
                             {
                                 inputErrors.attendance_type && (
