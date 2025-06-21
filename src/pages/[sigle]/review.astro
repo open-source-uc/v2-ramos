@@ -1,9 +1,24 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getCourseReviewByUserIdAndSigle } from "@/services/courses";
+import { getCourseReviewByUserIdAndSigle, getCourseBySigle } from "@/services/courses";
 import { actions, isInputError } from "astro:actions";
 import { getUserDataByToken } from "@/services/auth";
 import RedirectLogin from "@/components/reviews/RedirectLogin";
+import { getEntry } from "astro:content";
+import { 
+    CalendarIcon, 
+    WorkloadIcon, 
+    AttendanceIcon, 
+    ClockIcon,
+    EditIcon,
+    PlusIcon,
+    HourglassIcon,
+    BuildingIcon,
+    AreaIcon
+} from "@/components/icons/icons";
+import { Sentiment } from "@/components/icons/sentiment";
+import { Pill } from "@/components/ui/pill";
+import { Button } from "@/components/ui/button";
 
 const result = Astro.getActionResult(actions.createCourseReview);
 
@@ -12,6 +27,20 @@ const { sigle } = Astro.params;
 if (!sigle) {
     return Astro.redirect("/404");
 }
+
+// Get course data for header section
+const courseData = await getEntry("coursesStatic", sigle);
+if (!courseData) {
+    return Astro.redirect("/404");
+}
+const course = courseData.data;
+
+// Get additional course data for pills
+const c = await getCourseBySigle(Astro.locals, sigle);
+
+// Import ID to name mapping for schools and areas
+import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+const id2NameData = Id2NameRaw as Record<string, string>;
 
 const user = await getUserDataByToken(
     Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
@@ -35,386 +64,574 @@ if (defaultData.comment) {
 
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 const currentYear = new Date().getFullYear();
+const isEditMode = defaultData && defaultData.id !== null;
 ---
 
 <Layout>
-    <div class="max-w-2xl mx-auto mt-8 mb-12">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                Crear Reseña de Curso
-            </h1>
-            <p class="text-gray-600">
-                Comparte tu experiencia con otros estudiantes
-            </p>
-        </div>
-
-        <!-- Mensaje de éxito -->
-        {
-            result && result.data?.message && (
-                <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-                    <p class="font-medium">{result.data.message}</p>
-                    {result.data.wasUpdated && (
-                        <p class="text-sm mt-1">
-                            Tu reseña anterior ha sido sobrescrita.
-                        </p>
-                    )}
-                </div>
-            )
-        }
-
-        <form
-            method="POST"
-            action={actions.createCourseReview}
-            class="bg-white shadow-lg rounded-xl p-8 space-y-6"
-        >
-            <!-- Sigla del Curso -->
-            <div>
-                <input type="hidden" name="course_sigle" value={sigle} />
-            </div>
-
-            <!-- Valoración General -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    Valoración General *
-                </label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="like_dislike"
-                            value="0"
-                            checked={defaultData.like_dislike === 0}
-                            required
-                            class="mr-2 text-red-600 focus:ring-red-500"
-                            transition:persist
-                        />
-                        <span class="text-red-600 flex items-center">
-                            👎 No me gustó
-                        </span>
-                    </label>
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="like_dislike"
-                            value="1"
-                            checked={defaultData.like_dislike === 1}
-                            required
-                            class="mr-2 text-blue-600 focus:ring-blue-500"
-                            transition:persist
-                        />
-                        <span class="text-blue-600 flex items-center">
-                            👍 Me gustó
-                        </span>
-                    </label>
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="like_dislike"
-                            value="2"
-                            checked={defaultData.like_dislike === 2}
-                            required
-                            class="mr-2 text-green-600 focus:ring-green-500"
-                            transition:persist
-                        />
-                        <span class="text-green-600 flex items-center">
-                            ⭐ Me encantó
-                        </span>
-                    </label>
-                </div>
-                {
-                    inputErrors.like_dislike && (
-                        <p class="text-red-600 text-sm mt-1">
-                            {inputErrors.like_dislike}
-                        </p>
-                    )
-                }
-            </div>
-
-            <!-- Carga de Trabajo -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    Carga de Trabajo *
-                </label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="workload_vote"
-                            value="0"
-                            checked={defaultData.workload_vote === 0}
-                            required
-                            class="mr-2 text-green-600 focus:ring-green-500"
-                            transition:persist
-                        />
-                        <span class="text-green-600">📚 Baja</span>
-                    </label>
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="workload_vote"
-                            value="1"
-                            checked={defaultData.workload_vote === 1}
-                            required
-                            class="mr-2 text-yellow-600 focus:ring-yellow-500"
-                            transition:persist
-                        />
-                        <span class="text-yellow-600">📖 Media</span>
-                    </label>
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="workload_vote"
-                            value="2"
-                            checked={defaultData.workload_vote === 2}
-                            required
-                            class="mr-2 text-red-600 focus:ring-red-500"
-                            transition:persist
-                        />
-                        <span class="text-red-600">📚📚 Alta</span>
-                    </label>
-                </div>
-                {
-                    inputErrors.workload_vote && (
-                        <p class="text-red-600 text-sm mt-1">
-                            {inputErrors.workload_vote}
-                        </p>
-                    )
-                }
-            </div>
-
-            <!-- Asistencia -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    Tipo de Asistencia *
-                </label>
-                <div class="flex space-x-4">
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="attendance_type"
-                            value="0"
-                            checked={defaultData.attendance_type === 0}
-                            required
-                            class="mr-2 text-red-600 focus:ring-red-500"
-                            transition:persist
-                        />
-                        <span class="text-red-600">🚫 Obligatoria</span>
-                    </label>
-                    <label class="flex items-center cursor-pointer">
-                        <input
-                            type="radio"
-                            name="attendance_type"
-                            value="1"
-                            checked={defaultData.attendance_type === 1}
-                            required
-                            class="mr-2 text-green-600 focus:ring-green-500"
-                            transition:persist
-                        />
-                        <span class="text-green-600">✅ Opcional</span>
-                    </label>
-                </div>
-                {
-                    inputErrors.attendance_type && (
-                        <p class="text-red-600 text-sm mt-1">
-                            {inputErrors.attendance_type}
-                        </p>
-                    )
-                }
-            </div>
-
-            <!-- Grid para campos numéricos -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Horas Semanales -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Course Header Section -->
+        <section class="border border-border rounded-md px-6 py-8 mb-8">
+            <p class="text-sm">{course.sigle}</p>
+            
+            <div class="pt-2 flex items-center justify-between">
                 <div>
-                    <label
-                        for="weekly_hours"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                        Horas Semanales *
-                    </label>
-                    <input
-                        type="number"
-                        id="weekly_hours"
-                        name="weekly_hours"
-                        required
-                        min="0"
-                        max="168"
-                        placeholder="Ej: 8"
-                        value={defaultData.weekly_hours || ""}
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                        transition:persist
-                    />
-                    {
-                        inputErrors.weekly_hours && (
-                            <p class="text-red-600 text-sm mt-1">
-                                {inputErrors.weekly_hours}
-                            </p>
-                        )
-                    }
+                    <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
+                    <p class="text-sm opacity-60 max-w-[75%]">{course.program}</p>
                 </div>
-
-                <!-- Año -->
-                <div>
-                    <label
-                        for="year_taken"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                        Año Cursado *
-                    </label>
-                    <input
-                        type="number"
-                        id="year_taken"
-                        name="year_taken"
-                        required
-                        min="2000"
-                        max={currentYear}
-                        placeholder={currentYear.toString()}
-                        value={defaultData.year_taken || ""}
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                        transition:persist
-                    />
-                    {
-                        inputErrors.year_taken && (
-                            <p class="text-red-600 text-sm mt-1">
-                                {inputErrors.year_taken}
-                            </p>
-                        )
-                    }
-                </div>
-
-                <!-- Semestre -->
-                <div>
-                    <label
-                        for="semester_taken"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                        Semestre *
-                    </label>
-                    <select
-                        id="semester_taken"
-                        name="semester_taken"
-                        required
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                        transition:persist
-                    >
-                        <option value="">Seleccionar</option>
-                        <option
-                            value="1"
-                            selected={defaultData.semester_taken === 1}
-                            >1° Semestre</option
-                        >
-                        <option
-                            value="2"
-                            selected={defaultData.semester_taken === 2}
-                            >2° Semestre</option
-                        >
-                        <option
-                            value="3"
-                            selected={defaultData.semester_taken === 3}
-                            >TAV</option
-                        >
-                    </select>
-                    {
-                        inputErrors.semester_taken && (
-                            <p class="text-red-600 text-sm mt-1">
-                                {inputErrors.semester_taken}
-                            </p>
-                        )
-                    }
-                </div>
-            </div>
-
-            <!-- Comentario -->
-            <div>
-                <label
-                    for="comment"
-                    class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                    Comentario (Opcional)
-                </label>
-                <p class="text-sm text-gray-500 mb-2">
-                    Comparte tu experiencia, consejos para futuros estudiantes,
-                    o cualquier información útil.
-                </p>
-                <textarea
-                    id="comment"
-                    name="comment"
-                    rows="6"
-                    maxlength="10000"
-                    placeholder="Escribe tu comentario aquí... Puedes incluir información sobre el profesor, metodología, evaluaciones, consejos para el curso, etc."
-                    class="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 resize-vertical field-sizing-content text-sm resize-none min-h-20"
-                    transition:persist>{text || ""}</textarea
-                >
-                <div class="flex justify-between mt-1">
-                    <div>
-                        {
-                            inputErrors.comment && (
-                                <p class="text-red-600 text-sm">
-                                    {inputErrors.comment}
-                                </p>
-                            )
-                        }
+                <div class="hidden desktop:block items-center p-3 text-xl bg-green-light text-green border border-green/20 rounded-sm">
+                    <div class="flex items-center gap-2 text-xl">
+                        <HourglassIcon className="inline-block fill-green" />
+                        <span class="font-medium">{course.credits} Créditos</span>
                     </div>
-                    <p class="text-xs text-gray-400">
-                        Máximo 10,000 caracteres
-                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center flex-wrap gap-2 mt-8">
+                <Pill
+                    variant="green"
+                    icon={HourglassIcon}
+                    className="desktop:hidden"
+                >
+                    {course.credits} Créditos
+                </Pill>
+                {
+                    c && id2NameData[c.school_id] &&
+                        id2NameData[c.school_id] !== "Ninguna" && (
+                            <Pill variant="blue" icon={BuildingIcon}>
+                                <span>{id2NameData[c.school_id]}</span>
+                            </Pill>
+                        )
+                }
+                {
+                    c && id2NameData[c.area_id] &&
+                        id2NameData[c.area_id] !== "Sin Área Asignada" && (
+                            <Pill variant="pink" icon={AreaIcon}>
+                                {id2NameData[c.area_id]}
+                            </Pill>
+                        )
+                }
+            </div>
+        </section>
+
+        <!-- Review Form Header -->
+        <section class="border border-border rounded-md overflow-hidden mb-8">
+            <div class="border-b border-border px-6 py-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-foreground">
+                            {isEditMode ? "Editar tu Reseña" : "Crear Reseña de Curso"}
+                        </h2>
+                        <p class="text-sm text-muted-foreground mt-1">
+                            Comparte tu experiencia con otros estudiantes
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-border">
+                            <span class="font-medium text-muted-foreground">
+                                {isEditMode ? "Modo Edición" : "Nueva Reseña"}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Error general -->
+            <!-- Success Message -->
             {
-                !isInputError(result?.error) && result?.error?.message && (
-                    <div class="p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                        <p class="font-medium">{result.error.message}</p>
+                result && result.data?.message && (
+                    <div class="px-6 py-4 bg-green-50 border-b border-green-200">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <p class="font-medium text-green-800">{result.data.message}</p>
+                        </div>
+                        {result.data.wasUpdated && (
+                            <p class="text-sm mt-1 text-green-700 ml-4">
+                                Tu reseña anterior ha sido sobrescrita.
+                            </p>
+                        )}
                     </div>
                 )
             }
 
-            <!-- Botones -->
-            <div class="flex justify-between items-center pt-6 border-t">
-                <a
-                    href={`/${sigle}/`}
-                    class="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium transition"
+            <!-- Review Form -->
+            <div class="p-6">
+                <form
+                    method="POST"
+                    action={actions.createCourseReview}
+                    class="space-y-8"
                 >
-                    ← Volver
-                </a>
-                <button
-                    type="submit"
-                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring focus:ring-blue-200 transition"
-                >
-                    Guardar Reseña
-                </button>
-                {
-                    defaultData.id && (
-                        <a
-                            href={`/${sigle}/delete/${defaultData.id}`}
-                            class="px-6 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:ring focus:ring-red-200 transition"
-                        >
-                            Borrar Reseña
-                        </a>
-                    )
-                }
-            </div>
-        </form>
+                    <!-- Hidden course sigle -->
+                    <input type="hidden" name="course_sigle" value={sigle} />
 
-        <!-- Información adicional -->
-        <div class="mt-8 p-4 bg-blue-50 rounded-md">
-            <h3 class="font-medium text-blue-900 mb-2">
-                💡 Consejos para una buena reseña:
+                    <!-- Rating Section -->
+                    <div class="border border-border rounded-md p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                                <Sentiment sentiment="happy" size="sm" />
+                            </div>
+                            Valoración General
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="relative cursor-pointer group">
+                                <input
+                                    type="radio"
+                                    name="like_dislike"
+                                    value="0"
+                                    checked={defaultData.like_dislike === 0}
+                                    required
+                                    class="absolute opacity-0 peer"
+                                    transition:persist
+                                />
+                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300 group-hover:bg-red-25">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-red-light text-red border border-red/20 rounded-lg">
+                                            <Sentiment sentiment="sad" size="sm" />
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-foreground">No me gustó</div>
+                                            <div class="text-sm text-muted-foreground">El curso no cumplió expectativas</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="relative cursor-pointer group">
+                                <input
+                                    type="radio"
+                                    name="like_dislike"
+                                    value="1"
+                                    checked={defaultData.like_dislike === 1}
+                                    required
+                                    class="absolute opacity-0 peer"
+                                    transition:persist
+                                />
+                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:border-blue-300 group-hover:bg-blue-25">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                                            <Sentiment sentiment="happy" size="sm" />
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-foreground">Me gustó</div>
+                                            <div class="text-sm text-muted-foreground">Curso recomendable</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="relative cursor-pointer group">
+                                <input
+                                    type="radio"
+                                    name="like_dislike"
+                                    value="2"
+                                    checked={defaultData.like_dislike === 2}
+                                    required
+                                    class="absolute opacity-0 peer"
+                                    transition:persist
+                                />
+                                <div class="border border-border rounded-md p-4 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300 group-hover:bg-green-25">
+                                    <div class="flex items-center gap-3">
+                                        <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                                            <Sentiment sentiment="veryHappy" size="sm" />
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-foreground">Me encantó</div>
+                                            <div class="text-sm text-muted-foreground">Excelente experiencia</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        {
+                            inputErrors.like_dislike && (
+                                <p class="text-destructive text-sm mt-3">
+                                    {inputErrors.like_dislike}
+                                </p>
+                            )
+                        }
+                    </div>
+
+                    <!-- Course Details Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Workload Section -->
+                        <div class="border border-border rounded-md p-6">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                                    <WorkloadIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                Carga de Trabajo
+                            </h3>
+                            <div class="space-y-3">
+                                <label class="relative cursor-pointer group">
+                                    <input
+                                        type="radio"
+                                        name="workload_vote"
+                                        value="0"
+                                        checked={defaultData.workload_vote === 0}
+                                        required
+                                        class="absolute opacity-0 peer"
+                                        transition:persist
+                                    />
+                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-green-light text-green border border-green/20 rounded-lg flex items-center justify-center text-xs font-medium">
+                                                B
+                                            </div>
+                                            <div>
+                                                <div class="font-medium">Baja</div>
+                                                <div class="text-sm text-muted-foreground">Pocas horas de estudio</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="relative cursor-pointer group">
+                                    <input
+                                        type="radio"
+                                        name="workload_vote"
+                                        value="1"
+                                        checked={defaultData.workload_vote === 1}
+                                        required
+                                        class="absolute opacity-0 peer"
+                                        transition:persist
+                                    />
+                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-orange-300">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-orange-light text-orange border border-orange/20 rounded-lg flex items-center justify-center text-xs font-medium">
+                                                M
+                                            </div>
+                                            <div>
+                                                <div class="font-medium">Media</div>
+                                                <div class="text-sm text-muted-foreground">Carga de trabajo estándar</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="relative cursor-pointer group">
+                                    <input
+                                        type="radio"
+                                        name="workload_vote"
+                                        value="2"
+                                        checked={defaultData.workload_vote === 2}
+                                        required
+                                        class="absolute opacity-0 peer"
+                                        transition:persist
+                                    />
+                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-red-light text-red border border-red/20 rounded-lg flex items-center justify-center text-xs font-medium">
+                                                A
+                                            </div>
+                                            <div>
+                                                <div class="font-medium">Alta</div>
+                                                <div class="text-sm text-muted-foreground">Muchas horas de estudio</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            {
+                                inputErrors.workload_vote && (
+                                    <p class="text-destructive text-sm mt-3">
+                                        {inputErrors.workload_vote}
+                                    </p>
+                                )
+                            }
+                        </div>
+
+                        <!-- Attendance Section -->
+                        <div class="border border-border rounded-md p-6">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                                    <AttendanceIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                Tipo de Asistencia
+                            </h3>
+                            <div class="space-y-3">
+                                <label class="relative cursor-pointer group">
+                                    <input
+                                        type="radio"
+                                        name="attendance_type"
+                                        value="0"
+                                        checked={defaultData.attendance_type === 0}
+                                        required
+                                        class="absolute opacity-0 peer"
+                                        transition:persist
+                                    />
+                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-red-500 peer-checked:bg-red-50 hover:border-red-300">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-red-light text-red border border-red/20 rounded-lg flex items-center justify-center text-xs font-medium">
+                                                OB
+                                            </div>
+                                            <div>
+                                                <div class="font-medium">Obligatoria</div>
+                                                <div class="text-sm text-muted-foreground">Asistencia requerida</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="relative cursor-pointer group">
+                                    <input
+                                        type="radio"
+                                        name="attendance_type"
+                                        value="1"
+                                        checked={defaultData.attendance_type === 1}
+                                        required
+                                        class="absolute opacity-0 peer"
+                                        transition:persist
+                                    />
+                                    <div class="border border-border rounded-md p-3 transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:border-green-300">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-green-light text-green border border-green/20 rounded-lg flex items-center justify-center text-xs font-medium">
+                                                OP
+                                            </div>
+                                            <div>
+                                                <div class="font-medium">Opcional</div>
+                                                <div class="text-sm text-muted-foreground">Puedes faltar sin problemas</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            {
+                                inputErrors.attendance_type && (
+                                    <p class="text-destructive text-sm mt-3">
+                                        {inputErrors.attendance_type}
+                                    </p>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Numeric Fields Grid -->
+                    <div class="border border-border rounded-md p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                                <CalendarIcon className="h-5 w-5 fill-current" />
+                            </div>
+                            Detalles del Curso
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Weekly Hours -->
+                            <div>
+                                <label
+                                    for="weekly_hours"
+                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                >
+                                    <ClockIcon className="h-4 w-4 fill-current" />
+                                    Horas Semanales *
+                                </label>
+                                <input
+                                    type="number"
+                                    id="weekly_hours"
+                                    name="weekly_hours"
+                                    required
+                                    min="0"
+                                    max="168"
+                                    placeholder="Ej: 8"
+                                    value={defaultData.weekly_hours || ""}
+                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
+                                    transition:persist
+                                />
+                                {
+                                    inputErrors.weekly_hours && (
+                                        <p class="text-destructive text-sm mt-1">
+                                            {inputErrors.weekly_hours}
+                                        </p>
+                                    )
+                                }
+                            </div>
+
+                            <!-- Year -->
+                            <div>
+                                <label
+                                    for="year_taken"
+                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                >
+                                    <CalendarIcon className="h-4 w-4 fill-current" />
+                                    Año Cursado *
+                                </label>
+                                <input
+                                    type="number"
+                                    id="year_taken"
+                                    name="year_taken"
+                                    required
+                                    min="2000"
+                                    max={currentYear}
+                                    placeholder={currentYear.toString()}
+                                    value={defaultData.year_taken || ""}
+                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
+                                    transition:persist
+                                />
+                                {
+                                    inputErrors.year_taken && (
+                                        <p class="text-destructive text-sm mt-1">
+                                            {inputErrors.year_taken}
+                                        </p>
+                                    )
+                                }
+                            </div>
+
+                            <!-- Semester -->
+                            <div>
+                                <label
+                                    for="semester_taken"
+                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                >
+                                    <CalendarIcon className="h-4 w-4 fill-current" />
+                                    Semestre *
+                                </label>
+                                <select
+                                    id="semester_taken"
+                                    name="semester_taken"
+                                    required
+                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
+                                    transition:persist
+                                >
+                                    <option value="">Seleccionar</option>
+                                    <option
+                                        value="1"
+                                        selected={defaultData.semester_taken === 1}
+                                        >1° Semestre</option
+                                    >
+                                    <option
+                                        value="2"
+                                        selected={defaultData.semester_taken === 2}
+                                        >2° Semestre</option
+                                    >
+                                    <option
+                                        value="3"
+                                        selected={defaultData.semester_taken === 3}
+                                        >TAV</option
+                                    >
+                                </select>
+                                {
+                                    inputErrors.semester_taken && (
+                                        <p class="text-destructive text-sm mt-1">
+                                            {inputErrors.semester_taken}
+                                        </p>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment Section -->
+                    <div class="border border-border rounded-md p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                                <EditIcon className="h-5 w-5 fill-current" />
+                            </div>
+                            Comentario (Opcional)
+                        </h3>
+                        <p class="text-sm text-muted-foreground mb-4">
+                            Comparte tu experiencia, consejos para futuros estudiantes, o cualquier información útil.
+                        </p>
+                        <textarea
+                            id="comment"
+                            name="comment"
+                            rows="6"
+                            maxlength="10000"
+                            placeholder="Escribe tu comentario aquí... Puedes incluir información sobre el profesor, metodología, evaluaciones, consejos para el curso, etc."
+                            class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 resize-vertical text-sm resize-none min-h-20 transition-colors"
+                            transition:persist>{text || ""}</textarea
+                        >
+                        <div class="flex justify-between mt-2">
+                            <div>
+                                {
+                                    inputErrors.comment && (
+                                        <p class="text-destructive text-sm">
+                                            {inputErrors.comment}
+                                        </p>
+                                    )
+                                }
+                            </div>
+                            <p class="text-xs text-muted-foreground">
+                                Máximo 10,000 caracteres
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- General Error -->
+                    {
+                        !isInputError(result?.error) && result?.error?.message && (
+                            <div class="border border-destructive/20 rounded-md p-4 bg-destructive/5">
+                                <div class="flex items-center gap-2">
+                                    <div class="p-1 bg-destructive/10 rounded-full">
+                                        <div class="w-2 h-2 bg-destructive rounded-full"></div>
+                                    </div>
+                                    <p class="font-medium text-destructive">{result.error.message}</p>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between items-center pt-6 border-t border-border">
+                        <Button
+                            variant="ghost"
+                            href={`/${sigle}/`}
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            ← Volver al curso
+                        </Button>
+                        
+                        <div class="flex items-center gap-3">
+                            <Button
+                                type="submit"
+                                variant="default"
+                                icon={isEditMode ? EditIcon : PlusIcon}
+                            >
+                                {isEditMode ? "Actualizar Reseña" : "Guardar Reseña"}
+                            </Button>
+                            
+                            {
+                                defaultData.id && (
+                                    <Button
+                                        variant="destructive"
+                                        href={`/${sigle}/delete/${defaultData.id}`}
+                                        size="sm"
+                                    >
+                                        Borrar Reseña
+                                    </Button>
+                                )
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Information Section -->
+        <div class="border border-border rounded-md p-6">
+            <h3 class="font-medium text-foreground mb-3 flex items-center gap-2">
+                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                    <EditIcon className="h-4 w-4 fill-current" />
+                </div>
+                Consejos para una buena reseña
             </h3>
-            <ul class="text-sm text-blue-800 space-y-1">
-                <li>• Sé honesto y constructivo en tu valoración</li>
-                <li>• Incluye información útil para futuros estudiantes</li>
-                <li>
-                    • Menciona aspectos específicos del curso que te gustaron o
-                    no
-                </li>
-                <li>
-                    • Si ya tienes una reseña para este curso, será actualizada
-                    automáticamente
-                </li>
-            </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+                <ul class="space-y-2">
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Sé honesto y constructivo en tu valoración</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Incluye información útil para futuros estudiantes</span>
+                    </li>
+                </ul>
+                <ul class="space-y-2">
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Menciona aspectos específicos del curso</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Si ya tienes una reseña, será actualizada automáticamente</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <RedirectLogin userIsNull={userIsNull} client:only="react" />
