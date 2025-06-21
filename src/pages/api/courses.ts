@@ -44,7 +44,6 @@ import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
-    console.log("API_SECRET", API_SECRET);
     if (!API_SECRET) {
         return new Response("Internal Server Error", { status: 500 });
     }

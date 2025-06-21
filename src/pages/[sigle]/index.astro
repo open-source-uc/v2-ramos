@@ -1,54 +1,92 @@
 ---
 import { getCourseBySigle, getCourseReviews } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
-import CoursesRaw from "../../../migration/json/2025-1.json";
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
-import { HourglassIcon, CalendarIcon, LinkIcon, BuildingIcon, AreaIcon, ClockIcon, ThumbUpIcon, ThumbDownIcon, AttendanceIcon, WorkloadIcon } from "../../components/icons/icons";
+import {
+    HourglassIcon,
+    CalendarIcon,
+    LinkIcon,
+    BuildingIcon,
+    AreaIcon,
+    ClockIcon,
+    ThumbUpIcon,
+    ThumbDownIcon,
+    AttendanceIcon,
+    WorkloadIcon,
+} from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
-import { calculateSentiment, calculatePositivePercentage, getWorkloadLabel, getAttendanceLabel, formatWeeklyHours, getSentimentLabel } from "../../lib/courseStats";
+import {
+    calculateSentiment,
+    calculatePositivePercentage,
+    getWorkloadLabel,
+    getAttendanceLabel,
+    formatWeeklyHours,
+    getSentimentLabel,
+} from "../../lib/courseStats";
 import { Button } from "@/components/ui/button";
 
 const { sigle } = Astro.params;
-const courses = CoursesRaw as Record<string, CourseStaticInfo>;
-const id2Name = Id2NameRaw as Record<string, string>;
 
-if (!sigle || !courses[sigle]) {
+if (!sigle) {
     return Astro.redirect("/404");
 }
 
-const course = courses[sigle];
+import { getEntry } from "astro:content";
 
-if (!course) {
+const courseData = await getEntry("coursesStatic", sigle);
+if (!courseData) {
     return Astro.redirect("/404");
 }
+const course = courseData.data;
+const id2NameData = Id2NameRaw as Record<string, string>;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
 const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Calculate statistics
-const sentiment = c ? calculateSentiment(c.likes, c.superlikes, c.dislikes) : 'question';
-const positivePercentage = c ? calculatePositivePercentage(c.likes, c.superlikes, c.dislikes) : 0;
-const workloadLabel = c ? getWorkloadLabel(c.votes_low_workload, c.votes_medium_workload, c.votes_high_workload) : "Sin datos";
-const attendanceLabel = c ? getAttendanceLabel(c.votes_mandatory_attendance, c.votes_optional_attendance, c.votes_no_attendance) : "Sin datos";
-const weeklyHoursLabel = c ? formatWeeklyHours(c.avg_weekly_hours) : "Sin datos";
-const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
+const sentiment = c
+    ? calculateSentiment(c.likes, c.superlikes, c.dislikes)
+    : "question";
+const positivePercentage = c
+    ? calculatePositivePercentage(c.likes, c.superlikes, c.dislikes)
+    : 0;
+const workloadLabel = c
+    ? getWorkloadLabel(
+          c.votes_low_workload,
+          c.votes_medium_workload,
+          c.votes_high_workload,
+      )
+    : "Sin datos";
+const attendanceLabel = c
+    ? getAttendanceLabel(
+          c.votes_mandatory_attendance,
+          c.votes_optional_attendance,
+          0,
+      )
+    : "Sin datos";
+const weeklyHoursLabel = c
+    ? formatWeeklyHours(c.avg_weekly_hours)
+    : "Sin datos";
+const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
 ---
 
 <Layout>
-    
     <div class="max-w-6xl mx-auto px-4 py-8">
-
         <!-- Información Fundamental del Curso -->
         <section class="border border-border rounded-md px-6 py-8">
             <p class="text-sm">{course.sigle}</p>
 
             <div class="pt-2 flex items-center justify-between">
                 <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
-                <div class="hidden desktop:block items-center p-3 text-xl bg-green-light text-green border border-green/20 rounded-sm">
+                <div
+                    class="hidden desktop:block items-center p-3 text-xl bg-green-light text-green border border-green/20 rounded-sm"
+                >
                     <div class="flex items-center gap-2 text-xl">
-                        <HourglassIcon className="inline-block fill-green"/>
-                        <span class="font-medium">{course.credits} Créditos</span>
+                        <HourglassIcon className="inline-block fill-green" />
+                        <span class="font-medium"
+                            >{course.credits} Créditos</span
+                        >
                     </div>
                 </div>
             </div>
@@ -56,48 +94,71 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                 <p class="text-sm opacity-60 max-w-[75%]">{course.program}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
-                <Pill variant="green" icon={HourglassIcon} className="desktop:hidden">
+                <Pill
+                    variant="green"
+                    icon={HourglassIcon}
+                    className="desktop:hidden"
+                >
                     {course.credits} Créditos
                 </Pill>
-                {course.school && course.school !== "Ninguna" && (
-                    <Pill variant="blue" icon={BuildingIcon}>
-                        <span>{course.school}</span>
-                    </Pill>
-                )}
-                {course.area && course.area !== "Ninguna" && (
-                    <Pill variant="pink" icon={AreaIcon}>
-                        {course.area}
-                    </Pill>
-                )}
+                {
+                    id2NameData[c.school_id] &&
+                        id2NameData[c.school_id] !== "Ninguna" && (
+                            <Pill variant="blue" icon={BuildingIcon}>
+                                <span>{id2NameData[c.school_id]}</span>
+                            </Pill>
+                        )
+                }
+                {
+                    id2NameData[c.area_id] &&
+                        id2NameData[c.area_id] !== "Ninguna" && (
+                            <Pill variant="pink" icon={AreaIcon}>
+                                {id2NameData[c.area_id]}
+                            </Pill>
+                        )
+                }
             </div>
         </section>
 
         <!-- Estadísticas del Curso -->
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+        <section
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8"
+        >
             <!-- Sentimiento General -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <Sentiment sentiment={sentiment} size="default" />
                     <div>
-                        <h3 class="text-sm font-medium text-muted-foreground">Opinión General</h3>
-                        <p class="text-lg font-semibold">{getSentimentLabel(sentiment)}</p>
+                        <h3 class="text-sm font-medium text-muted-foreground">
+                            Opinión General
+                        </h3>
+                        <p class="text-lg font-semibold">
+                            {getSentimentLabel(sentiment)}
+                        </p>
                     </div>
                 </div>
-                {totalReviews > 0 && (
-                    <div class="text-sm text-muted-foreground">
-                        {positivePercentage}% positivas de {totalReviews} reseñas
-                    </div>
-                )}
+                {
+                    totalReviews > 0 && (
+                        <div class="text-sm text-muted-foreground">
+                            {positivePercentage}% positivas de {totalReviews}{" "}
+                            reseñas
+                        </div>
+                    )
+                }
             </div>
 
             <!-- Carga de Trabajo -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                    <div
+                        class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
+                    >
                         <WorkloadIcon className="h-5 w-5 fill-current" />
                     </div>
                     <div>
-                        <h3 class="text-sm font-medium text-muted-foreground">Carga de Trabajo</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">
+                            Carga de Trabajo
+                        </h3>
                         <p class="text-lg font-semibold">{workloadLabel}</p>
                     </div>
                 </div>
@@ -109,38 +170,55 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
             <!-- Asistencia -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                    <div
+                        class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
+                    >
                         <AttendanceIcon className="h-5 w-5 fill-current" />
                     </div>
                     <div>
-                        <h3 class="text-sm font-medium text-muted-foreground">Asistencia</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">
+                            Asistencia
+                        </h3>
                         <p class="text-lg font-semibold">{attendanceLabel}</p>
                     </div>
                 </div>
-                {c && (
-                    <div class="text-sm text-muted-foreground">
-                        Basado en {c.votes_mandatory_attendance + c.votes_optional_attendance + c.votes_no_attendance} votos
-                    </div>
-                )}
+                {
+                    c && (
+                        <div class="text-sm text-muted-foreground">
+                            Basado en{" "}
+                            {c.votes_mandatory_attendance +
+                                c.votes_optional_attendance}{" "}
+                            votos
+                        </div>
+                    )
+                }
             </div>
 
             <!-- Total de Reseñas -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                    <div
+                        class="p-2 bg-green-light text-green border border-green/20 rounded-lg"
+                    >
                         <ThumbUpIcon className="h-5 w-5 fill-current" />
                     </div>
                     <div>
-                        <h3 class="text-sm font-medium text-muted-foreground">Total Reseñas</h3>
+                        <h3 class="text-sm font-medium text-muted-foreground">
+                            Total Reseñas
+                        </h3>
                         <p class="text-lg font-semibold">{totalReviews}</p>
                     </div>
                 </div>
-                {c && (
-                    <div class="flex gap-2 text-sm">
-                        <span class="text-green-600">{c.likes + c.superlikes} ↑</span>
-                        <span class="text-red-600">{c.dislikes} ↓</span>
-                    </div>
-                )}
+                {
+                    c && (
+                        <div class="flex gap-2 text-sm">
+                            <span class="text-green-600">
+                                {c.likes + c.superlikes} ↑
+                            </span>
+                            <span class="text-red-600">{c.dislikes} ↓</span>
+                        </div>
+                    )
+                }
             </div>
         </section>
 
@@ -149,10 +227,10 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
             <div class="border border-border rounded-md p-6">
                 <h2 class="text-2xl font-semibold mb-6">Links de Interés</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Button 
-                        variant="outline" 
-                        href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`} 
-                        target="_blank" 
+                    <Button
+                        variant="outline"
+                        href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="w-full"
                         icon={LinkIcon}
@@ -161,10 +239,10 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                         Ver Secciones
                     </Button>
 
-                    <Button 
-                        variant="outline" 
-                        href={`https://catalogo.uc.cl/index.php?tmpl=component&option=com_catalogo&view=programa&sigla=${course.sigle}`} 
-                        target="_blank" 
+                    <Button
+                        variant="outline"
+                        href={`https://catalogo.uc.cl/index.php?tmpl=component&option=com_catalogo&view=programa&sigla=${course.sigle}`}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="w-full"
                         icon={LinkIcon}
@@ -172,86 +250,135 @@ const totalReviews = c ? (c.likes + c.superlikes + c.dislikes) : 0;
                     >
                         Ver Programa
                     </Button>
-
                 </div>
             </div>
         </section>
 
         <!-- Sección de Reseñas -->
-        {reviews && reviews.length > 0 && (
-            <section class="mt-8">
-                <div class="border border-border rounded-md overflow-hidden">
-                    <div class="border-b border-border px-6 py-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h2 class="text-2xl font-semibold text-foreground">Reseñas de Estudiantes</h2>
-                                <p class="text-sm text-muted-foreground mt-1">
-                                    Cónoce las experiencias de otros estudiantes con este curso.
-                                </p>
-                            </div>
-                            <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
-                                <span class="font-medium text-muted-foreground">{reviews.length}</span>
-                                <span class="text-muted-foreground">reseñas mostradas</span>
+        {
+            reviews && reviews.length > 0 && (
+                <section class="mt-8">
+                    <div class="border border-border rounded-md overflow-hidden">
+                        <div class="border-b border-border px-6 py-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-2xl font-semibold text-foreground">
+                                        Reseñas de Estudiantes
+                                    </h2>
+                                    <p class="text-sm text-muted-foreground mt-1">
+                                        Cónoce las experiencias de otros
+                                        estudiantes con este curso.
+                                    </p>
+                                </div>
+                                <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
+                                    <span class="font-medium text-muted-foreground">
+                                        {reviews.length}
+                                    </span>
+                                    <span class="text-muted-foreground">
+                                        reseñas mostradas
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="p-6">
-                        <div class="space-y-6">
-                            {reviews.map((review, index) => (
-                                <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
-                                    {/* Número de reviews */}
-                                    <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
-                                        {index + 1}
-                                    </div>
-                                    
-                                    {/* Header con sentiment y metadata */}
-                                    <div class="items-start justify-between pr-8 gap-2">
+
+                        <div class="p-6">
+                            <div class="space-y-6">
+                                {reviews.map((review, index) => (
+                                    <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
+                                        {/* Número de reviews */}
+                                        <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
+                                            {index + 1}
+                                        </div>
+
+                                        {/* Header con sentiment y metadata */}
+                                        <div class="items-start justify-between pr-8 gap-2">
                                             <div class="flex items-center gap-2">
-                                                <Sentiment 
-                                                    sentiment={review.like_dislike === 2 ? 'veryHappy' : review.like_dislike === 1 ? 'happy' : 'sad'} 
-                                                    size="default" 
+                                                <Sentiment
+                                                    sentiment={
+                                                        review.like_dislike ===
+                                                        2
+                                                            ? "veryHappy"
+                                                            : review.like_dislike ===
+                                                                1
+                                                              ? "happy"
+                                                              : "sad"
+                                                    }
+                                                    size="default"
                                                 />
                                                 <span class="text-md font-medium text-foreground">
-                                                    {review.like_dislike === 2 ? 'Excelente' : review.like_dislike === 1 ? 'Bueno' : 'Malo'}
+                                                    {review.like_dislike === 2
+                                                        ? "Excelente"
+                                                        : review.like_dislike ===
+                                                            1
+                                                          ? "Bueno"
+                                                          : "Malo"}
                                                 </span>
                                             </div>
+                                        </div>
 
-                                    </div>
-                                    
-                                    {/* Comentario */}
-                                    {review.comment && (
-                                        <blockquote class="">
-                                            "{review.comment}"
-                                        </blockquote>
-                                    )}
-
-                                    {/* Tags informativos */}
-                                    <div class="flex flex-wrap gap-2">
-                                        <Pill variant="ghost_green" size="sm" icon={CalendarIcon}>
-                                            {review.year_taken} - {review.semester_taken === 1 ? '1er' : '2do'} sem
-                                        </Pill>
-                                        <Pill variant="ghost_blue" size="sm" icon={WorkloadIcon}>
-                                            {review.workload_vote === 0 ? 'Carga Baja' : review.workload_vote === 1 ? 'Carga Media' : 'Carga Alta'}
-                                        </Pill>
-                                        <Pill variant="ghost_purple" size="sm" icon={AttendanceIcon}>
-                                            {review.attendance_type === 0 ? 'Asistencia Obligatoria' : review.attendance_type === 1 ? 'Asistencia Opcional' : 'Sin Asistencia'}
-                                        </Pill>
-                                        {review.weekly_hours && (
-                                            <Pill variant="ghost_orange" size="sm" icon={ClockIcon}>
-                                                {formatWeeklyHours(review.weekly_hours)}/sem
-                                            </Pill>
+                                        {/* Comentario */}
+                                        {review.comment && (
+                                            <blockquote class="">
+                                                "{review.comment}"
+                                            </blockquote>
                                         )}
-                                    </div>
 
-                                </div>
-                            ))}
+                                        {/* Tags informativos */}
+                                        <div class="flex flex-wrap gap-2">
+                                            <Pill
+                                                variant="ghost_green"
+                                                size="sm"
+                                                icon={CalendarIcon}
+                                            >
+                                                {review.year_taken} -{" "}
+                                                {review.semester_taken === 1
+                                                    ? "1er"
+                                                    : "2do"}{" "}
+                                                sem
+                                            </Pill>
+                                            <Pill
+                                                variant="ghost_blue"
+                                                size="sm"
+                                                icon={WorkloadIcon}
+                                            >
+                                                {review.workload_vote === 0
+                                                    ? "Carga Baja"
+                                                    : review.workload_vote === 1
+                                                      ? "Carga Media"
+                                                      : "Carga Alta"}
+                                            </Pill>
+                                            <Pill
+                                                variant="ghost_purple"
+                                                size="sm"
+                                                icon={AttendanceIcon}
+                                            >
+                                                {review.attendance_type === 0
+                                                    ? "Asistencia Obligatoria"
+                                                    : review.attendance_type ===
+                                                        1
+                                                      ? "Asistencia Opcional"
+                                                      : "Sin Asistencia"}
+                                            </Pill>
+                                            {review.weekly_hours && (
+                                                <Pill
+                                                    variant="ghost_orange"
+                                                    size="sm"
+                                                    icon={ClockIcon}
+                                                >
+                                                    {formatWeeklyHours(
+                                                        review.weekly_hours,
+                                                    )}
+                                                    /sem
+                                                </Pill>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        )}
-
-        
+                </section>
+            )
+        }
     </div>
 </Layout>

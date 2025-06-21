@@ -1,5 +1,5 @@
+import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
-
 const recommendations = defineCollection({
     schema: z.object({
         title: z.string(),
@@ -64,5 +64,30 @@ const coursesScore = defineCollection({
     })
 })
 
+const coursesStatic = defineCollection({
+    loader: file("src/../migration/json/2025-1.json", {
+        parser: (content) => {
 
-export const collections = { recommendations, coursesScore }
+            const coursesData: Record<string, object> = JSON.parse(content);
+
+            const entries = Object.entries(coursesData).map(([key, course]) => ({
+                id: key, // Usa la clave como ID (ej: "AGC204")
+                ...course // Spread de las propiedades del curso
+            }));
+
+            return entries;
+        }
+    }),
+    schema: z.object({
+        sigle: z.string(),
+        name: z.string(),
+        credits: z.number(),
+        program: z.string(),
+        school: z.string(),
+        area: z.string(),
+        category: z.string(),
+    })
+})
+
+
+export const collections = { recommendations, coursesScore, coursesStatic }
