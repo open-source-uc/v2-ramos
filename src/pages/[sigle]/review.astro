@@ -69,52 +69,41 @@ const isEditMode = defaultData && defaultData.id !== null;
 
 <Layout>
     <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- Course Header Section -->
-        <section class="border border-border rounded-md px-6 py-8 mb-8">
-            <p class="text-sm">{course.sigle}</p>
-            
-            <div class="pt-2 flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
-                    <p class="text-sm opacity-60 max-w-[75%]">{course.program}</p>
+
+        <!-- Information Section -->
+        <div class="border border-border rounded-md p-6">
+            <h3 class="font-medium text-foreground mb-3 flex items-center gap-2">
+                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                    <EditIcon className="h-4 w-4 fill-current" />
                 </div>
-                <div class="hidden desktop:block items-center p-3 text-xl bg-green-light text-green border border-green/20 rounded-sm">
-                    <div class="flex items-center gap-2 text-xl">
-                        <HourglassIcon className="inline-block fill-green" />
-                        <span class="font-medium">{course.credits} Créditos</span>
-                    </div>
-                </div>
+                Consejos para una buena reseña
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                <ul class="space-y-2">
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Sé honesto y constructivo en tu valoración</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Incluye información útil para futuros estudiantes</span>
+                    </li>
+                </ul>
+                <ul class="space-y-2">
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Menciona aspectos específicos del curso</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <span>Si ya tienes una reseña, será actualizada automáticamente</span>
+                    </li>
+                </ul>
             </div>
-            
-            <div class="flex items-center flex-wrap gap-2 mt-8">
-                <Pill
-                    variant="green"
-                    icon={HourglassIcon}
-                    className="desktop:hidden"
-                >
-                    {course.credits} Créditos
-                </Pill>
-                {
-                    c && id2NameData[c.school_id] &&
-                        id2NameData[c.school_id] !== "Ninguna" && (
-                            <Pill variant="blue" icon={BuildingIcon}>
-                                <span>{id2NameData[c.school_id]}</span>
-                            </Pill>
-                        )
-                }
-                {
-                    c && id2NameData[c.area_id] &&
-                        id2NameData[c.area_id] !== "Sin Área Asignada" && (
-                            <Pill variant="pink" icon={AreaIcon}>
-                                {id2NameData[c.area_id]}
-                            </Pill>
-                        )
-                }
-            </div>
-        </section>
+        </div>
 
         <!-- Review Form Header -->
-        <section class="border border-border rounded-md overflow-hidden mb-8">
+        <section class="border border-border rounded-md overflow-hidden mt-8">
             <div class="border-b border-border px-6 py-6">
                 <div class="flex items-center justify-between">
                     <div>
@@ -405,7 +394,7 @@ const isEditMode = defaultData && defaultData.id !== null;
 
                     <!-- Numeric Fields Grid -->
                     <div class="border border-border rounded-md p-6">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
                             <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
                                 <CalendarIcon className="h-5 w-5 fill-current" />
                             </div>
@@ -413,29 +402,36 @@ const isEditMode = defaultData && defaultData.id !== null;
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <!-- Weekly Hours -->
-                            <div>
+                            <div class="space-y-3">
                                 <label
                                     for="weekly_hours"
-                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                    class="block text-sm font-medium text-foreground"
                                 >
-                                    <ClockIcon className="h-4 w-4 fill-current" />
                                     Horas Semanales *
                                 </label>
-                                <input
-                                    type="number"
-                                    id="weekly_hours"
-                                    name="weekly_hours"
-                                    required
-                                    min="0"
-                                    max="168"
-                                    placeholder="Ej: 8"
-                                    value={defaultData.weekly_hours || ""}
-                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
-                                    transition:persist
-                                />
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <ClockIcon className="h-4 w-4 fill-muted-foreground" />
+                                    </div>
+                                    <input
+                                        type="number"
+                                        id="weekly_hours"
+                                        name="weekly_hours"
+                                        required
+                                        min="0"
+                                        max="168"
+                                        placeholder="8"
+                                        value={defaultData.weekly_hours || ""}
+                                        class="w-full pl-10 pr-3 py-3 rounded-md border border-border shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
+                                        transition:persist
+                                    />
+                                </div>
+                                <p class="text-xs text-muted-foreground">
+                                    Tiempo dedicado semanalmente al curso
+                                </p>
                                 {
                                     inputErrors.weekly_hours && (
-                                        <p class="text-destructive text-sm mt-1">
+                                        <p class="text-destructive text-sm">
                                             {inputErrors.weekly_hours}
                                         </p>
                                     )
@@ -443,29 +439,36 @@ const isEditMode = defaultData && defaultData.id !== null;
                             </div>
 
                             <!-- Year -->
-                            <div>
+                            <div class="space-y-3">
                                 <label
                                     for="year_taken"
-                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                    class="block text-sm font-medium text-foreground"
                                 >
-                                    <CalendarIcon className="h-4 w-4 fill-current" />
                                     Año Cursado *
                                 </label>
-                                <input
-                                    type="number"
-                                    id="year_taken"
-                                    name="year_taken"
-                                    required
-                                    min="2000"
-                                    max={currentYear}
-                                    placeholder={currentYear.toString()}
-                                    value={defaultData.year_taken || ""}
-                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
-                                    transition:persist
-                                />
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <CalendarIcon className="h-4 w-4 fill-muted-foreground" />
+                                    </div>
+                                    <input
+                                        type="number"
+                                        id="year_taken"
+                                        name="year_taken"
+                                        required
+                                        min="2000"
+                                        max={currentYear}
+                                        placeholder={currentYear.toString()}
+                                        value={defaultData.year_taken || ""}
+                                        class="w-full pl-10 pr-3 py-3 rounded-md border border-border shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
+                                        transition:persist
+                                    />
+                                </div>
+                                <p class="text-xs text-muted-foreground">
+                                    Año en que cursaste la materia
+                                </p>
                                 {
                                     inputErrors.year_taken && (
-                                        <p class="text-destructive text-sm mt-1">
+                                        <p class="text-destructive text-sm">
                                             {inputErrors.year_taken}
                                         </p>
                                     )
@@ -473,41 +476,53 @@ const isEditMode = defaultData && defaultData.id !== null;
                             </div>
 
                             <!-- Semester -->
-                            <div>
+                            <div class="space-y-3">
                                 <label
                                     for="semester_taken"
-                                    class="block text-sm font-medium text-foreground mb-2 flex items-center gap-2"
+                                    class="block text-sm font-medium text-foreground"
                                 >
-                                    <CalendarIcon className="h-4 w-4 fill-current" />
                                     Semestre *
                                 </label>
-                                <select
-                                    id="semester_taken"
-                                    name="semester_taken"
-                                    required
-                                    class="w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors"
-                                    transition:persist
-                                >
-                                    <option value="">Seleccionar</option>
-                                    <option
-                                        value="1"
-                                        selected={defaultData.semester_taken === 1}
-                                        >1° Semestre</option
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <CalendarIcon className="h-4 w-4 fill-muted-foreground" />
+                                    </div>
+                                    <select
+                                        id="semester_taken"
+                                        name="semester_taken"
+                                        required
+                                        class="w-full pl-10 pr-8 py-3 rounded-md border border-border shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 transition-colors appearance-none bg-white"
+                                        transition:persist
                                     >
-                                    <option
-                                        value="2"
-                                        selected={defaultData.semester_taken === 2}
-                                        >2° Semestre</option
-                                    >
-                                    <option
-                                        value="3"
-                                        selected={defaultData.semester_taken === 3}
-                                        >TAV</option
-                                    >
-                                </select>
+                                        <option value="">Seleccionar semestre</option>
+                                        <option
+                                            value="1"
+                                            selected={defaultData.semester_taken === 1}
+                                            >1° Semestre</option
+                                        >
+                                        <option
+                                            value="2"
+                                            selected={defaultData.semester_taken === 2}
+                                            >2° Semestre</option
+                                        >
+                                        <option
+                                            value="3"
+                                            selected={defaultData.semester_taken === 3}
+                                            >TAV (Trimestre de Otoño-Verano)</option
+                                        >
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <svg class="h-4 w-4 fill-muted-foreground" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-muted-foreground">
+                                    Período académico cursado
+                                </p>
                                 {
                                     inputErrors.semester_taken && (
-                                        <p class="text-destructive text-sm mt-1">
+                                        <p class="text-destructive text-sm">
                                             {inputErrors.semester_taken}
                                         </p>
                                     )
@@ -602,37 +617,6 @@ const isEditMode = defaultData && defaultData.id !== null;
             </div>
         </section>
 
-        <!-- Information Section -->
-        <div class="border border-border rounded-md p-6">
-            <h3 class="font-medium text-foreground mb-3 flex items-center gap-2">
-                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
-                    <EditIcon className="h-4 w-4 fill-current" />
-                </div>
-                Consejos para una buena reseña
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-                <ul class="space-y-2">
-                    <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Sé honesto y constructivo en tu valoración</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Incluye información útil para futuros estudiantes</span>
-                    </li>
-                </ul>
-                <ul class="space-y-2">
-                    <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Menciona aspectos específicos del curso</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Si ya tienes una reseña, será actualizada automáticamente</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>
