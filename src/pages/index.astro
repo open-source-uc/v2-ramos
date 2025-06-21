@@ -1,111 +1,35 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
 import { getCourses } from "../services/courses";
 import rawId2Name from "../../migration/json/valores_unicos.json";
 
-const courses = await getCourses(Astro.locals);
 const id2name: Record<string, string> = rawId2Name as Record<string, string>;
+const courses = await getCollection("coursesScore");
 ---
 
 <Layout>
+	{JSON.stringify(courses)}
 	<div class="max-w-7xl mx-auto px-4 py-8">
 		<!-- Header -->
 		<div class="mb-8">
-			<h1 class="text-4xl font-bold text-gray-900 mb-2">Resumen de Cursos</h1>
-			<p class="text-gray-600">Explora todos los cursos disponibles con sus estadísticas de la comunidad</p>
+			<h1 class="text-4xl font-bold text-gray-900 mb-2">
+				Resumen de Cursos
+			</h1>
+			<p class="text-gray-600">
+				Explora todos los cursos disponibles con sus estadísticas de la
+				comunidad
+			</p>
 		</div>
 
 		<!-- Grid de cursos -->
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{
-				courses.map((c) => (
-					<div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200">
-						<!-- Header del curso -->
-						<div class="bg-blue-600 p-4">
-							<h2 class="text-xl font-bold text-white mb-1">
-								<a href={`/${c.sigle}`} class="hover:underline">
-									{c.sigle}
-								</a>
-							</h2>
-							<div class="flex justify-between items-center text-white/90 text-sm">
-								<span>{id2name[c.school_id]}</span>
-								<span class="bg-white/20 px-2 py-1 rounded text-xs">
-									{c.avg_weekly_hours.toFixed(1)}h/sem
-								</span>
-							</div>
-						</div>
 
-						<!-- Contenido del curso -->
-						<div class="p-4">
-							<!-- Información básica -->
-							<div class="mb-4">
-								<div class="grid grid-cols-2 gap-2 text-sm">
-									<div class="bg-gray-50 p-2 rounded">
-										<span class="text-gray-600 text-xs block">Área</span>
-										<span class="font-medium text-gray-900">{id2name[c.area_id]}</span>
-									</div>
-									<div class="bg-gray-50 p-2 rounded">
-										<span class="text-gray-600 text-xs block">Categoría</span>
-										<span class="font-medium text-gray-900">{id2name[c.category_id]}</span>
-									</div>
-								</div>
-							</div>
-
-							<!-- Métricas de valoración -->
-							<div class="mb-4">
-								<h3 class="text-sm font-semibold text-gray-700 mb-2">Valoraciones</h3>
-								<div class="flex justify-between items-center space-x-2">
-									<div class="flex items-center space-x-1 bg-green-50 px-2 py-1 rounded">
-										<span class="text-green-600 text-xs">❤️</span>
-										<span class="text-green-700 font-semibold text-sm">{c.superlikes}</span>
-									</div>
-									<div class="flex items-center space-x-1 bg-blue-50 px-2 py-1 rounded">
-										<span class="text-blue-600 text-xs">👍</span>
-										<span class="text-blue-700 font-semibold text-sm">{c.likes}</span>
-									</div>
-									<div class="flex items-center space-x-1 bg-red-50 px-2 py-1 rounded">
-										<span class="text-red-600 text-xs">👎</span>
-										<span class="text-red-700 font-semibold text-sm">{c.dislikes}</span>
-									</div>
-								</div>
-							</div>
-
-							<!-- Carga de trabajo -->
-							<div class="mb-4">
-								<h3 class="text-sm font-semibold text-gray-700 mb-2">Carga de Trabajo</h3>
-								<div class="space-y-1">
-									<div class="flex justify-between text-xs">
-										<span class="text-green-600">Baja</span>
-										<span class="font-semibold">{c.votes_low_workload}</span>
-									</div>
-									<div class="flex justify-between text-xs">
-										<span class="text-yellow-600">Media</span>
-										<span class="font-semibold">{c.votes_medium_workload}</span>
-									</div>
-									<div class="flex justify-between text-xs">
-										<span class="text-red-600">Alta</span>
-										<span class="font-semibold">{c.votes_high_workload}</span>
-									</div>
-								</div>
-							</div>
-
-							<!-- Footer con enlace -->
-							<div class="pt-3 border-t border-gray-100">
-								<a 
-									href={`/${c.sigle}`} 
-									class="block w-full text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
-								>
-									Ver Detalles
-								</a>
-							</div>
-						</div>
-					</div>
-				))
-			}
-		</div>
 		<!-- Información adicional -->
 		<div class="mt-12 bg-gray-50 rounded-lg p-6">
-			<h2 class="text-xl font-bold text-gray-900 mb-3">¿Cómo interpretar las estadísticas?</h2>
+			<h2 class="text-xl font-bold text-gray-900 mb-3">
+				¿Cómo interpretar las estadísticas?
+			</h2>
 			<div class="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
 				<div>
 					<h3 class="font-semibold mb-2">Valoraciones</h3>
@@ -115,13 +39,22 @@ const id2name: Record<string, string> = rawId2Name as Record<string, string>;
 				</div>
 				<div>
 					<h3 class="font-semibold mb-2">Carga de Trabajo</h3>
-					<p><span class="text-green-600">Baja:</span> Menos demandante</p>
-					<p><span class="text-yellow-600">Media:</span> Carga equilibrada</p>
-					<p><span class="text-red-600">Alta:</span> Muy demandante</p>
+					<p>
+						<span class="text-green-600">Baja:</span> Menos demandante
+					</p>
+					<p>
+						<span class="text-yellow-600">Media:</span> Carga equilibrada
+					</p>
+					<p>
+						<span class="text-red-600">Alta:</span> Muy demandante
+					</p>
 				</div>
 				<div>
 					<h3 class="font-semibold mb-2">Horas Semanales</h3>
-					<p>Promedio de horas de estudio y trabajo que requiere el curso según la comunidad estudiantil.</p>
+					<p>
+						Promedio de horas de estudio y trabajo que requiere el
+						curso según la comunidad estudiantil.
+					</p>
 				</div>
 			</div>
 		</div>
