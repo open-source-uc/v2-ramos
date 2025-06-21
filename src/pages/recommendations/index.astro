@@ -11,9 +11,6 @@ const search = Astro.url.searchParams.get("search") || "";
     <section class="flex flex-col gap-8">
       <header class="flex flex-col md:flex-row justify-between">
         <h1 class="text-2xl font-bold">Recommendations</h1>
-        <a href="/recommendations/new" class="text-blue-600 hover:underline"
-          >New Recommendation</a
-        >
       </header>
       <!-- Crea un buscador que redireccione a /recommendations?search= -->
       <form
