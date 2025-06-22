@@ -47,6 +47,48 @@ CREATE TABLE course_reviews (
     FOREIGN KEY (course_sigle) REFERENCES course_summary(sigle)
 );
 
+CREATE TABLE report_reviews (
+    review_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    email_hash TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (review_id) REFERENCES course_reviews(id),
+);
+
+-- Índices simples para course_summary (orden descendente para métricas numéricas)
+CREATE INDEX idx_course_summary_school_id ON course_summary(school_id);
+CREATE INDEX idx_course_summary_area_id ON course_summary(area_id);
+CREATE INDEX idx_course_summary_category_id ON course_summary(category_id);
+CREATE INDEX idx_course_summary_likes ON course_summary(likes DESC);
+CREATE INDEX idx_course_summary_superlikes ON course_summary(superlikes DESC);
+CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
+CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours DESC);
+CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index DESC);
+
+-- Índices para los votos de asistencia (solo mandatory y optional)
+CREATE INDEX idx_course_summary_mandatory_attendance ON course_summary(votes_mandatory_attendance DESC);
+CREATE INDEX idx_course_summary_optional_attendance ON course_summary(votes_optional_attendance DESC);
+
+-- Índices compuestos para consultas más complejas
+CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);
+CREATE INDEX idx_course_summary_area_sort ON course_summary(area_id, sort_index DESC);
+CREATE INDEX idx_course_summary_category_sort ON course_summary(category_id, sort_index DESC);
+CREATE INDEX idx_course_summary_superlikes_likes ON course_summary(superlikes DESC, likes DESC);
+
+-- Índices con id como segundo criterio de ordenamiento
+CREATE INDEX idx_course_summary_sort_index_id ON course_summary(sort_index DESC, id DESC);
+CREATE INDEX idx_course_summary_sigle_id ON course_summary(sigle, id DESC);
+
+-- Índices para la tabla course_reviews
+CREATE INDEX idx_course_reviews_course_sigle ON course_reviews(course_sigle);
+CREATE INDEX idx_course_reviews_user_id ON course_reviews(user_id);
+CREATE INDEX idx_course_reviews_sigle_updated ON course_reviews(course_sigle, updated_at DESC);
+CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike DESC);
+CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DESC);
+CREATE INDEX idx_course_reviews_attendance_type ON course_reviews(attendance_type DESC);
+CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);
+
 CREATE TRIGGER trg_course_reviews_set_updated_at
 BEFORE UPDATE ON course_reviews
 FOR EACH ROW
@@ -233,35 +275,3 @@ BEGIN
   WHERE sigle = OLD.course_sigle;
 END;
 
--- Índices simples para course_summary (orden descendente para métricas numéricas)
-CREATE INDEX idx_course_summary_school_id ON course_summary(school_id);
-CREATE INDEX idx_course_summary_area_id ON course_summary(area_id);
-CREATE INDEX idx_course_summary_category_id ON course_summary(category_id);
-CREATE INDEX idx_course_summary_likes ON course_summary(likes DESC);
-CREATE INDEX idx_course_summary_superlikes ON course_summary(superlikes DESC);
-CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
-CREATE INDEX idx_course_summary_avg_weekly_hours ON course_summary(avg_weekly_hours DESC);
-CREATE INDEX idx_course_summary_sort_index ON course_summary(sort_index DESC);
-
--- Índices para los votos de asistencia (solo mandatory y optional)
-CREATE INDEX idx_course_summary_mandatory_attendance ON course_summary(votes_mandatory_attendance DESC);
-CREATE INDEX idx_course_summary_optional_attendance ON course_summary(votes_optional_attendance DESC);
-
--- Índices compuestos para consultas más complejas
-CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);
-CREATE INDEX idx_course_summary_area_sort ON course_summary(area_id, sort_index DESC);
-CREATE INDEX idx_course_summary_category_sort ON course_summary(category_id, sort_index DESC);
-CREATE INDEX idx_course_summary_superlikes_likes ON course_summary(superlikes DESC, likes DESC);
-
--- Índices con id como segundo criterio de ordenamiento
-CREATE INDEX idx_course_summary_sort_index_id ON course_summary(sort_index DESC, id DESC);
-CREATE INDEX idx_course_summary_sigle_id ON course_summary(sigle, id DESC);
-
--- Índices para la tabla course_reviews
-CREATE INDEX idx_course_reviews_course_sigle ON course_reviews(course_sigle);
-CREATE INDEX idx_course_reviews_user_id ON course_reviews(user_id);
-CREATE INDEX idx_course_reviews_sigle_updated ON course_reviews(course_sigle, updated_at DESC);
-CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike DESC);
-CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DESC);
-CREATE INDEX idx_course_reviews_attendance_type ON course_reviews(attendance_type DESC);
-CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);

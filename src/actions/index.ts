@@ -104,7 +104,7 @@ export const server = {
                 });
             }
 
-            if (!user.permissions.includes(OsucPermissions.useCanEditAndCreateReview)) {
+            if (!user.permissions.includes(OsucPermissions.userCanEditAndCreateReview)) {
                 throw new ActionError({
                     code: "FORBIDDEN",
                     message: "No tienes permisos para crear o editar reseñas"
@@ -330,5 +330,85 @@ export const server = {
             }
         }
     }),
+    deleteCourseReviewByReviewId: defineAction({
+        accept: "form",
+        input: z.object({
+            review_id: z.number().int().positive("ID de reseña inválido")
+        }),
+        handler: async (state, ctx) => {
+            const { locals, cookies } = ctx;
+
+            const token = cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "";
+            const user = await getUserDataByToken(token);
+
+            if (!user) {
+                throw new ActionError({
+                    code: "UNAUTHORIZED",
+                    message: "Debes iniciar sesión para eliminar una reseña"
+                });
+            }
+
+            if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+                throw new ActionError({
+                    code: "FORBIDDEN",
+                    message: "No tienes permisos para eliminar reseñas"
+                });
+            }
+
+            try {
+                // Verificar que la reseña existe y pertenece al usuario, y obtener el path del archivo
+                const existingReview = await locals.runtime.env.DB
+                    .prepare("SELECT id, comment FROM course_reviews WHERE id = ?")
+                    .bind(state.review_id)
+                    .first<CourseReview>();
+
+                if (!existingReview) {
+                    throw new ActionError({
+                        code: "NOT_FOUND",
+                        message: "Reseña no encontrada."
+                    });
+                }
+
+                // Eliminar el archivo de R2 si existe
+                if (existingReview.comment) {
+                    try {
+                        await locals.runtime.env.R2.delete(existingReview.comment);
+                    } catch (error) {
+                        console.warn('No se pudo eliminar el archivo de R2:', error);
+                        // No fallar si no se puede eliminar el archivo, continuar con la eliminación de la reseña
+                    }
+                }
+
+                // Eliminar la reseña de la base de datos
+                const result = await locals.runtime.env.DB
+                    .prepare("DELETE FROM course_reviews WHERE id = ?")
+                    .bind(state.review_id)
+                    .run();
+
+                if (!result.success) {
+                    throw new ActionError({
+                        code: "INTERNAL_SERVER_ERROR",
+                        message: "Error al eliminar la reseña"
+                    });
+                }
+
+                return {
+                    message: "Reseña eliminada exitosamente",
+                    code: 200
+                };
+
+            } catch (error) {
+                if (error instanceof ActionError) {
+                    throw error;
+                }
+
+                throw new ActionError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Error interno del servidor al eliminar la reseña"
+                });
+            }
+        }
+    }),
+
 
 }
