@@ -18,12 +18,17 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const clientEtag = request.headers.get("If-None-Match");
     const serverEtag = head.httpEtag;
 
+    // Headers que deben ir tanto en 200 como en 304
+    const sharedHeaders = {
+        "Cache-Control": "private, max-age=180, must-revalidate",
+        "Vary": "Accept-Encoding",
+        "ETag": serverEtag
+    };
+
     if (clientEtag && serverEtag && clientEtag === serverEtag) {
         return new Response(null, {
             status: 304,
-            headers: {
-                "Etag": serverEtag
-            }
+            headers: sharedHeaders
         });
     }
 
@@ -37,10 +42,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
     return new Response(markdownContent, {
         status: 200,
         headers: {
-            "Content-Type": "text/markdown",
-            "Cache-Control": "private, max-age=180, must-revalidate",
-            "Vary": "Accept-Encoding",
-            "Etag": serverEtag
-        },
+            ...sharedHeaders,
+            "Content-Type": "text/markdown"
+        }
     });
 };

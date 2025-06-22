@@ -8,7 +8,7 @@ export async function getPendingReviews(locals: App.Locals, token: string) {
         throw new Error("User not found");
 
 
-    if (user.permissions.includes(OsucPermissions.userIsRoot))
+    if (!user.permissions.includes(OsucPermissions.userIsRoot))
         throw new Error("You do not have permission to access this resource");
 
     const DB = locals.runtime.env.DB;
@@ -26,8 +26,7 @@ export async function getReportedReviews(locals: App.Locals, token: string) {
     if (!user)
         throw new Error("User not found");
 
-
-    if (user.permissions.includes(OsucPermissions.userIsRoot))
+    if (!user.permissions.includes(OsucPermissions.userIsRoot))
         throw new Error("You do not have permission to access this resource");
 
     const DB = locals.runtime.env.DB;
