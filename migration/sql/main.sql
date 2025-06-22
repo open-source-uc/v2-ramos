@@ -83,19 +83,30 @@ CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DE
 CREATE INDEX idx_course_reviews_attendance_type ON course_reviews(attendance_type DESC);
 CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);
 CREATE INDEX idx_course_reviews_visible_updated
-ON course_reviews(updated_at DESC)
+ON course_reviews(course_sigle, updated_at DESC)
 WHERE status != 3;
-CREATE INDEX idx_course_reviews_status_updated
-ON course_reviews(status, updated_at DESC)
 
+CREATE INDEX idx_course_reviews_status_updated
+ON course_reviews(course_sigle, status, updated_at DESC);
+
+-- Si una review es aprobada, se actualiza el campo updated_at y se cambia el estado a pending
+-- Si una review es reportada, se cambia el estado a reported
+-- Si una review es oculta, se cambia el estado a hidden
 CREATE TRIGGER trg_course_reviews_set_updated_at
 BEFORE UPDATE ON course_reviews
 FOR EACH ROW
 BEGIN
   UPDATE course_reviews
-  SET updated_at = CURRENT_TIMESTAMP
+  SET
+    updated_at = CURRENT_TIMESTAMP,
+    status = CASE
+      WHEN OLD.status = 1 THEN 0      -- approved → pending
+      ELSE OLD.status                 -- reported/hidden se mantiene
+    END
   WHERE id = OLD.id;
 END;
+
+
 
 CREATE TRIGGER trg_course_reviews_after_insert
 AFTER INSERT ON course_reviews
