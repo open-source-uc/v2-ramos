@@ -1,7 +1,173 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { HourglassIcon, LinkIcon, BuildingIcon, AreaIcon } from "@/components/icons/icons";
+import { Pill } from "@/components/ui/pill";
 ---
 
 <Layout>
-    <h1 class="text-4xl font-bold text-center mt-20">404 - Page Not Found</h1>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Main Error Section - Styled like course info section -->
+        <section class="border border-border rounded-md px-6 py-8">
+            <p class="text-sm">ERR404</p>
+
+            <div class="pt-2 flex items-center justify-between">
+                <h1 class="text-3xl font-bold mb-2">Introducción a las Páginas No Encontradas</h1>
+                <Pill
+                    variant="red"
+                    size="xl"
+                    icon={HourglassIcon}
+                    className="hidden desktop:flex"
+                >
+                    Error 404
+                </Pill>
+            </div>
+            <div>
+                <p class="text-sm opacity-60 max-w-[75%]">
+                    Ese curso introduce a la temática de las páginas no encontradas. Aquí aprenderás sobre los errores 404, cómo afectan la experiencia del usuario y las mejores prácticas para manejarlos. Aunque no se trata de un curso tradicional, es esencial para entender la navegación web y la importancia de una buena experiencia de usuario.
+                </p>
+            </div>
+            <div class="flex items-center flex-wrap gap-2 mt-8">
+                <Pill
+                    variant="red"
+                    icon={HourglassIcon}
+                    className="desktop:hidden"
+                >
+                    404 Error
+                </Pill>
+                <Pill variant="blue" icon={BuildingIcon}>
+                    Open Source eUC
+                </Pill>
+                <Pill variant="pink" icon={AreaIcon}>
+                    Sistemas de Ayudas
+                </Pill>
+            </div>
+        </section>
+
+        <!-- Helpful Resources Section -->
+        <section class="mt-8">
+            <div class="border border-border rounded-md overflow-hidden">
+                <div class="border-b border-border px-6 py-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-foreground">
+                                ¿Necesitas Ayuda?
+                            </h2>
+                            <p class="text-sm text-muted-foreground mt-1">
+                                Explora estas opciones para encontrar lo que buscas.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border">
+                                <span class="font-medium text-muted-foreground">
+                                    2
+                                </span>
+                                <span class="text-muted-foreground">
+                                    opciones disponibles
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
+                            <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
+                                1
+                            </div>
+
+                            <div class="items-start justify-between pr-8 gap-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                                        <HourglassIcon className="h-5 w-5 fill-current" />
+                                    </div>
+                                    <span class="text-md font-medium text-foreground">
+                                        Catálogo de Cursos
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-muted-foreground">
+                                Explora todos los cursos disponibles, encuentra información detallada sobre cada uno y lee reseñas de otros estudiantes.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2">
+                                <Pill
+                                    variant="ghost_blue"
+                                    size="sm"
+                                    icon={BuildingIcon}
+                                >
+                                    Open Source eUC
+                                </Pill>
+                                <Pill
+                                    variant="ghost_blue"
+                                    size="sm"
+                                    icon={AreaIcon}
+                                >
+                                    Búsquedas Avanzadas
+                                </Pill>
+                            </div>
+
+                            <Button
+                                variant="outline"
+                                href="/catalog"
+                                className="w-fit"
+                                aria-label="Ir al catálogo"
+                            >
+                                Ir al Catálogo
+                            </Button>
+                        </div>
+
+                        <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
+                            <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
+                                2
+                            </div>
+
+                            <div class="items-start justify-between pr-8 gap-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                                        <LinkIcon className="h-5 w-5 fill-current" />
+                                    </div>
+                                    <span class="text-md font-medium text-foreground">
+                                        Recomendaciones y Guías
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-muted-foreground">
+                                Descubre consejos útiles, guías de estudio y recomendaciones de la comunidad estudiantil.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2">
+                                <Pill
+                                    variant="ghost_pink"
+                                    size="sm"
+                                    icon={BuildingIcon}
+                                >
+                                    Comunidad Estudiantil
+                                </Pill>
+                                <Pill
+                                    variant="ghost_pink"
+                                    size="sm"
+                                    icon={AreaIcon}
+                                >
+                                    Recursos Útiles
+                                </Pill>
+                            </div>
+
+                            <Button
+                                variant="outline"
+                                href="/recommendations"
+                                className="w-fit"
+                                aria-label="Ver recomendaciones"
+                            >
+                                Ver Recomendaciones
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </Layout>

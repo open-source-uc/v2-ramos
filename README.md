@@ -1,4 +1,4 @@
-# 📚 Proyecto Ramos UC
+# 📚 Proyecto BuscaRamos
 
 Este es un proyecto de estudiantes de la Pontificia Universidad Católica de Chile (UC) que busca revolucionar la forma en la que interactúa la comunidad estudiantil al momento de inscribir cursos.
 

@@ -1,5 +1,5 @@
 ---
-title: Cómo hacemos de RamosUC un espacio seguro
+title: Cómo hacemos de BuscaRamos un espacio seguro
 readtime: 5
 description: Lorem markdownum venit vestigia, et mentis Harpyia solvunt nobilium cumulum verba, vocem locus precesque externos lympha. Etiam est iube e Argolicis sonis, non Olympus herbas, concubitusque.
 author:
