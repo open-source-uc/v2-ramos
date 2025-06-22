@@ -89,16 +89,13 @@ const hasExistingReview = userReview && userReview.id !== null;
 
             <div class="pt-2 flex items-center justify-between">
                 <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
-                <div
-                    class="hidden desktop:block items-center p-3 text-xl bg-green-light text-green border border-green/20 rounded-sm"
+                <Pill
+                    variant="green"
+                    size="xl"
+                    icon={HourglassIcon}
                 >
-                    <div class="flex items-center gap-2 text-xl">
-                        <HourglassIcon className="inline-block fill-green" />
-                        <span class="font-medium"
-                            >{course.credits} Créditos</span
-                        >
-                    </div>
-                </div>
+                    {course.credits} Créditos
+                </Pill>
             </div>
             <div>
                 <p class="text-sm opacity-60 max-w-[75%]">{course.program}</p>

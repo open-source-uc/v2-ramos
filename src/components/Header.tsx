@@ -89,7 +89,7 @@ export default function Header() {
                     <ListItem href="/404" title="Cómo protegemos tu privacidad">
                       Descubre cómo protegemos tu privacidad y datos personales.
                     </ListItem>
-                    <ListItem href="/404" title="RamosUC: Un espacio libre de acoso">
+                    <ListItem href="/resources/respect" title="RamosUC: Un espacio libre de acoso">
                       Conóce cómo mantenemos un ambiente seguro y respetuoso.
                     </ListItem>
                     <ListItem href="/404" title="Conóce a nuestro equipo">

@@ -1,5 +1,21 @@
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
+import { title } from "process";
+
+const resources = defineCollection({
+    schema: z.object({
+        title: z.string(),
+        readtime: z.number(),
+        description: z.string(),
+        author: z.object({
+            name: z.string(),
+            title: z.string(),
+            picture: z.string().optional(),
+            link: z.string().optional(),
+        }).optional(),
+    })
+})
+
 const recommendations = defineCollection({
     schema: z.object({
         title: z.string(),
@@ -12,6 +28,7 @@ const recommendations = defineCollection({
         resume: z.string(),
     })
 })
+
 const coursesScore = defineCollection({
     loader: async () => {
         console.log("=== SI PASA MUCHO ES MUY MALO ===");
@@ -90,4 +107,4 @@ const coursesStatic = defineCollection({
 })
 
 
-export const collections = { recommendations, coursesScore, coursesStatic }
+export const collections = { resources, recommendations, coursesScore, coursesStatic }
