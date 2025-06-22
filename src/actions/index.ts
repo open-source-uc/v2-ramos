@@ -127,7 +127,7 @@ export const server = {
 
                 // Verificar si ya existe una reseña para este usuario y curso
                 const existingReview = await locals.runtime.env.DB
-                    .prepare("SELECT id, comment FROM course_reviews WHERE user_id = ? AND course_sigle = ?")
+                    .prepare("SELECT id, comment_path FROM course_reviews WHERE user_id = ? AND course_sigle = ?")
                     .bind(user.id, state.course_sigle.toUpperCase())
                     .first<CourseReview>();
 
@@ -140,9 +140,9 @@ export const server = {
                     isUpdate = true;
 
                     // Eliminar el archivo anterior de R2 si existe
-                    if (existingReview.comment) {
+                    if (existingReview.comment_path) {
                         try {
-                            await locals.runtime.env.R2.delete(existingReview.comment);
+                            await locals.runtime.env.R2.delete(existingReview.comment_path);
                         } catch (error) {
                             console.warn('No se pudo eliminar el archivo anterior:', error);
                         }
@@ -153,7 +153,7 @@ export const server = {
                         .prepare(`
                         INSERT INTO course_reviews (
                             user_id, course_sigle, like_dislike, workload_vote, 
-                            attendance_type, weekly_hours, year_taken, semester_taken, comment
+                            attendance_type, weekly_hours, year_taken, semester_taken, comment_path
                         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `)
                         .bind(
@@ -208,7 +208,7 @@ export const server = {
                     .prepare(`
                     UPDATE course_reviews 
                     SET like_dislike = ?, workload_vote = ?, attendance_type = ?, 
-                        weekly_hours = ?, year_taken = ?, semester_taken = ?, comment = ?
+                        weekly_hours = ?, year_taken = ?, semester_taken = ?, comment_path = ?
                     WHERE id = ?
                 `)
                     .bind(
@@ -277,7 +277,7 @@ export const server = {
             try {
                 // Verificar que la reseña existe y pertenece al usuario, y obtener el path del archivo
                 const existingReview = await locals.runtime.env.DB
-                    .prepare("SELECT id, comment FROM course_reviews WHERE id = ? AND user_id = ?")
+                    .prepare("SELECT id, comment_path FROM course_reviews WHERE id = ? AND user_id = ?")
                     .bind(state.review_id, user.id)
                     .first<CourseReview>();
 
@@ -289,9 +289,9 @@ export const server = {
                 }
 
                 // Eliminar el archivo de R2 si existe
-                if (existingReview.comment) {
+                if (existingReview.comment_path) {
                     try {
-                        await locals.runtime.env.R2.delete(existingReview.comment);
+                        await locals.runtime.env.R2.delete(existingReview.comment_path);
                     } catch (error) {
                         console.warn('No se pudo eliminar el archivo de R2:', error);
                         // No fallar si no se puede eliminar el archivo, continuar con la eliminación de la reseña
@@ -358,7 +358,7 @@ export const server = {
             try {
                 // Verificar que la reseña existe y pertenece al usuario, y obtener el path del archivo
                 const existingReview = await locals.runtime.env.DB
-                    .prepare("SELECT id, comment FROM course_reviews WHERE id = ?")
+                    .prepare("SELECT id, comment_path FROM course_reviews WHERE id = ?")
                     .bind(state.review_id)
                     .first<CourseReview>();
 
@@ -370,9 +370,9 @@ export const server = {
                 }
 
                 // Eliminar el archivo de R2 si existe
-                if (existingReview.comment) {
+                if (existingReview.comment_path) {
                     try {
-                        await locals.runtime.env.R2.delete(existingReview.comment);
+                        await locals.runtime.env.R2.delete(existingReview.comment_path);
                     } catch (error) {
                         console.warn('No se pudo eliminar el archivo de R2:', error);
                         // No fallar si no se puede eliminar el archivo, continuar con la eliminación de la reseña

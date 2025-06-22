@@ -26,7 +26,7 @@ interface CourseReview {
     weekly_hours: number;
     year_taken: number;
     semester_taken: number; // 1 or 2
-    comment: string;
+    comment_path: string;
     created_at: string;
     updated_at: string;
 }

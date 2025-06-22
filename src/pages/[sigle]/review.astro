@@ -60,8 +60,8 @@ const defaultData = await getCourseReviewByUserIdAndSigle(
 );
 let text = "";
 
-if (defaultData.comment) {
-    const res = await Astro.locals.runtime.env.R2.get(defaultData.comment);
+if (defaultData.comment_path) {
+    const res = await Astro.locals.runtime.env.R2.get(defaultData.comment_path);
     if (res) {
         text = await res.text();
     }

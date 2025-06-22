@@ -335,9 +335,9 @@ const hasExistingReview = userReview && userReview.id !== null;
                                     </div>
 
                                     {/* Comentario */}
-                                    {review.comment && (
+                                    {review.comment_path && (
                                         <MarkdownReviewView
-                                            path={review.comment}
+                                            path={review.comment_path}
                                             client:only="react"
                                         />
                                     )}

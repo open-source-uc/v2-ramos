@@ -39,7 +39,10 @@ CREATE TABLE course_reviews (
     year_taken INTEGER,
     semester_taken INTEGER CHECK (semester_taken IN (1, 2, 3)), -- 1: Spring, 2: Summer, 3: TAV
 
-    comment TEXT,
+    comment_path TEXT, --url al documento de la review que es en un bucket de R2
+
+    status INTEGER DEFAULT 0, -- 0: pending, 1: approved, 2: reported, 3: hidden
+    report_count INTEGER DEFAULT 0, -- Contador de reportes
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -47,14 +50,6 @@ CREATE TABLE course_reviews (
     FOREIGN KEY (course_sigle) REFERENCES course_summary(sigle)
 );
 
-CREATE TABLE report_reviews (
-    review_id INTEGER PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    email_hash TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (review_id) REFERENCES course_reviews(id),
-);
 
 -- Índices simples para course_summary (orden descendente para métricas numéricas)
 CREATE INDEX idx_course_summary_school_id ON course_summary(school_id);
@@ -88,6 +83,9 @@ CREATE INDEX idx_course_reviews_like_dislike ON course_reviews(like_dislike DESC
 CREATE INDEX idx_course_reviews_workload_vote ON course_reviews(workload_vote DESC);
 CREATE INDEX idx_course_reviews_attendance_type ON course_reviews(attendance_type DESC);
 CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC, semester_taken DESC);
+CREATE INDEX idx_course_reviews_visible_updated
+ON course_reviews(updated_at DESC)
+WHERE status != 3;
 
 CREATE TRIGGER trg_course_reviews_set_updated_at
 BEFORE UPDATE ON course_reviews
@@ -275,3 +273,12 @@ BEGIN
   WHERE sigle = OLD.course_sigle;
 END;
 
+-- Trigger para ocultar automáticamente las reseñas reportadas con más de 3 reportes
+CREATE TRIGGER trg_course_reviews_auto_hide
+AFTER UPDATE OF report_count ON course_reviews
+WHEN NEW.report_count >= 3 AND NEW.status != 3
+BEGIN
+  UPDATE course_reviews
+  SET status = 3, updated_at = CURRENT_TIMESTAMP
+  WHERE id = NEW.id;
+END;

@@ -34,7 +34,7 @@ export const getCourseReviews = async (locals: App.Locals, sigle: string, limit:
       weekly_hours,
       year_taken,
       semester_taken,
-      comment,
+      comment_path,
       created_at,
       updated_at
     FROM course_reviews 
@@ -58,7 +58,7 @@ export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle:
       weekly_hours,
       year_taken,
       semester_taken,
-      comment,
+      comment_path,
       created_at,
       updated_at
     FROM course_reviews 
@@ -75,7 +75,7 @@ export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle:
     weekly_hours: null,
     year_taken: null,
     semester_taken: null,
-    comment: null,
+    comment_path: null,
     created_at: null,
     updated_at: null
   };
