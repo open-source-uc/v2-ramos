@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import Contribuidores from "@/components/Contribuidores";
+
+const contribuidores = await getCollection("contribuidores");
+---
+
+<Layout>
+    <Contribuidores client:load items={contribuidores.map(c => c.data)} />
+</Layout>
