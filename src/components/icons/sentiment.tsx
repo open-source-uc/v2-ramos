@@ -43,7 +43,7 @@ const Sentiment = React.forwardRef<HTMLDivElement, SentimentProps>(
       happy: HappyIcon,
       neutral: NeutralIcon,
       sad: SadIcon,
-      verySad: VerySadIcon,
+      verySad: SadIcon,
       question: QuestionIcon,
     }[sentiment]
 
