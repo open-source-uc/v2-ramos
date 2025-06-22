@@ -42,7 +42,6 @@ CREATE TABLE course_reviews (
     comment_path TEXT, --url al documento de la review que es en un bucket de R2
 
     status INTEGER DEFAULT 0, -- 0: pending, 1: approved, 2: reported, 3: hidden
-    report_count INTEGER DEFAULT 0, -- Contador de reportes
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -86,6 +85,8 @@ CREATE INDEX idx_course_reviews_year_semester ON course_reviews(year_taken DESC,
 CREATE INDEX idx_course_reviews_visible_updated
 ON course_reviews(updated_at DESC)
 WHERE status != 3;
+CREATE INDEX idx_course_reviews_status_updated
+ON course_reviews(status, updated_at DESC)
 
 CREATE TRIGGER trg_course_reviews_set_updated_at
 BEFORE UPDATE ON course_reviews
@@ -271,14 +272,4 @@ BEGIN
       WHERE course_sigle = OLD.course_sigle
     )
   WHERE sigle = OLD.course_sigle;
-END;
-
--- Trigger para ocultar automáticamente las reseñas reportadas con más de 3 reportes
-CREATE TRIGGER trg_course_reviews_auto_hide
-AFTER UPDATE OF report_count ON course_reviews
-WHEN NEW.report_count >= 3 AND NEW.status != 3
-BEGIN
-  UPDATE course_reviews
-  SET status = 3, updated_at = CURRENT_TIMESTAMP
-  WHERE id = NEW.id;
 END;

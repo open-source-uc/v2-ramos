@@ -1,0 +1,26 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getToken } from "@/services/auth";
+import { getReportedReviews } from "@/services/admin.reviews";
+import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+
+const token = getToken(Astro.cookies);
+const reportedReviews = await getReportedReviews(Astro.locals, token);
+---
+
+<Layout>
+    <h1>Report Reviews</h1>
+    <ul>
+        {
+            reportedReviews.map((review) => (
+                <li id={review.id + "-reported"}>
+                    <h1>{review.comment_path}</h1>
+                    <MarkdownReviewView
+                        path={review.comment_path}
+                        client:only="react"
+                    />
+                </li>
+            ))
+        }
+    </ul>
+</Layout>

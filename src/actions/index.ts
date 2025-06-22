@@ -277,7 +277,8 @@ export const server = {
             try {
                 // Verificar que la reseña existe y pertenece al usuario, y obtener el path del archivo
                 const existingReview = await locals.runtime.env.DB
-                    .prepare("SELECT id, comment_path FROM course_reviews WHERE id = ? AND user_id = ?")
+                    .prepare("SELECT id, comment_path FROM course_reviews WHERE id = ? AND user_id = ? AND status != 3") // una reseña ocultada no puede ser eliminada pues el usuario malisioso la podria eliminar para volver a publicarla
+                    // TODO: Tener en cuenta que el usuario podria borrar su cuenta para tener un nuevo id de usuario y volver a publicar la reseña, por lo que seria importante crear en el auth una lista de hashes baneados para evitar que se puedan volver a REGISTRAR 
                     .bind(state.review_id, user.id)
                     .first<CourseReview>();
 
@@ -330,10 +331,85 @@ export const server = {
             }
         }
     }),
-    deleteCourseReviewByReviewId: defineAction({
+    reportCourseReview: defineAction({
         accept: "form",
         input: z.object({
             review_id: z.number().int().positive("ID de reseña inválido")
+        }),
+        handler: async (state, ctx) => {
+            console.log(state)
+            try {
+                // Verificar que la reseña existe
+                const existingReview = await ctx.locals.runtime.env.DB
+                    .prepare("SELECT id, status FROM course_reviews WHERE id = ?")
+                    .bind(state.review_id)
+                    .first<{ id: number; status: number }>();
+
+                if (!existingReview) {
+                    throw new ActionError({
+                        code: "NOT_FOUND",
+                        message: "Reseña no encontrada"
+                    });
+                }
+
+                // Evitar múltiples reportes de una reseña ya reportada o moderada
+                if (existingReview.status === 1) {
+                    throw new ActionError({
+                        code: "BAD_REQUEST",
+                        message: "La reseña ya ha sido moderada"
+                    });
+                }
+                if (existingReview.status === 2) {
+                    return {
+                        code: 200,
+                        message: "Reseña reportada exitosamente"
+                    }
+                }
+                if (existingReview.status === 3) {
+                    throw new ActionError({
+                        code: "BAD_REQUEST",
+                        message: "La reseña ya ha sido ocultada"
+                    });
+                }
+
+                const updateResult = await ctx.locals.runtime.env.DB
+                    .prepare("UPDATE course_reviews SET status = 2 WHERE id = ?")
+                    .bind(state.review_id)
+                    .run();
+
+                if (!updateResult.success) {
+                    throw new ActionError({
+                        code: "INTERNAL_SERVER_ERROR",
+                        message: "Error al actualizar el estado de la reseña"
+                    });
+                }
+
+                return {
+                    message: "Reseña reportada exitosamente",
+                    code: 200
+                };
+
+            } catch (error) {
+                if (error instanceof ActionError) {
+                    throw error;
+                }
+
+                console.error("Error al reportar la reseña:", error);
+
+                throw new ActionError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Error interno del servidor al reportar la reseña"
+                });
+            }
+        }
+    }),
+    updateReviewStatus: defineAction({
+        accept: "form",
+        input: z.object({
+            review_id: z.number().int().positive("ID de reseña inválido"),
+            status: z.enum(["0", "1", "2", "3"], {
+                errorMap: () => ({ message: "El estado debe ser 0 (pendiente), 1 (aprobada), 2 (reportada) o 3 (ocultada)" })
+            })
         }),
         handler: async (state, ctx) => {
             const { locals, cookies } = ctx;
@@ -356,7 +432,6 @@ export const server = {
             }
 
             try {
-                // Verificar que la reseña existe y pertenece al usuario, y obtener el path del archivo
                 const existingReview = await locals.runtime.env.DB
                     .prepare("SELECT id, comment_path FROM course_reviews WHERE id = ?")
                     .bind(state.review_id)
@@ -369,26 +444,16 @@ export const server = {
                     });
                 }
 
-                // Eliminar el archivo de R2 si existe
-                if (existingReview.comment_path) {
-                    try {
-                        await locals.runtime.env.R2.delete(existingReview.comment_path);
-                    } catch (error) {
-                        console.warn('No se pudo eliminar el archivo de R2:', error);
-                        // No fallar si no se puede eliminar el archivo, continuar con la eliminación de la reseña
-                    }
-                }
-
-                // Eliminar la reseña de la base de datos
-                const result = await locals.runtime.env.DB
-                    .prepare("DELETE FROM course_reviews WHERE id = ?")
-                    .bind(state.review_id)
+                // Actualizar el estado de la reseña
+                const updateResult = await locals.runtime.env.DB
+                    .prepare("UPDATE course_reviews SET status = ? WHERE id = ?")
+                    .bind(state.status, state.review_id)
                     .run();
 
-                if (!result.success) {
+                if (!updateResult.success) {
                     throw new ActionError({
                         code: "INTERNAL_SERVER_ERROR",
-                        message: "Error al eliminar la reseña"
+                        message: "Error al actualizar el estado de la reseña"
                     });
                 }
 
@@ -409,6 +474,4 @@ export const server = {
             }
         }
     }),
-
-
 }

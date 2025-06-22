@@ -27,6 +27,7 @@ interface CourseReview {
     year_taken: number;
     semester_taken: number; // 1 or 2
     comment_path: string;
+    status: number; // 0: pending, 1: approved, 2: reported, 3: hidden
     created_at: string;
     updated_at: string;
 }

@@ -1,3 +1,5 @@
+import type { AstroCookies } from "astro";
+
 export async function getUserDataByToken(token: string): Promise<{ message: string, permissions: string[], id: string } | null> {
     const response = await fetch("https://auth.osuc.dev/api", {
         method: "POST",
@@ -16,4 +18,10 @@ export async function getUserDataByToken(token: string): Promise<{ message: stri
         };
     }
     return null;
+}
+
+export function getToken(cookies: AstroCookies) {
+    const token = cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "";
+
+    return token;
 }
