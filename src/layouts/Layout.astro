@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header";
+import Footer from "../components/Footer.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
 ---
 
@@ -19,5 +20,6 @@ import ClientRouter from "astro/components/ClientRouter.astro";
 	>
 		<Header client:only="react" />
 		<slot />
+		<Footer />
 	</body>
 </html>

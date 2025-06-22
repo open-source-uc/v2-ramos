@@ -32,14 +32,14 @@ export default function Header() {
     <header className="space-between tablet:space-x-8 flex w-full items-center py-8 px-4">
       <a href="/">
         <img
-          src="logos/UC_Logo_Big.svg"
+          src="/logos/UC_Big.svg"
           alt="UC Logo"
           width={200}
           height={200}
           className="tablet:hidden h-20 w-auto"
         />
         <img
-          src="logos/UC_Logo_Small.svg"
+          src="/logos/UC_Small.svg"
           alt="UC Logo"
           width={200}
           height={200}

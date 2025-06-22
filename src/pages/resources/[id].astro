@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import { BuildingIcon, ClockIcon } from "../../components/icons/icons";
+import { ResourcesIcon, ClockIcon } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 
 export const prerender = true;
@@ -88,7 +88,7 @@ const authorData = typeof author === 'string'
                 <Pill
                     variant="blue"
                     size="sm"
-                    icon={BuildingIcon}
+                    icon={ResourcesIcon}
                     className=""
                 >
                     Recurso
@@ -114,7 +114,7 @@ const authorData = typeof author === 'string'
         </article>
 
         <!-- Navigation Section -->
-        <section class="mt-8">
+        <section class="mt-6">
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
