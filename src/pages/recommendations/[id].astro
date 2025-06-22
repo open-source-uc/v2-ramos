@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const recommendations = await getCollection("recommendations");
 
@@ -19,7 +21,6 @@ const { title, initiative, period, faculty, qualification, tags, resume } =
   data;
 
 const { Content } = await render(rec);
-export const prerender = true;
 ---
 
 <Layout>

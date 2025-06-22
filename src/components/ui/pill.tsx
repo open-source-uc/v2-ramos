@@ -25,6 +25,7 @@ const pillVariants = cva(
         sm: "gap-1 px-2 py-1 text-xs",
         md: "gap-2 px-3 py-1.5 text-sm",
         lg: "gap-2 px-4 py-2 text-base",
+        xl: "gap-3 px-5 py-2.5 text-lg",
       },
     },
     defaultVariants: {
@@ -42,8 +43,8 @@ export interface PillProps
 
 const Pill = React.forwardRef<HTMLDivElement, PillProps>(
   ({ className, variant, size, icon: Icon, children, ...props }, ref) => {
-    const iconSize = size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
-    
+    const iconSize = size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : size === "xl" ? "h-6 w-6" : "h-4 w-4";
+
     // Determine icon color for ghost variants
     const getIconColor = () => {
       if (!variant?.startsWith('ghost_')) return 'fill-current';

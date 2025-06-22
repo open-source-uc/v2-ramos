@@ -98,4 +98,65 @@
     @apply bg-background text-foreground;
     font-family: 'Instrument Sans Variable', sans-serif;
   }
+
+  /* Markdown content styles */
+  .content-markdown h1 {
+    @apply text-2xl font-bold mb-4 text-foreground;
+  }
+  
+  .content-markdown h2 {
+    @apply text-xl font-semibold mb-3 mt-6 text-foreground;
+  }
+  
+  .content-markdown h3 {
+    @apply text-lg font-medium mb-2 mt-4 text-foreground;
+  }
+  
+  .content-markdown p {
+    @apply mb-4 leading-relaxed text-foreground;
+  }
+  
+  .content-markdown ul, .content-markdown ol {
+    @apply mb-4 pl-6 text-foreground;
+  }
+  
+  .content-markdown ul {
+    @apply list-disc;
+  }
+  
+  .content-markdown ol {
+    @apply list-decimal;
+  }
+  
+  .content-markdown li {
+    @apply mb-1;
+  }
+  
+  .content-markdown li::marker {
+    @apply text-foreground;
+  }
+  
+  .content-markdown a {
+    @apply text-blue hover:underline;
+  }
+  
+  .content-markdown blockquote {
+    @apply border-l-4 border-blue pl-4 italic text-muted-foreground mb-4;
+  }
+  
+  .content-markdown code {
+    @apply bg-muted px-1 py-0.5 rounded text-sm;
+  }
+  
+  .content-markdown pre {
+    @apply bg-muted p-4 rounded mb-4 overflow-x-auto;
+  }
+  
+  .content-markdown strong {
+    @apply font-semibold;
+  }
+  
+  .content-markdown em {
+    @apply italic;
+  }
 }
