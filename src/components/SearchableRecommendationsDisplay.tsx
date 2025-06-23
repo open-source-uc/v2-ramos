@@ -226,10 +226,7 @@ export function SearchableRecommendationsDisplay({
                           )}`,
                         }}
                       >
-                        <Pill size="md">
-                          {" "}
-                          Iniciativa estudiantil reconocida{" "}
-                        </Pill>
+                        <Pill size="md">Iniciativa estudiantil reconocida</Pill>
                       </div>
                     </div>
                     <span
