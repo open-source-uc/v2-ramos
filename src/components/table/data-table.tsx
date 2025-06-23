@@ -45,12 +45,12 @@ export function DataTable({
 }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState(externalSearchValue)
-  
+
   // Update internal filter when external search value changes
   useEffect(() => {
     setGlobalFilter(externalSearchValue)
   }, [externalSearchValue])
-  
+
   const table = useReactTable({
     data,
     columns,
@@ -63,9 +63,9 @@ export function DataTable({
       const name = row.getValue("name") as string
       const sigle = row.getValue("sigle") as string
       const searchValue = normalizeText(value)
-      
-      return normalizeText(name).includes(searchValue) || 
-             normalizeText(sigle).includes(searchValue)
+
+      return normalizeText(name).includes(searchValue) ||
+        normalizeText(sigle).includes(searchValue)
     },
     onGlobalFilterChange: setGlobalFilter,
     state: {
@@ -91,9 +91,9 @@ export function DataTable({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}

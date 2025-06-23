@@ -2,62 +2,26 @@
 import Layout from "../layouts/Layout.astro";
 import { SearchableTableDisplay } from "../components/SearchableTableDisplay";
 
-// Import direct data from JSON
-import CoursesRaw from "../../migration/json/2025-1.json";
-import Id2NameRaw from "../../migration/json/valores_unicos.json";
 import { getCollection } from "astro:content";
-import { School } from "lucide-react";
 
-// Get search parameter from URL
 const searchParam = Astro.url.searchParams.get("search") || "";
 
-// Prepare data
-const coursesData = CoursesRaw as Record<string, CourseStaticInfo>;
-const id2NameData = Id2NameRaw as Record<string, string>;
-
-// Get dynamic course data from database
-// hola
-// Create a map for quick lookup of course summaries by sigle
-
-// Transform the JSON data directly into the format needed by the table
-const coursesScore = await getCollection("coursesScore");
-
-const coursesWithNames = Object.entries(coursesScore).map(
-  ([sigle, details], index) => {
-    const moredata = coursesData[details.data.sigle];
-    return {
-      id: details.id,
-      sigle: details.data.sigle,
-
-      name: moredata.name,
-      credits: moredata.credits,
-
-      school: id2NameData[details.data.school_id],
-      area: id2NameData[details.data.area_id],
-      category: id2NameData[details.data.category_id],
-
-      likes: details.data.likes,
-      superlikes: details.data.superlikes,
-      dislikes: details.data.dislikes,
-
-      votes_low_workload: details.data.votes_low_workload,
-      votes_medium_workload: details.data.votes_medium_workload,
-      votes_high_workload: details.data.votes_high_workload,
-
-      votes_mandatory_attendance: details.data.votes_mandatory_attendance,
-      votes_optional_attendance: details.data.votes_optional_attendance,
-
-      avg_weekly_hours: details.data.avg_weekly_hours,
-
-      sort_index: details.data.sort_index,
-    };
-  },
-);
+const coursesScore = await getCollection("coursesScore"); // ahora el tipo seria
+/*
+{
+    id: string;
+    body?: string;
+    collection: "coursesScore";
+    data: InferEntrySchema<"coursesScore">; !!!!! Aqui va la informacion del curso
+    rendered?: RenderedContent;
+    filePath?: string;
+}[]
+*/
 ---
 
 <Layout title="Catálogo de Cursos">
   <SearchableTableDisplay
-    data={coursesWithNames}
+    data={coursesScore}
     initialSearchValue={searchParam}
     client:only="react"
   />
