@@ -20,8 +20,15 @@ import { Banner } from "@/components/ui/banner";
     class="bg-background text-foreground min-h-screen"
   >
     <!-- Promotional Banners -->
-    <Banner variant="red" size="lg" icon="SadIcon" client:only="react">
-      No le hagan caso al Rocka, hagan branches y pull requests. No hagan commits directamente a main.
+    <Banner 
+      variant="blue" 
+      size="md" 
+      icon="VeryHappyIcon" 
+      dismissible={true} 
+      bannerId="2025-1"
+      client:only="react"
+    >
+      Es el día del platano!!!! ¡Feliz día del plátano! 
     </Banner>
     <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
       <Header client:only="react" />

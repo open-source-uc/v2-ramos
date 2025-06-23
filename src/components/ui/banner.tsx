@@ -67,10 +67,37 @@ export interface BannerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof bannerVariants> {
   icon?: IconName
+  dismissible?: boolean
+  onDismiss?: () => void
+  bannerId?: string // Unique identifier for the banner
 }
 
 const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
-  ({ className, variant, size, icon, children, ...props }, ref) => {
+  ({ className, variant, size, icon, children, dismissible = false, onDismiss, bannerId, ...props }, ref) => {
+    // Generate a unique banner ID based on content and props if not provided
+    const generateBannerId = () => {
+      if (bannerId) return bannerId;
+      
+      // Create a simple hash based on the banner content and props
+      const content = typeof children === 'string' ? children : JSON.stringify(children);
+      const bannerData = `${variant}-${size}-${icon}-${content}`;
+      return btoa(bannerData).replace(/[^a-zA-Z0-9]/g, '').substring(0, 16);
+    };
+
+    const finalBannerId = generateBannerId();
+    const storageKey = `banner-dismissed-${finalBannerId}`;
+
+    // Check if banner was previously dismissed
+    const [isVisible, setIsVisible] = React.useState(() => {
+      if (typeof window === 'undefined') return true; // SSR fallback
+      try {
+        const dismissed = localStorage.getItem(storageKey);
+        return dismissed !== 'true';
+      } catch {
+        return true; // Fallback if localStorage is not available
+      }
+    });
+
     const iconSize = size === "sm" ? "h-4 w-4" : size === "lg" ? "h-6 w-6" : size === "xl" ? "h-7 w-7" : "h-5 w-5";
 
     // Get the icon component from the mapping
@@ -90,6 +117,23 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
         default: return 'fill-current';
       }
     };
+
+    const handleDismiss = () => {
+      setIsVisible(false);
+      
+      // Store dismissal in localStorage
+      try {
+        localStorage.setItem(storageKey, 'true');
+      } catch {
+        // Silently fail if localStorage is not available
+      }
+      
+      onDismiss?.();
+    };
+
+    if (!isVisible) {
+      return null;
+    }
     
     return (
       <div
@@ -99,6 +143,23 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       >
         {IconComponent && <IconComponent className={`${iconSize} ${getIconColor()} flex-shrink-0`} />}
         <div className="flex-1">{children}</div>
+        {dismissible && (
+          <button
+            onClick={handleDismiss}
+            className={`${iconSize} flex-shrink-0 ml-2 hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded-sm`}
+            aria-label="Dismiss banner"
+          >
+            <svg
+              className={`${iconSize} ${getIconColor()}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
     )
   }
