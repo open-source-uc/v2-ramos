@@ -36,6 +36,7 @@ if (!sigle) {
 
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import { getToken } from "@/lib/auth";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -74,9 +75,9 @@ const weeklyHoursLabel = c
 const totalReviews = c ? c.likes + c.superlikes + c.dislikes : 0;
 
 // Check if user has an existing review
-const user = await getUserDataByToken(
-    Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
-);
+const token = getToken(Astro.cookies);
+
+const user = await getUserDataByToken(token);
 const userReview = user ? await getCourseReviewByUserIdAndSigle(Astro.locals, sigle, user.id) : null;
 const hasExistingReview = userReview && userReview.id !== null;
 

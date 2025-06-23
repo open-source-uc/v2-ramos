@@ -1,14 +1,17 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getCourseReviewByUserIdAndSigle, getCourseBySigle } from "@/services/courses";
+import {
+    getCourseReviewByUserIdAndSigle,
+    getCourseBySigle,
+} from "@/services/courses";
 import { actions, isInputError } from "astro:actions";
 import { getUserDataByToken } from "@/services/auth";
 import RedirectLogin from "@/components/reviews/RedirectLogin";
 import { getEntry } from "astro:content";
-import { 
-    CalendarIcon, 
-    WorkloadIcon, 
-    AttendanceIcon, 
+import {
+    CalendarIcon,
+    WorkloadIcon,
+    AttendanceIcon,
     ClockIcon,
     EditIcon,
     PlusIcon,
@@ -17,7 +20,7 @@ import {
     AreaIcon,
     SadIcon,
     HappyIcon,
-    VeryHappyIcon
+    VeryHappyIcon,
 } from "@/components/icons/icons";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
@@ -45,11 +48,11 @@ const c = await getCourseBySigle(Astro.locals, sigle);
 
 // Import ID to name mapping for schools and areas
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+import { getToken } from "@/lib/auth";
 const id2NameData = Id2NameRaw as Record<string, string>;
 
-const user = await getUserDataByToken(
-    Astro.cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "",
-);
+const token = getToken(Astro.cookies);
+const user = await getUserDataByToken(token);
 
 const userIsNull = !user;
 
@@ -74,34 +77,56 @@ const isEditMode = defaultData && defaultData.id !== null;
 
 <Layout>
     <div class="max-w-6xl mx-auto px-4 py-8">
-
         <!-- Information Section -->
         <div class="border border-border rounded-md p-6">
-            <h3 class="font-medium text-foreground mb-3 flex items-center gap-2">
-                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+            <h3
+                class="font-medium text-foreground mb-3 flex items-center gap-2"
+            >
+                <div
+                    class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
+                >
                     <EditIcon className="h-4 w-4 fill-current" />
                 </div>
                 Consejos para una buena reseña
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground"
+            >
                 <ul class="space-y-2">
                     <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <div
+                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
+                        >
+                        </div>
                         <span>Sé honesto y constructivo en tu valoración</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Incluye información útil para futuros estudiantes</span>
+                        <div
+                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
+                        >
+                        </div>
+                        <span
+                            >Incluye información útil para futuros estudiantes</span
+                        >
                     </li>
                 </ul>
                 <ul class="space-y-2">
                     <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
+                        <div
+                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
+                        >
+                        </div>
                         <span>Menciona aspectos específicos del curso</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <div class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"></div>
-                        <span>Si ya tienes una reseña, será actualizada automáticamente</span>
+                        <div
+                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
+                        >
+                        </div>
+                        <span
+                            >Si ya tienes una reseña, será actualizada
+                            automáticamente</span
+                        >
                     </li>
                 </ul>
             </div>
@@ -113,14 +138,20 @@ const isEditMode = defaultData && defaultData.id !== null;
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-foreground">
-                            {isEditMode ? "Editar tu Reseña" : "Crear Reseña de Curso"}
+                            {
+                                isEditMode
+                                    ? "Editar tu Reseña"
+                                    : "Crear Reseña de Curso"
+                            }
                         </h2>
                         <p class="text-sm text-muted-foreground mt-1">
                             Comparte tu experiencia con otros estudiantes
                         </p>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-border">
+                        <div
+                            class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-border"
+                        >
                             <span class="font-medium text-muted-foreground">
                                 {isEditMode ? "Modo Edición" : "Nueva Reseña"}
                             </span>
@@ -134,8 +165,10 @@ const isEditMode = defaultData && defaultData.id !== null;
                 result && result.data?.message && (
                     <div class="px-6 py-4 bg-green-50 border-b border-green-200">
                         <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <p class="font-medium text-green-800">{result.data.message}</p>
+                            <div class="w-2 h-2 bg-green-500 rounded-full" />
+                            <p class="font-medium text-green-800">
+                                {result.data.message}
+                            </p>
                         </div>
                         {result.data.wasUpdated && (
                             <p class="text-sm mt-1 text-green-700 ml-4">
@@ -158,14 +191,18 @@ const isEditMode = defaultData && defaultData.id !== null;
 
                     <!-- Rating Section -->
                     <div class="border border-border rounded-md p-6">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center gap-2"
+                        >
+                            <div
+                                class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
+                            >
                                 <HappyIcon className="h-4 w-4 fill-current" />
                             </div>
                             Valoración General
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <ButtonInput 
+                            <ButtonInput
                                 variant="red"
                                 icon={SadIcon}
                                 title="No me gustó"
@@ -175,11 +212,11 @@ const isEditMode = defaultData && defaultData.id !== null;
                                     name: "like_dislike",
                                     value: "0",
                                     checked: defaultData.like_dislike === 0,
-                                    required: true
+                                    required: true,
                                 }}
                             />
 
-                            <ButtonInput 
+                            <ButtonInput
                                 variant="blue"
                                 icon={HappyIcon}
                                 title="Me gustó"
@@ -189,11 +226,11 @@ const isEditMode = defaultData && defaultData.id !== null;
                                     name: "like_dislike",
                                     value: "1",
                                     checked: defaultData.like_dislike === 1,
-                                    required: true
+                                    required: true,
                                 }}
                             />
 
-                            <ButtonInput 
+                            <ButtonInput
                                 variant="green"
                                 icon={VeryHappyIcon}
                                 title="Me encantó"
@@ -203,7 +240,7 @@ const isEditMode = defaultData && defaultData.id !== null;
                                     name: "like_dislike",
                                     value: "2",
                                     checked: defaultData.like_dislike === 2,
-                                    required: true
+                                    required: true,
                                 }}
                             />
                         </div>
@@ -220,14 +257,20 @@ const isEditMode = defaultData && defaultData.id !== null;
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Workload Section -->
                         <div class="border border-border rounded-md p-6">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
-                                    <WorkloadIcon className="h-5 w-5 fill-current" />
+                            <h3
+                                class="text-lg font-semibold mb-4 flex items-center gap-2"
+                            >
+                                <div
+                                    class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
+                                >
+                                    <WorkloadIcon
+                                        className="h-5 w-5 fill-current"
+                                    />
                                 </div>
                                 Carga de Trabajo
                             </h3>
                             <div class="space-y-3">
-                                <ButtonInput 
+                                <ButtonInput
                                     variant="green"
                                     size="sm"
                                     icon={ClockIcon}
@@ -237,12 +280,13 @@ const isEditMode = defaultData && defaultData.id !== null;
                                         type: "radio",
                                         name: "workload_vote",
                                         value: "0",
-                                        checked: defaultData.workload_vote === 0,
-                                        required: true
+                                        checked:
+                                            defaultData.workload_vote === 0,
+                                        required: true,
                                     }}
                                 />
 
-                                <ButtonInput 
+                                <ButtonInput
                                     variant="orange"
                                     size="sm"
                                     icon={HourglassIcon}
@@ -252,12 +296,13 @@ const isEditMode = defaultData && defaultData.id !== null;
                                         type: "radio",
                                         name: "workload_vote",
                                         value: "1",
-                                        checked: defaultData.workload_vote === 1,
-                                        required: true
+                                        checked:
+                                            defaultData.workload_vote === 1,
+                                        required: true,
                                     }}
                                 />
 
-                                <ButtonInput 
+                                <ButtonInput
                                     variant="red"
                                     size="sm"
                                     icon={WorkloadIcon}
@@ -267,8 +312,9 @@ const isEditMode = defaultData && defaultData.id !== null;
                                         type: "radio",
                                         name: "workload_vote",
                                         value: "2",
-                                        checked: defaultData.workload_vote === 2,
-                                        required: true
+                                        checked:
+                                            defaultData.workload_vote === 2,
+                                        required: true,
                                     }}
                                 />
                             </div>
@@ -283,14 +329,20 @@ const isEditMode = defaultData && defaultData.id !== null;
 
                         <!-- Attendance Section -->
                         <div class="border border-border rounded-md p-6">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
-                                    <AttendanceIcon className="h-5 w-5 fill-current" />
+                            <h3
+                                class="text-lg font-semibold mb-4 flex items-center gap-2"
+                            >
+                                <div
+                                    class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
+                                >
+                                    <AttendanceIcon
+                                        className="h-5 w-5 fill-current"
+                                    />
                                 </div>
                                 Tipo de Asistencia
                             </h3>
                             <div class="space-y-3">
-                                <ButtonInput 
+                                <ButtonInput
                                     variant="red"
                                     size="sm"
                                     icon={AttendanceIcon}
@@ -300,12 +352,13 @@ const isEditMode = defaultData && defaultData.id !== null;
                                         type: "radio",
                                         name: "attendance_type",
                                         value: "0",
-                                        checked: defaultData.attendance_type === 0,
-                                        required: true
+                                        checked:
+                                            defaultData.attendance_type === 0,
+                                        required: true,
                                     }}
                                 />
 
-                                <ButtonInput 
+                                <ButtonInput
                                     variant="green"
                                     size="sm"
                                     icon={ClockIcon}
@@ -315,8 +368,9 @@ const isEditMode = defaultData && defaultData.id !== null;
                                         type: "radio",
                                         name: "attendance_type",
                                         value: "1",
-                                        checked: defaultData.attendance_type === 1,
-                                        required: true
+                                        checked:
+                                            defaultData.attendance_type === 1,
+                                        required: true,
                                     }}
                                 />
                             </div>
@@ -332,9 +386,15 @@ const isEditMode = defaultData && defaultData.id !== null;
 
                     <!-- Numeric Fields Grid -->
                     <div class="border border-border rounded-md p-6">
-                        <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
-                            <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
-                                <CalendarIcon className="h-5 w-5 fill-current" />
+                        <h3
+                            class="text-lg font-semibold mb-6 flex items-center gap-2"
+                        >
+                            <div
+                                class="p-2 bg-green-light text-green border border-green/20 rounded-lg"
+                            >
+                                <CalendarIcon
+                                    className="h-5 w-5 fill-current"
+                                />
                             </div>
                             Detalles del Curso
                         </h3>
@@ -376,7 +436,7 @@ const isEditMode = defaultData && defaultData.id !== null;
                                 selectProps={{
                                     id: "semester_taken",
                                     name: "semester_taken",
-                                    required: true
+                                    required: true,
                                 }}
                                 transition:persist
                             >
@@ -384,29 +444,37 @@ const isEditMode = defaultData && defaultData.id !== null;
                                 <option
                                     value="1"
                                     selected={defaultData.semester_taken === 1}
-                                >1° Semestre</option>
+                                    >1° Semestre</option
+                                >
                                 <option
                                     value="2"
                                     selected={defaultData.semester_taken === 2}
-                                >2° Semestre</option>
+                                    >2° Semestre</option
+                                >
                                 <option
                                     value="3"
                                     selected={defaultData.semester_taken === 3}
-                                >TAV (Trimestre de Otoño-Verano)</option>
+                                    >TAV (Trimestre de Otoño-Verano)</option
+                                >
                             </SelectInput>
                         </div>
                     </div>
 
                     <!-- Comment Section -->
                     <div class="border border-border rounded-md p-6">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                        <h3
+                            class="text-lg font-semibold mb-4 flex items-center gap-2"
+                        >
+                            <div
+                                class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
+                            >
                                 <EditIcon className="h-5 w-5 fill-current" />
                             </div>
                             Comentario (Opcional)
                         </h3>
                         <p class="text-sm text-muted-foreground mb-4">
-                            Comparte tu experiencia, consejos para futuros estudiantes, o cualquier información útil.
+                            Comparte tu experiencia, consejos para futuros
+                            estudiantes, o cualquier información útil.
                         </p>
                         <textarea
                             id="comment"
@@ -435,20 +503,25 @@ const isEditMode = defaultData && defaultData.id !== null;
 
                     <!-- General Error -->
                     {
-                        !isInputError(result?.error) && result?.error?.message && (
-                            <div class="border border-destructive/20 rounded-md p-4 bg-destructive/5">
-                                <div class="flex items-center gap-2">
-                                    <div class="p-1 bg-destructive/10 rounded-full">
-                                        <div class="w-2 h-2 bg-destructive rounded-full"></div>
+                        !isInputError(result?.error) &&
+                            result?.error?.message && (
+                                <div class="border border-destructive/20 rounded-md p-4 bg-destructive/5">
+                                    <div class="flex items-center gap-2">
+                                        <div class="p-1 bg-destructive/10 rounded-full">
+                                            <div class="w-2 h-2 bg-destructive rounded-full" />
+                                        </div>
+                                        <p class="font-medium text-destructive">
+                                            {result.error.message}
+                                        </p>
                                     </div>
-                                    <p class="font-medium text-destructive">{result.error.message}</p>
                                 </div>
-                            </div>
-                        )
+                            )
                     }
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-between items-center pt-6 border-t border-border">
+                    <div
+                        class="flex justify-between items-center pt-6 border-t border-border"
+                    >
                         <Button
                             variant="ghost"
                             href={`/${sigle}/`}
@@ -456,16 +529,20 @@ const isEditMode = defaultData && defaultData.id !== null;
                         >
                             ← Volver al curso
                         </Button>
-                        
+
                         <div class="flex items-center gap-3">
                             <Button
                                 type="submit"
                                 variant="default"
                                 icon={isEditMode ? EditIcon : PlusIcon}
                             >
-                                {isEditMode ? "Actualizar Reseña" : "Guardar Reseña"}
+                                {
+                                    isEditMode
+                                        ? "Actualizar Reseña"
+                                        : "Guardar Reseña"
+                                }
                             </Button>
-                            
+
                             {
                                 defaultData.id && (
                                     <Button
@@ -482,7 +559,6 @@ const isEditMode = defaultData && defaultData.id !== null;
                 </form>
             </div>
         </section>
-
     </div>
     <RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>

@@ -94,7 +94,7 @@ export const server = {
                 });
             }
             // Verificar autenticación
-            const token = cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "";
+            const token = getToken(cookies);
             const user = await getUserDataByToken(token);
 
 
@@ -265,7 +265,7 @@ export const server = {
         handler: async (state, ctx) => {
             const { locals, cookies } = ctx;
 
-            const token = cookies.get("osucookie")?.value || import.meta.env.USER_TOKEN || "";
+            const token = getToken(cookies);
             const user = await getUserDataByToken(token);
 
             if (!user) {
