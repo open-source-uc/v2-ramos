@@ -17,5 +17,6 @@ export async function getUserDataByToken(token: string): Promise<{ message: stri
             id: data.userId
         };
     }
+
     return null;
 }
