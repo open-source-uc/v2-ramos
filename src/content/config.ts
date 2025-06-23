@@ -84,7 +84,8 @@ const coursesScore = defineCollection({
         return data.map((c) => {
             const staticInfo = coursesData[c.sigle];
             return {
-                id: c.id + "", // debe ser texto why, idk xd
+                id: c.sigle + "", // debe ser texto why, idk xd
+                db_id: c.id,
                 sigle: c.sigle,
                 name: staticInfo?.name ?? c.sigle,
                 school_id: c.school_id,
@@ -108,6 +109,7 @@ const coursesScore = defineCollection({
     },
     schema: z.object({
         id: z.string().transform((val) => val ?? ""),
+        db_id: z.string().transform((val) => val ?? ""),
         sigle: z.string().transform((val) => val ?? ""),
         name: z.string().transform((val) => val ?? ""),
         school_id: z.number().nullable().transform((val) => val ?? 0),
