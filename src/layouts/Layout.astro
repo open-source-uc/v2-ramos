@@ -6,18 +6,18 @@ import ClientRouter from "astro/components/ClientRouter.astro";
 
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Ramos UC</title>
-		<ClientRouter />
-	</head>
-	<body
-		class="bg-background text-foreground flex flex-col gap-8 px-4 tablet:px-8"
-	>
-		<Header client:only="react" />
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Ramos UC</title>
+    <ClientRouter />
+  </head>
+  <body
+    class="bg-background text-foreground flex flex-col gap-4 px-2 sm:px-4 tablet:px-8 min-h-screen"
+  >
+    <Header client:only="react" />
+    <slot />
+  </body>
 </html>

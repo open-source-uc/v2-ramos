@@ -94,9 +94,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    height: 100%;
+    width: 100%;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-family: 'Instrument Sans Variable', sans-serif;
+    min-height: 100vh;
+    min-width: 100vw;
+    width: 100%;
   }
 
   /* Markdown content styles */
