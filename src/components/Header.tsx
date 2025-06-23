@@ -105,8 +105,7 @@ export default function Header() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center space-x-2">
-            <ButtonNavbar text="Login" url="/login" />
-            <ButtonNavbar text="Registrarse" url="/register" />
+            <ButtonNavbar text="Tu Cuenta" url="https://auth.osuc.dev/?ref=https://v2-ramos-osuc-dev.osuc.dev" />
           </div>
         </div>
 
