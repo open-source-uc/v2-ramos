@@ -38,7 +38,7 @@ export default function Header() {
     <header className="space-between tablet:space-x-8 flex w-full items-center py-8 px-4">
       <a href="/">
         <img
-          src="/logos/OSUC.svg"
+          src="/logos/Placeholder.svg"
           alt="Open Source eUC Logo"
           width={200}
           height={200}

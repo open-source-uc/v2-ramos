@@ -131,9 +131,7 @@
     min-height: 100vh;
     min-width: 100vw;
     width: 100%;
-    /* Improve text readability */
     line-height: 1.5;
-    /* Prevent horizontal scroll on mobile */
     overflow-x: hidden;
   }
   
