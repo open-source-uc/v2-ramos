@@ -1,8 +1,9 @@
 ---
-import "../styles/global.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
+import { Banner } from "@/components/ui/banner";
 ---
 
 <!doctype html>
@@ -16,10 +17,16 @@ import ClientRouter from "astro/components/ClientRouter.astro";
     <ClientRouter />
   </head>
   <body
-    class="bg-background text-foreground flex flex-col gap-4 px-2 sm:px-4 tablet:px-8 min-h-screen"
+    class="bg-background text-foreground min-h-screen"
   >
-    <Header client:only="react" />
-    <slot />
-	<Footer />
+    <!-- Promotional Banners -->
+    <Banner variant="red" size="lg" icon="SadIcon" client:only="react">
+      No le hagan caso al Rocka, hagan branches y pull requests. No hagan commits directamente a main.
+    </Banner>
+    <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
+      <Header client:only="react" />
+      <slot />
+      <Footer />
+    </main>   
   </body>
 </html>
