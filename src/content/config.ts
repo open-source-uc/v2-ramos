@@ -118,4 +118,5 @@ const contribuidores = defineCollection({
   });
 
 
+
 export const collections = { resources, recommendations, coursesScore, coursesStatic, contribuidores }
