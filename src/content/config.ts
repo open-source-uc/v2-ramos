@@ -43,6 +43,7 @@ const coursesScore = defineCollection({
                 "Authorization": `Bearer ${import.meta.env.API_SECRET}`,
             }
         });
+        console.log(import.meta.env.PROD);
         const data = await response.json() as CourseSummary[];
         return data.map((c) => ({
             id: c.id + "", // debe ser texto why, idk xd
