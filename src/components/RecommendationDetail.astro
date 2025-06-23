@@ -16,54 +16,86 @@ const { title, code, initiative, period, faculty, qualification, tags } =
   Astro.props;
 ---
 
-<article
-  class="px-4 sm:px-4 md:px-8 flex flex-col gap-6 md:gap-8 border border-border rounded-md py-4 md:py-6 w-full max-w-full overflow-hidden"
->
-  <header
-    class="flex flex-col lg:flex-row lg:justify-between gap-4 py-4 rounded-t-lg"
-  >
-    <h1
-      class="text-xl sm:text-2xl md:text-3xl text-center lg:text-left font-bold flex-1 break-words"
-      transition:name={`recommendation-title-${code}`}
+<article class="border border-border rounded-lg p-6 w-full max-w-4xl mx-auto">
+  <div class="space-y-6">
+    <headeron
+      class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4"
     >
-      {title}
-    </h1>
-    <div class="flex items-center justify-center">
-      <Pill size="md"> Iniciativa estudiantil reconocida </Pill>
+      <div class="flex flex-col items-start gap-4">
+        <h1
+          class="font-semibold text-2xl md:text-3xl leading-tight flex-1"
+          style={`view-transition-name: recommendation-title-${code}-${initiative.replace(/\s/g, "")}`}
+        >
+          {title}
+        </h1>
+        <Pill size="md"> Iniciativa estudiantil reconocida </Pill>
+      </div>
+      <span
+        class="text-lg font-semibold font-mono"
+        aria-label={`Código del curso: ${code}`}
+        style={`view-transition-name: code-${code}-${initiative.replace(/\s/g, "")}`}
+      >
+        {code}
+      </span>
+    </headeron>
+    <div
+      class="font-medium text-lg"
+      style={`view-transition-name: initiative-${code}-${initiative.replace(/\s/g, "")}`}
+    >
+      {initiative}
     </div>
-  </header>
-  <div class="flex flex-col lg:flex-row gap-4 lg:gap-8">
-    <dl class="lg:w-xs xl:w-2xl grid grid-cols-2 gap-2 sm:gap-4">
-      <div transition:name={`period-${code}`}>
-        <dt class="font-semibold">Period:</dt>
-        <dd>{period}</dd>
-      </div>
-      <div transition:name={`code-${code}`}>
-        <dt class="font-semibold">Code:</dt>
-        <dd>{code}</dd>
-      </div>
-      <div transition:name={`faculty-${code}`}>
-        <dt class="font-semibold">Faculty:</dt>
-        <dd>{faculty}</dd>
-      </div>
-      <div transition:name={`qualification-${code}`}>
-        <dt class="font-semibold">Qualification:</dt>
-        <dd>{qualification} ⭐</dd>
-      </div>
-      <div transition:name={`tags-${code}`}>
-        <dt class="font-semibold">Tags:</dt>
-        <dd>
-          <ul class="list-disc pl-4">
-            {tags.map((tag: string) => <li>{tag}</li>)}
-          </ul>
-        </dd>
-      </div>
-    </dl>
-    <div class="w-full flex-1 mt-4 lg:mt-0">
-      <h2 class="text-xl sm:text-2xl font-bold mb-4">Recomendación:</h2>
-      <div class="content-markdown">
-        <slot />
-      </div>
+    <div class="flex items-center gap-2 text-base">
+      <span
+        aria-label="Facultad"
+        style={`view-transition-name: faculty-${code}-${initiative.replace(/\s/g, "")}`}
+        >{faculty}</span
+      >
+      <span aria-hidden="true">•</span>
+      <span
+        aria-label="Período"
+        style={`view-transition-name: period-${code}-${initiative.replace(/\s/g, "")}`}
+        >{period}</span
+      >
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <span
+      class="text-base text-muted-foreground"
+      style={`view-transition-name: qualification-label-${code}-${initiative.replace(/\s/g, "")}`}
+    >
+      Calificación:
+    </span>
+    <div
+      class="font-semibold text-xl"
+      aria-label={`Calificación: ${qualification} de 7`}
+      style={`view-transition-name: qualification-${code}-${initiative.replace(/\s/g, "")}`}
+    >
+      <span class="text-2xl">{qualification}</span>
+      <span class="text-lg text-muted-foreground">/7</span>
+    </div>
+  </div>
+  <footer
+    class="flex flex-wrap gap-2"
+    aria-label="Etiquetas"
+    role="list"
+    style={`view-transition-name: tags-${code}-${initiative.replace(/\s/g, "")}`}
+  >
+    {
+      tags.map((tag: string) => (
+        <span
+          class="inline-block bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full"
+          role="listitem"
+        >
+          {tag}
+        </span>
+      ))
+    }
+  </footer>
+
+  <div class="border-t border-border pt-6">
+    <h2 class="text-xl font-bold mb-4">Recomendación:</h2>
+    <div class="content-markdown">
+      <slot />
     </div>
   </div>
 </article>

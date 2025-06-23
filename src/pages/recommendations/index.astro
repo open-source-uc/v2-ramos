@@ -1,68 +1,18 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import RecommendationCard from "../../components/RecommendationCard.astro";
+import { SearchableRecommendationsDisplay } from "../../components/SearchableRecommendationsDisplay";
 
 const recommendations = await getCollection("recommendations");
-const search = Astro.url.searchParams.get("search") || "";
+const searchParam = Astro.url.searchParams.get("search") || "";
 ---
 
 <Layout>
-  <main>
-    <section class="flex flex-col gap-8">
-      <header class="flex flex-col md:flex-row justify-between">
-        <h1 class="text-2xl font-bold">Recommendations</h1>
-      </header>
-      <form
-        class="flex items-center gap-4"
-        action="/recommendations"
-        method="GET"
-      >
-        <Input
-          type="text"
-          name="search"
-          placeholder="Buscar por iniciativa..."
-          defaultValue={search}
-        />
-        <Button type="submit" variant="outline">Buscar</Button>
-      </form>
-      <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        {
-          recommendations.map((rec) => {
-            const { slug, data } = rec;
-            const {
-              title,
-              code,
-              initiative,
-              period,
-              faculty,
-              qualification,
-              tags,
-              resume,
-            } = data;
-            if (
-              search &&
-              !initiative.toLowerCase().includes(search.toLowerCase())
-            ) {
-              return null; // Skip this recommendation if it doesn't match the search
-            }
-            return (
-              <RecommendationCard
-                title={title}
-                code={code}
-                initiative={initiative}
-                period={period}
-                faculty={faculty}
-                qualification={qualification}
-                tags={tags}
-                resume={resume}
-              />
-            );
-          })
-        }
-      </div>
-    </section>
+  <main class="container mx-auto py-4">
+    <SearchableRecommendationsDisplay
+      recommendations={recommendations}
+      initialSearchValue={searchParam}
+      client:only="react"
+    />
   </main>
 </Layout>

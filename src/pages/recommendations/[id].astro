@@ -33,13 +33,14 @@ const { Content } = await render(rec);
 ---
 
 <Layout>
-  <main
-    class="flex flex-col gap-4 min-h-screen w-full max-w-full overflow-hidden"
-  >
+  <main class="container mx-auto py-8 px-4">
     <a
-      class="text-blue-600 hover:text-blue-800 hover:underline"
-      href="/recommendations">⬅ Go back</a
+      class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+      href="/recommendations"
     >
+      ← Volver a recomendaciones
+    </a>
+
     <RecommendationDetail
       title={title}
       code={code}
