@@ -84,8 +84,8 @@ const coursesScore = defineCollection({
         return data.map((c) => {
             const staticInfo = coursesData[c.sigle];
             return {
-                id: c.sigle + "", // debe ser texto why, idk xd
-                db_id: c.id,
+                id: c.sigle, // id para buscar con collection
+                db_id: c.id, // id de la base de datos, para buscar con API, igual tambien se puede usar el id en la base de datos, y es LO RECOMENDADO
                 sigle: c.sigle,
                 name: staticInfo?.name ?? c.sigle,
                 school_id: c.school_id,
@@ -109,7 +109,7 @@ const coursesScore = defineCollection({
     },
     schema: z.object({
         id: z.string().transform((val) => val ?? ""),
-        db_id: z.string().transform((val) => val ?? ""),
+        db_id: z.number().nullable().transform((val) => val ?? 0),
         sigle: z.string().transform((val) => val ?? ""),
         name: z.string().transform((val) => val ?? ""),
         school_id: z.number().nullable().transform((val) => val ?? 0),
