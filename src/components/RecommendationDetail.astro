@@ -1,0 +1,68 @@
+---
+import { Pill } from "./ui/pill";
+
+export interface Props {
+  title: string;
+  code: string;
+  initiative: string;
+  period: string;
+  faculty: string;
+  qualification: number;
+  tags: string[];
+  children?: any;
+}
+
+const { title, code, initiative, period, faculty, qualification, tags } =
+  Astro.props;
+---
+
+<section
+  class="px-4 sm:px-4 md:px-8 flex flex-col gap-6 md:gap-8 border border-border rounded-md py-4 md:py-6 w-full max-w-full overflow-hidden"
+  transition:name={`recommendation-article-${code}`}
+>
+  <header class="flex flex-col gap-4 py-4 rounded-t-lg">
+    <h1
+      class="text-xl sm:text-2xl md:text-3xl font-bold text-center flex-1 break-words"
+      transition:name={`recommendation-title-${code}`}
+    >
+      {title}
+    </h1>
+    <div class="flex items-center justify-center">
+      <Pill size="md"> Iniciativa estudiantil reconocida </Pill>
+    </div>
+  </header>
+  <div class="flex flex-col lg:flex-row gap-4 lg:gap-8">
+    <dl class="w-full lg:w-2xl grid grid-cols-2 gap-2 sm:gap-4">
+      <div transition:name={`period-${code}`}>
+        <dt class="font-semibold">Period:</dt>
+        <dd>{period}</dd>
+      </div>
+      <div transition:name={`code-${code}`}>
+        <dt class="font-semibold">Code:</dt>
+        <dd>{code}</dd>
+      </div>
+      <div transition:name={`faculty-${code}`}>
+        <dt class="font-semibold">Faculty:</dt>
+        <dd>{faculty}</dd>
+      </div>
+      <div transition:name={`qualification-${code}`}>
+        <dt class="font-semibold">Qualification:</dt>
+        <dd>{qualification} ⭐</dd>
+      </div>
+      <div transition:name={`tags-${code}`}>
+        <dt class="font-semibold">Tags:</dt>
+        <dd>
+          <ul class="list-disc pl-4">
+            {tags.map((tag: string) => <li>{tag}</li>)}
+          </ul>
+        </dd>
+      </div>
+    </dl>
+    <div class="w-full lg:flex-1 mt-4 lg:mt-0">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4">Recomendación:</h2>
+      <div class="content-markdown">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>
