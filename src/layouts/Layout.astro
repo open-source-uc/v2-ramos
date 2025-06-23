@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header";
+import Footer from "../components/Footer.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
 ---
 
@@ -11,7 +12,7 @@ import ClientRouter from "astro/components/ClientRouter.astro";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Ramos UC</title>
+    <title>BuscaRamos</title>
     <ClientRouter />
   </head>
   <body
@@ -19,5 +20,6 @@ import ClientRouter from "astro/components/ClientRouter.astro";
   >
     <Header client:only="react" />
     <slot />
+	<Footer />
   </body>
 </html>

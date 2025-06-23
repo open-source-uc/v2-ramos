@@ -136,3 +136,9 @@ export function EditIcon({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M128-128v-136.77l557.23-558.77q5.15-5.48 11.57-6.97 6.43-1.49 12.49-1.49 6.06 0 11.12.54 5.05.54 11.44 6.15l92.69 91.93q5.61 6.38 6.54 12 .92 5.63.92 12.25 0 6.13-1.74 12.06-1.74 5.92-6.72 11.07L264.77-128H128Zm565.15-520.46L754-708.54 708.54-753l-60.08 59.85 44.69 44.69Z"/></svg>
   );
 }
+
+export function ResourcesIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M218.62-128q-38.35 0-64.48-26.14Q128-180.27 128-218.62v-522.76q0-38.35 26.14-64.48Q180.27-832 218.62-832h522.76q38.35 0 64.48 26.14Q832-779.73 832-741.38v522.76q0 38.35-26.14 64.48Q779.73-128 741.38-128H218.62ZM488-513.38l96-57.7 96 57.7V-766H488v252.62Z"/></svg>
+  );
+}

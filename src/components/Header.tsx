@@ -12,6 +12,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 
 const components: { title: string; href: string; description: string }[] = [
@@ -22,8 +23,13 @@ const components: { title: string; href: string; description: string }[] = [
   },
   {
     title: "Sobre las Áreas de Formación General",
-    href: "/docs/primitives/hover-card",
+    href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
+  },
+  {
+    title: "Recomendados por la Comunidad",
+    href: "/recommendations",
+    description: "Descubre los cursos recomendados por la comunidad estudiantil.",
   }
 ];
 
@@ -32,18 +38,11 @@ export default function Header() {
     <header className="space-between tablet:space-x-8 flex w-full items-center py-8 px-4">
       <a href="/">
         <img
-          src="logos/UC_Logo_Big.svg"
-          alt="UC Logo"
+          src="/logos/OSUC.svg"
+          alt="Open Source eUC Logo"
           width={200}
           height={200}
-          className="tablet:hidden h-20 w-auto"
-        />
-        <img
-          src="logos/UC_Logo_Small.svg"
-          alt="UC Logo"
-          width={200}
-          height={200}
-          className="tablet:block hidden h-20 w-auto"
+          className="h-20 w-auto"
         />
       </a>
 
@@ -78,7 +77,7 @@ export default function Header() {
                           href="https://osuc.dev"
                         >
                           <div className="mt-4 mb-2 text-lg font-medium">
-                            Creado por <br /> Open Source UC
+                            Creado por <br /> Open Source eUC
                           </div>
                           <p className="text-background text-sm leading-tight">
                             La comunidad estudiantil de innovación y desarrollo de software de la UC.
@@ -89,7 +88,7 @@ export default function Header() {
                     <ListItem href="/404" title="Cómo protegemos tu privacidad">
                       Descubre cómo protegemos tu privacidad y datos personales.
                     </ListItem>
-                    <ListItem href="/resources/respect" title="RamosUC: Un espacio libre de acoso">
+                    <ListItem href="/resources/respect" title="BuscaRamos: Un espacio libre de acoso">
                       Conóce cómo mantenemos un ambiente seguro y respetuoso.
                     </ListItem>
                     <ListItem href="/404" title="Conóce a nuestro equipo">
@@ -97,6 +96,11 @@ export default function Header() {
                     </ListItem>
                   </ul>
                 </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                  <a href="/docs">OTRO</a>
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
