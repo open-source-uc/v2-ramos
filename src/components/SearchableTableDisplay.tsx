@@ -82,7 +82,7 @@ export function SearchableTableDisplay({ data, initialSearchValue = "" }: Search
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Filtrar por Área de Formación General</SelectLabel>
-                <SelectItem value="all">Todas las áreas de formación general</SelectItem>
+                <SelectItem value="all">Todos los cursos</SelectItem>
                 {uniqueAreas.map((area) => (
                   <SelectItem key={area} value={area}>
                     {area}
@@ -99,8 +99,8 @@ export function SearchableTableDisplay({ data, initialSearchValue = "" }: Search
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Filtrar por Facultad</SelectLabel>
-                <SelectItem value="all">Todas las facultades</SelectItem>
+                <SelectLabel>Filtrar por Unidad Académica</SelectLabel>
+                <SelectItem value="all">Todas las unidades académicas</SelectItem>
                 {uniqueSchools.map((school) => (
                   <SelectItem key={school} value={school}>
                     {school}
