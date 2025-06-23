@@ -1,4 +1,4 @@
-interface CourseSummary {
+export interface CourseSummary {
     id: number;
     sigle: string;
     school_id: number;
@@ -16,7 +16,7 @@ interface CourseSummary {
     sort_index: number;
 }
 
-interface CourseReview {
+export interface CourseReview {
     id: number;
     user_id: number;
     course_sigle: string;
@@ -32,9 +32,26 @@ interface CourseReview {
     updated_at: string;
 }
 
-interface CourseStaticInfo {
+export interface CourseStaticInfo {
     sigle: string;
     name: string;
     credits: number;
     program: string;
+}
+
+export interface RecommendationData {
+    title: string;
+    code: string;
+    initiative: string;
+    period: string;
+    faculty: string;
+    qualification: number;
+    tags: string[];
+    resume: string;
+}
+
+export interface Recommendation {
+    id: string;
+    slug: string;
+    data: RecommendationData;
 }
