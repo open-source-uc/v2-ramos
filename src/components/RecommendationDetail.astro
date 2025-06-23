@@ -16,13 +16,14 @@ const { title, code, initiative, period, faculty, qualification, tags } =
   Astro.props;
 ---
 
-<section
+<article
   class="px-4 sm:px-4 md:px-8 flex flex-col gap-6 md:gap-8 border border-border rounded-md py-4 md:py-6 w-full max-w-full overflow-hidden"
-  transition:name={`recommendation-article-${code}`}
 >
-  <header class="flex flex-col gap-4 py-4 rounded-t-lg">
+  <header
+    class="flex flex-col lg:flex-row lg:justify-between gap-4 py-4 rounded-t-lg"
+  >
     <h1
-      class="text-xl sm:text-2xl md:text-3xl font-bold text-center flex-1 break-words"
+      class="text-xl sm:text-2xl md:text-3xl text-center lg:text-left font-bold flex-1 break-words"
       transition:name={`recommendation-title-${code}`}
     >
       {title}
@@ -32,7 +33,7 @@ const { title, code, initiative, period, faculty, qualification, tags } =
     </div>
   </header>
   <div class="flex flex-col lg:flex-row gap-4 lg:gap-8">
-    <dl class="w-full lg:w-2xl grid grid-cols-2 gap-2 sm:gap-4">
+    <dl class="lg:w-xs xl:w-2xl grid grid-cols-2 gap-2 sm:gap-4">
       <div transition:name={`period-${code}`}>
         <dt class="font-semibold">Period:</dt>
         <dd>{period}</dd>
@@ -58,11 +59,11 @@ const { title, code, initiative, period, faculty, qualification, tags } =
         </dd>
       </div>
     </dl>
-    <div class="w-full lg:flex-1 mt-4 lg:mt-0">
+    <div class="w-full flex-1 mt-4 lg:mt-0">
       <h2 class="text-xl sm:text-2xl font-bold mb-4">Recomendación:</h2>
       <div class="content-markdown">
         <slot />
       </div>
     </div>
   </div>
-</section>
+</article>
