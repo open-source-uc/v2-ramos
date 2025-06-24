@@ -83,7 +83,7 @@ export const columns: ColumnDef<Course>[] = [
             )
         },
         cell: ({ row }) => {
-            return <div>{row.original.credits}</div>
+            return <div c>{row.original.credits}</div>
         }
     },
     {
@@ -131,7 +131,7 @@ export const columns: ColumnDef<Course>[] = [
         },
         cell: ({ row }) => {
             const { superlikes, likes, dislikes } = row.original
-            const totalReviews = 2 * superlikes + likes + dislikes
+            const totalReviews = superlikes + likes + dislikes
 
             if (totalReviews === 0) {
                 return (
@@ -139,7 +139,7 @@ export const columns: ColumnDef<Course>[] = [
                 )
             }
 
-            const positiveReviews = 2 * superlikes + likes
+            const positiveReviews = superlikes + likes
             const positivePercentage = (positiveReviews / totalReviews) * 100
 
             let sentimentType: "veryHappy" | "happy" | "neutral" | "sad" | "verySad"
@@ -160,6 +160,8 @@ export const columns: ColumnDef<Course>[] = [
                 <Sentiment
                     sentiment={sentimentType}
                     size="sm"
+                    percentage={positivePercentage}
+                    reviewCount={totalReviews}
                     ariaLabel={`${Math.round(positivePercentage)}% de reseñas positivas de ${totalReviews} total`}
                 />
             )
