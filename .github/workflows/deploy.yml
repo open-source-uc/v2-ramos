@@ -11,8 +11,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -28,5 +26,6 @@ jobs:
       - name: Run build
         env:
           API_SECRET: ${{ secrets.API_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: npm run deploy
 
