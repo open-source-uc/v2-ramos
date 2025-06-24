@@ -36,7 +36,7 @@ export function LandingSearch() {
   ]
 
   return (
-    <div className="relative max-w-4xl w-full mx-auto my-8 tablet:my-12 desktop:my-16 px-4 tablet:px-6 desktop:px-8">
+    <div className="relative max-w-4xl w-full mx-auto mb-8 mt-24 tablet:my-12 desktop:my-16 px-4 tablet:px-6 desktop:px-8">
       {/* Floating Pills - Only visible on desktop */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {floatingPills.map((pill, index) => (
