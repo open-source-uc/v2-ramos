@@ -136,7 +136,6 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const { superlikes, likes, dislikes } = row.original;
       const totalReviews = 2 * superlikes + likes + dislikes;
-
       if (totalReviews === 0) {
         return <Sentiment sentiment="question" size="sm" />;
       }

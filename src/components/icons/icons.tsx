@@ -386,3 +386,31 @@ export function GitHubIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function MenuIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      className={className}
+    >
+      <path d="M128-251.23v-66h704v66H128ZM128-448v-66h704v66H128Zm0-196.77v-66h704v66H128Z" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      className={className}
+    >
+      <path d="M252-203.69 205.69-252l227-228-227-230L252-758.31l229 230 227-230L754.31-710l-227 230 227 228L708-203.69l-227-230-229 230Z" />
+    </svg>
+  );
+}
