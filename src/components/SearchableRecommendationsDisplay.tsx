@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Pill } from "./ui/pill";
+import { Pill } from "@/components/ui/pill";
 import { cn } from "@/lib/utils";
 import type { Recommendation } from "@/types";
 

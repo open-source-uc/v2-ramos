@@ -1,13 +1,20 @@
 ---
 import { getCollection } from "astro:content";
-import BlogCard from "@/components/BlogCard.astro";
+import BlogCard from "@/components/BlogCard.tsx";
 import Layout from "@/layouts/Layout.astro";
 
 const blogs = await getCollection("blogs");
 ---
 
 <Layout>
-  <main class="grid lg:grid-cols-2">
+  <main class="grid md:grid-cols-2 lg:grid-cols-3">
+    <div
+      class="w-full h-[60vh] lg:h-[70vh] flex flex-col justify-center lg:col-start-1 lg:col-end-4 md:col-start-1 md:col-end-3"
+    >
+      <h1 class="text-3xl md:text-5xl text-center font-bold">
+        Lee lo que las iniciativas te quieren contar
+      </h1>
+    </div>
     {
       blogs.map((blog) => {
         const { data } = blog;
