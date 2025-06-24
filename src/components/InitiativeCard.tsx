@@ -43,7 +43,7 @@ export default function InitiativeCard({
               {faculty}
             </Pill>
           </div>
-        </header>{" "}
+        </header>
         {description && (
           <div className="mt-auto">
             <p className="text-muted-foreground text-sm line-clamp-2">
