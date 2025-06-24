@@ -1,5 +1,6 @@
 import { Pill } from "@/components/ui/pill";
 import { ClockIcon } from "@/components/icons/icons";
+import { createSlug } from "@/lib/utils";
 
 interface BlogCardProps {
   title: string;
@@ -16,9 +17,7 @@ export default function BlogCard({
   readtime,
   tags,
 }: BlogCardProps) {
-  const blogUrl = `/blogs/${authorName
-    .toLowerCase()
-    .replace(/\s+/g, "-")}/${title.toLowerCase().replace(/\s+/g, "-")}`;
+  const blogUrl = `/blogs/${createSlug(authorName)}/${createSlug(title)}`;
 
   return (
     <a href={blogUrl}>

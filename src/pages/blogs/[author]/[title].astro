@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import ContentPage from "@/components/ContentPage.astro";
 import { EditIcon, ClockIcon } from "../../../components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
+import { createSlug } from "@/lib/utils";
 
 export const prerender = true;
 
@@ -11,10 +12,8 @@ export async function getStaticPaths() {
 
   return blogs.map((blog) => ({
     params: {
-      author: (blog.data.author?.name || "unknown")
-        .toLowerCase()
-        .replace(/\s+/g, "-"),
-      title: (blog.data.title || blog.slug).toLowerCase().replace(/\s+/g, "-"),
+      author: createSlug(blog.data.author?.name || "unknown"),
+      title: createSlug(blog.data.title || blog.slug),
     },
     props: { blog },
   }));
