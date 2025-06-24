@@ -25,7 +25,7 @@ export default function BlogCard({
         <header>
           <h2 className="text-2xl font-bold">{title}</h2>
           <p className="text-sm text-gray-500">
-            {authorName} - {title}
+            {authorName}
           </p>
         </header>
         <div>
