@@ -15,10 +15,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Wrangler
-        uses: cloudflare/wrangler-action@v2
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
         with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          node-version: '22'
 
-      - name: Publish worker
-        run: wrangler deploy
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run deploy
+        run: npm run deploy
