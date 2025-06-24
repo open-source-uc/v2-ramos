@@ -1,4 +1,3 @@
-import type { CourseSummary } from "@/types";
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 import CoursesRaw from "../../migration/json/2025-1.json";
