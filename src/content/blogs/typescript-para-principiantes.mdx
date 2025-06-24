@@ -1,0 +1,485 @@
+---
+title: "TypeScript para Principiantes: Tu Primera Aplicación Tipada"
+readtime: 8
+description: "Aprende TypeScript desde cero con ejemplos prácticos. Descubre cómo los tipos estáticos pueden mejorar tu código JavaScript y prevenir errores comunes."
+author:
+  name: "Diego Martínez"
+  title: "Full Stack Developer"
+  picture: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+  link: "https://github.com/diegomartinez"
+tags:
+  - typescript
+  - javascript
+  - tipos
+  - desarrollo
+  - principiantes
+---
+
+# TypeScript para Principiantes: Tu Primera Aplicación Tipada
+
+TypeScript es un superset de JavaScript que añade tipos estáticos opcionales al lenguaje. Si ya sabes JavaScript, aprender TypeScript te ayudará a escribir código más robusto y mantenible.
+
+## ¿Por qué TypeScript?
+
+### Ventajas principales:
+- **Detección temprana de errores**: Los errores se detectan en tiempo de compilación
+- **Mejor autocompletado**: Los editores pueden sugerir propiedades y métodos
+- **Refactoring más seguro**: Cambiar código es menos propenso a errores
+- **Documentación viva**: Los tipos sirven como documentación del código
+
+### Comparación básica:
+
+```javascript
+// JavaScript
+function saludar(nombre) {
+  return "Hola, " + nombre.toUpperCase();
+}
+
+saludar(123); // Error en runtime: 123.toUpperCase is not a function
+```
+
+```typescript
+// TypeScript
+function saludar(nombre: string): string {
+  return "Hola, " + nombre.toUpperCase();
+}
+
+saludar(123); // Error en compilación: Argument of type 'number' is not assignable to parameter of type 'string'
+```
+
+## Configuración Inicial
+
+### Instalación
+```bash
+# Instalar TypeScript globalmente
+npm install -g typescript
+
+# O usar en un proyecto específico
+npm install --save-dev typescript
+npm install --save-dev @types/node
+
+# Crear archivo de configuración
+npx tsc --init
+```
+
+### Configuración básica (tsconfig.json)
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## Tipos Básicos
+
+### Tipos Primitivos
+```typescript
+// Números
+let edad: number = 25;
+let precio: number = 99.99;
+
+// Strings
+let nombre: string = "Ana";
+let mensaje: string = `Hola, ${nombre}`;
+
+// Booleanos
+let activo: boolean = true;
+let completado: boolean = false;
+
+// Arrays
+let numeros: number[] = [1, 2, 3, 4, 5];
+let nombres: string[] = ["Ana", "Luis", "María"];
+// Sintaxis alternativa
+let scores: Array<number> = [98, 87, 92];
+```
+
+### Tipos de Objeto
+```typescript
+// Objeto simple
+let persona: { nombre: string; edad: number } = {
+  nombre: "Carlos",
+  edad: 30
+};
+
+// Con propiedades opcionales
+let config: { tema: string; debug?: boolean } = {
+  tema: "oscuro"
+  // debug es opcional
+};
+```
+
+## Interfaces
+
+Las interfaces definen la estructura de los objetos:
+
+```typescript
+interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+  activo?: boolean; // Propiedad opcional
+}
+
+interface UsuarioCompleto extends Usuario {
+  fechaRegistro: Date;
+  preferencias: {
+    tema: string;
+    idioma: string;
+  };
+}
+
+// Uso de interfaces
+const usuario: Usuario = {
+  id: 1,
+  nombre: "María González",
+  email: "maria@ejemplo.com"
+};
+
+function crearUsuario(datos: Usuario): UsuarioCompleto {
+  return {
+    ...datos,
+    activo: datos.activo ?? true,
+    fechaRegistro: new Date(),
+    preferencias: {
+      tema: "claro",
+      idioma: "es"
+    }
+  };
+}
+```
+
+## Funciones Tipadas
+
+```typescript
+// Función básica
+function sumar(a: number, b: number): number {
+  return a + b;
+}
+
+// Función con parámetros opcionales
+function saludar(nombre: string, apellido?: string): string {
+  if (apellido) {
+    return `Hola, ${nombre} ${apellido}`;
+  }
+  return `Hola, ${nombre}`;
+}
+
+// Función con valor por defecto
+function crearMensaje(texto: string, importante: boolean = false): string {
+  return importante ? `¡IMPORTANTE! ${texto}` : texto;
+}
+
+// Arrow functions
+const multiplicar = (x: number, y: number): number => x * y;
+
+// Función que devuelve una promesa
+async function obtenerUsuario(id: number): Promise<Usuario> {
+  const response = await fetch(`/api/usuarios/${id}`);
+  return response.json();
+}
+```
+
+## Tipos Avanzados
+
+### Union Types
+```typescript
+// Puede ser string o number
+let id: string | number;
+id = "user_123";
+id = 123;
+
+// Función que acepta múltiples tipos
+function formatearId(id: string | number): string {
+  return `ID: ${id}`;
+}
+```
+
+### Literal Types
+```typescript
+// Solo puede ser uno de estos valores específicos
+type Tema = "claro" | "oscuro" | "auto";
+type EstadoPedido = "pendiente" | "procesando" | "enviado" | "entregado";
+
+interface Configuracion {
+  tema: Tema;
+  modo: "desarrollo" | "producción";
+}
+
+const config: Configuracion = {
+  tema: "oscuro",
+  modo: "desarrollo"
+};
+```
+
+### Type Aliases
+```typescript
+// Alias para tipos complejos
+type CoordenadasGPS = {
+  latitud: number;
+  longitud: number;
+};
+
+type EventoClick = {
+  tipo: "click";
+  elemento: string;
+  coordenadas: CoordenadasGPS;
+};
+
+type EventoTeclado = {
+  tipo: "keypress";
+  tecla: string;
+  modificadores: string[];
+};
+
+type Evento = EventoClick | EventoTeclado;
+
+function manejarEvento(evento: Evento): void {
+  switch (evento.tipo) {
+    case "click":
+      console.log(`Click en ${evento.elemento}`);
+      break;
+    case "keypress":
+      console.log(`Tecla presionada: ${evento.tecla}`);
+      break;
+  }
+}
+```
+
+## Clases en TypeScript
+
+```typescript
+class Producto {
+  private _id: number;
+  public nombre: string;
+  protected precio: number;
+
+  constructor(id: number, nombre: string, precio: number) {
+    this._id = id;
+    this.nombre = nombre;
+    this.precio = precio;
+  }
+
+  // Getter
+  get id(): number {
+    return this._id;
+  }
+
+  // Método público
+  public obtenerInfo(): string {
+    return `${this.nombre} - $${this.precio}`;
+  }
+
+  // Método protegido (accesible en subclases)
+  protected calcularDescuento(porcentaje: number): number {
+    return this.precio * (1 - porcentaje / 100);
+  }
+}
+
+class ProductoConDescuento extends Producto {
+  private descuento: number;
+
+  constructor(id: number, nombre: string, precio: number, descuento: number) {
+    super(id, nombre, precio);
+    this.descuento = descuento;
+  }
+
+  public obtenerPrecioConDescuento(): number {
+    return this.calcularDescuento(this.descuento);
+  }
+}
+
+// Uso
+const producto = new ProductoConDescuento(1, "Laptop", 1000, 15);
+console.log(producto.obtenerInfo()); // "Laptop - $1000"
+console.log(producto.obtenerPrecioConDescuento()); // 850
+```
+
+## Generics
+
+Los generics permiten crear código reutilizable:
+
+```typescript
+// Función genérica
+function obtenerPrimero<T>(array: T[]): T | undefined {
+  return array[0];
+}
+
+const numeros = [1, 2, 3, 4, 5];
+const nombres = ["Ana", "Luis", "María"];
+
+const primerNumero = obtenerPrimero(numeros); // tipo: number | undefined
+const primerNombre = obtenerPrimero(nombres); // tipo: string | undefined
+
+// Interface genérica
+interface Respuesta<T> {
+  datos: T;
+  exitoso: boolean;
+  mensaje?: string;
+}
+
+interface ListaUsuarios {
+  usuarios: Usuario[];
+  total: number;
+}
+
+// Uso de la interface genérica
+const respuestaUsuarios: Respuesta<ListaUsuarios> = {
+  datos: {
+    usuarios: [/* ... */],
+    total: 150
+  },
+  exitoso: true
+};
+
+const respuestaString: Respuesta<string> = {
+  datos: "Operación completada",
+  exitoso: true
+};
+```
+
+## Proyecto Práctico: Lista de Tareas
+
+Vamos a crear una aplicación simple de lista de tareas:
+
+```typescript
+// types.ts
+export interface Tarea {
+  id: number;
+  titulo: string;
+  descripcion?: string;
+  completada: boolean;
+  fechaCreacion: Date;
+  fechaVencimiento?: Date;
+  prioridad: "baja" | "media" | "alta";
+}
+
+export type NuevaTarea = Omit<Tarea, "id" | "fechaCreacion" | "completada">;
+
+// gestorTareas.ts
+export class GestorTareas {
+  private tareas: Tarea[] = [];
+  private siguienteId: number = 1;
+
+  public agregarTarea(nuevaTarea: NuevaTarea): Tarea {
+    const tarea: Tarea = {
+      id: this.siguienteId++,
+      completada: false,
+      fechaCreacion: new Date(),
+      ...nuevaTarea
+    };
+
+    this.tareas.push(tarea);
+    return tarea;
+  }
+
+  public obtenerTareas(): Tarea[] {
+    return [...this.tareas];
+  }
+
+  public obtenerTareasPorPrioridad(prioridad: Tarea["prioridad"]): Tarea[] {
+    return this.tareas.filter(tarea => tarea.prioridad === prioridad);
+  }
+
+  public marcarComoCompletada(id: number): boolean {
+    const tarea = this.tareas.find(t => t.id === id);
+    if (tarea) {
+      tarea.completada = true;
+      return true;
+    }
+    return false;
+  }
+
+  public eliminarTarea(id: number): boolean {
+    const indice = this.tareas.findIndex(t => t.id === id);
+    if (indice !== -1) {
+      this.tareas.splice(indice, 1);
+      return true;
+    }
+    return false;
+  }
+
+  public obtenerEstadisticas(): { total: number; completadas: number; pendientes: number } {
+    const completadas = this.tareas.filter(t => t.completada).length;
+    return {
+      total: this.tareas.length,
+      completadas,
+      pendientes: this.tareas.length - completadas
+    };
+  }
+}
+
+// main.ts
+const gestor = new GestorTareas();
+
+// Agregar algunas tareas
+gestor.agregarTarea({
+  titulo: "Aprender TypeScript",
+  descripcion: "Completar el tutorial básico",
+  prioridad: "alta",
+  fechaVencimiento: new Date("2024-07-01")
+});
+
+gestor.agregarTarea({
+  titulo: "Revisar emails",
+  prioridad: "media"
+});
+
+gestor.agregarTarea({
+  titulo: "Organizar escritorio",
+  prioridad: "baja"
+});
+
+// Usar el gestor
+console.log("Todas las tareas:", gestor.obtenerTareas());
+console.log("Tareas de alta prioridad:", gestor.obtenerTareasPorPrioridad("alta"));
+
+gestor.marcarComoCompletada(1);
+console.log("Estadísticas:", gestor.obtenerEstadisticas());
+```
+
+## Consejos para Principiantes
+
+### 1. Empieza gradualmente
+```typescript
+// Puedes empezar sin tipos y agregarlos gradualmente
+let datos; // any (implícito)
+let datos: any; // any (explícito)
+let datos: unknown; // más seguro que any
+```
+
+### 2. Usa inferencia de tipos
+```typescript
+// TypeScript puede inferir tipos automáticamente
+let mensaje = "Hola"; // string (inferido)
+let numeros = [1, 2, 3]; // number[] (inferido)
+
+// No es necesario escribir:
+let mensaje: string = "Hola";
+```
+
+### 3. Utiliza herramientas
+- **VS Code**: Excelente soporte para TypeScript
+- **Prettier**: Formateo automático
+- **ESLint**: Linting con reglas específicas de TypeScript
+
+## Conclusión
+
+TypeScript añade una capa de seguridad y productividad a JavaScript sin cambiar radicalmente cómo escribes código. La inversión inicial en aprender los tipos se paga rápidamente con código más robusto y menos errores.
+
+**Próximos pasos:**
+1. Practica con proyectos pequeños
+2. Aprende sobre tipos avanzados (mapped types, conditional types)
+3. Explora el ecosistema de types (DefinitelyTyped)
+4. Integra TypeScript en tu flujo de trabajo
+
+¡Empieza hoy mismo y experimenta la diferencia que hace tener tipos en tu código!

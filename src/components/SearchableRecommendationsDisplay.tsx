@@ -224,7 +224,7 @@ export function SearchableRecommendationsDisplay({
                           )}`,
                         }}
                       >
-                        <Pill size="md">Iniciativa estudiantil reconocida</Pill>
+                        <Pill size="sm">Iniciativa estudiantil reconocida</Pill>
                       </div>
                     </div>
                     <span
@@ -319,13 +319,9 @@ export function SearchableRecommendationsDisplay({
                     }}
                   >
                     {tags.map((tag: string, index: number) => (
-                      <span
-                        key={index}
-                        className="inline-block bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full"
-                        role="listitem"
-                      >
+                      <Pill key={index} size="sm" variant="ghost_blue">
                         {tag}
-                      </span>
+                      </Pill>
                     ))}
                   </footer>
                 </article>

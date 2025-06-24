@@ -1,0 +1,334 @@
+---
+title: "Guía Completa de CSS Grid: De Básico a Avanzado"
+readtime: 15
+description: "Aprende CSS Grid desde los conceptos fundamentales hasta técnicas avanzadas. Incluye ejemplos prácticos y casos de uso reales para crear layouts modernos y responsivos."
+author:
+  name: "Alex Rodríguez"
+  title: "UI/UX Designer & Frontend Developer"
+  picture: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+  link: "https://github.com/alexrodriguez"
+tags:
+  - css
+  - grid
+  - layout
+  - responsive-design
+  - frontend
+---
+
+# Guía Completa de CSS Grid: De Básico a Avanzado
+
+CSS Grid ha revolucionado la forma en que creamos layouts en la web. Esta poderosa herramienta nos permite crear diseños complejos de manera intuitiva y con un control total sobre la disposición de los elementos.
+
+## ¿Qué es CSS Grid?
+
+CSS Grid es un sistema de layout bidimensional que permite organizar elementos tanto en filas como en columnas simultáneamente. A diferencia de Flexbox, que es unidimensional, Grid nos da control completo sobre ambas dimensiones.
+
+### Conceptos Fundamentales
+
+Antes de empezar, es importante entender estos términos:
+
+- **Grid Container**: El elemento padre que contiene el grid
+- **Grid Items**: Los elementos hijos directos del container
+- **Grid Lines**: Las líneas que dividen el grid
+- **Grid Tracks**: Las filas y columnas del grid
+- **Grid Cells**: Los espacios individuales del grid
+- **Grid Areas**: Áreas rectangulares compuestas por una o más celdas
+
+## Configuración Básica
+
+### Creando tu primer Grid
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 100px 100px;
+  gap: 20px;
+}
+
+.item {
+  background-color: #3498db;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+}
+```
+
+```html
+<div class="container">
+  <div class="item">1</div>
+  <div class="item">2</div>
+  <div class="item">3</div>
+  <div class="item">4</div>
+  <div class="item">5</div>
+  <div class="item">6</div>
+</div>
+```
+
+### Unidades Flexibles con `fr`
+
+La unidad `fr` (fracción) es una de las características más poderosas de Grid:
+
+```css
+.container {
+  display: grid;
+  /* Tres columnas: fija, flexible, fija */
+  grid-template-columns: 200px 1fr 100px;
+  /* Dos columnas iguales */
+  grid-template-columns: 1fr 1fr;
+  /* Tres columnas con proporción 2:1:1 */
+  grid-template-columns: 2fr 1fr 1fr;
+}
+```
+
+## Técnicas Avanzadas
+
+### Grid Template Areas
+
+Una forma muy intuitiva de definir layouts complejos:
+
+```css
+.layout {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+  grid-template-columns: 200px 1fr 1fr;
+  grid-template-rows: 80px 1fr 60px;
+  min-height: 100vh;
+  gap: 20px;
+}
+
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+```
+
+### Posicionamiento Preciso
+
+```css
+.item-especial {
+  /* Desde la línea 2 hasta la 4 en columnas */
+  grid-column: 2 / 4;
+  /* Desde la línea 1 hasta la 3 en filas */
+  grid-row: 1 / 3;
+  
+  /* Sintaxis alternativa */
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+```
+
+### Función `repeat()`
+
+Simplifica la definición de tracks repetitivos:
+
+```css
+.galeria {
+  display: grid;
+  /* 5 columnas de 200px cada una */
+  grid-template-columns: repeat(5, 200px);
+  
+  /* Patrón alternante */
+  grid-template-columns: repeat(3, 100px 200px);
+  
+  /* Auto-fill: crea tantas columnas como quepan */
+  grid-template-columns: repeat(auto-fill, 250px);
+  
+  /* Auto-fit: similar a auto-fill pero colapsa tracks vacíos */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+```
+
+### Función `minmax()`
+
+Controla el tamaño mínimo y máximo de los tracks:
+
+```css
+.responsive-grid {
+  display: grid;
+  /* Columnas que van de 200px mínimo a 1fr máximo */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  
+  /* Filas con altura mínima */
+  grid-template-rows: repeat(auto-fill, minmax(150px, auto));
+  gap: 20px;
+}
+```
+
+## Layouts Prácticos
+
+### Layout de Artículo
+
+```css
+.articulo {
+  display: grid;
+  grid-template-areas:
+    "titulo titulo"
+    "metadata contenido"
+    "tags contenido"
+    "relacionados relacionados";
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.titulo { grid-area: titulo; }
+.metadata { grid-area: metadata; }
+.contenido { grid-area: contenido; }
+.tags { grid-area: tags; }
+.relacionados { grid-area: relacionados; }
+```
+
+### Galería de Imágenes Responsiva
+
+```css
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.imagen {
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.imagen:hover {
+  transform: scale(1.05);
+}
+
+/* Imagen destacada que ocupa 2 columnas */
+.imagen-destacada {
+  grid-column: span 2;
+}
+```
+
+### Dashboard Layout
+
+```css
+.dashboard {
+  display: grid;
+  grid-template-areas:
+    "nav header header"
+    "nav main sidebar"
+    "nav main sidebar";
+  grid-template-columns: 250px 1fr 300px;
+  grid-template-rows: 80px 1fr auto;
+  min-height: 100vh;
+}
+
+.navegacion { grid-area: nav; }
+.encabezado { grid-area: header; }
+.contenido-principal { grid-area: main; }
+.barra-lateral { grid-area: sidebar; }
+
+/* Responsive: en móviles cambia a stack vertical */
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-areas:
+      "header"
+      "nav"
+      "main"
+      "sidebar";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+  }
+}
+```
+
+## Grid vs Flexbox: ¿Cuándo usar cada uno?
+
+### Usa CSS Grid cuando:
+- Necesites control bidimensional (filas Y columnas)
+- Tengas un layout complejo con múltiples áreas
+- Quieras posicionar elementos de forma precisa
+- Diseñes layouts de página completos
+
+### Usa Flexbox cuando:
+- Trabajes en una sola dimensión
+- Necesites alinear elementos dentro de un contenedor
+- Quieras distribuir espacio dinámicamente
+- Diseñes componentes individuales
+
+## Herramientas y Debugging
+
+### Firefox DevTools
+Firefox tiene las mejores herramientas para debuggear Grid:
+- Visualiza líneas del grid
+- Muestra áreas nombradas
+- Indica el gap entre elementos
+
+### CSS Grid Inspector
+```css
+/* Añade esto temporalmente para visualizar mejor */
+.container {
+  display: grid;
+  /* Esto ayuda durante el desarrollo */
+  grid-template-columns: [inicio] 1fr [medio] 1fr [fin];
+}
+```
+
+## Casos de Uso Avanzados
+
+### Masonry Layout (Tipo Pinterest)
+
+```css
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 20px; /* Filas pequeñas para mejor control */
+  gap: 20px;
+}
+
+.masonry-item {
+  /* JavaScript calculará el span necesario */
+  grid-row-end: span var(--row-span);
+}
+```
+
+### Layout de Cartas Responsivo
+
+```css
+.cartas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+
+.carta {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.carta-imagen { grid-row: 1; }
+.carta-contenido { grid-row: 2; padding: 20px; }
+.carta-acciones { grid-row: 3; padding: 20px; }
+```
+
+## Conclusión
+
+CSS Grid es una herramienta extraordinariamente poderosa que, una vez dominada, te permitirá crear layouts complejos y responsivos con menos código y mayor control. La clave está en practicar y experimentar con diferentes combinaciones de propiedades.
+
+**Próximos pasos recomendados:**
+1. Practica con ejemplos simples
+2. Experimenta con `grid-template-areas`
+3. Combina Grid con Flexbox según sea apropiado
+4. Explora las herramientas de debugging de tu navegador
+
+¿Te animas a crear tu primer layout complejo con CSS Grid?

@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import BlogCard from "@/components/BlogCard.astro";
+import Layout from "@/layouts/Layout.astro";
+
+const blogs = await getCollection("blogs");
+---
+
+<Layout>
+  <main class="grid lg:grid-cols-2">
+    {
+      blogs.map((blog) => {
+        const { data } = blog;
+        const { title, author, readtime, description, tags } = data;
+
+        return (
+          <div class="p-2 flex justify-center">
+            <BlogCard
+              title={title}
+              authorName={author?.name || "Desconocido"}
+              description={description}
+              readtime={readtime}
+              tags={tags || []}
+            />
+          </div>
+        );
+      })
+    }
+  </main>
+</Layout>

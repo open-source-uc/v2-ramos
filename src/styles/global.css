@@ -203,26 +203,35 @@
     white-space: nowrap;
     border: 0;
   }
-
   /* Markdown content styles */
+  .content-markdown {
+    @apply break-words overflow-hidden;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  
   .content-markdown h1 {
-    @apply text-2xl font-bold mb-4 text-foreground;
+    @apply text-xl sm:text-2xl font-bold mb-4 text-foreground break-words;
   }
   
   .content-markdown h2 {
-    @apply text-xl font-semibold mb-3 mt-6 text-foreground;
+    @apply text-lg sm:text-xl font-semibold mb-3 mt-6 text-foreground break-words;
   }
   
   .content-markdown h3 {
-    @apply text-lg font-medium mb-2 mt-4 text-foreground;
+    @apply text-base sm:text-lg font-medium mb-2 mt-4 text-foreground break-words;
+  }
+  
+  .content-markdown h4 {
+    @apply text-sm sm:text-base font-medium mb-2 mt-3 text-foreground break-words;
   }
   
   .content-markdown p {
-    @apply mb-4 leading-relaxed text-foreground;
+    @apply mb-4 leading-relaxed text-foreground break-words;
   }
   
   .content-markdown ul, .content-markdown ol {
-    @apply mb-4 pl-6 text-foreground;
+    @apply mb-4 pl-4 sm:pl-6 text-foreground;
   }
   
   .content-markdown ul {
@@ -234,7 +243,7 @@
   }
   
   .content-markdown li {
-    @apply mb-1;
+    @apply mb-1 break-words;
   }
   
   .content-markdown li::marker {
@@ -242,19 +251,45 @@
   }
   
   .content-markdown a {
-    @apply text-blue hover:underline;
+    @apply text-blue hover:underline break-words;
+    word-break: break-all;
   }
   
   .content-markdown blockquote {
-    @apply border-l-4 border-blue pl-4 italic text-muted-foreground mb-4;
+    @apply border-l-4 border-blue pl-4 italic text-muted-foreground mb-4 break-words;
   }
   
   .content-markdown code {
-    @apply bg-muted px-1 py-0.5 rounded text-sm;
+    @apply bg-muted px-1 py-0.5 rounded text-xs sm:text-sm break-all;
+    word-break: break-all;
   }
   
   .content-markdown pre {
-    @apply bg-muted p-4 rounded mb-4 overflow-x-auto;
+    @apply bg-muted p-2 sm:p-4 rounded mb-4 overflow-x-auto text-xs sm:text-sm;
+    max-width: 100%;
+  }
+  
+  .content-markdown pre code {
+    @apply bg-transparent p-0;
+    word-break: normal;
+  }
+  
+  .content-markdown table {
+    @apply w-full mb-4 border-collapse;
+    font-size: 0.875rem;
+  }
+  
+  .content-markdown th,
+  .content-markdown td {
+    @apply border border-border px-2 sm:px-4 py-2 text-left break-words;
+  }
+  
+  .content-markdown th {
+    @apply bg-muted font-medium;
+  }
+  
+  .content-markdown img {
+    @apply max-w-full h-auto mb-4 rounded;
   }
   
   .content-markdown strong {
@@ -263,6 +298,17 @@
   
   .content-markdown em {
     @apply italic;
+  }
+  
+  /* Responsive table wrapper */
+  .content-markdown table {
+    @apply block overflow-x-auto whitespace-nowrap;
+  }
+  
+  @media (min-width: 640px) {
+    .content-markdown table {
+      @apply table whitespace-normal;
+    }
   }
   /* Line clamp utility */
   .line-clamp-3 {

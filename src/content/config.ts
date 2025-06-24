@@ -1,9 +1,10 @@
+import type { CourseSummary } from "@/types";
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 import { title } from "process";
 
-const resources = defineCollection({
-    schema: z.object({
+const resourcesSchema = 
+  z.object({
         title: z.string(),
         readtime: z.number(),
         description: z.string(),
@@ -13,8 +14,32 @@ const resources = defineCollection({
             picture: z.string().optional(),
             link: z.string().optional(),
         }).optional(),
-    })
 })
+
+const resources = defineCollection({
+    schema: resourcesSchema,
+})
+
+const blogs = defineCollection({
+    schema: resourcesSchema.extend({
+        tags: z.array(z.string())
+    }),
+})
+
+const initiatives = defineCollection({
+    schema: z.object({
+        title: z.string(),
+        name: z.string(),
+        picture: z.string().optional(),
+        faculty: z.string(),
+        rrss: z.object({
+            instagram: z.string().optional(),
+            github: z.string().optional(),
+            linkedin: z.string().optional(),
+            twitter: z.string().optional(),
+        })
+    })
+});
 
 const recommendations = defineCollection({
     schema: z.object({
@@ -108,4 +133,4 @@ const coursesStatic = defineCollection({
 })
 
 
-export const collections = { resources, recommendations, coursesScore, coursesStatic }
+export const collections = { resources, blogs, initiatives, recommendations, coursesScore, coursesStatic }
