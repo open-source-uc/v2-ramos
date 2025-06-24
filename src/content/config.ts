@@ -88,6 +88,7 @@ const coursesScore = defineCollection({
                 db_id: c.id, // id de la base de datos, para buscar con API, igual tambien se puede usar el id en la base de datos, y es LO RECOMENDADO
                 sigle: c.sigle,
                 name: staticInfo?.name ?? c.sigle,
+                credits: staticInfo?.credits ?? 0,
                 school_id: c.school_id,
                 school: id2NameData[c.school_id] || "",
                 area_id: c.area_id,
@@ -112,6 +113,7 @@ const coursesScore = defineCollection({
         db_id: z.number().nullable().transform((val) => val ?? 0),
         sigle: z.string().transform((val) => val ?? ""),
         name: z.string().transform((val) => val ?? ""),
+        credits: z.number().nullable().transform((val) => val ?? 0),
         school_id: z.number().nullable().transform((val) => val ?? 0),
         school: z.string().transform((val) => val ?? ""),
         area_id: z.number().nullable().transform((val) => val ?? 0),
