@@ -18,20 +18,29 @@ npm install
 
 Crea un archivo `.env.local` en la raíz del proyecto. Este archivo es **crucial** para que la aplicación funcione correctamente.
 
-Copia y pega el siguiente contenido en tu archivo `.env.local`:
+Puedes usar el archivo de ejemplo `.env.local.example` incluido en el repositorio. Para ello, ejecuta:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Luego, edita el archivo `.env.local` y reemplaza los valores de ejemplo por los que correspondan según tu entorno.
 
 ```env
+# Indica el entorno a usar. Puede ser 'development' o 'production'
 MODE_ENV="development"
 
+# El secret de la API. Puedes usar un generador de contraseñas seguras para crear este valor.
 API_SECRET="tu_secreto_aqui"
 
-# ¡IMPORTANTE! Este token es SOLO para desarrollo. Obtén este token desde el panel de Auth Osuc.
+# ¡IMPORTANTE! Este token es SOLO para desarrollo.
+# Puedes obtener un token en el panel de Auth Osuc (https://auth.osuc.dev/home/sessions).
 USER_TOKEN="tu_token_de_usuario_aqui"
 ```
 
 **Notas:**
-*   `API_SECRET`: Puedes usar un generador de contraseñas seguras para crear este valor.
-*   `USER_TOKEN`: Este token es para simular un usuario autenticado en desarrollo. Asegúrate de no exponerlo.
+- `API_SECRET`: Usa un valor único y seguro.
+- `USER_TOKEN`: Simula un usuario autenticado en el entorno de desarrollo. Asegúrate de no exponerlo.
 
 ### 3. Ejecutar las Migraciones
 
