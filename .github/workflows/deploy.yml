@@ -11,6 +11,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
