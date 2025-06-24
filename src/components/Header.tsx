@@ -33,7 +33,7 @@ const components: { title: string; href: string; description: string }[] = [
   }
 ];
 
-export default function Header({ osucookie }: { osucookie: string | null }) {
+export default function Header() {
   return (
     <header className="space-between tablet:space-x-8 flex w-full items-center py-8 px-4">
       <a href="/">
@@ -105,7 +105,9 @@ export default function Header({ osucookie }: { osucookie: string | null }) {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center space-x-2">
-            <ButtonNavbar text="Tu Cuenta" url={`https://auth.osuc.dev/${!osucookie ? "?ref=" + new URL(window.location.href).toString() : ""}`} />
+            <ButtonNavbar
+              text="Tu Cuenta"
+              url={`https://auth.osuc.dev/?ref=${new URL(window.location.href).toString()}`} />
           </div>
         </div>
 

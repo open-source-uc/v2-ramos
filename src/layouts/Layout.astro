@@ -1,9 +1,9 @@
 ---
-import "../styles/global.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
-const osucookie = Astro.cookies.get("osucookie")?.value ?? null;
+import { Banner } from "@/components/ui/banner";
 ---
 
 <!doctype html>
@@ -17,10 +17,23 @@ const osucookie = Astro.cookies.get("osucookie")?.value ?? null;
     <ClientRouter />
   </head>
   <body
-    class="bg-background text-foreground flex flex-col gap-4 px-2 sm:px-4 tablet:px-8 min-h-screen"
+    class="bg-background text-foreground min-h-screen"
   >
-    <Header client:only="react" osucookie={osucookie} />
-    <slot />
-    <Footer />
+    <!-- Promotional Banners -->
+    <Banner 
+      variant="blue" 
+      size="md" 
+      icon="VeryHappyIcon" 
+      dismissible={true} 
+      bannerId="2025-1"
+      client:only="react"
+    >
+      Es el día del platano!!!! ¡Feliz día del plátano! 
+    </Banner>
+    <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
+      <Header client:only="react" />
+      <slot />
+      <Footer />
+    </main>   
   </body>
 </html>
