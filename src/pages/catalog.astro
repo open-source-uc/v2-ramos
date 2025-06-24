@@ -18,12 +18,15 @@ const coursesScore = await getCollection("coursesScore"); // ahora el tipo seria
 }[]
 */
 
+// Extract the data property from the collection entries
+const coursesData = coursesScore.map(entry => entry.data);
+
 console.log("coursesScore", coursesScore);
 ---
 
 <Layout title="Catálogo de Cursos">
   <SearchableTableDisplay
-    data={coursesScore}
+    data={coursesData}
     initialSearchValue={searchParam}
     client:only="react"
   />

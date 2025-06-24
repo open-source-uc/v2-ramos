@@ -67,7 +67,7 @@ export function LandingSearch() {
             ¿En qué curso estás pensando?
           </h1>
           <p className="text-base tablet:text-lg text-muted-foreground max-w-xl mx-auto px-4 tablet:px-0">
-            Descubre opiniones, estadísticas y recursos de miles de cursos universitarios
+            Descubre opiniones, estadísticas y recursos de miles de cursos de la UC
           </p>
         </div>
         

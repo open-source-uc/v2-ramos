@@ -65,13 +65,22 @@ export const columns: ColumnDef<Course>[] = [
             )
         },
         cell: ({ row }) => {
-            return <div className="font-medium">{row.original.name}</div>
+            return <div className="font-medium text-wrap max-w-[200px]">{row.original.name}</div>
         }
     },
     {
         accessorKey: "credits",
-        header: () => {
-            return <div className="text-left font-semibold">Créditos</div>
+        header: ({ column }) => {
+            return (
+                <Button
+                    className="font-semibold flex gap-2 items-center my-2"
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Créditos
+                    <SwapVertIcon />
+                </Button>
+            )
         },
         cell: ({ row }) => {
             return <div>{row.original.credits}</div>
