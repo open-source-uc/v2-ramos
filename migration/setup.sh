@@ -17,7 +17,7 @@ else
 fi
 
 # npx wrangler r2 object put v2-ramos/2025-1.json -f ./json/2025-1.json $FLAG
-npx wrangler r2 object put v2-ramos/valores_unicos.json -f ./json/valores_unicos.json $FLAG
+# npx wrangler r2 object put v2-ramos/valores_unicos.json -f ./json/valores_unicos.json $FLAG
 
 npx wrangler d1 execute v2-ramos $FLAG --file=./sql/main.sql -y
 echo "main ready"
