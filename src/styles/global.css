@@ -70,24 +70,37 @@
   --pink-light: oklch(0.95 0.26 349.85 / 30%);
   --orange: oklch(0.6754 0.2034 35.74);
   --orange-light: oklch(0.95 0.2034 35.74 / 30%);
-}.dark { /* Dark mode styles NOT IMPLEMENTED */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+}
+
+.high-contrast {
+  /* High contrast theme for accessibility */
+  --background: oklch(1 0 0); /* Pure white background */
+  --foreground: oklch(0 0 0); /* Pure black text */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0.2 0.4 260); /* Black primary elements */
+  --primary-foreground: oklch(0.95 0.4 260 / 50%); /* White text on black */
+  --muted: oklch(0.9 0 0); /* Light gray for muted areas */
+  --muted-foreground: oklch(0 0 0); /* Black text on muted */
+  --accent: oklch(0.9 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --border: oklch(0 0 0); /* Black borders */
+  --input: oklch(0 0 0); /* White input backgrounds */
+  --ring: oklch(0 0 0); /* Black focus rings */
+  --red: oklch(0.3 0.5 19); /* Darker red for better contrast */
+  --red-light: oklch(0.95 0.5 19 / 50%);
+  --green: oklch(0.25 0.4 139.2308); /* Darker green */
+  --green-light: oklch(0.95 0.4 139.2308 / 50%);
+  --blue: oklch(0.2 0.4 260); /* Darker blue */
+  --blue-light: oklch(0.95 0.4 260 / 50%);
+  --purple: oklch(0.3 0.5 324.31); /* Darker purple */
+  --purple-light: oklch(0.95 0.5 324.31 / 50%);
+  --pink: oklch(0.3 0.5 349.85); /* Darker pink */
+  --pink-light: oklch(0.95 0.5 349.85 / 50%);
+  --orange: oklch(0.3 0.4 35.74); /* Darker orange */
+  --orange-light: oklch(0.95 0.4 35.74 / 50%);
 }
 
 @layer base {
@@ -312,5 +325,43 @@
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* High contrast theme specific improvements */
+  .high-contrast * {
+    /* Ensure all text has sufficient contrast */
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .high-contrast a {
+    /* Make links more distinguishable in high contrast */
+    font-weight: 500;
+  }
+
+  .high-contrast button {
+    /* Ensure buttons have strong borders */
+    border: 2px solid var(--foreground) !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+
+  .high-contrast button:hover {
+    background-color: var(--foreground) !important;
+    color: var(--background) !important;
+  }
+
+  .high-contrast input,
+  .high-contrast textarea,
+  .high-contrast select {
+    /* Ensure form elements have strong borders */
+    border: 2px solid var(--foreground) !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+
+  .high-contrast svg {
+    /* Ensure icons are visible */
+    fill: currentColor !important;
   }
 }

@@ -15,6 +15,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
+import HighContrastToggle from "./HighContrastToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -98,6 +99,7 @@ export default function Header() {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center space-x-2">
+              <HighContrastToggle />
               <ButtonNavbar
                 text="Tu Cuenta"
                 url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`} />
