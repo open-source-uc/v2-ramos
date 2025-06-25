@@ -5,6 +5,7 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 import { getUserDataByToken } from "@/services/auth";
 import { getToken } from "@/lib/auth";
+import type { CourseReview } from "@/types";
 
 const courseReviewSchema = z.object({
     course_sigle: z.string()
@@ -71,9 +72,9 @@ async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, f
 
 
 // Función helper para generar path único
-function generateReviewPath(userId: string, courseId: string, reviewId: number) {
+function generateReviewPath(courseId: string, reviewId: number) {
     const timestamp = Date.now();
-    return `reviews/${courseId}/${userId}/${reviewId}-${timestamp}.md`;
+    return `reviews/${courseId}/${reviewId}-${timestamp}.md`;
 }
 
 export const server = {
@@ -184,7 +185,7 @@ export const server = {
 
                 // Si hay un comentario, subirlo a R2
                 if (state.comment && state.comment.trim().length > 0) {
-                    filePath = generateReviewPath(user.id, state.course_sigle.toUpperCase(), reviewId);
+                    filePath = generateReviewPath(state.course_sigle.toUpperCase(), reviewId);
 
                     const uploadSuccess = await uploadMarkdownToR2(locals, state.comment, filePath);
 
