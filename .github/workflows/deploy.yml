@@ -1,0 +1,32 @@
+name: Deploy Cloudflare Worker
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 */3 * * *'     # A las 00:00, 03:00, 06:00, etc.
+    - cron: '30 1-23/3 * * *' # A las 01:30, 04:30, 07:30, etc.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        env:
+          API_SECRET: ${{ secrets.API_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: npm run deploy
+

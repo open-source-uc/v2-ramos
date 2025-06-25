@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Pill } from "./ui/pill";
+import { Pill } from "@/components/ui/pill";
 import { cn } from "@/lib/utils";
 import type { Recommendation } from "@/types";
 
@@ -162,10 +162,10 @@ export function SearchableRecommendationsDisplay({
                 ))}
               </SelectGroup>
             </SelectContent>
-          </Select>{" "}
+          </Select>
         </div>
       </section>
-      {/* Results */}{" "}
+      {/* Results */}
       <section className="space-y-4" aria-label="Resultados de recomendaciones">
         <div
           className="text-sm text-foreground-muted-dark"
@@ -202,11 +202,9 @@ export function SearchableRecommendationsDisplay({
                 role="listitem"
                 aria-label={`Ver detalles de la recomendación: ${title} - ${code}`}
               >
-                {" "}
                 <article className="space-y-3">
                   <header className="flex justify-between items-start gap-4">
                     <div className="flex flex-col items-start gap-2">
-                      {" "}
                       <h3
                         className="font-semibold text-lg leading-tight"
                         style={{
@@ -226,7 +224,7 @@ export function SearchableRecommendationsDisplay({
                           )}`,
                         }}
                       >
-                        <Pill size="md">Iniciativa estudiantil reconocida</Pill>
+                        <Pill size="sm">Iniciativa estudiantil reconocida</Pill>
                       </div>
                     </div>
                     <span
@@ -241,9 +239,8 @@ export function SearchableRecommendationsDisplay({
                     >
                       {code}
                     </span>
-                  </header>{" "}
+                  </header>
                   <div className="text-sm text-muted-foreground space-y-1">
-                    {" "}
                     <div
                       className="font-medium"
                       style={{
@@ -256,7 +253,6 @@ export function SearchableRecommendationsDisplay({
                       {initiative}
                     </div>
                     <div className="flex items-center gap-1">
-                      {" "}
                       <span
                         aria-label="Facultad"
                         style={{
@@ -281,7 +277,7 @@ export function SearchableRecommendationsDisplay({
                         {period}
                       </span>
                     </div>
-                  </div>{" "}
+                  </div>
                   <div className="flex items-center gap-2">
                     <span
                       className="text-sm text-muted-foreground"
@@ -293,7 +289,7 @@ export function SearchableRecommendationsDisplay({
                       }}
                     >
                       Calificación:
-                    </span>{" "}
+                    </span>
                     <div
                       className="font-semibold"
                       aria-label={`Calificación: ${qualification} de 7`}
@@ -310,7 +306,7 @@ export function SearchableRecommendationsDisplay({
                   </div>
                   <p className="text-sm line-clamp-3 leading-relaxed">
                     {resume}
-                  </p>{" "}
+                  </p>
                   <footer
                     className="flex flex-wrap gap-1"
                     aria-label="Etiquetas"
@@ -323,20 +319,16 @@ export function SearchableRecommendationsDisplay({
                     }}
                   >
                     {tags.map((tag: string, index: number) => (
-                      <span
-                        key={index}
-                        className="inline-block bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full"
-                        role="listitem"
-                      >
+                      <Pill key={index} size="sm" variant="ghost_blue">
                         {tag}
-                      </span>
+                      </Pill>
                     ))}
-                  </footer>{" "}
+                  </footer>
                 </article>
               </a>
             );
           })}
-        </div>{" "}
+        </div>
         {filteredRecommendations.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">

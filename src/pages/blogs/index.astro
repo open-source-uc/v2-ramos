@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import BlogCard from "@/components/BlogCard.tsx";
+import Layout from "@/layouts/Layout.astro";
+
+const blogs = await getCollection("blogs");
+---
+
+<Layout>
+  <main class="grid md:grid-cols-2 lg:grid-cols-3">
+    <div
+      class="w-full h-[60vh] lg:h-[70vh] flex flex-col justify-center lg:col-start-1 lg:col-end-4 md:col-start-1 md:col-end-3"
+    >
+      <h1 class="text-3xl md:text-5xl text-center font-bold">
+        Descubre blogs creados por la comunidad
+      </h1>
+    </div>
+    {
+      blogs.map((blog) => {
+        const { data } = blog;
+        const { title, author, readtime, description, tags } = data;
+
+        return (
+          <div class="p-2 flex justify-center">
+            <BlogCard
+              title={title}
+              authorName={author?.name || "Desconocido"}
+              description={description}
+              readtime={readtime}
+              tags={tags || []}
+            />
+          </div>
+        );
+      })
+    }
+  </main>
+</Layout>
