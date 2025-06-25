@@ -3,10 +3,10 @@ title: Cómo hacemos de BuscaRamos un espacio seguro
 readtime: 5
 description: Lorem markdownum venit vestigia, et mentis Harpyia solvunt nobilium cumulum verba, vocem locus precesque externos lympha. Etiam est iube e Argolicis sonis, non Olympus herbas, concubitusque.
 author:
-  name: "Vicente Muñoz"
-  title: "Chief Executive Officer"
-  picture: "https://media.licdn.com/dms/image/v2/D4E03AQGG7i_XEMXiaA/profile-displayphoto-shrink_400_400/B4EZaUeWnxHMAg-/0/1746247708112?e=1756339200&v=beta&t=uPQQqoE79jTFoyGWFtAhMZaHnENqVicdYIhiYIhovrQ"
-  link: "https://linkedin.com/in/janesmith"
+  name: "Ignacio Palma"
+  title: "BuscaRamos Project Manager"
+  picture: "https://media.licdn.com/dms/image/v2/D4E03AQGmL6TUTXkKWA/profile-displayphoto-shrink_400_400/B4EZTSW2eFGgAg-/0/1738695993921?e=1756339200&v=beta&t=u4u_ns-rDpE1G4yXR-ZPmu1EloCPY1vGzZTYheIzTFc"
+  link: "https://www.linkedin.com/in/ignaciopalma-ai/"
 ---
 
 # Modo transit suarum insequitur ullis spretis cum

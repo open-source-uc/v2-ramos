@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer.astro";
 import ClientRouter from "astro/components/ClientRouter.astro";
 import { Banner } from "@/components/ui/banner";
+import { SEO } from "astro-seo";
 ---
 
 <!doctype html>
@@ -19,17 +20,19 @@ import { Banner } from "@/components/ui/banner";
   <body
     class="bg-background text-foreground min-h-screen"
   >
-    <!-- Promotional Banners -->
+    <!-- Banner de Anuncios -->
     <Banner 
-      variant="blue" 
+      variant="pink" 
       size="md" 
       icon="VeryHappyIcon" 
       dismissible={true} 
-      bannerId="2025-1"
+      bannerId="2025-2"
       client:only="react"
     >
-      Es el día del platano!!!! ¡Feliz día del plátano! 
+      <strong>Esta página se encuentra en desarrollo:</strong> si encuentras algún error, no dudes en contactarnos a través de nuestras redes sociales o envíanos un correo a <a href="mailto:coord@osuc.dev">coord@osuc.dev</a>
     </Banner>
+
+    <!-- Main -->
     <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
       <Header client:only="react" />
       <slot />

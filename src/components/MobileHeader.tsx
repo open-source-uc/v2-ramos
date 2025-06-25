@@ -13,11 +13,6 @@ const components: { title: string; href: string; description: string }[] = [
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
-  },
-  {
-    title: "Recomendados por la Comunidad",
-    href: "/recommendations",
-    description: "Descubre los cursos recomendados por la comunidad estudiantil.",
   }
 ];
 
@@ -122,17 +117,6 @@ export default function MobileHeader() {
                 </a>
                 
                 <a
-                  href="/404"
-                  onClick={closeMenu}
-                  className="block p-3 rounded-md hover:bg-primary-light hover:text-primary transition-colors"
-                >
-                  <div className="font-medium text-sm leading-none">Cómo protegemos tu privacidad</div>
-                  <p className="text-muted-foreground text-sm leading-snug mt-1">
-                    Descubre cómo protegemos tu privacidad y datos personales.
-                  </p>
-                </a>
-                
-                <a
                   href="/resources/respect"
                   onClick={closeMenu}
                   className="block p-3 rounded-md hover:bg-primary-light hover:text-primary transition-colors"
@@ -143,16 +127,6 @@ export default function MobileHeader() {
                   </p>
                 </a>
                 
-                <a
-                  href="/404"
-                  onClick={closeMenu}
-                  className="block p-3 rounded-md hover:bg-primary-light hover:text-primary transition-colors"
-                >
-                  <div className="font-medium text-sm leading-none">Conoce a nuestro equipo</div>
-                  <p className="text-muted-foreground text-sm leading-snug mt-1">
-                    Conoce a nuestro equipo de trabajo y cómo puedes colaborar.
-                  </p>
-                </a>
               </div>
             </div>
 

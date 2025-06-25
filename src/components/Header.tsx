@@ -26,11 +26,6 @@ const components: { title: string; href: string; description: string }[] = [
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
-  },
-  {
-    title: "Recomendados por la Comunidad",
-    href: "/recommendations",
-    description: "Descubre los cursos recomendados por la comunidad estudiantil.",
   }
 ];
 
@@ -91,23 +86,15 @@ export default function Header() {
                           </a>
                         </NavigationMenuLink>
                       </li>
-                      <ListItem href="/404" title="Cómo protegemos tu privacidad">
-                        Descubre cómo protegemos tu privacidad y datos personales.
-                      </ListItem>
+
                       <ListItem href="/resources/respect" title="BuscaRamos: Un espacio libre de acoso">
                         Conoce cómo mantenemos un ambiente seguro y respetuoso.
                       </ListItem>
-                      <ListItem href="/404" title="Conoce a nuestro equipo">
-                        Conoce a nuestro equipo de trabajo y cómo puedes colaborar.
-                      </ListItem>
+
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                    <a href="/docs">OTRO</a>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+
               </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center space-x-2">
