@@ -6,17 +6,25 @@ import type { Course } from "./table/columns"
 import { DataTable } from "./table/data-table"
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { cn } from "@/lib/utils"
+import type { InferEntrySchema, RenderedContent } from "astro:content"
 
 interface SearchableTableDisplayProps {
-  data: Course[]
-  initialSearchValue?: string
+  coursesScore: {
+    id: string;
+    body?: string;
+    collection: "coursesScore";
+    data: InferEntrySchema<"coursesScore">;
+    rendered?: RenderedContent;
+    filePath?: string;
+  }[];
+  initialSearchValue?: string;
 }
 
-export function SearchableTableDisplay({ data, initialSearchValue = "" }: SearchableTableDisplayProps) {
+export function SearchableTableDisplay({ coursesScore, initialSearchValue = "" }: SearchableTableDisplayProps) {
   const [searchValue, setSearchValue] = useState(initialSearchValue)
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
-
+  const data = coursesScore.map((entry) => entry.data)
   // Get unique areas from the data
   const uniqueAreas = useMemo(() => {
     const areas = data
