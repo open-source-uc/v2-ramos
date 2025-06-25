@@ -3,7 +3,7 @@ name: Deploy Cloudflare Worker
 on:
   push:
     branches:
-      - deploy
+      - develop
 jobs:
   deploy:
     if: github.ref == 'refs/heads/deploy'
