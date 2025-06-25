@@ -406,3 +406,15 @@ export function CloseIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function StarIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="m273-176.08 55.62-235.54-182.93-157.84 240.23-19.85L480-810.69l94.08 221.38 240.23 19.85-182.93 157.84L687-176.08 480-300.92 273-176.08Z"/></svg>
+  );
+}
+
+export function FlagIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M210-114v-672h337.48l18.21 82H790v378H532.31l-16-82H276v294h-66Z"/></svg>
+  );
+}

@@ -9,7 +9,8 @@ export function calculateSentiment(likes: number, superlikes: number, dislikes: 
   
   if (positivePercentage >= 80) return 'veryHappy';
   if (positivePercentage >= 60 && positivePercentage < 80) return 'happy';
-  if (positivePercentage >= 40 && positivePercentage < 60) return 'sad';
+  if (positivePercentage >= 40 && positivePercentage < 60) return 'neutral';
+  if (positivePercentage >= 20 && positivePercentage < 40) return 'sad';
   if (positivePercentage < 20) return 'verySad';
 
   return 'neutral';

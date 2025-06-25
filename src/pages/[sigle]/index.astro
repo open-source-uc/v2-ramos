@@ -14,7 +14,10 @@ import {
     AttendanceIcon,
     WorkloadIcon,
     PlusIcon,
-    EditIcon
+    EditIcon,
+    FlagIcon,
+    StarIcon,
+    ThumbDownIcon,
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
@@ -332,26 +335,29 @@ const reportSuccessMessage = reportResult?.data?.message;
                                     {/* Header con sentiment y metadata */}
                                     <div class="items-start justify-between pr-8 gap-2">
                                         <div class="flex items-center gap-2">
-                                            <Sentiment
-                                                sentiment={
-                                                    review.like_dislike ===
-                                                    2
-                                                        ? "veryHappy"
+                                            <div class={`flex gap-2 items-center p-2 border rounded-lg ${
+                                                review.like_dislike === 2
+                                                    ? "bg-green-light text-green border-green/20"
+                                                    : review.like_dislike === 1
+                                                    ? "bg-blue-light text-blue border-blue/20" 
+                                                    : "bg-red-light text-red border-red/20"
+                                            }`}>
+                                                {review.like_dislike === 2 ? (
+                                                    <StarIcon className="h-5 w-5 fill-current" />
+                                                ) : review.like_dislike === 1 ? (
+                                                    <ThumbUpIcon className="h-5 w-5 fill-current" />
+                                                ) : (
+                                                    <ThumbDownIcon className="h-5 w-5 fill-current" />
+                                                )}
+                                                <span class="text-sm font-semibold">
+                                                    {review.like_dislike === 2
+                                                        ? "Lo super recomiendo"
                                                         : review.like_dislike ===
                                                             1
-                                                          ? "happy"
-                                                          : "sad"
-                                                }
-                                                size="default"
-                                            />
-                                            <span class="text-md font-medium text-foreground">
-                                                {review.like_dislike === 2
-                                                    ? "Excelente"
-                                                    : review.like_dislike ===
-                                                        1
-                                                      ? "Bueno"
-                                                      : "Malo"}
-                                            </span>
+                                                          ? "Lo recomiendo"
+                                                          : "No lo recomiendo"}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -364,75 +370,74 @@ const reportSuccessMessage = reportResult?.data?.message;
                                     )}
 
                                     {/* Tags informativos */}
-                                    <div class="flex flex-wrap gap-2">
-                                        <Pill
-                                            variant="ghost_green"
-                                            size="sm"
-                                            icon={CalendarIcon}
-                                        >
-                                            {review.year_taken} -{" "}
-                                            {review.semester_taken === 1
-                                                ? "1er"
-                                                : "2do"}{" "}
-                                            sem
-                                        </Pill>
-                                        <Pill
-                                            variant="ghost_blue"
-                                            size="sm"
-                                            icon={WorkloadIcon}
-                                        >
-                                            {review.workload_vote === 0
-                                                ? "Carga Baja"
-                                                : review.workload_vote === 1
-                                                  ? "Carga Media"
-                                                  : "Carga Alta"}
-                                        </Pill>
-                                        <Pill
-                                            variant="ghost_purple"
-                                            size="sm"
-                                            icon={AttendanceIcon}
-                                        >
-                                            {review.attendance_type === 0
-                                                ? "Asistencia Obligatoria"
-                                                : review.attendance_type ===
-                                                    1
-                                                  ? "Asistencia Opcional"
-                                                  : "Sin Asistencia"}
-                                        </Pill>
-                                        {review.weekly_hours && (
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div class="flex flex-wrap gap-2">
                                             <Pill
-                                                variant="ghost_orange"
+                                                variant="ghost_green"
                                                 size="sm"
-                                                icon={ClockIcon}
+                                                icon={CalendarIcon}
                                             >
-                                                {formatWeeklyHours(
-                                                    review.weekly_hours,
-                                                )}
-                                                /sem
+                                                {review.year_taken} -{" "}
+                                                {review.semester_taken === 1
+                                                    ? "1er"
+                                                    : "2do"}{" "}
+                                                sem
                                             </Pill>
-                                        )}
+                                            <Pill
+                                                variant="ghost_blue"
+                                                size="sm"
+                                                icon={WorkloadIcon}
+                                            >
+                                                {review.workload_vote === 0
+                                                    ? "Carga Baja"
+                                                    : review.workload_vote === 1
+                                                    ? "Carga Media"
+                                                    : "Carga Alta"}
+                                            </Pill>
+                                            <Pill
+                                                variant="ghost_purple"
+                                                size="sm"
+                                                icon={AttendanceIcon}
+                                            >
+                                                {review.attendance_type === 0
+                                                    ? "Asistencia Obligatoria"
+                                                    : review.attendance_type ===
+                                                        1
+                                                    ? "Asistencia Opcional"
+                                                    : "Sin Asistencia"}
+                                            </Pill>
+                                            {review.weekly_hours && (
+                                                <Pill
+                                                    variant="ghost_orange"
+                                                    size="sm"
+                                                    icon={ClockIcon}
+                                                >
+                                                    {formatWeeklyHours(
+                                                        review.weekly_hours,
+                                                    )}
+                                                    /sem
+                                                </Pill>
+                                            )}
+                                        </div>
+                                        <form action={actions.reportCourseReview} method="post">
+                                            <input
+                                                type="hidden"
+                                                name="review_id"
+                                                value={review.id}
+                                            />
+                                            <Button
+                                                type="submit"
+                                                variant="ghost"
+                                                size="sm"
+                                                icon={FlagIcon}
+                                                className="text-muted-foreground hover:text-red-600 hover:bg-red-50"
+                                                aria-label="Reportar reseña"
+                                            >
+                                                Reportar
+                                            </Button>
+                                        </form>
                                     </div>
-                                </div>
-                                <div>
-                                    <form action={actions.reportCourseReview} method="post">
-                                        <input
-                                            type="hidden"
-                                            name="review_id"
-                                            value={review.id}
-                                        />
-                                            {
-                                            !isInputError(reportResult?.error) && reportResult?.error?.message && (
-                                            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                                            <p class="font-medium">{reportResult.error.message}</p>
-                                            </div>
-                                            )
-                                            }
-                                        <Button
-                                            type="submit"
-                                        >
-                                            Reportar Reseña
-                                        </Button>
-                                    </form>
+
                                 </div>
                             ))}
                         </div>
