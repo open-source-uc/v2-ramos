@@ -4,9 +4,12 @@ on:
   push:
     branches:
       - develop
+  pull_request:
+    branches:
+      - develop
+
 jobs:
   develop:
-    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
 
     steps:
