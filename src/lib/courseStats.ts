@@ -6,13 +6,12 @@ export function calculateSentiment(likes: number, superlikes: number, dislikes: 
   }
   
   const positivePercentage = ((likes + superlikes * 2) / (total + superlikes)) * 100;
-  const negativePercentage = (dislikes / total) * 100;
   
   if (positivePercentage >= 80) return 'veryHappy';
-  if (positivePercentage >= 60) return 'happy';
-  if (negativePercentage >= 60) return 'sad';
-  if (negativePercentage >= 80) return 'verySad';
-  
+  if (positivePercentage >= 60 && positivePercentage < 80) return 'happy';
+  if (positivePercentage >= 40 && positivePercentage < 60) return 'sad';
+  if (positivePercentage < 20) return 'verySad';
+
   return 'neutral';
 }
 

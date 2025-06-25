@@ -5,6 +5,10 @@ import { Pill } from "@/components/ui/pill";
 import { Button } from "../ui/button";
 import { SwapVertIcon } from "../icons/icons";
 import { Sentiment } from "../icons/sentiment";
+import { 
+  calculateSentiment, 
+  calculatePositivePercentage 
+} from "@/lib/courseStats";
 
 export type Course = {
   id: string;
@@ -135,35 +139,22 @@ export const columns: ColumnDef<Course>[] = [
     },
     cell: ({ row }) => {
       const { superlikes, likes, dislikes } = row.original;
-      const totalReviews = 2 * superlikes + likes + dislikes;
+      const totalReviews = likes + superlikes + dislikes; // Count each review once, like in [sigle]/index
+      
       if (totalReviews === 0) {
         return <Sentiment sentiment="question" size="sm" />;
       }
 
-      const positiveReviews = 2 * superlikes + likes;
-      const positivePercentage = (positiveReviews / totalReviews) * 100;
-
-      let sentimentType: "veryHappy" | "happy" | "neutral" | "sad" | "verySad";
-
-      if (positivePercentage >= 80) {
-        sentimentType = "veryHappy";
-      } else if (positivePercentage >= 60) {
-        sentimentType = "happy";
-      } else if (positivePercentage >= 40) {
-        sentimentType = "neutral";
-      } else if (positivePercentage >= 20) {
-        sentimentType = "sad";
-      } else {
-        sentimentType = "verySad";
-      }
+      const sentimentType = calculateSentiment(likes, superlikes, dislikes);
+      const positivePercentage = calculatePositivePercentage(likes, superlikes, dislikes);
 
       return (
         <Sentiment
           sentiment={sentimentType}
           size="sm"
-          ariaLabel={`${Math.round(
-            positivePercentage
-          )}% de reseñas positivas de ${totalReviews} total`}
+          percentage={positivePercentage}
+          reviewCount={totalReviews}
+          ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
         />
       );
     },
