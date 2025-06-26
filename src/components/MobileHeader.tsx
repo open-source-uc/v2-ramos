@@ -135,7 +135,7 @@ export default function MobileHeader() {
                 <a
                   href="/resources/respect"
                   onClick={closeMenu}
-                  className="block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
+                  className="hidden block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
                 >
                   <div className="font-medium text-sm leading-none text-foreground">BuscaRamos: Un espacio libre de acoso</div>
                   <p className="text-muted-foreground text-sm leading-snug mt-2">
