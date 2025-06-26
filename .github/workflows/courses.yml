@@ -17,4 +17,6 @@ jobs:
           node-version: '22'
 
       - name: Run reload-courses script
+        env:
+          API_SECRET: ${{ secrets.API_SECRET }}
         run: npm run reload-courses
