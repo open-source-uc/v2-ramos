@@ -21,7 +21,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://public.osuc.dev/courses-score.json");
+        const response = await fetch("https://public.osuc.dev/courses-score.ndjson");
 
         if (!response.ok) throw new Error("Network response was not ok");
         if (!response.body) throw new Error("ReadableStream not supported");
