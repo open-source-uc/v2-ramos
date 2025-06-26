@@ -87,7 +87,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
 
   return (
     <>
-      <div className="hidden xl:block">
+      <div className="hidden tablet:block">
         <div className="flex items-center gap-4">
           <div className="space-x-2"></div>
         </div>
