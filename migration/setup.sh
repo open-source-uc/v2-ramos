@@ -10,7 +10,9 @@ read -p "Opción (1/2): " mode
 if [ "$mode" == "1" ]; then
     FLAG="--local"
 elif [ "$mode" == "2" ]; then
-    FLAG="--remote"
+    echo "Que estas intentando hacer? No borres la base de datos de produccion, por favor."
+    echo "Si necesitas hacer cambios, habla con rocka."
+    exit 1
 else
     echo "Opción inválida. Saliendo."
     exit 1

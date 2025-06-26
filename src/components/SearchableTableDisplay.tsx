@@ -21,7 +21,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/courses-score");
+        const response = await fetch("https://public.osuc.dev/courses-score.ndjson");
 
         if (!response.ok) throw new Error("Network response was not ok");
         if (!response.body) throw new Error("ReadableStream not supported");
@@ -29,34 +29,31 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = "";
-        const newCourses: InferEntrySchema<"coursesScore">[] = [];
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
+
           buffer += decoder.decode(value, { stream: true });
 
-          // Procesar líneas completas
-          let lines = buffer.split("\n");
-          buffer = lines.pop() || ""; // Última línea puede estar incompleta
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || ""; // guarda línea incompleta
 
           for (const line of lines) {
             if (line.trim()) {
               const item = JSON.parse(line);
-              newCourses.push(item.data);
-              setCourses((old) => [...old, item.data]); // Renderizar progresivo
+              setCourses((prev) => [...prev, item]); // si usaste jq -c '.[]'
             }
           }
         }
 
-        // Procesar línea restante
+        // Procesar último fragmento si queda algo
         if (buffer.trim()) {
           const item = JSON.parse(buffer);
-          newCourses.push(item.data);
-          setCourses((old) => [...old, item.data]);
+          setCourses((prev) => [...prev, item]);
         }
       } catch (error) {
-        console.error("Failed to fetch courses:", error);
+        console.error("Failed to fetch courses as stream:", error);
       }
     };
 

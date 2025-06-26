@@ -33,11 +33,20 @@ export const GET: APIRoute = async ({ request, locals }) => {
         FROM course_summary ORDER BY sort_index DESC, id
     `).all<CourseSummary>();
 
-    return new Response(JSON.stringify(result.results), {
+    const stream = new ReadableStream({
+        start(controller) {
+            for (const course of result.results) {
+                const line = JSON.stringify(course) + "\n";
+                controller.enqueue(new TextEncoder().encode(line));
+            }
+            controller.close();
+        },
+    });
+
+    return new Response(stream, {
         status: 200,
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-ndjson",
         },
     });
 };
-
