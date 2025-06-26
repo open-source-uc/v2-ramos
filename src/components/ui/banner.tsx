@@ -146,8 +146,8 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
         {dismissible && (
           <button
             onClick={handleDismiss}
-            className={`${iconSize} flex-shrink-0 ml-2 hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded-sm`}
-            aria-label="Dismiss banner"
+            className={`${iconSize} hidden flex-shrink-0 ml-2 hover:opacity-70 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded-sm`}
+            aria-label="Cerrar Banner"
           >
             <svg
               className={`${iconSize} ${getIconColor()}`}

@@ -87,11 +87,6 @@ export default function Header() {
                           </a>
                         </NavigationMenuLink>
                       </li>
-
-                      <ListItem href="/resources/respect" title="BuscaRamos: Un espacio libre de acoso">
-                        Conoce cómo mantenemos un ambiente seguro y respetuoso.
-                      </ListItem>
-
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
