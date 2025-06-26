@@ -16,12 +16,12 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [searchValue, setSearchValue] = useState(initialSearchValue)
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
-  const [courses, setCourses] = useState<InferEntrySchema<"coursesScore">[]>([])
+  const [courses, setCourses] = useState<Course[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://public.osuc.dev/courses-score.ndjson");
+        const response = await fetch("https://public.osuc.dev/courses-score.json");
 
         if (!response.ok) throw new Error("Network response was not ok");
         if (!response.body) throw new Error("ReadableStream not supported");
@@ -52,6 +52,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
           const item = JSON.parse(buffer);
           setCourses((prev) => [...prev, item]);
         }
+        console.log("Courses fetched successfully:", courses);
       } catch (error) {
         console.error("Failed to fetch courses as stream:", error);
       }

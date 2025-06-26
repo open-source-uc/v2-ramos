@@ -14,6 +14,11 @@ export interface CourseSummary {
     votes_optional_attendance: number;
     avg_weekly_hours: number;
     sort_index: number;
+    name?: string; // Added for convenience
+    credits?: number; // Added for convenience
+    school?: string; // Added for convenience
+    area?: string; // Added for convenience
+    category?: string; // Added for convenience
 }
 
 export interface CourseReview {

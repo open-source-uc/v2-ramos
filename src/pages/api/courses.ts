@@ -1,5 +1,11 @@
-import type { CourseSummary } from "@/types";
 import type { APIRoute } from "astro";
+import CoursesRaw from "../../../migration/json/2025-1.json";
+import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+import type { CourseStaticInfo, CourseSummary } from "@/types";
+
+
+const coursesData = CoursesRaw as Record<string, CourseStaticInfo>;
+const id2NameData = Id2NameRaw as Record<string, string>;
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
@@ -36,6 +42,14 @@ export const GET: APIRoute = async ({ request, locals }) => {
     const stream = new ReadableStream({
         start(controller) {
             for (const course of result.results) {
+                const staticInfo = coursesData[course.sigle];
+
+                course.name = staticInfo?.name ?? course.sigle;
+                course.credits = staticInfo?.credits ?? 0;
+                course.school = id2NameData[course.school_id] || "";
+                course.area = id2NameData[course.area_id] || "";
+                course.category = id2NameData[course.category_id] || "";
+
                 const line = JSON.stringify(course) + "\n";
                 controller.enqueue(new TextEncoder().encode(line));
             }
@@ -46,7 +60,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
     return new Response(stream, {
         status: 200,
         headers: {
-            "Content-Type": "application/x-ndjson",
+            "Content-Type": "application/x-ndjson; charset=utf-8",
         },
     });
 };

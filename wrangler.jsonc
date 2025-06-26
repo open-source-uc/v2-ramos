@@ -27,10 +27,6 @@
 		{
 			"binding": "R2",
 			"bucket_name": "v2-ramos"
-		},
-		{
-			"binding": "R2_PUBLIC",
-			"bucket_name": "osuc-public"
 		}
 	]
 	/**
