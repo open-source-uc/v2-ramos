@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { MenuIcon, CloseIcon } from "./icons/icons";
+import HighContrastToggle from "./HighContrastToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -78,35 +79,50 @@ export default function MobileHeader() {
           </div>
 
           {/* Menu content - scrollable */}
-          <div className="flex flex-col p-4 space-y-6 overflow-y-auto flex-1">
+          <div className="flex flex-col p-6 space-y-8 overflow-y-auto flex-1">
+            {/* Account section */}
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Tu Cuenta</h3>
+              <div className="space-y-3">
+                <a
+                  href={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`}
+                  onClick={closeMenu}
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-2 text-center text-sm font-medium transition-colors duration-200 w-full"
+                >
+                  Iniciar Sesión
+                </a>
+                <HighContrastToggle />
+              </div>
+            </section>
+            
             {/* Courses section */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-primary">CURSOS</h3>
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Cursos</h3>
               <div className="space-y-3">
                 {components.map((component) => (
                   <a
                     key={component.title}
                     href={component.href}
                     onClick={closeMenu}
-                    className="block p-3 rounded-md hover:bg-primary-light hover:text-primary transition-colors"
+                    className="block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
                   >
-                    <div className="font-medium text-sm leading-none">{component.title}</div>
-                    <p className="text-muted-foreground text-sm leading-snug mt-1">
+                    <div className="font-medium text-sm leading-none text-foreground">{component.title}</div>
+                    <p className="text-muted-foreground text-sm leading-snug mt-2">
                       {component.description}
                     </p>
                   </a>
                 ))}
               </div>
-            </div>
+            </section>
 
             {/* About section */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-primary">ACERCA</h3>
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Acerca de</h3>
               <div className="space-y-3">
                 <a
                   href="https://osuc.dev"
                   onClick={closeMenu}
-                  className="block p-3 rounded-md bg-gradient-to-br from-foreground to-primary text-background hover:opacity-90 transition-opacity"
+                  className="block p-4 rounded-md bg-gradient-to-br from-foreground to-primary text-background hover:opacity-90 transition-opacity border border-transparent"
                 >
                   <div className="font-medium text-sm leading-none mb-2">
                     Creado por Open Source eUC
@@ -119,55 +135,43 @@ export default function MobileHeader() {
                 <a
                   href="/resources/respect"
                   onClick={closeMenu}
-                  className="block p-3 rounded-md hover:bg-primary-light hover:text-primary transition-colors"
+                  className="block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
                 >
-                  <div className="font-medium text-sm leading-none">BuscaRamos: Un espacio libre de acoso</div>
-                  <p className="text-muted-foreground text-sm leading-snug mt-1">
+                  <div className="font-medium text-sm leading-none text-foreground">BuscaRamos: Un espacio libre de acoso</div>
+                  <p className="text-muted-foreground text-sm leading-snug mt-2">
                     Conoce cómo mantenemos un ambiente seguro y respetuoso.
                   </p>
                 </a>
-                
               </div>
-            </div>
-
-            {/* Account section */}
-            <div className="space-y-3">
-              <a
-                href={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`}
-                onClick={closeMenu}
-                className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-1.5 text-center text-xs transition-colors duration-200 w-full"
-              >
-                Tu Cuenta
-              </a>
-            </div>
+            </section>
 
             {/* Quick links */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-primary">ENLACES RÁPIDOS</h3>
-              <div className="space-y-2">
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Enlaces Rápidos</h3>
+              <div className="grid grid-cols-1 gap-3">
                 <a
                   href="https://buscacursos.uc.cl/"
                   onClick={closeMenu}
-                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-1.5 text-center text-xs transition-colors duration-200 w-full"
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  BUSCACURSOS ORIGINAL
+                  BuscaCursos Original
                 </a>
                 <a
                   href="https://portal.uc.cl/"
                   onClick={closeMenu}
-                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-1.5 text-center text-xs transition-colors duration-200 w-full"
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  PORTAL UC
+                  Portal UC
                 </a>
                 <a
                   href="https://cursos.canvas.uc.cl/"
                   onClick={closeMenu}
-                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-1.5 text-center text-xs transition-colors duration-200 w-full"
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  CANVAS UC
+                  Canvas UC
                 </a>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       )}

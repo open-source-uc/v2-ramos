@@ -49,11 +49,11 @@ export default function HighContrastToggle() {
   return (
     <button
       onClick={toggleHighContrast}
-      className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary rounded-lg border-1 px-4 py-1.5 text-xs transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      className="w-full tablet:w-3/5 bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary rounded-lg border-1 px-4 py-1.5 text-xs transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
       aria-label={isHighContrast ? "Desactivar alto contraste" : "Activar alto contraste"}
       title={isHighContrast ? "Desactivar alto contraste" : "Activar alto contraste"}
     >
-      <div className="flex items-center space-x-2">
+      <div className="justify-center flex items-center space-x-2">
         <svg 
           className="w-4 h-4" 
           fill="none" 
@@ -68,11 +68,8 @@ export default function HighContrastToggle() {
             d="M12 3v18m0-18a9 9 0 110 18 9 9 0 010-18z"
           />
         </svg>
-        <span className="hidden sm:inline">
-          Alto Contraste
-        </span>
-        <span className="sm:hidden">
-          A/A
+        <span className="text-nowrap">
+          ALTO CONTRASTE
         </span>
       </div>
     </button>
