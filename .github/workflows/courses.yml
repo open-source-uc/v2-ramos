@@ -1,0 +1,20 @@
+name: Reload Courses Every Hour
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Cada hora en minuto 0
+
+jobs:
+  reload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run reload-courses script
+        run: npm run reload-courses
