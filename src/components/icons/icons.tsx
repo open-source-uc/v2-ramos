@@ -418,3 +418,9 @@ export function FlagIcon({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M210-114v-672h337.48l18.21 82H790v378H532.31l-16-82H276v294h-66Z"/></svg>
   );
 }
+
+export function OpenInFullIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M128-128v-306h66v194.46L720.46-766H526v-66h306v306h-66v-194.46L239.54-194H434v66H128Z"/></svg>
+  );
+}

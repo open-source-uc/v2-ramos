@@ -22,7 +22,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Input } from "@/components/ui/input";
+import {
+  BuildingIcon,
+  AreaIcon,
+  HourglassIcon,
+  OpenInFullIcon
+} from "@/components/icons/icons";
+
 import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/ui/pill";
 import { Sentiment } from "@/components/icons/sentiment";
@@ -172,7 +178,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
           </div>
         </div>
       </div>
-      <div className="xl:hidden flex flex-col space-y-4">
+      <div className="tablet:hidden flex flex-col space-y-4">
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => {
             const course = row.original;
@@ -208,56 +214,46 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
               >
                 {/* Header con sigla y créditos */}
                 <div className="flex justify-between items-start mb-2">
-                  <div className="font-bold text-lg text-foreground">
+                  <div className="font-medium text-xs text-foreground">
                     {course.sigle}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-xs text-muted-foreground">
                     {course.credits} créditos
                   </div>
                 </div>
 
                 {/* Nombre del curso */}
-                <h3 className="font-medium text-foreground mb-3 leading-tight">
+                <h3 className="text-lg font-semibold text-foreground mb-3 leading-tight">
                   {course.name}
                 </h3>
 
                 {/* Facultad y área */}
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm font-medium text-foreground">
-                    Facultad:
-                  </span>
-                  <Pill variant="blue">{course.school}</Pill>
+                  <Pill variant="blue" size="sm" icon={BuildingIcon}>{course.school}</Pill>
                 </div>
 
                 {course.area !== "Sin Área Asignada" && (
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm font-medium text-foreground">
-                      Area de formació general:
-                    </span>
-                    <Pill variant="pink">{course.area}</Pill>
+
+                    <Pill variant="pink" size="sm" icon={AreaIcon}>{course.area}</Pill>
                   </div>
                 )}
                 {/* Reseñas con componente Sentiment */}
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      Reseñas:
-                    </span>
                     {totalReviews === 0 ? (
-                      <Sentiment sentiment="question" size="sm" />
+                      <Sentiment sentiment="question" size="xs" />
                     ) : (
                       <Sentiment
                         sentiment={sentimentType}
-                        size="sm"
+                        size="xs"
                         percentage={positivePercentage}
                         reviewCount={totalReviews}
                         ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
                       />
                     )}
-                  </div>
                 </div>
-                <div className="mt-4 text-xs text-muted-foreground">
-                  Toca para ver detalles →
+                <div className="flex flex-row-reverse mt-4 text-xs text-muted-foreground items-center gap-1">
+                  <OpenInFullIcon className="inline-block h-4 w-4" /> Presiona para ver detalles
                 </div>
               </div>
             );

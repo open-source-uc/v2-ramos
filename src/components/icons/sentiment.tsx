@@ -16,6 +16,7 @@ const sentimentVariants = cva(
         question: "bg-gray-light text-gray border border-gray/20",
       },
       size: {
+        xs : "p-1.5",
         sm: "p-2",
         default: "p-2",
         lg: "p-3",
@@ -71,6 +72,7 @@ const Sentiment = React.forwardRef<HTMLDivElement, SentimentProps>(
       >
         <IconComponent 
           className={cn(
+            size === "xs" ? "h-3 w-3" :
             size === "sm" ? "h-4 w-4" : 
             size === "lg" ? "h-6 w-6" : 
             "h-5 w-5",
