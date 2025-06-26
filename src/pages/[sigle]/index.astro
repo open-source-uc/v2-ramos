@@ -178,7 +178,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                 }
             </div>
 
-            <!-- Carga de Trabajo -->
+            <!-- Nivel de Dificultad -->
             <div class="border border-border rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div
@@ -188,7 +188,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-muted-foreground">
-                            Carga de Trabajo
+                             Nivel de Dificultad
                         </h3>
                         <p class="text-lg font-semibold">{workloadLabel}</p>
                     </div>
@@ -389,10 +389,10 @@ const reportSuccessMessage = reportResult?.data?.message;
                                                 icon={WorkloadIcon}
                                             >
                                                 {review.workload_vote === 0
-                                                    ? "Carga Baja"
+                                                    ? "Dificultad Baja"
                                                     : review.workload_vote === 1
-                                                    ? "Carga Media"
-                                                    : "Carga Alta"}
+                                                    ? "Dificultad Normal"
+                                                    : "Dificultad Alta"}
                                             </Pill>
                                             <Pill
                                                 variant="ghost_purple"
