@@ -18,7 +18,7 @@ export interface CourseSummary {
     credits?: number; // Added for convenience
     school?: string; // Added for convenience
     area?: string; // Added for convenience
-    category?: string; // Added for convenience
+    category?: string; // Added for convenience.
 }
 
 export interface CourseReview {
