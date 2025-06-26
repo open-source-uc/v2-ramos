@@ -2,11 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { SearchableTableDisplay } from "../components/SearchableTableDisplay";
 
-import { getCollection } from "astro:content";
-
 const searchParam = Astro.url.searchParams.get("search") || "";
 
-const coursesScore = await getCollection("coursesScore"); // ahora el tipo seria
 /*
 {
     id: string;
@@ -23,7 +20,6 @@ const coursesScore = await getCollection("coursesScore"); // ahora el tipo seria
 
 <Layout title="Catálogo de Cursos">
   <SearchableTableDisplay
-    coursesScore={coursesScore}
     initialSearchValue={searchParam}
     client:only="react"
   />

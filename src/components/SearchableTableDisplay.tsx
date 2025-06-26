@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Search } from "./Search"
 import type { Course } from "./table/columns"
 import { DataTable } from "./table/data-table"
@@ -9,41 +9,80 @@ import { cn } from "@/lib/utils"
 import type { InferEntrySchema, RenderedContent } from "astro:content"
 
 interface SearchableTableDisplayProps {
-  coursesScore: {
-    id: string;
-    body?: string;
-    collection: "coursesScore";
-    data: InferEntrySchema<"coursesScore">;
-    rendered?: RenderedContent;
-    filePath?: string;
-  }[];
   initialSearchValue?: string;
 }
 
-export function SearchableTableDisplay({ coursesScore, initialSearchValue = "" }: SearchableTableDisplayProps) {
+export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTableDisplayProps) {
   const [searchValue, setSearchValue] = useState(initialSearchValue)
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
-  const data = coursesScore.map((entry) => entry.data)
+  const [courses, setCourses] = useState<InferEntrySchema<"coursesScore">[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/courses-score");
+
+        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.body) throw new Error("ReadableStream not supported");
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        const newCourses: InferEntrySchema<"coursesScore">[] = [];
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // Procesar líneas completas
+          let lines = buffer.split("\n");
+          buffer = lines.pop() || ""; // Última línea puede estar incompleta
+
+          for (const line of lines) {
+            if (line.trim()) {
+              const item = JSON.parse(line);
+              newCourses.push(item.data);
+              setCourses((old) => [...old, item.data]); // Renderizar progresivo
+            }
+          }
+        }
+
+        // Procesar línea restante
+        if (buffer.trim()) {
+          const item = JSON.parse(buffer);
+          newCourses.push(item.data);
+          setCourses((old) => [...old, item.data]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   // Get unique areas from the data
   const uniqueAreas = useMemo(() => {
-    const areas = data
+    const areas = courses
       .map((course) => course.area)
       .filter((area) => area && area !== "Ninguna"); // Filter out null/undefined and "Ninguna"
     return Array.from(new Set(areas)).sort();
-  }, [data]);
+  }, [courses]);
 
   // Get unique schools from the data
   const uniqueSchools = useMemo(() => {
-    const schools = data
+    const schools = courses
       .map((course) => course.school)
       .filter((school) => school && school.trim() !== ""); // Filter out null/undefined and empty strings
     return Array.from(new Set(schools)).sort();
-  }, [data]);
+  }, [courses]);
 
   // Filter data based on both search and area selection
   const filteredData = useMemo(() => {
-    let filtered = data;
+    let filtered = courses;
 
     if (selectedArea !== "all") {
       filtered = filtered.filter((course) => course.area === selectedArea);
@@ -54,7 +93,7 @@ export function SearchableTableDisplay({ coursesScore, initialSearchValue = "" }
     }
 
     return filtered;
-  }, [data, selectedArea, selectedSchool]);
+  }, [courses, selectedArea, selectedSchool]);
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
