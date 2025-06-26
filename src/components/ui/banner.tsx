@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { 
   VeryHappyIcon, 
-  SadIcon,
+  VerySadIcon,
   CalendarIcon, 
   BuildingIcon, 
   SearchIcon,
@@ -18,7 +18,7 @@ import {
 // Icon mapping for the Banner component
 const iconMap = {
   VeryHappyIcon,
-  SadIcon,
+  VerySadIcon,
   CalendarIcon,
   BuildingIcon,
   SearchIcon,
