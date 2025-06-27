@@ -113,7 +113,6 @@ export function LandingSearch() {
           </Button>
         </div>
 
-<<<<<<< HEAD
         <Button
           variant="outline"
           size="lg"
@@ -123,8 +122,6 @@ export function LandingSearch() {
         >
           Conocer más acerca de nosotros
         </Button>
-=======
->>>>>>> main
       </div>
     </div>
   )
