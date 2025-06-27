@@ -82,7 +82,7 @@ export default function MobileHeader() {
           <div className="flex flex-col p-6 space-y-8 overflow-y-auto flex-1">
             {/* Account section */}
             <section className="border border-border rounded-md p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Tu Cuenta</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">TU CUENTA OSUC</h3>
               <div className="space-y-3">
                 <a
                   href={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`}
