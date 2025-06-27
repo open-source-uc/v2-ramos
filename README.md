@@ -49,7 +49,9 @@ El siguiente paso es poblar tu base de datos local. El script `setup.sh` se enca
 Desde la raíz del proyecto, ejecuta:
 
 ```bash
-bash migration/setup.sh
+cd migration
+bash setup.sh
+cd ..
 ```
 
 Cuando el script te pregunte, selecciona la opción **1) Local**.
