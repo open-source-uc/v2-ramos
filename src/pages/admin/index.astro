@@ -1,8 +1,451 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import { getToken } from "@/lib/auth";
+import { getUserDataByToken } from "@/services/auth";
+import { getDashboardStats, getSystemHealth, getPendingReviews, getReportedReviews } from "@/services/admin.reviews";
+import { OsucPermissions } from "@/types/permissions";
+import { Button } from "@/components/ui/button";
+import { Pill } from "@/components/ui/pill";
+import {
+    ThumbUpIcon,
+    ThumbDownIcon,
+    StarIcon,
+    FlagIcon,
+    PlusIcon,
+    ClockIcon,
+    EditIcon,
+    BuildingIcon,
+    QuestionIcon,
+    MenuIcon,
+    CloseIcon,
+    ResourcesIcon,
+    OpenInFullIcon,
+    TrendingUpIcon,
+    ActivityIcon,
+    UsersIcon,
+    EyeIcon
+} from "@/components/icons/icons";
+
+// Authentication check
+const token = getToken(Astro.cookies);
+if (!token) {
+    return Astro.redirect("/");
+}
+
+const user = await getUserDataByToken(token);
+if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+    return Astro.redirect("/");
+}
+
+// Fetch dashboard data
+const stats = await getDashboardStats(Astro.locals, token);
+const systemHealth = await getSystemHealth(Astro.locals, token);
+const pendingReviews = await getPendingReviews(Astro.locals, token);
+const reportedReviews = await getReportedReviews(Astro.locals, token);
+
+// Process statistics
+const totalReviews = stats.reviewStats.reduce((sum: number, stat: any) => sum + Number(stat.count), 0);
+const approvedReviews = Number(stats.reviewStats.find((s: any) => s.status === 1)?.count || 0);
+const pendingCount = Number(stats.reviewStats.find((s: any) => s.status === 0)?.count || 0);
+const reportedCount = Number(stats.reviewStats.find((s: any) => s.status === 2)?.count || 0);
+const hiddenCount = Number(stats.reviewStats.find((s: any) => s.status === 3)?.count || 0);
+
+const positiveReviews = stats.sentimentStats.filter((s: any) => s.like_dislike >= 1).reduce((sum: number, s: any) => sum + Number(s.count), 0);
+const negativeReviews = Number(stats.sentimentStats.find((s: any) => s.like_dislike === 0)?.count || 0);
+const superLikes = Number(stats.sentimentStats.find((s: any) => s.like_dislike === 2)?.count || 0);
+const likes = Number(stats.sentimentStats.find((s: any) => s.like_dislike === 1)?.count || 0);
+
+const approvalRate = totalReviews > 0 ? Math.round((approvedReviews / totalReviews) * 100) : 0;
+const positiveRate = approvedReviews > 0 ? Math.round((positiveReviews / approvedReviews) * 100) : 0;
 ---
 
 <Layout>
-    <a href="/admin/reviews-reported" class="underline">REPORTED</a>
-    <a href="/admin/reviews-pending" class="underline">PENDING</a>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <section class="border border-border rounded-md px-6 py-8 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Panel de Administración</h1>
+                    <p class="text-muted-foreground">
+                        Gestiona reseñas, monitorea la actividad del sistema y revisa métricas importantes
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Pill variant="blue" icon={UsersIcon}>
+                        Administrador
+                    </Pill>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Metrics -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- Total Reviews -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                        <ResourcesIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Total Reseñas</h3>
+                        <p class="text-2xl font-bold">{totalReviews.toLocaleString()}</p>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    {approvalRate}% aprobadas
+                </div>
+            </div>
+
+            <!-- Active Courses -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                        <ActivityIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Cursos Activos</h3>
+                        <p class="text-2xl font-bold">{stats.coursesWithReviews.toLocaleString()}</p>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    Con reseñas aprobadas
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                        <TrendingUpIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Actividad (7d)</h3>
+                        <p class="text-2xl font-bold">{stats.recentActivity.toLocaleString()}</p>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    Nuevas reseñas esta semana
+                </div>
+            </div>
+
+            <!-- Positive Sentiment -->
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-orange-light text-orange border border-orange/20 rounded-lg">
+                        <StarIcon className="h-5 w-5 fill-current" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-muted-foreground">Sentimiento Positivo</h3>
+                        <p class="text-2xl font-bold">{positiveRate}%</p>
+                    </div>
+                </div>
+                <div class="text-sm text-muted-foreground">
+                    {positiveReviews.toLocaleString()} reseñas positivas
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Items & System Health -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Pending Actions -->
+            <section class="border border-border rounded-md">
+                <div class="border-b border-border px-6 py-4">
+                    <h2 class="text-xl font-semibold">Acciones Pendientes</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- Pending Reviews -->
+                        <div class="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-yellow-100 text-yellow-600 rounded-lg">
+                                    <ClockIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                <div>
+                                    <p class="font-medium">Reseñas Pendientes</p>
+                                    <p class="text-sm text-muted-foreground">{pendingCount} esperando aprobación</p>
+                                </div>
+                            </div>
+                            <Button
+                                variant="outline"
+                                href="/admin/reviews-pending"
+                                size="sm"
+                                icon={EyeIcon}
+                            >
+                                Revisar
+                            </Button>
+                        </div>
+
+                        <!-- Reported Reviews -->
+                        <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-red-100 text-red-600 rounded-lg">
+                                    <FlagIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                <div>
+                                    <p class="font-medium">Reseñas Reportadas</p>
+                                    <p class="text-sm text-muted-foreground">{reportedCount} requieren atención</p>
+                                </div>
+                            </div>
+                            <Button
+                                variant="outline"
+                                href="/admin/reviews-reported"
+                                size="sm"
+                                icon={FlagIcon}
+                            >
+                                Revisar
+                            </Button>
+                        </div>
+
+                        <!-- Stale Reviews -->
+                        {systemHealth.staleReviews > 0 && (
+                            <div class="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex items-center gap-3">                                <div class="p-2 bg-gray-100 text-gray-600 rounded-lg">
+                                    <QuestionIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                    <div>
+                                        <p class="font-medium">Reseñas Antiguas</p>
+                                        <p class="text-sm text-muted-foreground">{systemHealth.staleReviews} pendientes +7 días</p>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="outline"
+                                    href="/admin/reviews-pending"
+                                    size="sm"
+                                    icon={ClockIcon}
+                                >
+                                    Ver
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            <!-- System Health -->
+            <section class="border border-border rounded-md">
+                <div class="border-b border-border px-6 py-4">
+                    <h2 class="text-xl font-semibold">Estado del Sistema</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- System Status -->
+                        <div class="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-green-100 text-green-600 rounded-lg">
+                                    <ThumbUpIcon className="h-5 w-5 fill-current" />
+                                </div>
+                                <div>
+                                    <p class="font-medium">Sistema Operativo</p>
+                                    <p class="text-sm text-muted-foreground">Todos los servicios funcionando</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Database Health -->
+                        <div class="p-4 border border-border rounded-lg">
+                            <div class="flex items-center gap-3 mb-2">
+                                <BuildingIcon className="h-5 w-5 text-muted-foreground" />
+                                <p class="font-medium">Base de Datos</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-muted-foreground">Reseñas Aprobadas</p>
+                                    <p class="font-medium">{approvedReviews.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-muted-foreground">Reseñas Ocultas</p>
+                                    <p class="font-medium">{hiddenCount.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-muted-foreground">Reportes Recientes</p>
+                                    <p class="font-medium">{stats.recentReports.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-muted-foreground">Datos Huérfanos</p>
+                                    <p class="font-medium text-red-600">{systemHealth.orphanedReviews.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Top Courses and Sentiment Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Top Courses -->
+            <section class="border border-border rounded-md">
+                <div class="border-b border-border px-6 py-4">
+                    <h2 class="text-xl font-semibold">Cursos Más Reseñados</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-3">
+                        {stats.topCourses.map((course: any, index: number) => (
+                            <div class="flex items-center justify-between p-3 bg-background border border-border rounded-lg">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-blue-light text-blue rounded-full flex items-center justify-center text-sm font-bold">
+                                        {index + 1}
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">{course.course_sigle}</p>
+                                        <p class="text-sm text-muted-foreground">{course.review_count} reseñas</p>
+                                    </div>
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    href={`/${course.course_sigle}`}
+                                    size="sm"
+                                    icon={EyeIcon}
+                                >
+                                    Ver
+                                </Button>
+                            </div>
+                        ))}
+                        {stats.topCourses.length === 0 && (
+                            <div class="text-center py-8 text-muted-foreground">
+                                <p>No hay datos disponibles</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sentiment Distribution -->
+            <section class="border border-border rounded-md">
+                <div class="border-b border-border px-6 py-4">
+                    <h2 class="text-xl font-semibold">Distribución de Sentimientos</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <StarIcon className="h-6 w-6 text-green-600 fill-current" />
+                                <div>
+                                    <p class="font-medium">Super Recomendaciones</p>
+                                    <p class="text-sm text-muted-foreground">{superLikes} reseñas</p>
+                                </div>
+                            </div>
+                            <p class="text-lg font-bold text-green-600">
+                                {approvedReviews > 0 ? Math.round((superLikes / approvedReviews) * 100) : 0}%
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <ThumbUpIcon className="h-6 w-6 text-blue-600 fill-current" />
+                                <div>
+                                    <p class="font-medium">Recomendaciones</p>
+                                    <p class="text-sm text-muted-foreground">{likes} reseñas</p>
+                                </div>
+                            </div>
+                            <p class="text-lg font-bold text-blue-600">
+                                {approvedReviews > 0 ? Math.round((likes / approvedReviews) * 100) : 0}%
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <ThumbDownIcon className="h-6 w-6 text-red-600 fill-current" />
+                                <div>
+                                    <p class="font-medium">No Recomendaciones</p>
+                                    <p class="text-sm text-muted-foreground">{negativeReviews} reseñas</p>
+                                </div>
+                            </div>
+                            <p class="text-lg font-bold text-red-600">
+                                {approvedReviews > 0 ? Math.round((negativeReviews / approvedReviews) * 100) : 0}%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Recent Activity Preview -->
+        <section class="border border-border rounded-md">
+            <div class="border-b border-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">Actividad Reciente</h2>
+                    <div class="flex gap-2">
+                        <Button
+                            variant="outline"
+                            href="/admin/reviews-pending"
+                            size="sm"
+                        >
+                            Ver Pendientes
+                        </Button>
+                        <Button
+                            variant="outline"
+                            href="/admin/reviews-reported"
+                            size="sm"
+                        >
+                            Ver Reportadas
+                        </Button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Pending Reviews Preview -->
+                    <div>
+                        <h3 class="font-medium mb-3 text-yellow-600">Reseñas Pendientes ({pendingReviews.length})</h3>
+                        <div class="space-y-2">
+                            {pendingReviews.slice(0, 3).map((review: any) => (
+                                <div class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div class="text-sm">
+                                            <p class="font-medium">{review.course_sigle}</p>
+                                            <p class="text-muted-foreground">
+                                                {new Date(review.created_at).toLocaleDateString('es-CL')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        {review.like_dislike === 2 ? (
+                                            <StarIcon className="h-4 w-4 text-green-600 fill-current" />
+                                        ) : review.like_dislike === 1 ? (
+                                            <ThumbUpIcon className="h-4 w-4 text-blue-600 fill-current" />
+                                        ) : (
+                                            <ThumbDownIcon className="h-4 w-4 text-red-600 fill-current" />
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                            {pendingReviews.length === 0 && (
+                                <div class="text-center py-4 text-muted-foreground">
+                                    <p class="text-sm">No hay reseñas pendientes</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <!-- Reported Reviews Preview -->
+                    <div>
+                        <h3 class="font-medium mb-3 text-red-600">Reseñas Reportadas ({reportedReviews.length})</h3>
+                        <div class="space-y-2">
+                            {reportedReviews.slice(0, 3).map((review: any) => (
+                                <div class="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div class="text-sm">
+                                            <p class="font-medium">{review.course_sigle}</p>
+                                            <p class="text-muted-foreground">
+                                                Reportada: {new Date(review.updated_at).toLocaleDateString('es-CL')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <FlagIcon className="h-4 w-4 text-red-600 fill-current" />
+                                    </div>
+                                </div>
+                            ))}
+                            {reportedReviews.length === 0 && (
+                                <div class="text-center py-4 text-muted-foreground">
+                                    <p class="text-sm">No hay reseñas reportadas</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </Layout>
