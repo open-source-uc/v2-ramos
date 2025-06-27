@@ -96,7 +96,7 @@ export default function Header() {
             <div className="flex items-center space-x-2">
               <HighContrastToggle />
               <ButtonNavbar
-                text="Tu Cuenta"
+                text="TU CUENTA OSUC"
                 url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`} />
             </div>
           </div>
