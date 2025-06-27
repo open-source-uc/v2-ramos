@@ -79,4 +79,15 @@ const coursesStatic = defineCollection({
 })
 
 
-export const collections = { resources, blogs, initiatives, recommendations, coursesStatic }
+const contribuidores = defineCollection({
+    schema: z.object({
+      nombre: z.string(),
+      rol: z.string(),
+      carrera: z.string(),
+      linkedin: z.string().url(),
+      github: z.string().url(),
+      imagen: z.string(),
+    }),
+  });
+
+export const collections = { resources, blogs, initiatives, recommendations, coursesStatic, contribuidores }
