@@ -1,46 +1,11 @@
 import type { APIRoute } from "astro";
+import CoursesRaw from "../../../migration/json/2025-1.json";
+import Id2NameRaw from "../../../migration/json/valores_unicos.json";
+import type { CourseStaticInfo, CourseSummary } from "@/types";
 
-// export const GET: APIRoute = async ({ request, locals }) => {
-//     const key = "2025-1.json";
 
-//     // Obtener metadata del objeto
-//     const head = await locals.runtime.env.R2.head(key);
-//     if (!head || !head.etag) {
-//         return new Response("Not Found", { status: 404 });
-//     }
-
-//     const etag = `"${head.etag}"`;
-
-//     // Verificar si el cliente ya tiene esta versión
-//     const ifNoneMatch = request.headers.get("if-none-match");
-//     if (ifNoneMatch === etag) {
-//         return new Response(null, {
-//             status: 304,
-//             headers: {
-//                 "Cache-Control": "private, max-age=86400, must-revalidate",
-//                 "ETag": etag,
-//                 "Vary": "Accept-Encoding"
-//             },
-//         });
-//     }
-
-//     // Obtener contenido si no coincide el ETag
-//     const res = await locals.runtime.env.R2.get(key);
-//     if (!res) {
-//         return new Response("Not Found", { status: 404 });
-//     }
-
-//     const data = await res.json();
-
-//     return new Response(JSON.stringify(data), {
-//         status: 200,
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Cache-Control": "private, max-age=86400, must-revalidate",
-//             "ETag": etag,
-//         },
-//     });
-// };
+const coursesData = CoursesRaw as Record<string, CourseStaticInfo>;
+const id2NameData = Id2NameRaw as Record<string, string>;
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
@@ -74,11 +39,28 @@ export const GET: APIRoute = async ({ request, locals }) => {
         FROM course_summary ORDER BY sort_index DESC, id
     `).all<CourseSummary>();
 
-    return new Response(JSON.stringify(result.results), {
+    const stream = new ReadableStream({
+        start(controller) {
+            for (const course of result.results) {
+                const staticInfo = coursesData[course.sigle];
+
+                course.name = staticInfo?.name ?? course.sigle;
+                course.credits = staticInfo?.credits ?? 0;
+                course.school = id2NameData[course.school_id] || "";
+                course.area = id2NameData[course.area_id] || "";
+                course.category = id2NameData[course.category_id] || "";
+
+                const line = JSON.stringify(course) + "\n";
+                controller.enqueue(new TextEncoder().encode(line));
+            }
+            controller.close();
+        },
+    });
+
+    return new Response(stream, {
         status: 200,
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-ndjson; charset=utf-8",
         },
     });
 };
-

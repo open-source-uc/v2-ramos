@@ -1,140 +1,35 @@
 ---
 import { getCollection } from "astro:content";
+import ContentPage from "@/components/ContentPage.astro";
+import { ResourcesIcon, ClockIcon } from "../../components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
-import { BuildingIcon, ClockIcon } from "../../components/icons/icons";
-import { Pill } from "../../components/ui/pill";
-
 export const prerender = true;
 
 export async function getStaticPaths() {
-    const resources = await getCollection("resources");
+  const resources = await getCollection("resources");
 
-    return resources.map((resource) => ({
-        params: { id: resource.slug },
-        props: { resource }
-    }));
+  return resources.map((resource) => ({
+    params: { id: resource.slug },
+    props: { resource },
+  }));
 }
 
 const { resource } = Astro.props;
 const { data, body } = resource;
 const { title, author, readtime, description } = data;
 const { Content } = await resource.render();
-
-// Author can be a string or an object with name, title, picture, and link
-const authorData = typeof author === 'string' 
-    ? { name: author, title: null, picture: null, link: null }
-    : author;
 ---
 
 <Layout>
-    <div class="flex flex-col gap-4 max-w-4xl mx-auto px-4 py-8">
-
-        <!-- Header Section -->
-        <section class="border border-border rounded-md px-6 py-8">
-            <div>
-                <h1 class="text-3xl font-bold pb-4">{title}</h1>
-                <p class="text-sm opacity-60 max-w-[80%]">{description}</p>
-                {authorData && (
-                    <div class="flex items-center gap-3 mt-4">
-                        <div class="flex items-center gap-3">
-                            {authorData.picture ? (
-                                <a 
-                                    href={authorData.link || '#'} 
-                                    target={authorData.link ? '_blank' : undefined}
-                                    rel={authorData.link ? 'noopener noreferrer' : undefined}
-                                    class="block"
-                                >
-                                    <img 
-                                        src={authorData.picture} 
-                                        alt={`Foto de ${authorData.name}`}
-                                        class="w-10 h-10 rounded-full object-cover border-2 border-border hover:border-blue transition-colors"
-                                    />
-                                </a>
-                            ) : (
-                                <div class="w-10 h-10 rounded-full bg-muted border-2 border-border flex items-center justify-center">
-                                    <span class="text-sm font-medium text-muted-foreground">
-                                        {authorData.name?.charAt(0).toUpperCase()}
-                                    </span>
-                                </div>
-                            )}
-                            <div class="flex flex-col">
-                                <div class="text-sm text-muted-foreground">
-                                    Por{' '}
-                                    {authorData.link ? (
-                                        <a 
-                                            href={authorData.link} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            class="font-medium text-foreground hover:text-blue transition-colors"
-                                        >
-                                            {authorData.name}
-                                        </a>
-                                    ) : (
-                                        <span class="font-medium text-foreground">{authorData.name}</span>
-                                    )}
-                                </div>
-                                {authorData.title && (
-                                    <div class="text-xs text-muted-foreground">
-                                        {authorData.title}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div class="flex items-center flex-wrap gap-2 mt-8">
-                <Pill
-                    variant="blue"
-                    size="sm"
-                    icon={BuildingIcon}
-                    className=""
-                >
-                    Recurso
-                </Pill>
-                <Pill
-                    variant="green"
-                    size="sm"
-                    icon={ClockIcon}
-                    className=""
-                >
-                    {readtime} minutos de lectura
-                </Pill>
-            </div>
-        </section>
-
-        <!-- Content Section -->
-        <article class="border border-border rounded-md overflow-hidden">
-            <div class="px-6 py-8">
-                <div class="max-w-none text-foreground leading-relaxed content-markdown">
-                    <Content />
-                </div>
-            </div>
-        </article>
-
-        <!-- Navigation Section -->
-        <section class="mt-8">
-            <div class="border border-border rounded-md p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-semibold text-foreground mb-2">
-                            ¿Te resultó útil este recurso?
-                        </h3>
-                        <p class="text-sm text-muted-foreground">
-                            Explora más recursos y guías en nuestra sección de ayuda.
-                        </p>
-                    </div>
-                    <div class="flex gap-3">
-                        <a 
-                            href="/resources" 
-                            class="inline-flex items-center px-4 py-2 border border-border bg-background hover:bg-muted transition-colors rounded-md text-sm font-medium text-foreground"
-                        >
-                            Ver Todos los Recursos
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+  <ContentPage
+    title={title}
+    description={description}
+    author={author}
+    readtime={readtime}
+    contentType="resource"
+    primaryPillIcon={ResourcesIcon}
+    secondaryPillIcon={ClockIcon}
+  >
+    <Content />
+  </ContentPage>
 </Layout>

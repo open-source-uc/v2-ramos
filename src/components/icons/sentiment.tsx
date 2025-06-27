@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { VeryHappyIcon, HappyIcon, NeutralIcon, SadIcon, VerySadIcon, QuestionIcon } from "./icons"
 
 const sentimentVariants = cva(
-  "inline-flex items-center justify-center rounded-lg p-2 transition-colors",
+  "inline-flex items-center gap-3 rounded-lg transition-colors",
   {
     variants: {
       sentiment: {
@@ -16,7 +16,8 @@ const sentimentVariants = cva(
         question: "bg-gray-light text-gray border border-gray/20",
       },
       size: {
-        sm: "p-1.5",
+        xs : "p-1.5",
+        sm: "p-2",
         default: "p-2",
         lg: "p-3",
       },
@@ -34,10 +35,12 @@ export interface SentimentProps
   sentiment: "veryHappy" | "happy" | "neutral" | "sad" | "verySad" | "question"
   ariaLabel?: string
   showTooltip?: boolean
+  percentage?: number
+  reviewCount?: number
 }
 
 const Sentiment = React.forwardRef<HTMLDivElement, SentimentProps>(
-  ({ className, sentiment, size, ariaLabel, showTooltip = true, ...props }, ref) => {
+  ({ className, sentiment, size, ariaLabel, showTooltip = true, percentage, reviewCount, ...props }, ref) => {
     const IconComponent = {
       veryHappy: VeryHappyIcon,
       happy: HappyIcon,
@@ -69,13 +72,24 @@ const Sentiment = React.forwardRef<HTMLDivElement, SentimentProps>(
       >
         <IconComponent 
           className={cn(
+            size === "xs" ? "h-3 w-3" :
             size === "sm" ? "h-4 w-4" : 
             size === "lg" ? "h-6 w-6" : 
             "h-5 w-5",
-            "fill-current" // Make the fill color match the text color
+            "fill-current flex-shrink-0" // Make the fill color match the text color and prevent shrinking
           )}
           aria-hidden="true"
         />
+        {(percentage !== undefined && reviewCount !== undefined) && (
+          <div className="flex flex-col min-w-0">
+            <div className="font-semibold text-xs leading-tight">
+              {Math.round(percentage)}% Positivas
+            </div>
+            <div className="font-light text-xs leading-tight opacity-80">
+              Basado en {reviewCount} {reviewCount === 1 ? 'reseña' : 'reseñas'}
+            </div>
+          </div>
+        )}
       </div>
     )
   }

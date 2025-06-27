@@ -9,15 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary-foreground text-primary hover:bg-muted hover:text-primary",
+        default: "bg-primary text-background border border-border hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-border shadow-sm bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-border bg-muted hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-muted text-muted-foreground hover:bg-muted/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        ghost_blue: "bg-transparent text-primary border border-border hover:bg-primary-foreground hover:text-primary",
+        ghost_pink: "bg-transparent text-pink border border-border hover:bg-pink-light hover:text-pink",
+        ghost_green: "bg-transparent text-green border border-border hover:bg-green-light hover:text-green",
+        ghost_purple: "bg-transparent text-purple border border-border hover:bg-purple-light hover:text-purple",
+        ghost_orange: "bg-transparent text-orange border border-border hover:bg-orange-light hover:text-orange",
+        ghost_red: "bg-transparent text-red border border-border hover:bg-red-light hover:text-red",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -57,6 +63,21 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       "aria-busy": loading,
     }
 
+    // Determine icon color for ghost variants
+    const getIconColor = () => {
+      if (!variant?.startsWith('ghost_')) return 'fill-current';
+      
+      switch (variant) {
+        case 'ghost_blue': return 'fill-primary';
+        case 'ghost_pink': return 'fill-pink';
+        case 'ghost_green': return 'fill-green';
+        case 'ghost_purple': return 'fill-purple';
+        case 'ghost_orange': return 'fill-orange';
+        case 'ghost_red': return 'fill-red';
+        default: return 'fill-current';
+      }
+    };
+
     const content = loading ? (
       <>
         <svg 
@@ -85,7 +106,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       </>
     ) : (
       <>
-        {Icon && <Icon className="h-4 w-4 -ml-1 mr-2 fill-current" />}
+        {Icon && <Icon className={`h-4 w-4 -ml-1 mr-2 ${getIconColor()}`} />}
         {children}
       </>
     )

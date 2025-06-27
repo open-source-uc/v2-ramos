@@ -33,12 +33,12 @@ const iconContainerVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary/10 text-primary border-primary/20 group-has-[:checked]:bg-primary group-has-[:checked]:text-primary-foreground",
-        blue: "bg-blue-100 text-blue-600 border-blue/20 group-has-[:checked]:bg-blue-500 group-has-[:checked]:text-white",
-        green: "bg-green-100 text-green-600 border-green/20 group-has-[:checked]:bg-green-500 group-has-[:checked]:text-white",
-        red: "bg-red-100 text-red-600 border-red/20 group-has-[:checked]:bg-red-500 group-has-[:checked]:text-white",
-        orange: "bg-orange-100 text-orange-600 border-orange/20 group-has-[:checked]:bg-orange-500 group-has-[:checked]:text-white",
-        purple: "bg-purple-100 text-purple-600 border-purple/20 group-has-[:checked]:bg-purple-500 group-has-[:checked]:text-white",
+        default: "bg-transparent text-primary border-primary/20 group-has-[:checked]:bg-primary group-has-[:checked]:text-primary-foreground",
+        blue: "bg-transparent text-blue-600 border-blue/20 group-has-[:checked]:bg-blue-500 group-has-[:checked]:text-white",
+        green: "bg-transparent text-green-600 border-green/20 group-has-[:checked]:bg-green-500 group-has-[:checked]:text-white",
+        red: "bg-transparent text-red-600 border-red/20 group-has-[:checked]:bg-red-500 group-has-[:checked]:text-white",
+        orange: "bg-transparent text-orange-600 border-orange/20 group-has-[:checked]:bg-orange-500 group-has-[:checked]:text-white",
+        purple: "bg-transparent text-purple-600 border-purple/20 group-has-[:checked]:bg-purple-500 group-has-[:checked]:text-white",
       },
       size: {
         default: "p-2",

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 export function MarkdownReviewView({ path }: { path: string }) {
     const [text, setText] = useState("Cargando...");
@@ -26,5 +27,9 @@ export function MarkdownReviewView({ path }: { path: string }) {
         return <blockquote>Error cargando contenido.</blockquote>;
     }
 
-    return <blockquote>{text}</blockquote>;
+    return (
+        <article className="prose max-w-none">
+            <ReactMarkdown>{text}</ReactMarkdown>
+        </article>
+    );
 }

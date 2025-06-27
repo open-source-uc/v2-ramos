@@ -8,10 +8,12 @@
 		"preview": "astro build && wrangler pages dev",
 		"astro": "astro",
 		"deploy": "astro build && wrangler pages deploy",
+		"reload-courses": "bash migration/reload-courses.sh",
 		"cf-typegen": "wrangler types"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "12.6.0",
+		"@astrojs/mdx": "^4.3.0",
 		"@astrojs/react": "4.3.0",
 		"@fontsource-variable/instrument-sans": "5.2.6",
 		"@radix-ui/react-navigation-menu": "1.2.13",
@@ -20,12 +22,14 @@
 		"@tailwindcss/vite": "4.1.10",
 		"@tanstack/react-table": "8.21.3",
 		"astro": "5.10.0",
+		"astro-seo": "^0.8.4",
 		"class-variance-authority": "0.7.1",
 		"clsx": "2.1.1",
 		"lucide-react": "0.519.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-icons": "^5.5.0",
+		"react-markdown": "^10.1.0",
 		"tailwind-merge": "3.3.1",
 		"tailwindcss": "4.1.10",
 		"typescript": "5.8.3"

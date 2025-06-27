@@ -1,0 +1,219 @@
+---
+import { getCollection } from "astro:content";
+import BlogsScroll from "@/components/BlogsScroll.tsx";
+import Layout from "@/layouts/Layout.astro";
+import RenderMarkdown from "@/components/RenderMarkdown.astro";
+import BlogCard from "@/components/BlogCard.tsx";
+import { Pill } from "@/components/ui/pill";
+import {
+  BuildingIcon,
+  InstagramIcon,
+  GitHubIcon,
+  LinkedInIcon,
+} from "@/components/icons/icons";
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const initiatives = await getCollection("initiatives");
+  return initiatives.map((initiative) => ({
+    params: {
+      name: initiative.data.name.toLowerCase().replace(/\s+/g, "-"),
+    },
+    props: { initiative },
+  }));
+}
+
+const blogs = await getCollection("blogs", (blog) => {
+  return blog.data.author?.name === Astro.props.initiative.data.name;
+});
+
+const { initiative } = Astro.props;
+const { title, name, picture, faculty, rrss } = initiative.data;
+const { Content } = await initiative.render();
+---
+
+<Layout>
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <a
+      class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors mb-4"
+      href={`/initiatives`}
+    >
+      ← Ver más iniciativas
+    </a>
+    <header class="mb-12">
+      <section
+        class="border border-border rounded-md p-8"
+        aria-labelledby="initiative-title"
+      >
+        <div
+          class="flex flex-col lg:flex-row items-start lg:items-center gap-6"
+        >
+          <div class="flex-1">
+            <div class="mb-4">
+              <Pill size="sm" variant="blue" icon={BuildingIcon}>
+                {faculty}
+              </Pill>
+            </div>
+            <h1
+              id="initiative-title"
+              class="text-4xl lg:text-5xl font-bold text-foreground mb-2"
+            >
+              {name}
+            </h1>
+            <p class="text-lg text-muted-foreground">{title}</p>
+          </div>
+          <aside class="flex-shrink-0">
+            <figure
+              class="w-24 h-24 lg:w-32 lg:h-32 rounded-md overflow-hidden bg-white border border-border p-4"
+            >
+              <img
+                src={picture}
+                alt={`Logo de ${name}`}
+                class="w-full h-full object-contain"
+                loading="eager"
+              />
+            </figure>
+          </aside>
+        </div>
+      </section>
+    </header>
+    <!-- Main Content -->
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Initiative Description -->
+      <section class="lg:col-span-2" aria-labelledby="description-title">
+        <article class="border border-border rounded-md overflow-hidden">
+          <div class="p-8">
+            <h2 id="description-title" class="text-xl font-semibold">
+              Descripción de la iniciativa
+            </h2>
+            <RenderMarkdown border={false}>
+              <Content />
+            </RenderMarkdown>
+          </div>
+        </article>
+      </section>
+
+      <!-- Sidebar -->
+      <aside class="space-y-8" aria-label="Información adicional">
+        <!-- Social Media Links (if available) -->
+        <!-- Blogs Section -->
+        <section
+          class="border border-border rounded-md p-6"
+          aria-labelledby="blogs-title"
+        >
+          <header class="mb-4">
+            <h3 id="blogs-title" class="text-lg font-semibold text-foreground">
+              Blogs relacionados
+              {
+                blogs.length > 0 && (
+                  <Pill size="sm" variant="green" className="ml-2">
+                    {blogs.length}
+                  </Pill>
+                )
+              }
+            </h3>
+          </header>
+          {
+            blogs.length > 0 ? (
+              <div role="region" aria-label="Lista de blogs relacionados">
+                <BlogsScroll blogs={blogs} />
+              </div>
+            ) : (
+              <div class="text-center py-8" role="status" aria-live="polite">
+                <p class="text-muted-foreground text-sm">
+                  No hay blogs disponibles para esta iniciativa
+                </p>
+              </div>
+            )
+          }
+        </section>
+        {
+          rrss && Object.keys(rrss).length > 0 && (
+            <section
+              class="border border-border rounded-md p-6"
+              aria-labelledby="social-title"
+            >
+              <h3
+                id="social-title"
+                class="text-lg font-semibold text-foreground mb-4"
+              >
+                Síguenos
+              </h3>
+              <nav aria-label="Enlaces de redes sociales">
+                <ul class="space-y-3" role="list">
+                  {rrss.instagram && (
+                    <li>
+                      <a
+                        href={rrss.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        aria-label={`Seguir a ${name} en Instagram`}
+                      >
+                        {" "}
+                        <div
+                          class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <InstagramIcon className="w-4 h-4 text-white" />
+                        </div>
+                        <span class="text-sm text-muted-foreground">
+                          Instagram
+                        </span>
+                      </a>
+                    </li>
+                  )}
+                  {rrss.github && (
+                    <li>
+                      <a
+                        href={rrss.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        aria-label={`Ver repositorios de ${name} en GitHub`}
+                      >
+                        {" "}
+                        <div
+                          class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <GitHubIcon className="w-4 h-4 text-white" />
+                        </div>
+                        <span class="text-sm text-muted-foreground">
+                          GitHub
+                        </span>
+                      </a>
+                    </li>
+                  )}
+                  {rrss.linkedin && (
+                    <li>
+                      <a
+                        href={rrss.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                        aria-label={`Conectar con ${name} en LinkedIn`}
+                      >
+                        {" "}
+                        <div
+                          class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <LinkedInIcon className="w-4 h-4 text-white" />
+                        </div>
+                        <span class="text-sm text-muted-foreground">
+                          LinkedIn
+                        </span>
+                      </a>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            </section>
+          )
+        }
+      </aside>
+    </div>
+  </main>
+</Layout>

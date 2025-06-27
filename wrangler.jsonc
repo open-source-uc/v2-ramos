@@ -9,6 +9,9 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"limits": {
+		"cpu_ms": 10
+	},
 	"pages_build_output_dir": "./dist",
 	"observability": {
 		"enabled": true

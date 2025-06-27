@@ -38,7 +38,7 @@ export const getCourseReviews = async (locals: App.Locals, sigle: string, limit:
       created_at,
       updated_at
     FROM course_reviews 
-    WHERE course_sigle = ?
+    WHERE course_sigle = ? AND status != 3
     ORDER BY updated_at DESC
     LIMIT ?
   `).bind(sigle, limit).all<CourseReview>()
