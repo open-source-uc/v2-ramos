@@ -87,6 +87,11 @@ export default function Header() {
                           </a>
                         </NavigationMenuLink>
                       </li>
+
+                      <ListItem href="/team" title="Conoce al Equipo">
+                        Conoce a los estudiantes detrás de este proyecto, sus roles y carreras.
+                      </ListItem>
+
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>

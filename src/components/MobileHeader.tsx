@@ -142,6 +142,17 @@ export default function MobileHeader() {
                     Conoce cómo mantenemos un ambiente seguro y respetuoso.
                   </p>
                 </a>
+
+                <a
+                  href="/team"
+                  onClick={closeMenu}
+                  className="block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
+                >
+                  <div className="font-medium text-sm leading-none text-foreground">Conoce al Equipo</div>
+                  <p className="text-muted-foreground text-sm leading-snug mt-2">
+                    Conoce a los estudiantes detrás de este proyecto, sus roles y carreras.
+                  </p>
+                </a>
               </div>
             </section>
 

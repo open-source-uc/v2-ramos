@@ -106,22 +106,13 @@ export function LandingSearch() {
             variant="outline"
             size="lg"
             className="text-sm border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md bg-background/80 backdrop-blur-sm w-full tablet:w-auto"
-            onClick={() => window.location.href = '/404'}
+            onClick={() => window.location.href = 'https://osuc.dev/'}
             aria-label="Conocer más información acerca de nosotros"
           >
             Conocer más acerca de nosotros
           </Button>
         </div>
 
-        <Button
-          variant="outline"
-          size="lg"
-          className="text-sm border border-muted"
-          onClick={() => window.location.href = '/contributions'}
-          aria-label="Conocer más información acerca de nosotros"
-        >
-          Conocer más acerca de nosotros
-        </Button>
       </div>
     </div>
   )

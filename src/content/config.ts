@@ -1,5 +1,6 @@
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
+import { link } from "fs";
 
 const resourcesSchema =
     z.object({
@@ -108,6 +109,7 @@ const agradecimientos = defineCollection({
       nombre: z.string(),
       apellido: z.string(),
       imagen: z.string(),
+      linkedin: z.string().url().optional()
     }),
   });
 
