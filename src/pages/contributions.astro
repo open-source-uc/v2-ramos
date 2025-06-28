@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import Contribuidores from "@/components/Contribuidores";
+const contribuidores = await getCollection("contribuidores");
+
+const agradecimientos = Object.entries(
+  import.meta.glob("/src/assets/agradecimientos/*.{jpg,jpeg,png,gif}", {
+    eager: true,
+    as: "url",
+  })
+);
+  
+---
+<Layout>
+    <Contribuidores client:load items={contribuidores.map(c => c.data)} />
+        <section class="max-w-6xl mx-auto px-4 pb-16">
+            <h2 class="text-3xl font-semibold text-center mb-8">Agradecimientos</h2>
+            <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-10 justify-items-center">
+                {agradecimientos.map(([_, src], index) => (
+                  <div>
+                    <img
+                      src={src}
+                      alt={`Agradecimiento ${index + 1}`}
+                      class="w-20 h-20 object-cover rounded"
+                    />
+                  </div>
+                ))}
+              </div>
+              
+        </section>
+</Layout>
