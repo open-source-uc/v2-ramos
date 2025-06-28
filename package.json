@@ -16,6 +16,7 @@
 		"@astrojs/mdx": "^4.3.0",
 		"@astrojs/react": "4.3.0",
 		"@fontsource-variable/instrument-sans": "5.2.6",
+		"@mdxeditor/editor": "^3.37.0",
 		"@radix-ui/react-navigation-menu": "1.2.13",
 		"@radix-ui/react-select": "2.2.5",
 		"@radix-ui/react-slot": "1.2.3",

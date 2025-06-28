@@ -1,0 +1,10 @@
+---
+import EditorMDX from "@/components/EditorMDX.tsx";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="relative">
+    <EditorMDX client:only="react" />
+  </div>
+</Layout>

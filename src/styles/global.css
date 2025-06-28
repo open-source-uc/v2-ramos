@@ -365,3 +365,7 @@
     fill: currentColor !important;
   }
 }
+
+.mdxeditor-toolbar {
+  position: sticky;
+}
