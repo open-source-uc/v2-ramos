@@ -79,7 +79,14 @@ const coursesStatic = defineCollection({
 })
 
 const contribuidores = defineCollection({
+    loader: file("src/content/contribuidores/data.json", {
+        parser: (content) => {
+            const data = JSON.parse(content);
+            return data; // Return the array directly
+        }
+    }),
     schema: z.object({
+      id: z.string(),
       nombre: z.string(),
       rol: z.string(),
       carrera: z.string(),
@@ -89,5 +96,20 @@ const contribuidores = defineCollection({
     }),
   });
 
+const agradecimientos = defineCollection({
+    loader: file("src/content/agradecimientos/data.json", {
+        parser: (content) => {
+            const data = JSON.parse(content);
+            return data; // Return the array directly
+        }
+    }),
+    schema: z.object({
+      id: z.string(),
+      nombre: z.string(),
+      apellido: z.string(),
+      imagen: z.string(),
+    }),
+  });
 
-export const collections = { resources, blogs, initiatives, recommendations, coursesStatic, contribuidores };
+
+export const collections = { resources, blogs, initiatives, recommendations, coursesStatic, contribuidores, agradecimientos };

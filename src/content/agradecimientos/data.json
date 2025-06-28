@@ -1,0 +1,50 @@
+[
+  {
+    "id": "maria-gonzalez",
+    "nombre": "María",
+    "apellido": "González",
+    "imagen": "/src/assets/agradecimientos/pruebas.png"
+  },
+  {
+    "id": "carlos-rodriguez",
+    "nombre": "Carlos",
+    "apellido": "Rodríguez",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 2).png"
+  },
+  {
+    "id": "ana-martinez",
+    "nombre": "Ana",
+    "apellido": "Martínez",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 3).png"
+  },
+  {
+    "id": "diego-lopez",
+    "nombre": "Diego",
+    "apellido": "López",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 4).png"
+  },
+  {
+    "id": "sofia-fernandez",
+    "nombre": "Sofía",
+    "apellido": "Fernández",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 5).png"
+  },
+  {
+    "id": "roberto-silva",
+    "nombre": "Roberto",
+    "apellido": "Silva",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 6).png"
+  },
+  {
+    "id": "valentina-torres",
+    "nombre": "Valentina",
+    "apellido": "Torres",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 7).png"
+  },
+  {
+    "id": "andres-morales",
+    "nombre": "Andrés",
+    "apellido": "Morales",
+    "imagen": "/src/assets/agradecimientos/pruebas (Copy 8).png"
+  }
+]

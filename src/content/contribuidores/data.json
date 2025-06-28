@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ignacio",
+    "nombre": "Ignacio Palma",
+    "rol": "Desarrollador full stack",
+    "carrera": "Licenciatura en Ingenieria en Ciencia de Datos",
+    "linkedin": "https://linkedin.com/in/ignaciopalma",
+    "github": "https://github.com/ignaciopalma",
+    "imagen": "/images/contribuidores/prueba.jpg"
+  },
+  {
+    "id": "pablo",
+    "nombre": "Pablo Cruzat",
+    "rol": "Desarrollador full stack",
+    "carrera": "Licenciatura en Ingenieria en Ciencias de la Computacion",
+    "linkedin": "https://linkedin.com/in/",
+    "github": "https://github.com",
+    "imagen": "/images/contribuidores/prueba.jpg"
+  },
+  {
+    "id": "john",
+    "nombre": "John Dark Souls",
+    "rol": "Desarrollador full stack",
+    "carrera": "Ingeniería Civil",
+    "linkedin": "https://linkedin.com/in/",
+    "github": "https://github.com",
+    "imagen": "/images/contribuidores/prueba.jpg"
+  },
+  {
+    "id": "vicente",
+    "nombre": "Vicente Cuitiño",
+    "rol": "Desarrollador frontend",
+    "carrera": "Licenciatura en Ingenieria en Ciencias de la Computacion",
+    "linkedin": "https://linkedin.com/in/vicentecuitiño",
+    "github": "https://github.com/MangoFrapuccino",
+    "imagen": "/images/contribuidores/prueba.jpg"
+  }
+]
