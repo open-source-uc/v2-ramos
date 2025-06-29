@@ -1,0 +1,8 @@
+{
+  "title": "BuscaRamos",
+  "description": "Tu plataforma para explorar ramos, reseñarlos y mucho más. Encuentra ramos de la Pontificia Universidad Católica de Chile (UC), revisa sus reseñas y comparte tus experiencias.",
+  "image": {
+    "src": "/images/opengraph.png",
+    "alt": "BuscaRamos"
+  }
+}
