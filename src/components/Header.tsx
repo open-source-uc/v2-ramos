@@ -106,12 +106,12 @@ export default function Header() {
             </div>
           </div>
           <div className="flex w-full items-center justify-between">
-            <div className="flex w-full space-x-2">
+            <div className="flex gap-2">
               <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
               <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
               <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-2">
               <HighContrastToggle />
               <DarkThemeToggle />
             </div>
