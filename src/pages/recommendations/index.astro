@@ -12,7 +12,7 @@ const searchParam = Astro.url.searchParams.get("search") || "";
     <SearchableRecommendationsDisplay
       recommendations={recommendations}
       initialSearchValue={searchParam}
-      client:only="react"
+      client:load
     />
   </main>
 </Layout>

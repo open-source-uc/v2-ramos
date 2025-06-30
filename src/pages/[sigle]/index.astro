@@ -365,7 +365,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                                     {review.comment_path && (
                                         <MarkdownReviewView
                                             path={review.comment_path}
-                                            client:only="react"
+                                            client:load
                                         />
                                     )}
 

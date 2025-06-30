@@ -19,8 +19,5 @@ const searchParam = Astro.url.searchParams.get("search") || "";
 ---
 
 <Layout title="Catálogo de Cursos">
-  <SearchableTableDisplay
-    initialSearchValue={searchParam}
-    client:only="react"
-  />
+  <SearchableTableDisplay initialSearchValue={searchParam} client:load />
 </Layout>
