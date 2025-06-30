@@ -31,7 +31,7 @@ export default function MobileHeader() {
 
   return (
     <>
-      <header className="tablet:hidden flex w-full items-center justify-between py-4 px-4 border-b border-foreground-muted-dark">
+      <header className="tablet:hidden flex w-full items-center justify-between py-4 px-4 border-b border-background">
         <a href="/" onClick={closeMenu}>
           <img
             src="/logos/Placeholder.svg"
@@ -44,22 +44,22 @@ export default function MobileHeader() {
         
         <button
           onClick={toggleMenu}
-          className="p-2 hover:bg-primary-light hover:text-primary rounded-md transition-colors"
+          className="p-2 hover:bg-foreground hover:text-primary rounded-md transition-colors"
           aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
         >
           {isOpen ? (
-            <CloseIcon className="h-6 w-6" />
+            <CloseIcon className="h-6 w-6 fill-foreground" />
           ) : (
-            <MenuIcon className="h-6 w-6" />
+            <MenuIcon className="h-6 w-6 fill-foreground" />
           )}
         </button>
       </header>
 
       {/* Mobile menu overlay */}
       {isOpen && (
-        <div className="tablet:hidden fixed inset-0 z-50 bg-white flex flex-col">
+        <div className="tablet:hidden fixed inset-0 z-50 bg-background flex flex-col">
           {/* Header with close button */}
-          <div className="flex w-full items-center justify-between py-4 px-4 border-b border-foreground-muted-dark flex-shrink-0">
+          <div className="flex w-full items-center justify-between py-4 px-4 border-b border-border flex-shrink-0">
             <a href="/" onClick={closeMenu}>
               <img
                 src="/logos/Placeholder.svg"
@@ -72,7 +72,7 @@ export default function MobileHeader() {
             
             <button
               onClick={toggleMenu}
-              className="p-2 hover:bg-primary-light hover:text-primary rounded-md transition-colors"
+              className="p-2 hover:bg-primary hover:text-primary rounded-md transition-colors"
               aria-label="Cerrar menú"
             >
               <CloseIcon className="h-6 w-6" />

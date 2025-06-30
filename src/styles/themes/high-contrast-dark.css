@@ -1,0 +1,86 @@
+/* High contrast dark theme - only active when both dark and high-contrast classes are present */
+.dark.high-contrast {
+  /* High contrast dark theme for accessibility */
+  --background: oklch(0 0 0); /* Pure black background */
+  --foreground: oklch(1 0 0); /* Pure white text */
+  --card: oklch(0.1 0 0); /* Very dark gray for cards */
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.1 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.8 0.4 260); /* Bright primary for dark background */
+  --primary-foreground: oklch(0 0 0); /* Black text on bright primary */
+  --muted: oklch(0.2 0 0); /* Dark gray for muted areas */
+  --muted-foreground: oklch(1 0 0); /* White text on muted */
+  --accent: oklch(0.2 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0); /* White borders for maximum contrast */
+  --input: oklch(1 0 0); /* White input text */
+  --ring: oklch(1 0 0); /* White focus rings */
+  --red: oklch(0.8 0.5 19); /* Bright red for dark background */
+  --red-light: oklch(0.15 0.5 19 / 50%);
+  --green: oklch(0.8 0.4 139.2308); /* Bright green */
+  --green-light: oklch(0.15 0.4 139.2308 / 50%);
+  --blue: oklch(0.8 0.4 260); /* Bright blue */
+  --blue-light: oklch(0.15 0.4 260 / 50%);
+  --purple: oklch(0.8 0.5 324.31); /* Bright purple */
+  --purple-light: oklch(0.15 0.5 324.31 / 50%);
+  --pink: oklch(0.8 0.5 349.85); /* Bright pink */
+  --pink-light: oklch(0.15 0.5 349.85 / 50%);
+  --orange: oklch(0.8 0.4 35.74); /* Bright orange */
+  --orange-light: oklch(0.15 0.4 35.74 / 50%);
+}
+
+/* High contrast dark theme specific improvements */
+.dark.high-contrast * {
+  /* Ensure maximum contrast */
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.dark.high-contrast a {
+  /* Make links more distinguishable */
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.dark.high-contrast button {
+  /* Ensure buttons have maximum contrast */
+  border: 2px solid var(--foreground) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  font-weight: 600;
+}
+
+.dark.high-contrast button:hover {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+}
+
+.dark.high-contrast input,
+.dark.high-contrast textarea,
+.dark.high-contrast select {
+  /* Ensure form elements have maximum contrast */
+  border: 2px solid var(--foreground) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.dark.high-contrast svg {
+  /* Ensure icons are visible with maximum contrast */
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.dark.high-contrast img {
+  /* Increase contrast for images in high contrast dark mode */
+  filter: contrast(1.5) brightness(1.2);
+}
+
+/* Invert the logo colors in dark mode (black to white) */
+.dark img[src*="Placeholder.svg"] {
+  filter: invert(1) brightness(1);
+}
+
+.dark img[src*="OSUC.svg"] {
+  filter: invert(1) brightness(1);
+}

@@ -50,8 +50,8 @@ export default function DarkThemeToggle() {
     <button
       onClick={toggleDarkTheme}
       className="w-full tablet:w-auto bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary rounded-lg border-1 px-4 py-1.5 text-xs transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-      aria-label={isDarkTheme ? "Desactivar tema oscuro" : "Activar tema oscuro"}
-      title={isDarkTheme ? "Desactivar tema oscuro" : "Activar tema oscuro"}
+      aria-label={isDarkTheme ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
+      title={isDarkTheme ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
     >
       <div className="justify-center flex items-center space-x-2">
         <svg 
@@ -80,7 +80,7 @@ export default function DarkThemeToggle() {
           )}
         </svg>
         <span className="text-nowrap">
-          TEMA OSCURO
+          {isDarkTheme ? "TEMA CLARO" : "TEMA OSCURO"}
         </span>
       </div>
     </button>

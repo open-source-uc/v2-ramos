@@ -11,8 +11,9 @@ src/styles/
 ├── base.css               # Estilos base, resets y reglas de accesibilidad
 ├── utilities.css          # Clases utilitarias
 ├── themes/
-│   ├── dark.css          # Variables y estilos específicos del tema oscuro
-│   └── high-contrast.css # Tema de alto contraste para accesibilidad
+│   ├── dark.css              # Variables y estilos específicos del tema oscuro
+│   ├── high-contrast.css     # Tema de alto contraste para modo claro
+│   └── high-contrast-dark.css # Tema de alto contraste para modo oscuro (automático)
 └── components/
     └── markdown.css      # Estilos para renderizado de contenido markdown
 ```
@@ -42,9 +43,26 @@ src/styles/
 - Optimizaciones para legibilidad en modo oscuro
 
 ### `themes/high-contrast.css`
-- Tema de alto contraste para accesibilidad
+- Tema de alto contraste para modo claro
 - Bordes mejorados y ratios de contraste
 - Combinaciones de colores compatibles con WCAG
+
+### `themes/high-contrast-dark.css`
+- Tema de alto contraste específico para modo oscuro
+- Se activa automáticamente cuando `.dark` y `.high-contrast` están presentes
+- Máximo contraste con fondo negro y texto blanco
+- Optimizado para accesibilidad en entornos oscuros
+
+## Comportamiento de Temas
+
+El sistema de temas funciona de la siguiente manera:
+
+- **Modo normal**: Tema claro por defecto
+- **Alto contraste activado**: Tema de alto contraste claro
+- **Modo oscuro activado**: Tema oscuro
+- **Modo oscuro + Alto contraste**: Tema de alto contraste oscuro (automático)
+
+Los usuarios pueden combinar libremente modo oscuro y alto contraste, y el sistema aplicará automáticamente la combinación correcta.
 
 ### `components/markdown.css`
 - Estilos específicamente para contenido markdown renderizado

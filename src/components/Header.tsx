@@ -99,21 +99,22 @@ export default function Header() {
 
               </NavigationMenuList>
             </NavigationMenu>
-            <div className="flex items-center space-x-2 text-nowrap">
-              <div className="flex items-center space-x-1">
-                <HighContrastToggle />
-                <DarkThemeToggle />
-              </div>
+            <div className="flex items-center text-nowrap">
               <ButtonNavbar
                 text="CUENTA OSUC"
                 url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`} />
             </div>
           </div>
-
-          <div className="flex w-full space-x-2">
-            <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
-            <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
-            <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
+          <div className="flex w-full items-center justify-between">
+            <div className="flex w-full space-x-2">
+              <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
+              <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
+              <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
+            </div>
+            <div className="flex items-center space-x-2">
+              <HighContrastToggle />
+              <DarkThemeToggle />
+            </div>
           </div>
         </nav>
       </header >

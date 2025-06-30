@@ -8,6 +8,7 @@
 @import "./base.css";
 @import "./themes/dark.css";
 @import "./themes/high-contrast.css";
+@import "./themes/high-contrast-dark.css";
 @import "./components/markdown.css";
 @import "./utilities.css";
 
