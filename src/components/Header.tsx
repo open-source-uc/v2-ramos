@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 import ButtonNavbar from "./ui/button-navbar";
 import MobileHeader from "./MobileHeader";
+import DarkThemeToggle from "./DarkThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -44,7 +45,7 @@ export default function Header() {
             alt="Open Source eUC Logo"
             width={200}
             height={200}
-            className="h-20 w-auto"
+            className="h-20 w-auto fill-foreground"
           />
         </a>
 
@@ -99,7 +100,10 @@ export default function Header() {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center space-x-2 text-nowrap">
-              <HighContrastToggle />
+              <div className="flex items-center space-x-1">
+                <HighContrastToggle />
+                <DarkThemeToggle />
+              </div>
               <ButtonNavbar
                 text="CUENTA OSUC"
                 url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`} />

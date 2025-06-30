@@ -49,7 +49,7 @@ export default function HighContrastToggle() {
   return (
     <button
       onClick={toggleHighContrast}
-      className="w-full tablet:w-3/5 bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary rounded-lg border-1 px-4 py-1.5 text-xs transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      className="w-full tablet:w-auto bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary rounded-lg border-1 px-4 py-1.5 text-xs transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
       aria-label={isHighContrast ? "Desactivar alto contraste" : "Activar alto contraste"}
       title={isHighContrast ? "Desactivar alto contraste" : "Activar alto contraste"}
     >

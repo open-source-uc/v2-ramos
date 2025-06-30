@@ -3,6 +3,7 @@
 import * as React from "react";
 import { MenuIcon, CloseIcon } from "./icons/icons";
 import HighContrastToggle from "./HighContrastToggle";
+import DarkThemeToggle from "./DarkThemeToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -37,7 +38,7 @@ export default function MobileHeader() {
             alt="Open Source eUC Logo"
             width={200}
             height={200}
-            className="h-12 w-auto"
+            className="h-12 w-auto fill-foreground"
           />
         </a>
         
@@ -91,7 +92,10 @@ export default function MobileHeader() {
                 >
                   Iniciar Sesión
                 </a>
-                <HighContrastToggle />
+                <div className="flex items-center space-x-2">
+                  <HighContrastToggle />
+                  <DarkThemeToggle />
+                </div>
               </div>
             </section>
             
