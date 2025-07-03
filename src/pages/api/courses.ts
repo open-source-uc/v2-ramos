@@ -43,21 +43,21 @@ export const GET: APIRoute = async ({ request, locals }) => {
         start(controller) {
             for (const course of result.results) {
                 const staticInfo = coursesData[course.sigle];
-                const out: any = {}
-                out.name = staticInfo?.name ?? course.sigle;
-                out.credits = staticInfo?.credits ?? 0;
-                out.req = staticInfo?.req ?? "";
-                out.conn = staticInfo?.conn ?? "";
-                out.restr = staticInfo?.restr ?? "";
-                out.equiv = staticInfo?.equiv ?? "";
-                out.format = staticInfo?.format ?? [];
-                out.compus = staticInfo?.compus ?? [];
-                out.is_removable = staticInfo?.is_removable ?? [];
-                out.is_special = staticInfo?.is_special ?? [];
-                out.is_english = staticInfo?.is_english ?? [];
-                out.school = id2NameData[course.school_id] || "";
-                out.area = id2NameData[course.area_id] || "";
-                out.category = id2NameData[course.category_id] || "";
+                course.name = staticInfo?.name ?? course.sigle;
+                course.credits = staticInfo?.credits ?? 0;
+                course.req = staticInfo?.req ?? "";
+                course.conn = staticInfo?.conn ?? "";
+                course.restr = staticInfo?.restr ?? "";
+                course.equiv = staticInfo?.equiv ?? "";
+                course.format = staticInfo?.format ?? [];
+                course.compus = staticInfo?.compus ?? [];
+                course.description = staticInfo?.description ?? "";
+                course.is_removable = staticInfo?.is_removable ?? [];
+                course.is_special = staticInfo?.is_special ?? [];
+                course.is_english = staticInfo?.is_english ?? [];
+                course.school = id2NameData[course.school_id] || "";
+                course.area = id2NameData[course.area_id] || "";
+                course.category = id2NameData[course.category_id] || "";
 
 
                 const line = JSON.stringify(course) + "\n";

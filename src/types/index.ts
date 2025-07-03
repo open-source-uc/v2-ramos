@@ -19,6 +19,16 @@ export interface CourseSummary {
     school?: string; // Added for convenience
     area?: string; // Added for convenience
     category?: string; // Added for convenience.
+    req?: string;
+    conn?: string;
+    restr?: string;
+    equiv?: string;
+    format?: Array<string>;
+    compus?: Array<string>;
+    is_removable?: Array<boolean>;
+    is_special?: Array<boolean>;
+    is_english?: Array<boolean>;
+    description?: string;
 }
 
 export interface CourseReview {
