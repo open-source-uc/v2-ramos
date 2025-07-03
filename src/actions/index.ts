@@ -356,10 +356,10 @@ export const server = {
 
                 // Evitar múltiples reportes de una reseña ya reportada o moderada
                 if (existingReview.status === 1) {
-                    throw new ActionError({
-                        code: "BAD_REQUEST",
-                        message: "La reseña ya ha sido moderada"
-                    });
+                    return {
+                        code: 200,
+                        message: "Reseña reportada exitosamente"
+                    }
                 }
                 if (existingReview.status === 2) {
                     return {
