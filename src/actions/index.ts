@@ -355,18 +355,22 @@ export const server = {
                 }
 
                 // Evitar múltiples reportes de una reseña ya reportada o moderada
-                if (existingReview.status === 1) {
-                    return {
-                        code: 200,
-                        message: "Reseña reportada exitosamente"
-                    }
-                }
+                // if (existingReview.status === 1) {
+                //     return {
+                //         code: 200,
+                //         message: "Reseña reportada exitosamente"
+                //     }
+                // }
+
+                // evitar reportar reseñas que ya estan reportadas
                 if (existingReview.status === 2) {
                     return {
                         code: 200,
                         message: "Reseña reportada exitosamente"
                     }
                 }
+
+                // Evitar reportar reseñas que ya han sido ocultadas
                 if (existingReview.status === 3) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
