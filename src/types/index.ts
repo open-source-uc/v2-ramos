@@ -41,7 +41,16 @@ export interface CourseStaticInfo {
     sigle: string;
     name: string;
     credits: number;
-    program: string;
+    req: string;
+    conn: string;
+    restr: string;
+    equiv: string;
+    format: Array<string>;
+    compus: Array<string>;
+    is_removable: Array<boolean>;
+    is_special: Array<boolean>;
+    is_english: Array<boolean>;
+    description: string;
 }
 
 export interface RecommendationData {

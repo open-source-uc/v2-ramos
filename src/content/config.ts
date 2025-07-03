@@ -72,10 +72,19 @@ const coursesStatic = defineCollection({
         sigle: z.string(),
         name: z.string(),
         credits: z.number(),
-        program: z.string(),
+        req: z.string(),
+        conn: z.string(),
+        restr: z.string(),
+        equiv: z.string(),
         school: z.string(),
         area: z.string(),
         category: z.string(),
+        format: z.array(z.string()),
+        campus: z.array(z.string()),
+        is_removable: z.array(z.boolean()),
+        is_special: z.array(z.boolean()),
+        is_english: z.array(z.boolean()),
+        description: z.string(),
     })
 })
 
@@ -87,15 +96,15 @@ const contribuidores = defineCollection({
         }
     }),
     schema: z.object({
-      id: z.string(),
-      nombre: z.string(),
-      rol: z.string(),
-      carrera: z.string(),
-      linkedin: z.string().url(),
-      github: z.string().url(),
-      imagen: z.string(),
+        id: z.string(),
+        nombre: z.string(),
+        rol: z.string(),
+        carrera: z.string(),
+        linkedin: z.string().url(),
+        github: z.string().url(),
+        imagen: z.string(),
     }),
-  });
+});
 
 const agradecimientos = defineCollection({
     loader: file("src/content/agradecimientos/data.json", {
@@ -105,13 +114,13 @@ const agradecimientos = defineCollection({
         }
     }),
     schema: z.object({
-      id: z.string(),
-      nombre: z.string(),
-      apellido: z.string(),
-      imagen: z.string(),
-      linkedin: z.string().url().optional()
+        id: z.string(),
+        nombre: z.string(),
+        apellido: z.string(),
+        imagen: z.string(),
+        linkedin: z.string().url().optional()
     }),
-  });
+});
 
 
 export const collections = { resources, blogs, initiatives, recommendations, coursesStatic, contribuidores, agradecimientos };
