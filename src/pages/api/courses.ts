@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import CoursesRaw from "../../../migration/json/2025-1.json";
+import CoursesRaw from "../../../migration/json/cursos-simplificado.json";
 import Id2NameRaw from "../../../migration/json/valores_unicos.json";
 import type { CourseStaticInfo, CourseSummary } from "@/types";
 
@@ -51,7 +51,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
                 course.equiv = staticInfo?.equiv ?? "";
                 course.format = staticInfo?.format ?? [];
                 course.compus = staticInfo?.compus ?? [];
-                course.description = staticInfo?.description ?? "";
+                // course.description = staticInfo?.description ?? "";
                 course.is_removable = staticInfo?.is_removable ?? [];
                 course.is_special = staticInfo?.is_special ?? [];
                 course.is_english = staticInfo?.is_english ?? [];
