@@ -1,6 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getPendingReviews } from "@/services/admin.reviews";
+import { getHiddenReviews, getPendingReviews } from "@/services/admin.reviews";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 import { getUserDataByToken } from "@/services/auth";
@@ -33,7 +33,7 @@ if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
     return Astro.redirect("/");
 }
 
-const pendingReviews = await getPendingReviews(Astro.locals, token);
+const pendingReviews = await getHiddenReviews(Astro.locals, token);
 
 const result = Astro.getActionResult(actions.updateReviewStatus);
 const successMessage = result?.data?.message;
