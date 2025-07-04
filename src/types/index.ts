@@ -1,9 +1,6 @@
 export interface CourseSummary {
     id: number;
     sigle: string;
-    school_id: number;
-    area_id: number;
-    category_id: number;
     superlikes: number;
     likes: number;
     dislikes: number;
@@ -61,6 +58,9 @@ export interface CourseStaticInfo {
     is_special: Array<boolean>;
     is_english: Array<boolean>;
     description: string;
+    school: string;
+    area: string;
+    category: string;
 }
 
 export interface RecommendationData {

@@ -1,101 +1,399 @@
-INSERT INTO course_summary (sigle, school_id, area_id, category_id, likes, dislikes, avg_weekly_hours, votes_low_workload, votes_medium_workload, votes_high_workload, sort_index) VALUES
-('EDU0173', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0174', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0175', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0176', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0177', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0178', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0179', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0180', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0181', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU023R', 26852794, 92033042, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU024E', 26852794, 20491684, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU024F', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU024M', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU024Q', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0250', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0255', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0260', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0265', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0271', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0273', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0275', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0277', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0310', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0311', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0312', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0315', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0316', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0317', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0319', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0321', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0322', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0323', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0329', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0330', 26852794, 66136261, 86633250, 0, 0, 0, 0, 0, 0, 0),
-('EDU0332', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0336', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0339', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0340', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0341', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0360', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0361', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0363', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0366', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0370', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0376', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0386', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0393', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0396', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0423', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0429', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0430', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0431', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0432', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0433', 26852794, 66136261, 86633250, 0, 0, 0, 0, 0, 0, 0),
-('EDU0434', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0435', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0436', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0437', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0442', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0443', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0446', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0447', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0449', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0451', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0452', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0455', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0457', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0459', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0461', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0462', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0502', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0504', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0506', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0507', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0510', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0511', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0512', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0700', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0706', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0709', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0710', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0717', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU0727', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU21ES', 26852794, 20491684, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU224M', 26852794, 66781270, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU2998', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU324A', 26852794, 92033042, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU370F', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3722', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU375F', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3800', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3801', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3803', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3805', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3810', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3811', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3814', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3820', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3821', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0),
-('EDU3824', 26852794, 66136261, 66136261, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0335', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0337', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0338', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0339', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0340', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0341', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0350', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0351', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0360', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0362', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0363', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0366', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0370', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0376', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0380', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0386', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0393', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0396', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0420', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0421', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0423', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0424', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0425', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0427', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0429', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0430', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0431', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0432', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0433', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0434', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0435', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0436', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0437', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0441', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0442', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0443', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0445', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0448', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0450', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0451', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0452', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0456', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0458', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0460', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0461', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0462', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0500', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0501', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0502', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0503', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0505', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0508', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0509', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0510', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU0512', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU124C', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU224M', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU2999', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU324A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3722', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3802', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3804', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3812', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3816', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3822', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3823', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3832', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3837', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3842', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3845', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3852', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3853', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3861', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3865', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3870', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3873', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3881', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3884', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3896', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3898', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU3899', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4030', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4035', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4037', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4041', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4046', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4047', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4048', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4060', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4061', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4062', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4063', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4064', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('EDU4205', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEF105A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEF204A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEI1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEI1030', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEM3004', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MEM3005', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO UPDATE SET likes=EXCLUDED.likes, superlikes=EXCLUDED.superlikes, dislikes=EXCLUDED.dislikes, votes_low_workload=EXCLUDED.votes_low_workload, votes_medium_workload=EXCLUDED.votes_medium_workload, votes_high_workload=EXCLUDED.votes_high_workload, votes_mandatory_attendance=EXCLUDED.votes_mandatory_attendance, votes_optional_attendance=EXCLUDED.votes_optional_attendance, avg_weekly_hours=EXCLUDED.avg_weekly_hours, sort_index=EXCLUDED.sort_index;

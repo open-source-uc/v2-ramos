@@ -5,9 +5,6 @@ DROP TABLE IF EXISTS course_summary;
 CREATE TABLE course_summary (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sigle TEXT UNIQUE,  -- "UNIQUE KEY" no es válido en SQLite; solo usa UNIQUE
-    school_id INTEGER,
-    area_id INTEGER,
-    category_id INTEGER,
 
     likes INTEGER DEFAULT 0,
     superlikes INTEGER DEFAULT 0,
@@ -51,9 +48,6 @@ CREATE TABLE course_reviews (
 
 
 -- Índices simples para course_summary (orden descendente para métricas numéricas)
-CREATE INDEX idx_course_summary_school_id ON course_summary(school_id);
-CREATE INDEX idx_course_summary_area_id ON course_summary(area_id);
-CREATE INDEX idx_course_summary_category_id ON course_summary(category_id);
 CREATE INDEX idx_course_summary_likes ON course_summary(likes DESC);
 CREATE INDEX idx_course_summary_superlikes ON course_summary(superlikes DESC);
 CREATE INDEX idx_course_summary_dislikes ON course_summary(dislikes DESC);
@@ -65,9 +59,6 @@ CREATE INDEX idx_course_summary_mandatory_attendance ON course_summary(votes_man
 CREATE INDEX idx_course_summary_optional_attendance ON course_summary(votes_optional_attendance DESC);
 
 -- Índices compuestos para consultas más complejas
-CREATE INDEX idx_course_summary_school_sort ON course_summary(school_id, sort_index DESC);
-CREATE INDEX idx_course_summary_area_sort ON course_summary(area_id, sort_index DESC);
-CREATE INDEX idx_course_summary_category_sort ON course_summary(category_id, sort_index DESC);
 CREATE INDEX idx_course_summary_superlikes_likes ON course_summary(superlikes DESC, likes DESC);
 
 -- Índices con id como segundo criterio de ordenamiento

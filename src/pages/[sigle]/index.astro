@@ -46,7 +46,6 @@ if (!courseData) {
     return Astro.redirect("/404");
 }
 const course = courseData.data;
-const id2NameData = Id2NameRaw as Record<string, string>;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
 const reviews = await getCourseReviews(Astro.locals, sigle, 10);
@@ -133,18 +132,18 @@ const reportSuccessMessage = reportResult?.data?.message;
                     {course.credits} Créditos
                 </Pill>
                 {
-                    id2NameData[c.school_id] &&
-                        id2NameData[c.school_id] !== "Ninguna" && (
+                   course.school &&
+                         course.school !== "" && (
                             <Pill variant="blue" icon={BuildingIcon}>
-                                <span>{id2NameData[c.school_id]}</span>
+                                <span>{ course.school}</span>
                             </Pill>
                         )
                 }
                 {
-                    id2NameData[c.area_id] &&
-                        id2NameData[c.area_id] !== "Sin Área Asignada" && (
+                    course.area &&
+                        course.area !== "" && (
                             <Pill variant="pink" icon={AreaIcon}>
-                                {id2NameData[c.area_id]}
+                                {course.area}
                             </Pill>
                         )
                 }

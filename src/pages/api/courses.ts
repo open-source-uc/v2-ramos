@@ -1,11 +1,9 @@
 import type { APIRoute } from "astro";
 import CoursesRaw from "../../../migration/json/cursos-simplificado.json";
-import Id2NameRaw from "../../../migration/json/valores_unicos.json";
 import type { CourseStaticInfo, CourseSummary } from "@/types";
 
 
 const coursesData = CoursesRaw as Record<string, CourseStaticInfo>;
-const id2NameData = Id2NameRaw as Record<string, string>;
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
@@ -23,9 +21,6 @@ export const GET: APIRoute = async ({ request, locals }) => {
         SELECT 
         id,
         sigle,
-        school_id,
-        area_id,
-        category_id,
         superlikes,
         likes,
         dislikes,
@@ -55,9 +50,9 @@ export const GET: APIRoute = async ({ request, locals }) => {
                 course.is_removable = staticInfo?.is_removable ?? [];
                 course.is_special = staticInfo?.is_special ?? [];
                 course.is_english = staticInfo?.is_english ?? [];
-                course.school = id2NameData[course.school_id] || "";
-                course.area = id2NameData[course.area_id] || "";
-                course.category = id2NameData[course.category_id] || "";
+                course.school = staticInfo.school || "";
+                course.area = staticInfo.area || "";
+                course.category = staticInfo.category || "";
 
 
                 const line = JSON.stringify(course) + "\n";
