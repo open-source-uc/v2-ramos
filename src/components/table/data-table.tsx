@@ -102,9 +102,9 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}
@@ -232,7 +232,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                   <Pill variant="blue" size="sm" icon={BuildingIcon}>{course.school}</Pill>
                 </div>
 
-                {course.area !== "Sin Área Asignada" && (
+                {course.area && (
                   <div className="flex items-center gap-2 mb-3">
 
                     <Pill variant="pink" size="sm" icon={AreaIcon}>{course.area}</Pill>
@@ -240,17 +240,17 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                 )}
                 {/* Reseñas con componente Sentiment */}
                 <div className="flex items-center justify-between mb-2">
-                    {totalReviews === 0 ? (
-                      <Sentiment sentiment="question" size="xs" />
-                    ) : (
-                      <Sentiment
-                        sentiment={sentimentType}
-                        size="xs"
-                        percentage={positivePercentage}
-                        reviewCount={totalReviews}
-                        ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
-                      />
-                    )}
+                  {totalReviews === 0 ? (
+                    <Sentiment sentiment="question" size="xs" />
+                  ) : (
+                    <Sentiment
+                      sentiment={sentimentType}
+                      size="xs"
+                      percentage={positivePercentage}
+                      reviewCount={totalReviews}
+                      ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
+                    />
+                  )}
                 </div>
                 <div className="flex flex-row-reverse mt-4 text-xs text-muted-foreground items-center gap-1">
                   <OpenInFullIcon className="inline-block h-4 w-4" /> Presiona para ver detalles
