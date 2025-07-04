@@ -5,9 +5,9 @@ import { Pill } from "@/components/ui/pill";
 import { Button } from "../ui/button";
 import { SwapVertIcon } from "../icons/icons";
 import { Sentiment } from "../icons/sentiment";
-import { 
-  calculateSentiment, 
-  calculatePositivePercentage 
+import {
+  calculateSentiment,
+  calculatePositivePercentage
 } from "@/lib/courseStats";
 
 export type Course = {
@@ -127,7 +127,7 @@ export const columns: ColumnDef<Course>[] = [
       );
     },
     cell: ({ row }) => {
-      if (row.original.area !== "Sin Área Asignada") {
+      if (row.original.area !== "") {
         return <Pill variant="pink">{row.original.area}</Pill>;
       }
     },
@@ -140,7 +140,7 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const { superlikes, likes, dislikes } = row.original;
       const totalReviews = likes + superlikes + dislikes; // Count each review once, like in [sigle]/index
-      
+
       if (totalReviews === 0) {
         return <Sentiment sentiment="question" size="sm" />;
       }
