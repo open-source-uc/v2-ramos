@@ -16,10 +16,21 @@ export type Course = {
 
   name: string;
   credits: number;
+  req: string;
+  conn: string;
+  restr: string;
+  equiv: string;
+  format: Array<string>;
+  compus: Array<string>;
+  is_removable: Array<boolean>;
+  is_special: Array<boolean>;
+  is_english: Array<boolean>;
 
   school: string;
   area: string;
   category: string;
+
+  last_semester: string; // Format: YYYY-S
 
   likes: number;
   superlikes: number;
