@@ -85,6 +85,7 @@ const coursesStatic = defineCollection({
         is_special: z.array(z.boolean()),
         is_english: z.array(z.boolean()),
         description: z.string(),
+        last_semester: z.string(), // Formato: YYYY-S
     })
 })
 
