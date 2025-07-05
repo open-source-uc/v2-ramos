@@ -55,6 +55,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
                         course.school = staticInfo?.school ?? "";
                         course.area = staticInfo?.area ?? "";
                         course.category = staticInfo?.category ?? "";
+                        course.last_semester = staticInfo?.last_semester ?? "";
 
                         const line = JSON.stringify(course) + "\n";
                         controller.enqueue(new TextEncoder().encode(line));

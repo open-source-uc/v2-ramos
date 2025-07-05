@@ -26,6 +26,7 @@ export interface CourseSummary {
     is_special?: Array<boolean>;
     is_english?: Array<boolean>;
     description?: string;
+    last_semester?: string; // Format: YYYY-S
 }
 
 export interface CourseReview {
@@ -61,6 +62,7 @@ export interface CourseStaticInfo {
     school: string;
     area: string;
     category: string;
+    last_semester: string; // Format: YYYY-S
 }
 
 export interface RecommendationData {
