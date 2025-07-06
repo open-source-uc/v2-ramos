@@ -42,6 +42,7 @@ export interface CourseStaticInfo {
     name: string;
     credits: number;
     program: string;
+    schedules?: Schedule[];
 }
 
 export interface RecommendationData {
@@ -53,6 +54,15 @@ export interface RecommendationData {
     qualification: number;
     tags: string[];
     resume: string;
+}
+
+export interface Schedule {
+    day: string;
+    start: string;
+    end: string;
+    classroom?: string;
+    section?: string;
+    teachers?: string[];
 }
 
 export interface Recommendation {
