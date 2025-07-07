@@ -1,37 +1,35 @@
-/* Dark theme color overrides */
 .dark {
-  --background: oklch(0.15 0 0); /* Dark background */
-  --foreground: oklch(0.95 0 0); /* Light text */
+  --background: oklch(0.15 0 0);
+  --foreground: oklch(0.95 0 0);
   --card: oklch(0.18 0 0);
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.18 0 0);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.7 0.22 260); /* Lighter primary for dark theme */
-  --primary-foreground: oklch(0.15 0.22 260 / 30%);
-  --muted: oklch(0.25 0 0); /* Dark gray for muted areas */
-  --muted-foreground: oklch(0.8 0 0); /* Light gray text on muted */
+  --primary: oklch(0.7 0.22 260); 
+  --primary-foreground: oklch(0.15 0.22 260 / 60%);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.8 0 0);
   --accent: oklch(0.25 0 0);
   --accent-foreground: oklch(0.95 0 0);
-  --border: oklch(0.35 0 0); /* Gray borders */
-  --input: oklch(0.8 0 0); /* Light input text */
-  --ring: oklch(0.7 0.22 260); /* Lighter ring for focus */
-  --red: oklch(0.75 0.2372 19); /* Lighter red for dark theme */
-  --red-light: oklch(0.25 0.2372 19 / 30%);
-  --green: oklch(0.75 0.196479 139.2308); /* Lighter green */
-  --green-light: oklch(0.25 0.196479 139.2308 / 30%);
-  --blue: oklch(0.7 0.22 260); /* Lighter blue */
-  --blue-light: oklch(0.25 0.22 260 / 30%);
-  --purple: oklch(0.8 0.3121 324.31); /* Lighter purple */
-  --purple-light: oklch(0.25 0.3121 324.31 / 30%);
-  --pink: oklch(0.8 0.26 349.85); /* Lighter pink */
-  --pink-light: oklch(0.25 0.26 349.85 / 30%);
-  --orange: oklch(0.8 0.2034 35.74); /* Lighter orange */
-  --orange-light: oklch(0.25 0.2034 35.74 / 30%);
+  --border: oklch(0.35 0 0);
+  --input: oklch(0.8 0 0);
+  --ring: oklch(0.7 0.22 260);
+  --red: oklch(0.75 0.2372 19);
+  --red-light: oklch(0.25 0.2372 19 / 60%);
+  --green: oklch(0.75 0.196479 139.2308);
+  --green-light: oklch(0.25 0.196479 139.2308 / 60%);
+  --blue: oklch(0.7 0.22 260);
+  --blue-light: oklch(0.25 0.22 260 / 60%);
+  --purple: oklch(0.8 0.3121 324.31);
+  --purple-light: oklch(0.25 0.3121 324.31 / 60%);
+  --pink: oklch(0.8 0.26 349.85);
+  --pink-light: oklch(0.25 0.26 349.85 / 60%);
+  --orange: oklch(0.8 0.2034 35.74);
+  --orange-light: oklch(0.25 0.2034 35.74 / 60%);
 }
 
 /* Dark theme specific improvements */
 .dark img {
-  /* Slightly reduce brightness of images in dark mode */
   filter: brightness(0.9);
 }
 
@@ -45,12 +43,10 @@
 }
 
 .dark .content-markdown img {
-  /* Further reduce brightness for content images */
   filter: brightness(0.8);
 }
 
 .dark code {
-  /* Ensure code blocks have good contrast in dark mode */
   background-color: oklch(0.2 0 0);
   color: oklch(0.9 0 0);
 }
