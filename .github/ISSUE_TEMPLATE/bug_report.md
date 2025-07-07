@@ -1,20 +1,37 @@
 ---
-name: Reporte de Bug
-about: Ayúdanos a mejorar.
-title: '[BUG]: '
+name: 🐞 Reportar Bug
+about: Crea un reporte para ayudarnos a mejorar
+title: "[BUG] Título claro y conciso"
 labels: bug
 assignees: ''
 
 ---
 
-# Describe el error
-Una pequeña descripción del bug.
+## 🧩 Descripción del Bug
 
-## Pasos para generar el bug
-Pasos para replicar el comportamiento:
-1. 
-2. 
-3. 
+Una descripción clara y concisa de lo que es el bug.
 
-## *Contexto adicional
+## 🔁 Pasos para Reproducir
 
+1. Ve a '...'
+2. Haz clic en '....'
+3. Desplázate hasta '....'
+4. Observa el error
+
+## 🧠 Comportamiento Esperado
+
+Describe qué esperabas que pasara en lugar del error.
+
+## 🖥️ Capturas de Pantalla (opcional)
+
+Si aplica, añade capturas de pantalla para explicar mejor el problema.
+
+## 🧪 Información Técnica
+
+- Sistema Operativo: [e.g. Windows 11, macOS 13.5, Ubuntu 22.04]
+- Navegador (si aplica): [e.g. Chrome 115, Firefox 102]
+- Versión del proyecto: [e.g. v1.2.3]
+
+## 📋 Información Adicional
+
+Cualquier otra información relevante para el problema.
