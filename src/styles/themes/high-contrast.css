@@ -1,5 +1,5 @@
 .high-contrast {
-  --background: oklch(1 0 0);
+  --background: oklch(0.98 0 0);
   --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0 0 0);
@@ -9,7 +9,7 @@
   --primary-foreground: oklch(0.95 0.4 260 / 40%);
   --muted: oklch(0.9 0 0);
   --muted-foreground: oklch(0 0 0);
-  --accent: oklch(0.9 0 0);
+  --accent: oklch(1 0 0);
   --accent-foreground: oklch(0 0 0);
   --border: oklch(0 0 0);
   --input: oklch(0 0 0);

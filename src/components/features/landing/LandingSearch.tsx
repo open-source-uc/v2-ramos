@@ -95,7 +95,6 @@ export function LandingSearch() {
           <Button
             variant="outline"
             size="lg"
-            className="text-sm border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md bg-background/80 backdrop-blur-sm w-full tablet:w-auto"
             onClick={() => window.location.href = '/catalog'}
             aria-label="Ver todos los cursos disponibles en el catálogo"
           >
@@ -105,7 +104,6 @@ export function LandingSearch() {
           <Button
             variant="outline"
             size="lg"
-            className="text-sm border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md bg-background/80 backdrop-blur-sm w-full tablet:w-auto"
             onClick={() => window.location.href = 'https://osuc.dev/'}
             aria-label="Conocer más información acerca de nosotros"
           >
