@@ -1,15 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Search } from "./Search"
-import { Button } from "./ui/button"
-import { Pill } from "./ui/pill"
+import { Search } from "../search/SearchInput"
+import { Button } from "../../ui/button"
+import { Pill } from "../../ui/pill"
 import { 
   BuildingIcon, 
   AreaIcon, 
   HourglassIcon, 
   ResourcesIcon
-} from "./icons/icons"
+} from "../../icons/icons"
 
 export function LandingSearch() {
   const [searchTerm, setSearchTerm] = useState("")

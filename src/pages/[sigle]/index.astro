@@ -38,7 +38,7 @@ if (!sigle) {
 }
 
 import { getEntry } from "astro:content";
-import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import { MarkdownReviewView } from "@/components/features/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 
 const courseData = await getEntry("coursesStatic", sigle);

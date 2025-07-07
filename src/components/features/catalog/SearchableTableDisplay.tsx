@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react"
-import { Search } from "./Search"
-import type { Course } from "./table/columns"
-import { DataTable } from "./table/data-table"
-import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Search } from "../search/SearchInput"
+import type { Course } from "../../table/columns"
+import { DataTable } from "../../table/data-table"
+import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
 import { cn } from "@/lib/utils"
 import type { InferEntrySchema, RenderedContent } from "astro:content"
 
