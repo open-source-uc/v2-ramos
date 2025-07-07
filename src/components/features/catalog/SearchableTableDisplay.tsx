@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { Search } from "../search/SearchInput"
 import type { Course } from "../../table/columns"
 import { DataTable } from "../../table/data-table"
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
+import { Alert } from "../../ui/alert"
+import { ActivityIcon } from "../../icons/icons"
 import { cn } from "@/lib/utils"
+import { isMobileViewport } from "@/lib/mobile-utils"
 import type { InferEntrySchema, RenderedContent } from "astro:content"
 
 interface SearchableTableDisplayProps {
@@ -17,6 +20,8 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [courses, setCourses] = useState<Course[]>([])
+  const [showMobileNotification, setShowMobileNotification] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +66,17 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     fetchData();
   }, []);
 
+  // Check if device is mobile on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(isMobileViewport());
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
 
   // Get unique areas from the data
   const uniqueAreas = useMemo(() => {
@@ -93,20 +109,60 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return filtered;
   }, [courses, selectedArea, selectedSchool]);
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useCallback((value: string) => {
     setSearchValue(value);
-  };
+    
+    // Show notification on mobile when search is performed
+    if (isMobile && value.trim() !== "") {
+      setShowMobileNotification(true);
+      
+      // Auto-hide notification after 3 seconds
+      setTimeout(() => {
+        setShowMobileNotification(false);
+      }, 3000);
+    }
+  }, [isMobile]);
 
   const handleAreaChange = (value: string) => {
     setSelectedArea(value);
+    
+    // Show notification on mobile when filter is changed
+    if (isMobile) {
+      setShowMobileNotification(true);
+      setTimeout(() => {
+        setShowMobileNotification(false);
+      }, 3000);
+    }
   };
 
   const handleSchoolChange = (value: string) => {
     setSelectedSchool(value);
+    
+    // Show notification on mobile when filter is changed
+    if (isMobile) {
+      setShowMobileNotification(true);
+      setTimeout(() => {
+        setShowMobileNotification(false);
+      }, 3000);
+    }
   };
 
   return (
     <div className="container mx-auto py-4">
+      {/* Mobile notification */}
+      {showMobileNotification && isMobile && (
+        <div className="fixed top-24 left-4 right-4 z-50 transition-all duration-500 ease-in-out transform translate-y-0">
+          <Alert 
+            variant="green" 
+            size="md" 
+            icon={ActivityIcon}
+            className="shadow-xl rounded-b-lg border-t-0 animate-pulse"
+          >
+            <strong>Catálogo actualizado</strong> - Los resultados se han actualizado según tu búsqueda
+          </Alert>
+        </div>
+      )}
+
       {/* Search Component */}
       <div className="mb-6 flex flex-col w-full gap-4 items-center justify-between tablet:flex-row">
         <Search
