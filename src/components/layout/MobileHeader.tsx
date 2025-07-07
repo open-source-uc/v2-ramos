@@ -35,7 +35,7 @@ export default function MobileHeader() {
         <a href="/" onClick={closeMenu}>
           <img
             src="/logos/Placeholder.svg"
-            alt="Open Source eUC Logo"
+            alt="Logo de BuscaRamos"
             width={200}
             height={200}
             className="h-12 w-auto fill-foreground"
@@ -44,7 +44,7 @@ export default function MobileHeader() {
         
         <button
           onClick={toggleMenu}
-          className="p-2 hover:bg-foreground hover:text-primary rounded-md transition-colors"
+          className="p-2 hover:bg-muted hover:text-muted-foreground rounded-md transition-colors"
           aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
         >
           {isOpen ? (
@@ -63,7 +63,7 @@ export default function MobileHeader() {
             <a href="/" onClick={closeMenu}>
               <img
                 src="/logos/Placeholder.svg"
-                alt="Open Source eUC Logo"
+                alt="Logo de BuscaRamos"
                 width={200}
                 height={200}
                 className="h-12 w-auto"
@@ -72,7 +72,7 @@ export default function MobileHeader() {
             
             <button
               onClick={toggleMenu}
-              className="p-2 hover:bg-primary hover:text-primary rounded-md transition-colors"
+              className="p-2 hover:bg-muted hover:text-muted-foreground rounded-md transition-colors"
               aria-label="Cerrar menú"
             >
               <CloseIcon className="h-6 w-6" />
