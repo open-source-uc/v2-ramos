@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { MenuIcon, CloseIcon } from "./icons/icons";
-import HighContrastToggle from "./HighContrastToggle";
-import DarkThemeToggle from "./DarkThemeToggle";
+import { MenuIcon, CloseIcon } from "../icons/icons";
+import HighContrastToggle from "../common/HighContrastToggle";
+import DarkThemeToggle from "../common/DarkThemeToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {

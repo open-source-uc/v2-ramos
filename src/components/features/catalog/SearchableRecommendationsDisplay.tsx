@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search } from "./Search";
+import { Search } from "../search/SearchInput";
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../../ui/select";
 import { Pill } from "@/components/ui/pill";
 import { cn } from "@/lib/utils";
 import type { Recommendation } from "@/types";

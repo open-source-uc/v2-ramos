@@ -1,7 +1,7 @@
 "use client";
 
 import type { CollectionEntry } from "astro:content";
-import BlogCard from "@/components/BlogCard";
+import BlogCard from "./BlogCard";
 
 interface blogType {
   blogs: CollectionEntry<"blogs">[];

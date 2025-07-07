@@ -4,9 +4,9 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-import ButtonNavbar from "./ui/button-navbar";
+import ButtonNavbar from "../ui/button-navbar";
 import MobileHeader from "./MobileHeader";
-import DarkThemeToggle from "./DarkThemeToggle";
+import DarkThemeToggle from "../common/DarkThemeToggle";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -15,8 +15,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "./ui/navigation-menu";
-import HighContrastToggle from "./HighContrastToggle";
+} from "../ui/navigation-menu";
+import HighContrastToggle from "../common/HighContrastToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
