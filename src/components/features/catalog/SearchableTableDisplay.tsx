@@ -108,15 +108,15 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   return (
     <div className="container mx-auto py-4">
       {/* Search Component */}
-      <div className="flex flex-col gap-4 items-center justify-between tablet:flex-row tablet:mb-6 ">
+      <div className="flex flex-col gap-4 items-stretch justify-between tablet:flex-row tablet:items-center tablet:mb-6 ">
         <Search
           onSearch={handleSearch}
           placeholder="Buscar por nombre o sigla..."
-          className="w-full max-w-md"
+          className="w-full tablet:max-w-md"
           initialValue={initialSearchValue}
         />
 
-        <div className="flex flex-col-reverse items-center gap-4 w-full tablet:flex-row-reverse">
+        <div className="flex flex-col-reverse items-stretch gap-4 w-full tablet:flex-row-reverse tablet:items-center">
           {/* Area Filter */}
           <Select value={selectedArea} onValueChange={handleAreaChange}>
             <SelectTrigger
