@@ -5,6 +5,8 @@ import { Search } from "./Search"
 import type { Course } from "./table/columns"
 import { DataTable } from "./table/data-table"
 import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { Alert } from "./ui/alert"
+import { SearchIcon } from "./icons/icons"
 import { cn } from "@/lib/utils"
 import type { InferEntrySchema, RenderedContent } from "astro:content"
 
@@ -17,6 +19,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [courses, setCourses] = useState<Course[]>([])
+  const [showNotification, setShowNotification] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,18 +98,70 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
+    
+    // Show notification on mobile when search changes (only if there's a search term)
+    if (value.trim() !== '') {
+      setShowNotification(true);
+      
+      // Auto-hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    } else {
+      setShowNotification(false);
+    }
   };
 
   const handleAreaChange = (value: string) => {
     setSelectedArea(value);
+    
+    // Show notification when filter changes (except when showing all)
+    if (value !== 'all') {
+      setShowNotification(true);
+      
+      // Auto-hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    }
   };
 
   const handleSchoolChange = (value: string) => {
     setSelectedSchool(value);
+    
+    // Show notification when filter changes (except when showing all)
+    if (value !== 'all') {
+      setShowNotification(true);
+      
+      // Auto-hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    }
   };
 
   return (
     <div className="container mx-auto py-4">
+      {/* Mobile notification - shown above search on mobile only */}
+      {showNotification && (
+        <div className="mb-4 tablet:hidden">
+          <Alert 
+            variant="green" 
+            size="sm" 
+            icon={SearchIcon}
+            className="animate-in slide-in-from-top-2 duration-300"
+          >
+            <div className="text-sm">
+              <span className="font-medium">Tabla actualizada</span>
+              <br />
+              <span className="text-xs opacity-90">
+                {filteredData.length} cursos encontrados
+              </span>
+            </div>
+          </Alert>
+        </div>
+      )}
+      
       {/* Search Component */}
       <div className="mb-6 flex flex-col w-full gap-4 items-center justify-between tablet:flex-row">
         <Search
