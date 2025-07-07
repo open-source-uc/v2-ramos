@@ -76,13 +76,13 @@ export default function Header() {
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <a
-                            className="from-foreground to-primary from-80% text-background hover:text-background hover:to-primary-foreground flex h-full w-full flex-col justify-end rounded-md bg-radial p-6 no-underline outline-none select-none focus:shadow-md"
+                            className="from-background to-primary-foreground from-80% hover:to-primary flex h-full w-full flex-col justify-end rounded-md bg-radial p-6 no-underline outline-none select-none focus:shadow-md"
                             href="https://osuc.dev"
                           >
                             <div className="mt-4 mb-2 text-lg font-medium">
                               Creado por <br /> Open Source eUC
                             </div>
-                            <p className="text-background text-sm leading-tight">
+                            <p className="text-sm leading-tight">
                               La comunidad estudiantil de innovación y desarrollo de software de la UC.
                             </p>
                           </a>
