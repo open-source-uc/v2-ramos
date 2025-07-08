@@ -59,37 +59,76 @@ function parsePrerequisiteExpression(expression: string): PrerequisiteGroup {
     }
   }
 
-  // Dividir por el operador principal
-  const parts = splitByOperator(trimmed, mainOperator);
-  const groups: PrerequisiteGroup[] = [];
-  const courses: PrerequisiteCourse[] = [];
-
-  for (const part of parts) {
-    const partTrimmed = part.trim();
-    if (partTrimmed.includes('y') || partTrimmed.includes('o') || partTrimmed.includes('(')) {
-      // Esta parte necesita análisis adicional
-      const subGroup = parsePrerequisiteExpression(partTrimmed);
-      // Si es un curso único simple, agregarlo directamente en lugar de crear un grupo
-      if (subGroup.courses && subGroup.courses.length === 1 && !subGroup.groups) {
-        courses.push(...subGroup.courses);
-      } else {
-        groups.push(subGroup);
-      }
-    } else {
-      // Esta parte contiene solo cursos
-      courses.push(...extractCourses(partTrimmed));
-    }
+  // Crear grupos inteligentes basados en el operador principal
+  const groups = createIntelligentGroups(trimmed, mainOperator);
+  
+  if (groups.length === 1) {
+    return groups[0];
   }
 
   return {
     type: mainOperator === 'y' ? 'AND' : 'OR',
-    courses: courses,
-    groups: groups.length > 0 ? groups : undefined
+    courses: [],
+    groups: groups
   };
 }
 
 /**
+ * Crea grupos inteligentes basados en el operador principal
+ * Agrupa cursos consecutivos que comparten el mismo operador
+ */
+function createIntelligentGroups(expression: string, mainOperator: 'y' | 'o'): PrerequisiteGroup[] {
+  const parts = splitByOperator(expression, mainOperator);
+  const groups: PrerequisiteGroup[] = [];
+  
+  let currentGroup: PrerequisiteGroup | null = null;
+  const oppositeOperator = mainOperator === 'y' ? 'o' : 'y';
+  
+  for (const part of parts) {
+    const partTrimmed = part.trim();
+    
+    // Si la parte contiene el operador opuesto o paréntesis, necesita procesamiento recursivo
+    if (partTrimmed.includes(oppositeOperator) || partTrimmed.includes('(')) {
+      // Finalizar el grupo actual si existe
+      if (currentGroup && currentGroup.courses.length > 0) {
+        groups.push(currentGroup);
+        currentGroup = null;
+      }
+      
+      // Crear un nuevo grupo para esta parte compleja
+      const subGroup = parsePrerequisiteExpression(partTrimmed);
+      groups.push(subGroup);
+    } else {
+      // Esta parte contiene solo cursos simples
+      const courses = extractCourses(partTrimmed);
+      
+      if (courses.length > 0) {
+        // Para el operador principal OR, agrupar cursos consecutivos como OR
+        // Para el operador principal AND, agrupar cursos consecutivos como AND
+        const groupType = mainOperator === 'y' ? 'AND' : 'OR';
+        
+        if (!currentGroup) {
+          currentGroup = {
+            type: groupType,
+            courses: []
+          };
+        }
+        currentGroup.courses.push(...courses);
+      }
+    }
+  }
+  
+  // Finalizar el último grupo si existe
+  if (currentGroup && currentGroup.courses.length > 0) {
+    groups.push(currentGroup);
+  }
+  
+  return groups;
+}
+
+/**
  * Encuentra el operador principal (y o o) en el nivel superior de la expresión
+ * AND (y) tiene mayor precedencia que OR (o)
  */
 function findMainOperator(expression: string): 'y' | 'o' | null {
   let parenthesesCount = 0;
@@ -112,9 +151,9 @@ function findMainOperator(expression: string): 'y' | 'o' | null {
     }
   }
 
-  // AND (y) tiene mayor precedencia que OR (o)
-  if (hasY) return 'y';
+  // Si hay ambos operadores, OR tiene menor precedencia, así que se evalúa primero
   if (hasO) return 'o';
+  if (hasY) return 'y';
   return null;
 }
 
@@ -211,10 +250,20 @@ function isBalancedParentheses(text: string): boolean {
  */
 function isCompletelyWrapped(text: string): boolean {
   let count = 0;
+  let hasParentheses = false;
+  
   for (let i = 0; i < text.length; i++) {
-    if (text[i] === '(') count++;
-    else if (text[i] === ')') count--;
-    if (count === 0 && i < text.length - 1) return false;
+    if (text[i] === '(') {
+      count++;
+      hasParentheses = true;
+    } else if (text[i] === ')') {
+      count--;
+      hasParentheses = true;
+    }
+    // Solo retornar false si hay paréntesis y el count llega a 0 antes del final
+    if (hasParentheses && count === 0 && i < text.length - 1) {
+      return false;
+    }
   }
   return count === 0;
 }

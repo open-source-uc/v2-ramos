@@ -13,6 +13,9 @@ interface Props {
 }
 
 export default function PrerequisitesSection({ prerequisites, className = "" }: Props) {
+    // Debug: Log prerequisites.structure to console
+    console.log("Prerequisites structure:", prerequisites.structure);
+    
     if (!prerequisites.hasPrerequisites || !prerequisites.structure) {
         return (
             <section className={`prerequisites-section ${className}`}>
@@ -75,12 +78,12 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                                     <span>Prerrequisito corricular (c)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-blue-600">y</span>
-                                    <span>Todos los cursos/grupos son requeridos</span>
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    <span>Debes pasar todos estos ramos</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-green-600">o</span>
-                                    <span>Solo uno de los cursos/grupos es requerido</span>
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span>Debes pasar uno de estos ramos</span>
                                 </div>
                             </div>
                         </div>
