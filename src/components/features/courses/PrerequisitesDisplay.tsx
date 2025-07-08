@@ -42,8 +42,7 @@ interface PrerequisiteGroupComponentProps {
 }
 
 const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGroupComponentProps) => {
-  const groupLabel = group.type === 'AND' ? 'Todos requeridos' : 'Uno requerido';
-  const groupLabelColor = group.type === 'AND' ? 'text-blue' : 'text-green';
+  const groupLabel = group.type === 'AND' ? 'Debes aprobar todos los cursos de este grupo' : 'Debes aprobar solo uno de los cursos de este grupo';
   
   const renderCourse = (course: PrerequisiteCourse, index: number) => (
     <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2">
@@ -103,8 +102,8 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
       {/* Group header for nested groups */}
       {isNested && hasMultipleItems && (
         <div className="flex items-center gap-3 pb-3 border-b border-border">
-          <div className={`w-2 h-2 rounded-full ${group.type === 'AND' ? 'bg-blue' : 'bg-green'}`}></div>
-          <span className={`text-sm font-medium ${groupLabelColor}`}>
+          <div className={`w-2 h-2 rounded-full ${group.type === 'AND' ? 'bg-primary' : 'bg-green'}`}></div>
+          <span className={`text-sm font-semibold text-muted-foreground`}>
             {groupLabel}
           </span>
         </div>
