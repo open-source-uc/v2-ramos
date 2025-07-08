@@ -82,38 +82,36 @@ export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle:
 }
 
 /**
- * Obtiene los nombres de los cursos a partir de sus siglas
- * @param locals App locals que contiene la conexión a la base de datos
+ * Obtiene los nombres de los cursos a partir de sus siglas usando la colección de contenido
  * @param sigles Array de siglas de cursos
  * @returns Mapa de siglas a nombres de cursos
  */
-export const getCourseNames = async (locals: App.Locals, sigles: string[]): Promise<Map<string, string>> => {
+export const getCourseNames = async (sigles: string[]): Promise<Map<string, string>> => {
   if (sigles.length === 0) {
     return new Map();
   }
 
-  const placeholders = sigles.map(() => '?').join(',');
-  const result = await locals.runtime.env.DB.prepare(`
-    SELECT sigle, name 
-    FROM course_static_info 
-    WHERE sigle IN (${placeholders})
-  `).bind(...sigles).all<{sigle: string, name: string}>();
-
+  const { getCollection } = await import("astro:content");
+  const courses = await getCollection("coursesStatic");
+  
   const courseNames = new Map<string, string>();
-  result.results.forEach(row => {
-    courseNames.set(row.sigle, row.name);
-  });
+  
+  for (const sigla of sigles) {
+    const course = courses.find(c => c.data.sigle === sigla);
+    if (course) {
+      courseNames.set(sigla, course.data.name);
+    }
+  }
 
   return courseNames;
 };
 
 /**
  * Obtiene información detallada de los cursos para prerrequisitos
- * @param locals App locals que contiene la conexión a la base de datos
  * @param req String de prerrequisitos
  * @returns Prerrequisitos parseados con nombres de cursos
  */
-export const getPrerequisitesWithNames = async (locals: App.Locals, req: string) => {
+export const getPrerequisitesWithNames = async (req: string) => {
   const parsed = parsePrerequisites(req);
   
   if (!parsed.hasPrerequisites || !parsed.structure) {
@@ -121,7 +119,7 @@ export const getPrerequisitesWithNames = async (locals: App.Locals, req: string)
   }
 
   const sigles = extractSiglesFromStructure(parsed.structure);
-  const courseNames = await getCourseNames(locals, sigles);
+  const courseNames = await getCourseNames(sigles);
   const structureWithNames = addNamesToStructure(parsed.structure, courseNames);
   
   return {

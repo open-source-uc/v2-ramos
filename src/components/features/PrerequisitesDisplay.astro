@@ -1,0 +1,105 @@
+---
+import type { PrerequisiteGroup, PrerequisiteCourse } from "../../types";
+
+interface Props {
+    prerequisites: PrerequisiteGroup;
+    className?: string;
+}
+
+const { prerequisites, className = "" } = Astro.props;
+
+function renderCourse(course: PrerequisiteCourse, index: number, isLast: boolean, operatorText: string, operatorColor: string) {
+    return {
+        course,
+        index,
+        isLast,
+        operatorText,
+        operatorColor
+    };
+}
+
+function renderGroup(group: PrerequisiteGroup, index: number, isLast: boolean, operatorText: string, operatorColor: string) {
+    return {
+        group,
+        index,
+        isLast,
+        operatorText,
+        operatorColor
+    };
+}
+
+function processGroup(group: PrerequisiteGroup) {
+    const operatorText = group.type === 'AND' ? 'y' : 'o';
+    const operatorColor = group.type === 'AND' ? 'text-blue-600' : 'text-green-600';
+    
+    const courses = group.courses || [];
+    const groups = group.groups || [];
+    const totalItems = courses.length + groups.length;
+
+    const processedCourses = courses.map((course, index) => 
+        renderCourse(course, index, index === totalItems - 1, operatorText, operatorColor)
+    );
+
+    const processedGroups = groups.map((subGroup, index) => 
+        renderGroup(subGroup, index, courses.length + index === totalItems - 1, operatorText, operatorColor)
+    );
+
+    return {
+        operatorText,
+        operatorColor,
+        courses: processedCourses,
+        groups: processedGroups,
+        hasCoursesAndGroups: courses.length > 0 && groups.length > 0
+    };
+}
+
+const processedPrerequisites = processGroup(prerequisites);
+---
+
+<div class={`prerequisites-display ${className}`}>
+    <div class="flex flex-wrap items-center gap-1 p-3 bg-background rounded-lg border border-border">
+        {processedPrerequisites.courses.map((item) => (
+            <span class="inline-flex items-center gap-1 flex-wrap">
+                <span class={`font-mono text-sm px-2 py-1 rounded border ${
+                    item.course.isCorricular 
+                        ? 'bg-orange-50 text-orange-800 border-orange-200' 
+                        : 'bg-blue-50 text-blue-800 border-blue-200'
+                }`}>
+                    {item.course.sigle}
+                    {item.course.isCorricular && (
+                        <span class="text-orange-600 font-bold ml-1">(c)</span>
+                    )}
+                </span>
+                {item.course.name && (
+                    <span class="text-muted-foreground text-sm truncate max-w-[200px]" title={item.course.name}>
+                        {item.course.name}
+                    </span>
+                )}
+                {!item.isLast && (
+                    <span class={`mx-1 font-semibold ${item.operatorColor}`}>
+                        {item.operatorText}
+                    </span>
+                )}
+            </span>
+        ))}
+        
+        {processedPrerequisites.hasCoursesAndGroups && (
+            <span class={`mx-1 font-semibold ${processedPrerequisites.operatorColor}`}>
+                {processedPrerequisites.operatorText}
+            </span>
+        )}
+        
+        {processedPrerequisites.groups.map((item) => (
+            <span class="inline-flex items-center gap-1 flex-wrap">
+                <span class="inline-flex items-center gap-1 p-2 rounded border border-border bg-muted/30">
+                    <Astro.self prerequisites={item.group} className="nested" />
+                </span>
+                {!item.isLast && (
+                    <span class={`mx-1 font-semibold ${item.operatorColor}`}>
+                        {item.operatorText}
+                    </span>
+                )}
+            </span>
+        ))}
+    </div>
+</div>

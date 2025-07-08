@@ -1,3 +1,4 @@
+import { parsePrerequisites } from "@/lib/courseReq";
 import type { PrerequisiteGroup, PrerequisiteCourse } from "@/types";
 
 interface PrerequisitesDisplayProps {
@@ -127,6 +128,3 @@ export const CoursePrerequisites = ({ req, courseNames }: CoursePrerequisitesPro
     </div>
   );
 };
-
-// Import this at the top of the file
-import { parsePrerequisites } from "@/lib/utils";

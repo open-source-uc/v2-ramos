@@ -456,3 +456,27 @@ export function EyeIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}>
+      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+    </svg>
+  );
+}
+
+export function ChevronUpIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}>
+      <path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/>
+    </svg>
+  );
+}
+
+export function BookOpenIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}>
+      <path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80H240Zm0-80h480v-640H240v640Zm80-80h320v-80H320v80Zm0-160h320v-80H320v80Zm0-160h320v-80H320v80ZM240-160v-640 640Z"/>
+    </svg>
+  );
+}

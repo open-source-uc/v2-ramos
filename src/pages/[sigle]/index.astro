@@ -1,5 +1,5 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
 import { getUserDataByToken } from "../../services/auth";
 import {
@@ -39,6 +39,7 @@ if (!sigle) {
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
+import PrerequisitesSection from "@/components/features/PrerequisitesSection.astro";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -48,6 +49,9 @@ const course = courseData.data;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
 const reviews = await getCourseReviews(Astro.locals, sigle, 10);
+
+// Get prerequisites with names
+const prerequisites = await getPrerequisitesWithNames(course.req);
 
 // Calculate statistics
 const sentiment = c
@@ -250,6 +254,9 @@ const reportSuccessMessage = reportResult?.data?.message;
                 }
             </div>
         </section>
+
+        <!-- Prerequisites Section -->
+        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" />
 
         <!-- Links de Interés -->
         <section class="mt-8">
