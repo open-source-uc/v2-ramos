@@ -39,7 +39,7 @@ if (!sigle) {
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
-import PrerequisitesSection from "@/components/features/PrerequisitesSection.astro";
+import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -256,7 +256,7 @@ const reportSuccessMessage = reportResult?.data?.message;
         </section>
 
         <!-- Prerequisites Section -->
-        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" />
+        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:load />
 
         <!-- Links de Interés -->
         <section class="mt-8">

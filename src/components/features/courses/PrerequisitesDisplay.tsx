@@ -24,24 +24,24 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const operatorColor = group.type === 'AND' ? 'text-blue-600' : 'text-green-600';
   
   const renderCourse = (course: PrerequisiteCourse, index: number, isLast: boolean) => (
-    <span key={`${course.sigle}-${index}`} className="inline-flex items-center gap-1">
-      <span className={`font-mono text-sm px-2 py-1 rounded ${
+    <span key={`${course.sigle}-${index}`} className="inline-flex items-center gap-1 flex-wrap">
+      <span className={`font-mono text-sm px-2 py-1 rounded border ${
         course.isCorricular 
-          ? 'bg-orange-100 text-orange-800 border border-orange-200' 
-          : 'bg-blue-100 text-blue-800 border border-blue-200'
+          ? 'bg-orange-50 text-orange-800 border-orange-200' 
+          : 'bg-blue-50 text-blue-800 border-blue-200'
       }`}>
         {course.sigle}
         {course.isCorricular && (
-          <span className="text-orange-600 font-bold">(c)</span>
+          <span className="text-orange-600 font-bold ml-1">(c)</span>
         )}
       </span>
       {course.name && (
-        <span className="text-gray-600 text-sm">
+        <span className="text-muted-foreground text-sm truncate max-w-[200px]" title={course.name}>
           {course.name}
         </span>
       )}
       {!isLast && (
-        <span className={`mx-2 font-semibold ${operatorColor}`}>
+        <span className={`mx-1 font-semibold ${operatorColor}`}>
           {operatorText}
         </span>
       )}
@@ -49,12 +49,12 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   );
 
   const renderGroup = (subGroup: PrerequisiteGroup, index: number, isLast: boolean) => (
-    <span key={`group-${index}`} className="inline-flex items-center gap-1">
-      <span className="inline-flex items-center gap-1 p-2 rounded border border-gray-200 bg-gray-50">
+    <span key={`group-${index}`} className="inline-flex items-center gap-1 flex-wrap">
+      <span className="inline-flex items-center gap-1 p-2 rounded border border-border bg-muted/30">
         <PrerequisiteGroupComponent group={subGroup} isNested={true} />
       </span>
       {!isLast && (
-        <span className={`mx-2 font-semibold ${operatorColor}`}>
+        <span className={`mx-1 font-semibold ${operatorColor}`}>
           {operatorText}
         </span>
       )}
@@ -66,13 +66,13 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const totalItems = courses.length + groups.length;
 
   return (
-    <div className={`flex flex-wrap items-center gap-1 ${isNested ? '' : 'p-4 bg-white rounded-lg border'}`}>
+    <div className={`flex flex-wrap items-center gap-1 ${isNested ? '' : 'p-3 bg-background rounded-lg border border-border'}`}>
       {courses.map((course, index) => 
         renderCourse(course, index, index === totalItems - 1)
       )}
       
       {courses.length > 0 && groups.length > 0 && (
-        <span className={`mx-2 font-semibold ${operatorColor}`}>
+        <span className={`mx-1 font-semibold ${operatorColor}`}>
           {operatorText}
         </span>
       )}
