@@ -108,7 +108,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   return (
     <div className="container mx-auto py-4">
       {/* Search Component */}
-      <div className="flex flex-col gap-4 items-stretch justify-between tablet:flex-row tablet:items-center tablet:mb-6 ">
+      <div className="flex flex-col gap-4 items-stretch justify-between tablet:flex-row tablet:items-center">
         <Search
           onSearch={handleSearch}
           placeholder="Buscar por nombre o sigla..."

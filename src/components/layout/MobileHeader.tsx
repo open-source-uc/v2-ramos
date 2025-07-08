@@ -126,12 +126,12 @@ export default function MobileHeader() {
                 <a
                   href="https://osuc.dev"
                   onClick={closeMenu}
-                  className="block p-4 rounded-md bg-gradient-to-br from-foreground to-primary text-background hover:opacity-90 transition-opacity border border-transparent"
+                  className="block p-4 rounded-md bg-gradient-to-br from-background to-primary hover:opacity-60 transition-opacity border border-border"
                 >
                   <div className="font-medium text-sm leading-none mb-2">
                     Creado por Open Source eUC
                   </div>
-                  <p className="text-background text-sm leading-snug opacity-90">
+                  <p className="text-sm leading-snug opacity-90">
                     La comunidad estudiantil de innovación y desarrollo de software de la UC.
                   </p>
                 </a>

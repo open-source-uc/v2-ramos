@@ -87,7 +87,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
 
   return (
     <>
-      <div className="hidden tablet:block">
+      <div className="hidden pt-4 tablet:block">
         <div className="flex items-center gap-4">
           <div className="space-x-2"></div>
         </div>
@@ -178,7 +178,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
           </div>
         </div>
       </div>
-      <div className="tablet:hidden flex flex-col space-y-4">
+      <div className="tablet:hidden flex flex-col space-y-4 pt-4">
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => {
             const course = row.original;
