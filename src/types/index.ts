@@ -81,3 +81,21 @@ export interface Recommendation {
     slug: string;
     data: RecommendationData;
 }
+
+// Prerequisites types
+export interface PrerequisiteCourse {
+    sigle: string;
+    name?: string;
+    isCorricular: boolean; // true if the course has (c) suffix
+}
+
+export interface PrerequisiteGroup {
+    type: 'AND' | 'OR';
+    courses: PrerequisiteCourse[];
+    groups?: PrerequisiteGroup[];
+}
+
+export interface ParsedPrerequisites {
+    hasPrerequisites: boolean;
+    structure?: PrerequisiteGroup;
+}
