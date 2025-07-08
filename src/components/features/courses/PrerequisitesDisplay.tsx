@@ -45,7 +45,7 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const groupLabelColor = group.type === 'AND' ? 'text-blue-600' : 'text-green-600';
   
   const renderCourse = (course: PrerequisiteCourse, index: number) => (
-    <div key={`${course.sigle}-${index}`} className="flex items-center gap-2">
+    <div key={`${course.sigle}-${index}`} className="flex items-center gap-2 my-3">
       <Pill 
         variant={course.isCorricular ? 'orange' : 'blue'} 
         size="sm"
@@ -69,19 +69,38 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   );
 
   const renderGroup = (subGroup: PrerequisiteGroup, index: number) => (
-    <div key={`group-${index}`} className="border border-border rounded-lg p-3 bg-muted/30">
+    <div key={`group-${index}`} className="border border-border rounded-lg p-3 bg-muted/30 my-3">
       <PrerequisiteGroupComponent group={subGroup} isNested={true} />
     </div>
   );
 
   const courses = group.courses || [];
   const groups = group.groups || [];
-  const hasMultipleItems = courses.length + groups.length > 1;
+  const allItems = [...courses, ...groups];
+  
+  const renderSeparatorPill = () => {
+    const separatorText = group.type === 'AND' ? 'Y' : 'O';
+    const separatorColor = group.type === 'AND' ? 'blue' : 'green';
+    
+    return (
+      <div className="flex justify-center py-3">
+        <Pill 
+          variant={separatorColor} 
+          size="sm" 
+          className="font-bold text-xs"
+        >
+          {separatorText}
+        </Pill>
+      </div>
+    );
+  };
+
+  const hasMultipleItems = allItems.length > 1;
 
   return (
-    <div className={`space-y-3 ${isNested ? '' : ''}`}>
-      {/* Group header with label */}
-      {hasMultipleItems && (
+    <div className={`${isNested ? '' : ''}`}>
+      {/* Group header with label for nested groups only */}
+      {isNested && hasMultipleItems && (
         <div className="flex justify-between items-center border-b border-border pb-2 mb-3">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${group.type === 'AND' ? 'bg-blue-500' : 'bg-green-500'}`}></div>
@@ -94,18 +113,21 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
           </span>
         </div>
       )}
-      
-      {/* Courses */}
-      <div className="space-y-2">
-        {courses.map((course, index) => renderCourse(course, index))}
+
+      {/* Render courses and groups with separators */}
+      <div>
+        {allItems.map((item, index) => {
+          const isGroup = 'type' in item;
+          const isLast = index === allItems.length - 1;
+          
+          return (
+            <div key={`item-${index}`}>
+              {isGroup ? renderGroup(item as PrerequisiteGroup, index) : renderCourse(item as PrerequisiteCourse, index)}
+              {!isNested && !isLast && renderSeparatorPill()}
+            </div>
+          );
+        })}
       </div>
-      
-      {/* Groups */}
-      {groups.length > 0 && (
-        <div className="space-y-3">
-          {groups.map((subGroup, index) => renderGroup(subGroup, index))}
-        </div>
-      )}
     </div>
   );
 };
