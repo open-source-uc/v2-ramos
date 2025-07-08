@@ -1,6 +1,7 @@
 import { parsePrerequisites } from "@/lib/courseReq";
 import type { PrerequisiteGroup, PrerequisiteCourse } from "@/types";
 import { Pill } from "@/components/ui/pill";
+import { DocsIcon } from "@/components/icons/icons";
 
 interface PrerequisitesDisplayProps {
   prerequisites: PrerequisiteGroup;
@@ -13,23 +14,23 @@ export const PrerequisitesDisplay = ({ prerequisites, className = "" }: Prerequi
 
   if (!hasPrerequisites) {
     return (
-      <div className={`text-center py-8 ${className}`}>
-        <div className="flex flex-col items-center gap-3 text-muted-foreground">
-          <div className="p-3 bg-muted rounded-lg">
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+      <div className={`py-6 ${className}`}>
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+            <DocsIcon className="h-5 w-5 fill-current" />
           </div>
-          <p className="text-sm">
-            Este curso no tiene prerrequisitos específicos
-          </p>
+          <div>
+            <p className="text-sm font-medium">
+              Este curso no tiene prerrequisitos específicos
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`bg-background border border-border rounded-lg p-4 ${className}`}>
+    <div className={`py-6 ${className}`}>
       <PrerequisiteGroupComponent group={prerequisites} />
     </div>
   );
@@ -41,20 +42,20 @@ interface PrerequisiteGroupComponentProps {
 }
 
 const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGroupComponentProps) => {
-  const groupLabel = group.type === 'AND' ? 'Debes pasar todos estos ramos' : 'Debes pasar uno de estos ramos';
-  const groupLabelColor = group.type === 'AND' ? 'text-blue-600' : 'text-green-600';
+  const groupLabel = group.type === 'AND' ? 'Todos requeridos' : 'Uno requerido';
+  const groupLabelColor = group.type === 'AND' ? 'text-blue' : 'text-green';
   
   const renderCourse = (course: PrerequisiteCourse, index: number) => (
-    <div key={`${course.sigle}-${index}`} className="flex items-center gap-2 my-3">
+    <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2">
       <Pill 
         variant={course.isCorricular ? 'orange' : 'blue'} 
-        size="sm"
-        className="font-mono font-semibold"
+        size="xs"
+        className="font-mono font-semibold text-sm"
       >
         {course.sigle}
       </Pill>
       {course.isCorricular && (
-        <Pill variant="orange" size="sm" className="text-xs font-bold">
+        <Pill variant="orange" size="xs" className="text-xs font-medium">
           CORRICULAR
         </Pill>
       )}
@@ -69,7 +70,7 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   );
 
   const renderGroup = (subGroup: PrerequisiteGroup, index: number) => (
-    <div key={`group-${index}`} className="border border-border rounded-lg p-3 bg-muted/30 my-3">
+    <div key={`group-${index}`} className="border border-border rounded-lg p-4 bg-muted/30 my-3">
       <PrerequisiteGroupComponent group={subGroup} isNested={true} />
     </div>
   );
@@ -78,19 +79,19 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const groups = group.groups || [];
   const allItems = [...courses, ...groups];
   
-  const renderSeparatorPill = () => {
-    const separatorText = group.type === 'AND' ? 'Y' : 'O';
-    const separatorColor = group.type === 'AND' ? 'blue' : 'green';
+  const renderSeparatorPill = (separatorType: 'AND' | 'OR') => {
+    const separatorText = separatorType === 'AND' ? 'Y' : 'O';
+    const separatorColor = separatorType === 'AND' ? 'blue' : 'green';
     
     return (
-      <div className="flex justify-center py-3">
-        <Pill 
-          variant={separatorColor} 
-          size="sm" 
-          className="font-bold text-xs"
-        >
+      <div className="flex justify-center py-2">
+        <div className={`px-3 py-1 rounded-full text-xs font-bold border ${
+          separatorType === 'AND' 
+            ? 'bg-blue-light text-blue border-blue/20' 
+            : 'bg-green-light text-green border-green/20'
+        }`}>
           {separatorText}
-        </Pill>
+        </div>
       </div>
     );
   };
@@ -98,24 +99,19 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const hasMultipleItems = allItems.length > 1;
 
   return (
-    <div className={`${isNested ? '' : ''}`}>
-      {/* Group header with label for nested groups only */}
+    <div className={`${isNested ? 'space-y-2' : 'space-y-3'}`}>
+      {/* Group header for nested groups */}
       {isNested && hasMultipleItems && (
-        <div className="flex justify-between items-center border-b border-border pb-2 mb-3">
-          <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${group.type === 'AND' ? 'bg-blue-500' : 'bg-green-500'}`}></div>
-            <span className="text-sm font-medium text-muted-foreground">
-              {group.type === 'AND' ? 'Todos requeridos' : 'Uno requerido'}
-            </span>
-          </div>
-          <span className={`text-xs font-medium ${groupLabelColor}`}>
+        <div className="flex items-center gap-3 pb-3 border-b border-border">
+          <div className={`w-2 h-2 rounded-full ${group.type === 'AND' ? 'bg-blue' : 'bg-green'}`}></div>
+          <span className={`text-sm font-medium ${groupLabelColor}`}>
             {groupLabel}
           </span>
         </div>
       )}
 
       {/* Render courses and groups with separators */}
-      <div>
+      <div className="space-y-1">
         {allItems.map((item, index) => {
           const isGroup = 'type' in item;
           const isLast = index === allItems.length - 1;
@@ -123,7 +119,7 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
           return (
             <div key={`item-${index}`}>
               {isGroup ? renderGroup(item as PrerequisiteGroup, index) : renderCourse(item as PrerequisiteCourse, index)}
-              {!isNested && !isLast && renderSeparatorPill()}
+              {!isNested && !isLast && renderSeparatorPill(group.type)}
             </div>
           );
         })}
