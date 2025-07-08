@@ -459,21 +459,17 @@ export function EyeIcon({ className }: { className?: string }) {
 
 export function ChevronDownIcon({ className }: { className?: string }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}>
-      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
-    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M481-353.69 246.69-588 293-634.31l188 188 188-188L715.31-588 481-353.69Z"/></svg>
   );
 }
 
 export function ChevronUpIcon({ className }: { className?: string }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}>
-      <path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/>
-    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="m481-541.69-188 188L246.69-400 481-634.31 715.31-400 669-353.69l-188-188Z"/></svg>
   );
 }
 
-export function BookOpenIcon({ className }: { className?: string }) {
+export function DocsIcon({ className }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M331.38-493.69h297.24v-56H331.38v56Zm0 126.77h297.24v-56H331.38v56Zm0 126.77h177.24v-56H331.38v56ZM260.62-88q-38.35 0-64.48-26.14Q170-140.27 170-178.62v-602.76q0-38.35 26.14-64.48Q222.27-872 260.62-872H568l222 221v472.38q0 38.35-26.14 64.48Q737.73-88 699.38-88H260.62ZM560-642h164L560-806v164Z"/></svg>
   );

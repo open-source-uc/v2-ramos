@@ -1,4 +1,4 @@
-import { BookOpenIcon, ChevronDownIcon } from "@/components/icons/icons";
+import { DocsIcon, ChevronDownIcon } from "@/components/icons/icons";
 import { PrerequisitesDisplay } from "./PrerequisitesDisplay";
 import { 
   Collapsible, 
@@ -22,7 +22,7 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                 <div className="border border-border rounded-md p-6">
                     <div className="flex items-center gap-3 text-muted-foreground">
                         <div className="p-2 bg-muted text-muted-foreground border border-border rounded-lg">
-                            <BookOpenIcon className="h-5 w-5 fill-current" />
+                            <DocsIcon className="h-5 w-5 fill-current" />
                         </div>
                         <div>
                             <h2 className="text-lg font-semibold">
@@ -45,7 +45,7 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                     <CollapsibleTrigger className="w-full px-6 py-4 text-left bg-background hover:bg-muted/50 transition-colors duration-200 flex items-center justify-between group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
-                                <BookOpenIcon className="h-5 w-5 fill-current" />
+                                <DocsIcon className="h-5 w-5 fill-current" />
                             </div>
                             <div>
                                 <h2 className="text-lg font-semibold text-foreground">
