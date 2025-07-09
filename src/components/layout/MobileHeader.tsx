@@ -174,21 +174,14 @@ export default function MobileHeader() {
                   onClick={closeMenu}
                   className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  BuscaCursos Original
+                  BUSCACURSOS
                 </a>
                 <a
-                  href="https://portal.uc.cl/"
+                  href="https://registration9.uc.cl/StudentRegistrationSsb/ssb/registration"
                   onClick={closeMenu}
                   className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  Portal UC
-                </a>
-                <a
-                  href="https://cursos.canvas.uc.cl/"
-                  onClick={closeMenu}
-                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
-                >
-                  Canvas UC
+                  INSCRIPCIÓN CURSOS
                 </a>
               </div>
             </section>
