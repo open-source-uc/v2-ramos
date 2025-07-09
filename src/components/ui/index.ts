@@ -5,6 +5,7 @@ export { ButtonInput } from './button-input';
 export { default as ButtonNavbar } from './button-navbar';
 export { Button, buttonVariants } from './button';
 export { Card } from './card';
+export { Combobox } from './combobox';
 export { Input } from './input';
 export { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, NavigationMenuLink, navigationMenuTriggerStyle } from './navigation-menu';
 export { NumericInput } from './numeric-input';

@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react"
 import { Search } from "../search/SearchInput"
 import type { Course } from "../../table/columns"
 import { DataTable } from "../../table/data-table"
-import { Select, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectTrigger, SelectValue } from "../../ui/select"
+import { Combobox, type ComboboxOption } from "../../ui/combobox"
 import { cn } from "@/lib/utils"
 import type { InferEntrySchema, RenderedContent } from "astro:content"
 
@@ -78,6 +78,32 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return Array.from(new Set(schools)).sort();
   }, [courses]);
 
+  // Convert unique areas to combobox options
+  const areaOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todos los cursos" }
+    ];
+    
+    uniqueAreas.forEach((area) => {
+      options.push({ value: area, label: area });
+    });
+    
+    return options;
+  }, [uniqueAreas]);
+
+  // Convert unique schools to combobox options
+  const schoolOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todas las unidades académicas" }
+    ];
+    
+    uniqueSchools.forEach((school) => {
+      options.push({ value: school, label: school });
+    });
+    
+    return options;
+  }, [uniqueSchools]);
+
   // Filter data based on both search and area selection
   const filteredData = useMemo(() => {
     let filtered = courses;
@@ -118,54 +144,36 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
 
         <div className="flex flex-col-reverse items-stretch gap-4 w-full tablet:flex-row-reverse tablet:items-center">
           {/* Area Filter */}
-          <Select value={selectedArea} onValueChange={handleAreaChange}>
-            <SelectTrigger
-              className={cn(
-                "w-full tablet:max-w-[300px]",
-                selectedArea !== "all" &&
-                "bg-primary-foreground text-primary border border-primary"
-              )}
-            >
-              <SelectValue placeholder="Áreas de Formación General" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Filtrar por Área de Formación General</SelectLabel>
-                <SelectItem value="all">Todos los cursos</SelectItem>
-                {uniqueAreas.map((area) => (
-                  <SelectItem key={area} value={area}>
-                    {area}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Combobox
+            options={areaOptions}
+            value={selectedArea}
+            onValueChange={handleAreaChange}
+            placeholder="Áreas de Formación General"
+            searchPlaceholder="Buscar área..."
+            emptyMessage="No se encontraron áreas."
+            className="w-full tablet:max-w-[300px]"
+            buttonClassName={cn(
+              selectedArea !== "all" &&
+              "bg-primary-foreground text-primary border border-primary"
+            )}
+            aria-label="Filtrar por Área de Formación General"
+          />
 
           {/* School Filter */}
-          <Select value={selectedSchool} onValueChange={handleSchoolChange}>
-            <SelectTrigger
-              className={cn(
-                "w-full tablet:max-w-[300px]",
-                selectedSchool !== "all" &&
-                "bg-primary-foreground text-primary border border-primary"
-              )}
-            >
-              <SelectValue placeholder="Facultades" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Filtrar por Unidad Académica</SelectLabel>
-                <SelectItem value="all">
-                  Todas las unidades académicas
-                </SelectItem>
-                {uniqueSchools.map((school) => (
-                  <SelectItem key={school} value={school}>
-                    {school}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Combobox
+            options={schoolOptions}
+            value={selectedSchool}
+            onValueChange={handleSchoolChange}
+            placeholder="Facultades"
+            searchPlaceholder="Buscar facultad..."
+            emptyMessage="No se encontraron facultades."
+            className="w-full tablet:max-w-[300px]"
+            buttonClassName={cn(
+              selectedSchool !== "all" &&
+              "bg-primary-foreground text-primary border border-primary"
+            )}
+            aria-label="Filtrar por Unidad Académica"
+          />
         </div>
       </div>
 
