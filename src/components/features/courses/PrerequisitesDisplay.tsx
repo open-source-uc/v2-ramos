@@ -1,7 +1,7 @@
 import { parsePrerequisites } from "@/lib/courseReq";
 import type { PrerequisiteGroup, PrerequisiteCourse } from "@/types";
 import { Pill } from "@/components/ui/pill";
-import { DocsIcon } from "@/components/icons/icons";
+import { DocsIcon, DeceasedIcon, TextureIcon } from "@/components/icons/icons";
 
 interface PrerequisitesDisplayProps {
   prerequisites: PrerequisiteGroup;
@@ -44,29 +44,29 @@ interface PrerequisiteGroupComponentProps {
 const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGroupComponentProps) => {
   const groupLabel = group.type === 'AND' ? 'Debes aprobar todos los cursos de este grupo' : 'Debes aprobar solo uno de los cursos de este grupo';
   
-  const renderCourse = (course: PrerequisiteCourse, index: number) => (
-    <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2">
-      <Pill 
-        variant={course.isCorricular ? 'orange' : 'blue'} 
-        size="xs"
-        className="font-mono font-semibold text-sm"
-      >
-        {course.sigle}
-      </Pill>
-      {course.isCorricular && (
-        <Pill variant="orange" size="xs" className="text-xs font-medium">
-          CORRICULAR
+  const renderCourse = (course: PrerequisiteCourse, index: number) => {
+    const hasName = course.name && course.name.trim() !== '';
+    
+    return (
+      <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2">
+        <Pill 
+          icon={!hasName ? DeceasedIcon : course.isCoreq ? TextureIcon : undefined}
+          variant={!hasName ? 'ghost_blue' : course.isCoreq ? 'orange' : 'blue'} 
+          size="xs"
+        >
+          {course.sigle}
         </Pill>
-      )}
-      {course.name && (
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate" title={course.name}>
-            {course.name}
-          </p>
-        </div>
-      )}
-    </div>
-  );
+
+        {hasName && (
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground truncate" title={course.name}>
+              {course.name}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderGroup = (subGroup: PrerequisiteGroup, index: number) => (
     <div key={`group-${index}`} className="border border-border rounded-lg p-4 bg-muted/30 my-3">
@@ -80,7 +80,6 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   
   const renderSeparatorPill = (separatorType: 'AND' | 'OR') => {
     const separatorText = separatorType === 'AND' ? 'Y' : 'O';
-    const separatorColor = separatorType === 'AND' ? 'blue' : 'green';
     
     return (
       <div className="flex justify-center py-2">

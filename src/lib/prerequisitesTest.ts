@@ -17,8 +17,8 @@ const testCases = [
   // Complex cases
   '(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007)',
   '(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007) o (IMT2220 o IMT2230)',
-  
-  // Mixed with corricular
+
+  // Mixed with correquisitos
   'MAT1124(c) y (MAT0004 o MAT0006)',
   '(MAT1124(c) o MAT1126) y MAT0007',
   
@@ -55,7 +55,7 @@ function formatPrerequisiteGroup(group: any): string {
   // Add courses
   if (group.courses && group.courses.length > 0) {
     const courseTexts = group.courses.map((course: any) => 
-      `${course.sigle}${course.isCorricular ? '(c)' : ''}`
+      `${course.sigle}${course.isCoreq ? '(c)' : ''}`
     );
     parts.push(courseTexts.join(group.type === 'AND' ? ' y ' : ' o '));
   }

@@ -206,10 +206,10 @@ function splitByOperator(expression: string, operator: 'y' | 'o'): string[] {
 function extractCourses(text: string): PrerequisiteCourse[] {
   const courses: PrerequisiteCourse[] = [];
   
-  // Primero, identificar cursos corriculares antes de remover paréntesis
-  const corriculars = text.match(/[A-Z]{2,4}\d{1,4}[A-Z]?\(c\)/g) || [];
-  const corricularsSet = new Set(corriculars.map(c => c.replace('(c)', '')));
-  
+  // Primero, identificar cursos correquisitos antes de remover paréntesis
+  const correquisitos = text.match(/[A-Z]{2,4}\d{1,4}[A-Z]?\(c\)/g) || [];
+  const correquisitosSet = new Set(correquisitos.map(c => c.replace('(c)', '')));
+
   // Remover solo paréntesis de agrupación, no los marcadores (c)
   const cleanText = text.replace(/[()]/g, ' ').trim();
   const words = cleanText.split(/\s+/);
@@ -223,7 +223,7 @@ function extractCourses(text: string): PrerequisiteCourse[] {
       if (/^[A-Z]{2,4}\d{1,4}[A-Z]?$/.test(cleanWord)) {
         courses.push({
           sigle: cleanWord,
-          isCorricular: corricularsSet.has(cleanWord)
+          isCoreq: correquisitosSet.has(cleanWord)
         });
       }
     }

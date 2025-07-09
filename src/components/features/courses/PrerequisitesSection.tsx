@@ -1,4 +1,4 @@
-import { DocsIcon, ChevronDownIcon } from "@/components/icons/icons";
+import { DocsIcon, ChevronDownIcon, TextureIcon, DeceasedIcon } from "@/components/icons/icons";
 import { PrerequisitesDisplay } from "./PrerequisitesDisplay";
 import { 
   Collapsible, 
@@ -44,7 +44,7 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                 <Collapsible>
                     <CollapsibleTrigger className="w-full px-6 py-4 text-left bg-background hover:bg-muted/50 transition-colors duration-200 flex items-center justify-between group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg">
+                            <div className="p-2 bg-pink-light text-pink border border-purple/20 rounded-lg">
                                 <DocsIcon className="h-5 w-5 fill-current" />
                             </div>
                             <div>
@@ -56,8 +56,8 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm text-muted-foreground hidden sm:inline">
+                        <div className="flex items-center gap-2 ml-4">
+                            <span className="text-sm text-muted-foreground hidden tablet:inline">
                                 Click para expandir
                             </span>
                             <ChevronDownIcon className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-hover:text-foreground group-data-[state=open]:rotate-180" />
@@ -70,20 +70,20 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                         <div className="mt-4 pt-4 border-t border-border">
                             <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-blue-50 border border-blue-200 rounded"></div>
+                                    <div className="w-4 h-4 bg-blue border border-blue-light rounded"></div>
                                     <span>Prerrequisito regular</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-3 h-3 bg-orange-50 border border-orange-200 rounded"></div>
-                                    <span>Prerrequisito corricular (c)</span>
+                                    <div className="w-4 h-4 bg-orange border border-orange-light rounded flex items-center justify-center">
+                                        <TextureIcon className="w-3 h-3 text-background" />
+                                    </div>
+                                    <span>Co-requisito (puedes inscribir el curso al mismo tiempo)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    <span>Debes pasar todos estos ramos</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span>Debes pasar uno de estos ramos</span>
+                                    <div className="w-4 h-4 bg-muted-foreground border border-muted rounded flex items-center justify-center">
+                                        <DeceasedIcon className="w-3 h-3 text-muted" />
+                                    </div>
+                                    <span>Curso no ofrecido desde el primer semestre de 2024</span>
                                 </div>
                             </div>
                         </div>

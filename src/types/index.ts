@@ -86,7 +86,7 @@ export interface Recommendation {
 export interface PrerequisiteCourse {
     sigle: string;
     name?: string;
-    isCorricular: boolean; // true if the course has (c) suffix
+    isCoreq: boolean; // true if the course has (c) suffix
 }
 
 export interface PrerequisiteGroup {

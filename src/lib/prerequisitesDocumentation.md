@@ -15,7 +15,7 @@ function parsePrerequisites(req: string): ParsedPrerequisites
 interface PrerequisiteCourse {
     sigle: string;          // Código del curso (ej: "MAT1124")
     name?: string;          // Nombre del curso (opcional, se puede agregar después)
-    isCorricular: boolean;  // true si el curso tiene sufijo (c)
+    isCoreq: boolean;  // true si el curso tiene sufijo (c)
 }
 ```
 
@@ -58,7 +58,7 @@ const reqWithNames = await getPrerequisitesWithNames(locals, req);
 ### Casos Simples
 - `"No tiene"` → Sin prerrequisitos
 - `"MAT1124"` → Un solo prerrequisito
-- `"MAT1124(c)"` → Un solo prerrequisito corricular
+- `"MAT1124(c)"` → Un solo prerrequisito correquisito
 
 ### Relaciones OR
 - `"MAT1124 o MAT1126"` → Necesitas UNO de estos cursos
@@ -71,9 +71,9 @@ const reqWithNames = await getPrerequisitesWithNames(locals, req);
 - `"(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007)"` → Necesitas UNO del primer grupo Y UNO del segundo grupo
 - `"(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007) o (IMT2220 o IMT2230)"` → Estructura anidada compleja
 
-### Cursos Corriculares
-- `"MAT1124(c) y (MAT0004 o MAT0006)"` → Curso corricular + prerrequisitos regulares
-- `"(MAT1124(c) o MAT1126) y MAT0007"` → Mezclado corricular y regular en el mismo grupo
+### Cursos Correquisito
+- `"MAT1124(c) y (MAT0004 o MAT0006)"` → Curso correquisito + prerrequisitos regulares
+- `"(MAT1124(c) o MAT1126) y MAT0007"` → Mezclado correquisito y regular en el mismo grupo
 
 ## Entendiendo el Output
 
@@ -97,16 +97,16 @@ Input: `"(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007)"`
       {
         "type": "OR",
         "courses": [
-          {"sigle": "MAT1124", "isCorricular": false},
-          {"sigle": "MAT1126", "isCorricular": false}
+          {"sigle": "MAT1124", "isCoreq": false},
+          {"sigle": "MAT1126", "isCoreq": false}
         ]
       },
       {
         "type": "OR",
         "courses": [
-          {"sigle": "MAT0004", "isCorricular": false},
-          {"sigle": "MAT0006", "isCorricular": false},
-          {"sigle": "MAT0007", "isCorricular": false}
+          {"sigle": "MAT0004", "isCoreq": false},
+          {"sigle": "MAT0006", "isCoreq": false},
+          {"sigle": "MAT0007", "isCoreq": false}
         ]
       }
     ]
@@ -116,11 +116,11 @@ Input: `"(MAT1124 o MAT1126) y (MAT0004 o MAT0006 o MAT0007)"`
 
 Esto significa: "Necesitas (MAT1124 O MAT1126) Y (MAT0004 O MAT0006 O MAT0007)"
 
-## Cursos Corriculares
+## Cursos Correquisito
 
-Los cursos corriculares se marcan con `(c)` en la cadena original. Estos son cursos que pueden ser tomados junto con el curso objetivo.
+Los cursos correquisito se marcan con `(c)` en la cadena original. Estos son cursos que pueden ser tomados junto con el curso objetivo.
 
-En la estructura parseada, tienen `isCorricular: true`.
+En la estructura parseada, tienen `isCoreq: true`.
 
 ## Funciones
 
