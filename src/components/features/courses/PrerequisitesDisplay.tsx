@@ -77,7 +77,7 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
           </Pill>
 
           <a
-            href={`/course/${course.sigle}`}>
+            href={`/${course.sigle}`}>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground text-wrap" title={course.name}>
                   {course.name}
