@@ -17,6 +17,10 @@ import {
     FlagIcon,
     StarIcon,
     ThumbDownIcon,
+    CloseIcon,
+    CheckIcon,
+    LocationIcon,
+    LanguageIcon
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
@@ -150,6 +154,36 @@ const reportSuccessMessage = reportResult?.data?.message;
                             </Pill>
                         )
                 }
+                {
+                    course.campus &&
+                        course.campus.length > 0 && 
+                        course.campus.map((campus) => (
+                            <Pill key={campus} variant="orange" icon={LocationIcon}>
+                                {campus}
+                            </Pill>
+                        ))
+                }
+                {
+                    course.is_removable &&
+                        course.is_removable.length > 0 && (
+                            <Pill 
+                                variant={course.is_removable.some(removable => removable) ? "green" : "red"} 
+                                icon={course.is_removable.some(removable => removable) ? CheckIcon : CloseIcon}
+                            >
+                                {course.is_removable.some(removable => removable) ? "Retirable" : "No retirable"}
+                            </Pill>
+                        )
+                }
+                {
+                    course.is_english &&
+                        course.is_english.length > 0 && 
+                        course.is_english.some(english => english) && (
+                            <Pill variant="purple" icon={LanguageIcon}>
+                                Se dicta en Inglés
+                            </Pill>
+                        )
+                }
+                
             </div>
         </section>
 
