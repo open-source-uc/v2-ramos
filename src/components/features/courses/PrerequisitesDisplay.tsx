@@ -47,24 +47,40 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
   const renderCourse = (course: PrerequisiteCourse, index: number) => {
     const hasName = course.name && course.name.trim() !== '';
     
+    if (!hasName) {
+      return (
+        <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2 px-3">
+          <Pill 
+            icon={DeceasedIcon}
+            variant="ghost_blue"
+            size="xs"
+          >
+            {course.sigle}
+          </Pill>
+        </div>
+      );
+    }
+    
     return (
-      <div key={`${course.sigle}-${index}`} className="flex items-center gap-3 py-2">
+      <a 
+        key={`${course.sigle}-${index}`} 
+        href={`/${course.sigle}`}
+        className="flex items-center gap-3 py-2 rounded-lg px-3 transition-colors duration-200 hover:bg-muted/50 cursor-pointer group"
+      >
         <Pill 
-          icon={!hasName ? DeceasedIcon : course.isCoreq ? TextureIcon : undefined}
-          variant={!hasName ? 'ghost_blue' : course.isCoreq ? 'orange' : 'blue'} 
+          icon={course.isCoreq ? TextureIcon : undefined}
+          variant={course.isCoreq ? 'orange' : 'blue'} 
           size="xs"
         >
           {course.sigle}
         </Pill>
 
-        {hasName && (
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate" title={course.name}>
-              {course.name}
-            </p>
-          </div>
-        )}
-      </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground truncate" title={course.name}>
+            {course.name}
+          </p>
+        </div>
+      </a>
     );
   };
 
