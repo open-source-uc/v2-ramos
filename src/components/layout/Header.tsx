@@ -28,6 +28,11 @@ const components: { title: string; href: string; description: string }[] = [
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
+  },
+  {
+    title: "Preguntas Frecuentes",
+    href: "https://registrosacademicos.uc.cl/informacion-para-estudiantes/inscripcion-y-retiro-de-cursos/preguntas-frecuentes/",
+    description: "Resuelve tus dudas sobre los cursos, desde inscripciones, retiros y más.",
   }
 ];
 
