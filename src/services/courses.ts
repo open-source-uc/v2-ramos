@@ -1,11 +1,10 @@
+import type { CourseReview, CourseSummary } from "@/types";
+
 export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
   const result = await locals.runtime.env.DB.prepare(`
     SELECT 
       id,
       sigle,
-      school_id,
-      area_id,
-      category_id,
       superlikes,
       likes,
       dislikes,

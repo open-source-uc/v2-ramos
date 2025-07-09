@@ -1,60 +1,46 @@
 ---
-title: Cómo hacemos de BuscaRamos un espacio seguro
+title: Cómo hacemos de BuscaRamos un espacio de respeto
 readtime: 5
 description: Lorem markdownum venit vestigia, et mentis Harpyia solvunt nobilium cumulum verba, vocem locus precesque externos lympha. Etiam est iube e Argolicis sonis, non Olympus herbas, concubitusque.
 author:
   name: "Ignacio Palma"
   title: "BuscaRamos Project Manager"
-  picture: "https://media.licdn.com/dms/image/v2/D4E03AQGmL6TUTXkKWA/profile-displayphoto-shrink_400_400/B4EZTSW2eFGgAg-/0/1738695993921?e=1756339200&v=beta&t=u4u_ns-rDpE1G4yXR-ZPmu1EloCPY1vGzZTYheIzTFc"
+  picture: "https://avatars.githubusercontent.com/u/81819758?v=4"
   link: "https://www.linkedin.com/in/ignaciopalma-ai/"
 ---
 
-# Modo transit suarum insequitur ullis spretis cum
+En Open Source eUC, sabemos que no es fácil construir proyectos comunitarios - especialmente de manera online, en el que el respeto mutuo no está dado por hecho - siendo estos grandes desafíos en los que se debe manejar tanto el aspecto técnico como social. 
 
-## Erat auso lacrimas illi teretem hanc
+BuscaRamos, nuestro proyecto co-creado para nuestra comunidad universitaria, busca ser un espacio de encuentro basado en el respeto mutuo, tanto con los equipos docentes como con otros estudiantes. En este blog, les comentaremos cómo tratamos estos desafíos desde una perspectiva técnica como social.
 
-Lorem markdownum venit vestigia, *et mentis* Harpyia solvunt nobilium cumulum
-verba, vocem locus precesque externos lympha. Etiam est iube e Argolicis sonis,
-non Olympus herbas, concubitusque.
+## El desafío: Crear una comunidad respetuosa
 
-Horrore claudere. Graditur mutatus nostri! Axem si Latios ante quem munere?
-Lacrimae tum, cum vix imperat oblitis alias segetes iuventae exuritque Cereris.
-Signum aeno dedit errare?
+BuscaRamos nació de una necesidad clara: los estudiantes necesitaban un lugar honesto para compartir sus experiencias con cursos y profesores. Sin embargo, crear este espacio conllevaba preguntas complejas. ¿Cómo garantizar que las críticas fueran constructivas y no destructivas? ¿Cómo proteger tanto a estudiantes como a docentes?
 
-## Sed excusat pressos pariterque genuere
+## Nuestra solución técnica: Moderación activa e inteligente
 
-Potuit sed serae tandemque gerunt et dicebant vertice validum, excipit quam est.
-Ne sitim Telamonius evanuit; vindicta poeniceas auras mihi, rigescunt ferat
-processisse apertum possit.
+Sabemos que la tecnología puede ser una gran aliada para prevenir conductas dañinas. BuscaRamos integra sistemas automáticos que filtran lenguaje ofensivo, discursos de odio y contenido sensible antes de que las reseñas sean publicadas. Nuestros algoritmos se actualizan continuamente para adaptarse a la evolución del lenguaje.
 
-1. Hesperus admotis
-2. Nec diri necemque est dumque iuvet deus
-3. Vita facta
+Pero la tecnología no lo es todo. Nuestro equipo de moderación - compuesto por estudiantes de la comunidad - revisa manualmente los reportes y casos especiales, aplicando criterios de empatía y equidad. El objetivo siempre es proteger el bienestar de la comunidad y educar, más que sancionar.
 
-## Vultum pennas sua longo coepit silvas instantes
+## El aspecto social: Confianza y autorregulación
 
-Terque Bacchus favorem fidissima luminis cladis et adfectas alta, toto. Nec
-accedat.
+Confiamos en nuestra comunidad y fomentamos la autorregulación. Todos los usuarios pueden reportar reseñas o comportamientos inapropiados, que son analizados cuidadosamente, considerando el contexto y priorizando el respeto mutuo.
 
-- Teli carica
-- Meta solutis domum Palladis velut di parva
-- Tutus dixit uterque huic dis
-- Non tua tunc
-- Et laborum posses quinque temptat moventem
-- Monimenta diro cygnis hostem
+## Privacidad como fundamento
 
-## Stimulosque Caicum
+La privacidad es un valor intransigible en BuscaRamos. Permitir reseñas anónimas y proteger la identidad de los usuarios es clave para que todos se sientan seguros al compartir sus experiencias. Ningún docente, usuario o administrador tiene acceso a la identidad de los autores de reseñas.
 
-Subito **lacrimas**; pabula pudibunda, tertia genae ducere, de altum inplevit ab
-quaesitique inclusum. Ruat iuga, dabis vocat nonne mihi, diversorum forsitan
-pulveris iubes foliisque. Terrarumque facundia, venerabile iter, et quem
-resupinus celare perpetiar. [Illum
-facitis](http://www.avidaeque-dominae.net/mactatos.aspx), spiro huc tamen nostro
-passis, hoc nostros deos.
+## Cuando las normas se vulneran
 
-Contra nondum, Myrmidonasque olivi. Hac tanti verbaque: vidit sunt lassa quisque
-saevit; mihi [tertia](http://manu-exuritque.io/herbascircumdata.aspx): ipse.
-Quae nova illa nolim incipit, nisi verberis, Latinum umbras metuentior Eumolpo
-biceps rubor quin unum. Ducebas portabant **colorem cupioque in**, lacus classem
-sensi tibi scelerata cum parce tibi mihi gente! Erat ita vertuntur quem quae,
-quem hunc et vestibus.
+Cuando las normas de convivencia son vulneradas aplicamos sanciones claras y proporcionales, desde la eliminación del contenido hasta la suspensión de cuentas. Los usuarios siempre pueden apelar cualquier decisión, garantizando procesos justos y transparentes.
+
+## Aprendizaje continuo
+
+La construcción de un espacio seguro y respetuoso es un proceso continuo. Recibimos feedback, analizamos casos y actualizamos nuestras políticas y herramientas para adaptarnos a las nuevas realidades de la vida universitaria digital.
+
+En BuscaRamos, combinar tecnología, participación comunitaria y confianza mutua nos ha permitido crear un espacio donde cualquier estudiante puede compartir sus experiencias con tranquilidad.
+
+## Una invitación a contribuir
+
+Como proyecto open source, invitamos a toda la comunidad a sumarse y ser parte de la evolución constante de este espacio. ¿Tienes ideas para mejorar la seguridad y el respeto en nuestra plataforma? Abre un issue, participa en las discusiones o contribuye directamente al código.

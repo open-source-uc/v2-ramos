@@ -136,7 +136,7 @@ const successMessage = result?.data?.message;
                                 <div class="mb-6">
                                     <MarkdownReviewView
                                         path={review.comment_path}
-                                        client:only="react"
+                                        client:load
                                     />
                                 </div>
                             )}

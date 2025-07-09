@@ -1,0 +1,50 @@
+[
+  {
+    "id": "nico-mc",
+    "nombre": "Nicolás",
+    "apellido": "Mc Intyre",
+    "imagen": "https://media.licdn.com/dms/image/v2/C4E03AQHLkCkFifjxWQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1658190938777?e=1756339200&v=beta&t=fJ31NQfXMh_5hdmoEbsmLo2InfTC29wGDrly02dutA8",
+    "linkedin": "https://www.linkedin.com/in/nico-mc/"
+  },
+  {
+    "id": "benjamin-vicente",
+    "nombre": "Benjamín Vicente",
+    "apellido": "Goecke",
+    "imagen": "https://media.licdn.com/dms/image/v2/D5603AQFAf7aMS-YEcA/profile-displayphoto-shrink_400_400/B56Zd7y7gxHUAs-/0/1750128638603?e=1756339200&v=beta&t=gcOsYPEhrflmUMApLTpPDqLwR6IsPOR-vHj3hmPppvM",
+    "linkedin": "https://www.linkedin.com/in/benjavicente/"
+  },
+  {
+    "id": "agucova",
+    "nombre": "Agustín",
+    "apellido": "Covarrubias",
+    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQG87qT0SI9d5w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1729876608296?e=1756339200&v=beta&t=oZK5N1O6ndh_RIYZpDuqKkAtvdQdpWBhWoxEjCZJcvM",
+    "linkedin": "https://www.linkedin.com/in/agucova/"
+  },
+  {
+    "id": "enzo-morata",
+    "nombre": "Enzo",
+    "apellido": "Morata",
+    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQGqEJzXENzGkw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1704484099205?e=1756339200&v=beta&t=GXBx-iBfOqov45LgMgSoL7uvBUCTMtd_eysGBS8zkIw",
+    "linkedin": "https://www.linkedin.com/in/enzomorata/"
+  },
+  {
+    "id": "mauricio-cari-leal",
+    "nombre": "Mauricio",
+    "apellido": "Cari Leal",
+    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQG352fT3G6HZQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1725513985164?e=1756339200&v=beta&t=GbYfgwXx--oibc8jGHu4k7TMXD_DU8LicEgNoJv2St4",
+    "linkedin": "https://www.linkedin.com/in/mauricio-cari-leal/"
+  },
+  {
+    "id": "andres-urmeneta",
+    "nombre": "Andrés",
+    "apellido": "Urmeneta",
+    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQFf1fJt8Fx7DQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1680105903217?e=1756339200&v=beta&t=c61_XMa8jfSaM3pqs05QgQpM21UrBUeajmbnpMhf0R4",
+    "linkedin": "https://www.linkedin.com/in/aurmeneta/"
+  },
+  {
+    "id": "mateo-l",
+    "nombre": "Mateo",
+    "apellido": "L.",
+    "imagen": "/images/placeholder.jpg"
+  }
+]

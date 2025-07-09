@@ -1,42 +1,47 @@
 ---
 import "@/styles/global.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer.astro";
-import ClientRouter from "astro/components/ClientRouter.astro";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer.astro";
 import { Banner } from "@/components/ui/banner";
-import { SEO } from "astro-seo";
+import MainHead from "@/layouts/MainHead.astro";
+
+const {
+  title = "BuscaRamos",
+  description = "Tu plataforma para explorar ramos, reseñarlos y mucho más. Encuentra ramos de la universidad, revisa sus reseñas y comparte tus experiencias.",
+  image,
+  frontmatter,
+  robots,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>BuscaRamos</title>
-    <ClientRouter />
-  </head>
-  <body
-    class="bg-background text-foreground min-h-screen"
-  >
+  <MainHead
+    title={title}
+    description={description}
+    image={image}
+    frontmatter={frontmatter}
+    robots={robots}
+  />
+  <body class="bg-background text-foreground min-h-screen">
     <!-- Banner de Anuncios -->
-    <Banner 
-      variant="red" 
-      size="md" 
-      icon="VerySadIcon" 
-      dismissible={true} 
+    <Banner
+      variant="green"
+      size="md"
+      icon="VeryHappyIcon"
+      dismissible={true}
       bannerId="2025-3"
-      client:only="react"
+      client:load
     >
-    Estamos conscientes de problemas en el proceso de creación de cuenta. Estamos trabajando para solucionar estos inconvenientes.
+      <strong>Página en Desarrollo</strong>: ¡Crea tu cuenta y comparte tus
+      reseñas!
     </Banner>
 
     <!-- Main -->
     <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
-      <Header client:only="react" />
+      <Header client:load />
       <slot />
       <Footer />
-    </main>   
+    </main>
   </body>
 </html>

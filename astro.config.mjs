@@ -10,6 +10,7 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://buscaramos.osuc.dev',
   output: "server",
   adapter: cloudflare({
     platformProxy: {

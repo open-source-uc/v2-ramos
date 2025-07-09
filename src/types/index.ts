@@ -1,9 +1,6 @@
 export interface CourseSummary {
     id: number;
     sigle: string;
-    school_id: number;
-    area_id: number;
-    category_id: number;
     superlikes: number;
     likes: number;
     dislikes: number;
@@ -19,6 +16,17 @@ export interface CourseSummary {
     school?: string; // Added for convenience
     area?: string; // Added for convenience
     category?: string; // Added for convenience.
+    req?: string;
+    conn?: string;
+    restr?: string;
+    equiv?: string;
+    format?: Array<string>;
+    compus?: Array<string>;
+    is_removable?: Array<boolean>;
+    is_special?: Array<boolean>;
+    is_english?: Array<boolean>;
+    description?: string;
+    last_semester?: string; // Format: YYYY-S
 }
 
 export interface CourseReview {
@@ -41,7 +49,20 @@ export interface CourseStaticInfo {
     sigle: string;
     name: string;
     credits: number;
-    program: string;
+    req: string;
+    conn: string;
+    restr: string;
+    equiv: string;
+    format: Array<string>;
+    compus: Array<string>;
+    is_removable: Array<boolean>;
+    is_special: Array<boolean>;
+    is_english: Array<boolean>;
+    description: string;
+    school: string;
+    area: string;
+    category: string;
+    last_semester: string; // Format: YYYY-S
 }
 
 export interface RecommendationData {
