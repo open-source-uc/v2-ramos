@@ -64,7 +64,7 @@ export function Combobox({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
-            variant="outline"
+            variant="ghost_border"
             role="combobox"
             aria-expanded={open}
             aria-label={ariaLabel}
