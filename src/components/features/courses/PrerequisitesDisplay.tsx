@@ -62,8 +62,10 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
     }
     
     return (
-      <div
-        key={`${course.sigle}-${index}`} 
+      
+      <a
+        key={`${course.sigle}-${index}`}
+        href={`/${course.sigle}`}
         className="flex items-center justify-between gap-3 py-2 rounded-lg px-3 transition-colors duration-200 hover:bg-muted/50 cursor-pointer group w-full min-w-0"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -76,18 +78,17 @@ const PrerequisiteGroupComponent = ({ group, isNested = false }: PrerequisiteGro
             {course.sigle}
           </Pill>
 
-          <a
-            href={`/${course.sigle}`}>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground text-wrap" title={course.name}>
-                  {course.name}
-                </p>
-              </div>
-          </a>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground text-wrap" title={course.name}>
+              {course.name}
+            </p>
+          </div>
+
         </div>
 
         <OpenInFullIcon className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 flex-shrink-0" />
-      </div>
+      </a>
     );
   };
 
