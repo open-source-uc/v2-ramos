@@ -124,8 +124,8 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return filtered;
   }, [courses, selectedArea, selectedSchool]);
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
+  const handleSearch = (normalizedValue: string) => {
+    setSearchValue(normalizedValue);
   };
 
   const handleAreaChange = (value: string) => {

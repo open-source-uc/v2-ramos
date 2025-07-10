@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
 import { ScheduleLegend } from "./ScheduleLegend";
+import { Search, normalizeSearchText } from "@/components/features/search/SearchInput";
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -59,40 +60,40 @@ function CourseSearch({
   selectedCourses: string[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [normalizedSearchTerm, setNormalizedSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const filteredOptions = courseOptions.filter(option =>
-    option.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    option.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOptions = courseOptions.filter(option => {
+    const normalizedId = normalizeSearchText(option.id);
+    const normalizedName = normalizeSearchText(option.nombre);
+    
+    return normalizedId.includes(normalizedSearchTerm) ||
+           normalizedName.includes(normalizedSearchTerm);
+  });
 
   const handleSelect = (courseId: string) => {
     if (!selectedCourses.includes(courseId)) {
       onCourseSelect(courseId);
       setSearchTerm("");
+      setNormalizedSearchTerm("");
       setIsOpen(false);
     }
   };
 
+  const handleSearch = (normalizedValue: string) => {
+    setNormalizedSearchTerm(normalizedValue);
+    setIsOpen(normalizedValue.length > 0);
+  };
+
   return (
     <div className="relative">
-      <div className="relative">
-        <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setIsOpen(true);
-          }}
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-          className="w-full pl-10 pr-4 py-2.5 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-          placeholder="Buscar curso (ej: IIC2214, Matemáticas)"
-        />
-      </div>
+      <Search
+        onSearch={handleSearch}
+        placeholder="Buscar curso (ej: IIC2214, Matemáticas)"
+        initialValue={searchTerm}
+      />
       
-      {isOpen && searchTerm && (
+      {isOpen && normalizedSearchTerm && (
         <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto">
           {filteredOptions.slice(0, 10).map((option) => (
             <button
