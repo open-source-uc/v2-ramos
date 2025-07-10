@@ -1,10 +1,150 @@
 ---
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
+import { effect } from "astro:schema";
+
+let message = "";
+let messageType = "";
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+
+    // Enviar los datos a la API
+    const response = await fetch(new URL("/api/savemdx", Astro.url.origin), {
+      method: "POST",
+      body: data,
+    });
+
+    if (response.ok) {
+      message = "Blog creado exitosamente";
+      messageType = "success";
+    } else {
+      message = "Error al crear el blog. Por favor, intenta nuevamente.";
+      messageType = "error";
+    }
+  } catch (error) {
+    console.error("Error al procesar el formulario:", error);
+    message = "Error al procesar el formulario. Por favor, intenta nuevamente.";
+    messageType = "error";
+  }
+}
 ---
 
 <Layout>
-  <div class="relative">
-    <EditorMDX client:only="react" />
+  <!-- Container principal con máximo ancho y centrado -->
+  <div class="w-full max-w-9/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header de la página -->
+    <div class="text-center mb-8">
+      <h1
+        class="text-2xl sm:text-3xl tablet:text-4xl font-bold text-foreground mb-4"
+      >
+        Crear Nuevo Blog
+      </h1>
+      <p class="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+        Comparte tus experiencias y conocimientos con la comunidad estudiantil
+      </p>
+    </div>
+
+    <!-- Formulario con card styling -->
+    <div class="bg-card border border-border rounded-lg p-4 sm:p-6 tablet:p-8">
+      <form class="space-y-6" method="POST">
+        <!-- Información básica del blog -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground block">
+              Título del blog <span class="text-red">*</span>
+            </label>
+            <input
+              name="title"
+              placeholder="Ingrese el título del blog"
+              class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground block">
+              Facultad <span class="text-red">*</span>
+            </label>
+            <input
+              name="faculty"
+              placeholder="Ej. Ingeniería, Medicina, etc."
+              class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground block">
+              Tiempo de lectura <span class="text-red">*</span>
+            </label>
+            <div class="relative">
+              <input
+                name="readtime"
+                type="number"
+                min="1"
+                max="60"
+                placeholder="5"
+                class="w-full px-3 sm:px-4 py-2 sm:py-3 pr-12 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                required
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
+              />
+              <span
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm"
+              >
+                min
+              </span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground block">
+              Resumen del blog <span class="text-red">*</span>
+            </label>
+            <input
+              name="description"
+              placeholder="Breve descripción del contenido"
+              class="w-full px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Separador -->
+        <div class="border-t border-border pt-4 sm:pt-6">
+          <div class="space-y-2 mb-4">
+            <label class="text-sm font-medium text-foreground block">
+              Contenido del blog <span class="text-red">*</span>
+            </label>
+            <p class="text-sm text-muted-foreground">
+              Utiliza el editor para crear contenido enriquecido con formato,
+              imágenes y componentes especiales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Editor MDX -->
+        <EditorMDX submitText="Publicar Blog" client:only="react" />
+        <input type="text" value="blogs" name="contentType" hidden />
+      </form>
+    </div>
+
+    <!-- Información adicional -->
+    <div
+      class="mt-6 sm:mt-8 p-3 sm:p-4 bg-muted/50 rounded-lg border border-border"
+    >
+      <h3 class="font-semibold text-foreground mb-2">
+        💡 Consejos para escribir un buen blog
+      </h3>
+      <ul class="text-sm text-muted-foreground space-y-1">
+        <li>• Usa un título descriptivo y atractivo</li>
+        <li>• Estructura tu contenido con encabezados y párrafos cortos</li>
+        <li>• Incluye ejemplos y experiencias personales</li>
+        <li>• Revisa la ortografía y gramática antes de publicar</li>
+      </ul>
+    </div>
   </div>
 </Layout>

@@ -140,89 +140,56 @@
 
 .mdxeditor-toolbar :last-child {
   position: unset;
-  background-color: var(--background) !important;
-  border-color: var(--border) !important;
+}
+
+/* MDXEditor theming usando el sistema nativo */
+.mdxeditor-theme, .mdxeditor, .mdxeditor-popup-container, .mdxeditor-toolbar, .mdxeditor-root-contenteditable, .mdxeditor-diff-source-wrapper, .mdxeditor-rich-text-editor, .mdxeditor-source-editor, .mdxeditor-diff-editor, .mdxeditor-select-content {
+
+  --baseBorderHover: var(--color-input) !important;
+  --baseBorder: var(--border) !important;
+  --baseSolid: var(--foreground) !important;
+  --baseSolidHover: var(--foreground) !important;
+  --baseBase: var(--background) !important;
+  --baseBgSubtle: var(--muted) !important;
+  --baseBg: var(--background) !important;
+  --baseBgHover: var(--muted) !important;
+  --baseBgActive: var(--accent) !important;
+  --baseLine: var(--border) !important;
+  --baseText: var(--foreground) !important;
+  --baseTextContrast: var(--foreground) !important;
+  --basePageBg: var(--background) !important;
+
+  /* Accent colors (primary) */
+  --accentBase: var(--blue-light) !important;
+  --accentBgSubtle: var(--blue-light) !important;
+  --accentBg: var(--blue-light) !important;
+  --accentBgHover: var(--blue) !important;
+  --accentBgActive: var(--blue) !important;
+  --accentLine: var(--blue) !important;
+  --accentBorder: var(--blue) !important;
+  --accentBorderHover: var(--blue) !important;
+  --accentSolid: var(--blue) !important;
+  --accentSolidHover: var(--blue) !important;
+  --accentText: var(--blue) !important;
+  --accentTextContrast: var(--background) !important;
+
+  /* Background page color */
+  background: var(--background) !important;
   color: var(--foreground) !important;
-}
 
-.mdxeditor-toolbar :last-child > :first-child [data-state="on"] {
-  background-color: var(--accent) !important;
-  color: var(--accent-foreground) !important;
-}
+  /* Admonition colors */
+  --admonitionTipBg: var(--blue-light) !important;
+  --admonitionTipBorder: var(--blue) !important;
+  --admonitionInfoBg: var(--green-light) !important;
+  --admonitionInfoBorder: var(--green) !important;
+  --admonitionCautionBg: var(--orange-light) !important;
+  --admonitionCautionBorder: var(--orange) !important;
+  --admonitionDangerBg: var(--red-light) !important;
+  --admonitionDangerBorder: var(--red) !important;
+  --admonitionNoteBg: var(--muted) !important;
+  --admonitionNoteBorder: var(--border) !important;
 
-.mdxeditor-toolbar  > span > :hover {
-  background-color: var(--color-blue-600) !important;
-  color: var(--foreground) !important;
-}
-
-/* MDXEditor toolbar theming */
-.mdxeditor-toolbar {
-  background-color: var(--background) !important;
-  border-color: var(--border) !important;
-  color: var(--foreground) !important;
-}
-
-.mdxeditor-toolbar button {
-  color: var(--foreground) !important;
-}
-
-.mdxeditor-toolbar button:hover {
-  background-color: var(--muted) !important;
-}
-
-.mdxeditor-toolbar button[data-state="on"] {
-  background-color: var(--accent) !important;
-  color: var(--accent-foreground) !important;
-}
-
-.mdxeditor-toolbar svg {
-  color: var(--foreground) !important;
-}
-
-.mdxeditor {
-  color: var(--foreground) !important;
-  background-color: var(--background) !important;
-}
-
-/* Elementos específicos adicionales */
-.mdxeditor-toolbar .mdxeditor-toolbar-separator {
-  background-color: var(--border) !important;
-}
-
-.mdxeditor-toolbar select,
-.mdxeditor-toolbar [role="combobox"] {
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
-  border-color: var(--border) !important;
-}
-
-.mdxeditor-select-trigger {
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
-  border-color: var(--border) !important;
-}
-
-.mdxeditor-select-content {
-  background-color: var(--popover) !important;
-  color: var(--popover-foreground) !important;
-  border-color: var(--border) !important;
-}
-
-.mdxeditor-popup {
-  background-color: var(--popover) !important;
-  color: var(--popover-foreground) !important;
-  border-color: var(--border) !important;
-}
-
-.mdxeditor-popup-container {
-  background-color: var(--popover) !important;
-  color: var(--popover-foreground) !important;
-}
-
-/* Fix para hover de elementos de lista */
-.mdxeditor-select-content [role="option"]:hover,
-.mdxeditor-popup [role="option"]:hover,
-.mdxeditor-popup-container [role="option"]:hover {
-  background-color: var(--color-blue-600) !important;
-  color: white !important;
+  /* Typography */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }

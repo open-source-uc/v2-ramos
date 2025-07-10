@@ -1,9 +1,10 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import ContentPage from "@/components/common/ContentPage.astro";
 import { EditIcon, ClockIcon } from "../../../components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
+import { Pill } from "@/components/ui/pill";
 
 export const prerender = true;
 
@@ -22,7 +23,7 @@ export async function getStaticPaths() {
 const { blog } = Astro.props;
 const { data } = blog;
 const { title, author, readtime, description, tags } = data;
-const { Content } = await blog.render();
+const { Content } = await render(blog);
 ---
 
 <Layout>
