@@ -53,6 +53,35 @@ const recommendations = defineCollection({
     })
 })
 
+const coursesStaticTest = defineCollection({
+    loader: file("src/../migration/json/2025-1.json", {
+        parser: (content) => {
+
+            const coursesData: Record<string, object> = JSON.parse(content);
+
+            const entries = Object.entries(coursesData).map(([key, course]) => ({
+                id: key, // Usa la clave como ID (ej: "AGC204")
+                ...course // Spread de las propiedades del curso
+            }));
+
+            return entries;
+        }
+    }),
+    schema: z.object({
+        sigle: z.string(),
+        name: z.string(),
+        credits: z.number(),
+        req: z.string(),
+        conn: z.string(),
+        restr: z.string(),
+        equiv: z.string(),
+        school: z.string(),
+        area: z.string(),
+        category: z.string(),
+        sections: z.array()
+    })
+})
+
 
 const coursesStatic = defineCollection({
     loader: file("src/../migration/json/cursos-simplificado.json", {

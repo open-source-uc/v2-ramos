@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import cursosJSON from "2025-1.json";
+import cursosJSON from "@/migration/json/2025-1.json";
 
 const horarios = [
   ["08:20", "09:30"], ["09:40", "10:50"], ["11:00", "12:10"], ["12:20", "13:30"],

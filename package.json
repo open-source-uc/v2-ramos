@@ -9,7 +9,10 @@
 		"astro": "astro",
 		"deploy": "astro build && wrangler pages deploy",
 		"reload-courses": "bash migration/reload-courses.sh",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"test:run": "vitest run"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "12.6.0",
@@ -43,7 +46,9 @@
 		"@types/node": "22.15.29",
 		"@types/react": "18.3.23",
 		"@types/react-dom": "18.3.7",
+		"@vitest/ui": "^3.2.4",
 		"tw-animate-css": "1.3.4",
+		"vitest": "^3.2.4",
 		"wrangler": "4.20.5"
 	}
 }

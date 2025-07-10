@@ -109,3 +109,23 @@ export interface ParsedPrerequisites {
     hasPrerequisites: boolean;
     structure?: PrerequisiteGroup;
 }
+
+// Tipos para matriz de horarios
+export interface ScheduleBlock {
+    type: string;        // Tipo de clase (CLAS, LAB, AYUD)
+    classroom: string;   // Ubicación del aula
+    courseId: string;    // Identificador del curso
+    section: string;     // Identificador de la sección
+}
+
+export interface CourseSection {
+    schedule: Record<string, [string, string]>; // código de bloque -> [tipo, aula]
+}
+
+export interface CourseSections {
+    [courseId: string]: {
+        [sectionId: string]: CourseSection;
+    };
+}
+
+export type ScheduleMatrix = ScheduleBlock[][][]; // [franjaHoraria][diaSemana][clases]
