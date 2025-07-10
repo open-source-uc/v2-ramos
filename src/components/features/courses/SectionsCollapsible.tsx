@@ -1,12 +1,17 @@
-import { CalendarIcon, ChevronDownIcon } from "@/components/icons/icons";
+import { useState, useEffect } from "react";
+import { CalendarIcon, ChevronDownIcon, PlusIcon } from "@/components/icons/icons";
 import { 
   Collapsible, 
   CollapsibleContent, 
   CollapsibleTrigger 
 } from "@/components/ui/collapsible";
 import { Pill } from "@/components/ui/pill";
+import { Button } from "@/components/ui/button";
+import { ToastManager, useToasts } from "@/components/ui/toast";
 import type { ScheduleMatrix, CourseSections } from "@/types";
-import { createScheduleMatrix, TIME_SLOTS, DAYS } from "@/lib/scheduleMatrix";
+import { createScheduleMatrix, TIME_SLOTS, DAYS, convertCourseDataToSections } from "@/lib/scheduleMatrix";
+import { addCourseToSchedule, isCourseInSchedule } from "@/lib/scheduleStorage";
+import cursosJSON from "2025-1.json";
 
 interface Props {
     sectionIds: string[];
@@ -15,11 +20,40 @@ interface Props {
     className?: string;
 }
 
-function ScheduleGrid({ matrix, sectionId }: { matrix: ScheduleMatrix; sectionId: string }) {
+function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: { 
+  matrix: ScheduleMatrix; 
+  sectionId: string;
+  courseSigle: string;
+  onAddToSchedule: (courseId: string, success: boolean) => void;
+}) {
+    const [isInSchedule, setIsInSchedule] = useState(false);
+    const courseId = `${courseSigle}-${sectionId}`;
+    
+    useEffect(() => {
+        setIsInSchedule(isCourseInSchedule(courseId));
+    }, [courseId]);
+
+    const handleAddToSchedule = () => {
+        const success = addCourseToSchedule(courseId);
+        if (success) {
+            setIsInSchedule(true);
+        }
+        onAddToSchedule(courseId, success);
+    };
+
     return (
         <div className="border border-border rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">Sección {sectionId}</h3>
+                <Button
+                    variant={isInSchedule ? "outline" : "default"}
+                    size="sm"
+                    onClick={handleAddToSchedule}
+                    disabled={isInSchedule}
+                    icon={PlusIcon}
+                >
+                    {isInSchedule ? "En mi horario" : "Agregar"}
+                </Button>
             </div>
             
             {/* Minimalist Schedule Grid */}
@@ -91,22 +125,40 @@ function ScheduleGrid({ matrix, sectionId }: { matrix: ScheduleMatrix; sectionId
     );
 }
 
-interface Props {
-    sectionIds: string[];
-    placeholderSections: CourseSections;
+interface SectionsCollapsibleProps {
     courseSigle: string;
     className?: string;
 }
 
 export default function SectionsCollapsible({ 
-    sectionIds, 
-    placeholderSections, 
     courseSigle, 
     className = "" 
-}: Props) {
+}: SectionsCollapsibleProps) {
+    const [refreshKey, setRefreshKey] = useState(0);
+    const { toasts, addToast, removeToast } = useToasts();
+    
+    // Get real course data from the JSON
+    const courseData = (cursosJSON as any)[courseSigle];
+    const sections = courseData?.sections || {};
+    const sectionIds = Object.keys(sections);
+    
+    // Convert to the format expected by createScheduleMatrix
+    const courseSectionsData = convertCourseDataToSections(cursosJSON);
+
+    const handleAddToSchedule = (courseId: string, success: boolean) => {
+        if (success) {
+            addToast(`${courseId} agregado a tu horario`, "success");
+        } else {
+            addToast(`${courseId} ya está en tu horario`, "info");
+        }
+        // Force re-render to update button states
+        setRefreshKey(prev => prev + 1);
+    };
+
     return (
-        <section className={`${className}`}>
-            <div className="border border-border rounded-md overflow-hidden">
+        <>
+            <section className={`${className}`}>
+                <div className="border border-border rounded-md overflow-hidden">
                 <Collapsible>
                     <CollapsibleTrigger className="w-full px-6 py-4 text-left bg-background hover:bg-muted/50 transition-colors duration-200 flex items-center justify-between group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                         <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -135,18 +187,20 @@ export default function SectionsCollapsible({
                             <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
                                 {sectionIds.map(sectionId => {
                                     const scheduleMatrix = createScheduleMatrix(
-                                        placeholderSections, 
+                                        courseSectionsData, 
                                         [`${courseSigle}-${sectionId}`]
                                     );
                                     
                                     return (
                                         <ScheduleGrid 
-                                            key={sectionId}
+                                            key={`${sectionId}-${refreshKey}`}
                                             matrix={scheduleMatrix}
                                             sectionId={sectionId}
+                                            courseSigle={courseSigle}
+                                            onAddToSchedule={handleAddToSchedule}
                                         />
                                     );
-                                }                                )}
+                                })}
                             </div>
                         ) : (
                             <div className="text-center py-8">
@@ -175,5 +229,6 @@ export default function SectionsCollapsible({
                 </Collapsible>
             </div>
         </section>
-    );
+        <ToastManager toasts={toasts} removeToast={removeToast} />
+    </>);
 }

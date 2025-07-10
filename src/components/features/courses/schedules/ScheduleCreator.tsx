@@ -7,6 +7,12 @@ import {
   TIME_SLOTS, 
   DAYS 
 } from "@/lib/scheduleMatrix";
+import { 
+  getSavedCourses, 
+  saveCourses,
+  addCourseToSchedule,
+  removeCourseFromSchedule 
+} from "@/lib/scheduleStorage";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
@@ -31,14 +37,15 @@ interface CourseOption {
 const courseSectionsData: CourseSections = convertCourseDataToSections(cursosJSON);
 
 // Generate course options for the dropdown
-const courseOptions: CourseOption[] = Object.entries(cursosJSON).flatMap(([sigle, data]) =>
-  Object.keys((data as any).sections).map((seccion) => ({
+const courseOptions: CourseOption[] = Object.entries(cursosJSON).flatMap(([sigle, data]) => {
+  const courseData = data as any;
+  return Object.keys(courseData.sections || {}).map((seccion) => ({
     id: `${sigle}-${seccion}`,
     sigle,
     seccion,
-    nombre: (data as any).name
-  }))
-);
+    nombre: courseData.name || "Sin nombre"
+  }));
+});
 
 // Course search and selection component
 function CourseSearch({ 
@@ -209,30 +216,26 @@ function ScheduleGrid({
 
 // Main component
 export default function ScheduleCreator() {
-  const [selectedCourses, setSelectedCourses] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("scheduleCourses");
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(() => getSavedCourses());
 
   // Save to localStorage whenever courses change
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("scheduleCourses", JSON.stringify(selectedCourses));
-    }
+    saveCourses(selectedCourses);
   }, [selectedCourses]);
 
   // Create schedule matrix from selected courses
   const scheduleMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
 
   const handleCourseSelect = (courseId: string) => {
-    setSelectedCourses(prev => [...prev, courseId]);
+    if (addCourseToSchedule(courseId)) {
+      setSelectedCourses(getSavedCourses());
+    }
   };
 
   const handleCourseRemove = (courseId: string) => {
-    setSelectedCourses(prev => prev.filter(c => c !== courseId));
+    if (removeCourseFromSchedule(courseId)) {
+      setSelectedCourses(getSavedCourses());
+    }
   };
 
   const getCourseColor = (courseId: string) => {

@@ -42,7 +42,6 @@ import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
-import { generatePlaceholderSections, createScheduleMatrix } from "@/lib/scheduleMatrix";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -55,10 +54,6 @@ const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
-
-// Generate placeholder sections data (TODO: Replace with real data when available)
-const placeholderSections = generatePlaceholderSections(course.sigle);
-const sectionIds = Object.keys(placeholderSections[course.sigle] || {});
 
 // Calculate statistics
 const sentiment = c
@@ -268,8 +263,6 @@ const reportSuccessMessage = reportResult?.data?.message;
         <!-- Secciones Section -->
         <SectionsCollapsible
             className="mt-8"
-            sectionIds={sectionIds}
-            placeholderSections={placeholderSections}
             courseSigle={course.sigle}
             client:load 
         />
@@ -278,7 +271,17 @@ const reportSuccessMessage = reportResult?.data?.message;
         <section class="mt-8">
             <div class="border border-border rounded-md p-6">
                 <h2 class="text-2xl font-semibold mb-6">Links de Interés</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Button
+                        variant="outline"
+                        href="/horario"
+                        className="w-full"
+                        icon={CalendarIcon}
+                        aria-label="Ver mi horario completo"
+                    >
+                        Ver Mi Horario
+                    </Button>
+
                     <Button
                         variant="outline"
                         href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`}

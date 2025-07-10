@@ -60,7 +60,7 @@ export default function Header() {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
-                    CURSOS
+                    EXPLORA
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
@@ -72,6 +72,11 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                  <a href="/horario">ORGANIZA</a>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
                     ACERCA
