@@ -40,6 +40,8 @@ import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
+import SectionScheduleView from "@/components/features/courses/SectionScheduleView.astro";
+import { generatePlaceholderSections, createScheduleMatrix } from "@/lib/scheduleMatrix";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -52,6 +54,10 @@ const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
+
+// Generate placeholder sections data (TODO: Replace with real data when available)
+const placeholderSections = generatePlaceholderSections(course.sigle);
+const sectionIds = Object.keys(placeholderSections[course.sigle] || {});
 
 // Calculate statistics
 const sentiment = c
@@ -257,6 +263,48 @@ const reportSuccessMessage = reportResult?.data?.message;
 
         <!-- Prerequisites Section -->
         <PrerequisitesSection prerequisites={prerequisites} className="mt-8 hidden" client:load />
+
+        <!-- Secciones Section -->
+        <section class="mt-8">
+            <div class="border border-border rounded-md p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold">Secciones Disponibles</h2>
+                        <p class="text-sm text-muted-foreground mt-1">
+                            Horarios y ubicaciones de las diferentes secciones del curso.
+                        </p>
+                    </div>
+                    <div class="text-sm text-muted-foreground">
+                        {sectionIds.length} sección{sectionIds.length !== 1 ? 'es' : ''}
+                    </div>
+                </div>
+                
+                {sectionIds.length > 0 ? (
+                    <div class="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+                        {sectionIds.map(sectionId => {
+                            const sectionSchedule = placeholderSections[course.sigle][sectionId];
+                            const scheduleMatrix = createScheduleMatrix(
+                                placeholderSections, 
+                                [`${course.sigle}-${sectionId}`]
+                            );
+                            
+                            return (
+                                <SectionScheduleView 
+                                    sectionId={sectionId}
+                                    matrix={scheduleMatrix}
+                                />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div class="text-center py-8">
+                        <p class="text-muted-foreground">
+                            No hay secciones disponibles para este semestre.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </section>
 
         <!-- Links de Interés -->
         <section class="mt-8">

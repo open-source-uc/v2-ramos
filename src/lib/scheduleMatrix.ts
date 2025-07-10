@@ -165,3 +165,41 @@ export function convertCourseDataToSections(coursesJSON: any): CourseSections {
   
   return sections;
 }
+
+/**
+ * Genera datos de secciones de muestra para un curso (placeholder)
+ * @param courseId - ID del curso
+ * @returns Datos de secciones con horarios de ejemplo
+ */
+export function generatePlaceholderSections(courseId: string): CourseSections {
+  const sections: CourseSections = {
+    [courseId]: {
+      "1": {
+        schedule: {
+          "l3": ["CLAS", "Aula 201"],
+          "l4": ["CLAS", "Aula 201"],
+          "w3": ["AYUD", "Aula 105"],
+          "j2": ["LAB", "Lab 301"]
+        }
+      },
+      "2": {
+        schedule: {
+          "m2": ["CLAS", "Aula 150"],
+          "m3": ["CLAS", "Aula 150"],
+          "j4": ["AYUD", "Aula 203"],
+          "v1": ["LAB", "Lab 302"]
+        }
+      },
+      "3": {
+        schedule: {
+          "l1": ["CLAS", "Aula 180"],
+          "w1": ["CLAS", "Aula 180"],
+          "v3": ["AYUD", "Aula 107"],
+          "v4": ["LAB", "Lab 303"]
+        }
+      }
+    }
+  };
+  
+  return sections;
+}
