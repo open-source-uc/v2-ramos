@@ -19,86 +19,66 @@ function ScheduleGrid({ matrix, sectionId }: { matrix: ScheduleMatrix; sectionId
         <div className="border border-border rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">Sección {sectionId}</h3>
-                <span className="text-sm text-muted-foreground">Horario</span>
             </div>
             
-            {/* Schedule Grid */}
+            {/* Minimalist Schedule Grid */}
             <div className="overflow-x-auto">
-                <div className="min-w-[320px]">
+                <div className="min-w-[280px]">
                     {/* Header with days */}
                     <div className="grid grid-cols-6 gap-1 mb-2">
-                        <div className="text-xs font-medium text-muted-foreground p-1 w-12"></div>
+                        <div className="w-10"></div>
                         {DAYS.map(day => (
-                            <div key={day} className="text-xs font-medium text-center text-muted-foreground p-1 min-w-[40px]">
+                            <div key={day} className="text-xs font-medium text-center text-muted-foreground p-1">
                                 {day}
                             </div>
                         ))}
                     </div>
                     
-                    {/* Time slots and schedule */}
-                    {TIME_SLOTS.map((time, timeIndex) => (
-                        <div key={time} className="grid grid-cols-6 gap-1 mb-1">
-                            {/* Time label */}
-                            <div className="text-xs text-muted-foreground p-1 text-right w-12">
-                                {time}
-                            </div>
-                            
-                            {/* Day columns */}
-                            {DAYS.map((day, dayIndex) => {
-                                const classes = matrix[timeIndex][dayIndex];
-                                const hasClass = classes.length > 0;
-                                const classInfo = hasClass ? classes[0] : null;
+                    {/* Time slots - only show slots that have classes */}
+                    {TIME_SLOTS.map((time, timeIndex) => {
+                        const hasAnyClass = DAYS.some((_, dayIndex) => matrix[timeIndex][dayIndex].length > 0);
+                        
+                        if (!hasAnyClass) return null;
+                        
+                        return (
+                            <div key={time} className="grid grid-cols-6 gap-1 mb-1">
+                                {/* Time label */}
+                                <div className="text-xs text-muted-foreground p-1 text-right w-10">
+                                    {time}
+                                </div>
                                 
-                                return (
-                                    <div
-                                        key={`${day}-${timeIndex}`}
-                                        className={`
-                                            text-xs p-1 rounded min-h-[32px] tablet:min-h-[28px] flex items-center justify-center min-w-[40px]
-                                            ${hasClass && classInfo
-                                                ? classInfo.type === 'CLAS' 
-                                                    ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                                                    : classInfo.type === 'LAB'
-                                                    ? 'bg-green-100 text-green-800 border border-green-200'
-                                                    : classInfo.type === 'AYUD'
-                                                    ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                                                    : 'bg-gray-100 text-gray-800 border border-gray-200'
-                                                : 'bg-gray-50 border border-gray-100'
-                                            }
-                                        `}
-                                    >
-                                        {hasClass && classInfo && (
-                                            <div className="text-center">
-                                                <div className="font-medium text-[10px] tablet:text-xs">
-                                                    {classInfo.type}
-                                                </div>
-                                                {classInfo.classroom && (
-                                                    <div className="text-[8px] tablet:text-[10px] opacity-75">
-                                                        {classInfo.classroom}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </div>
-            </div>
-            
-            {/* Legend */}
-            <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border">
-                <div className="flex items-center gap-1 text-xs">
-                    <div className="w-3 h-3 bg-blue-100 border border-blue-200 rounded"></div>
-                    <span className="text-muted-foreground">CLAS</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs">
-                    <div className="w-3 h-3 bg-green-100 border border-green-200 rounded"></div>
-                    <span className="text-muted-foreground">LAB</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs">
-                    <div className="w-3 h-3 bg-purple-100 border border-purple-200 rounded"></div>
-                    <span className="text-muted-foreground">AYUD</span>
+                                {/* Day columns */}
+                                {DAYS.map((day, dayIndex) => {
+                                    const classes = matrix[timeIndex][dayIndex];
+                                    const hasClass = classes.length > 0;
+                                    const classInfo = hasClass ? classes[0] : null;
+                                    
+                                    return (
+                                        <div
+                                            key={`${day}-${timeIndex}`}
+                                            className={`
+                                                text-xs p-1 rounded min-h-[24px] flex items-center justify-center
+                                                ${hasClass && classInfo
+                                                    ? classInfo.type === 'CLAS' 
+                                                        ? 'bg-blue-500'
+                                                        : classInfo.type === 'LAB'
+                                                        ? 'bg-green-500'
+                                                        : classInfo.type === 'AYUD'
+                                                        ? 'bg-purple-500'
+                                                        : 'bg-gray-500'
+                                                    : 'bg-transparent'
+                                                }
+                                            `}
+                                        >
+                                            {hasClass && classInfo && (
+                                                <div className="w-full h-full bg-current opacity-80 rounded"></div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
@@ -163,7 +143,7 @@ export default function SectionsCollapsible({
                                             sectionId={sectionId}
                                         />
                                     );
-                                })}
+                                }                                )}
                             </div>
                         ) : (
                             <div className="text-center py-8">
@@ -172,6 +152,22 @@ export default function SectionsCollapsible({
                                 </p>
                             </div>
                         )}
+                        
+                        {/* Legend */}
+                        <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border">
+                            <div className="flex items-center gap-2 text-xs">
+                                <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                                <span className="text-muted-foreground">CLAS</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                                <div className="w-3 h-3 bg-green-500 rounded"></div>
+                                <span className="text-muted-foreground">LAB</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                                <div className="w-3 h-3 bg-purple-500 rounded"></div>
+                                <span className="text-muted-foreground">AYUD</span>
+                            </div>
+                        </div>
                     </CollapsibleContent>
                 </Collapsible>
             </div>
