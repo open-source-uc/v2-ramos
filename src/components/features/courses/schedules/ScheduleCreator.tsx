@@ -1,188 +1,394 @@
 import { useState, useEffect } from "react";
 import cursosJSON from "2025-1.json";
+import { 
+  createScheduleMatrix, 
+  convertCourseDataToSections, 
+  detectScheduleConflicts, 
+  TIME_SLOTS, 
+  DAYS 
+} from "@/lib/scheduleMatrix";
+import type { ScheduleMatrix, CourseSections } from "@/types";
+import { Pill } from "@/components/ui/pill";
+import { Button } from "@/components/ui/button";
+import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon } from "@/components/icons/icons";
+import { cn } from "@/lib/utils";
 
-const horarios = [
-  ["08:20", "09:30"], ["09:40", "10:50"], ["11:00", "12:10"], ["12:20", "13:30"],
-  ["14:50", "16:00"], ["16:10", "17:20"], ["17:30", "18:40"], ["18:50", "20:00"], ["20:10", "21:20"]
-];
+// Define color variants for different courses
+const COLOR_VARIANTS = [
+  "schedule_blue", "schedule_green", "schedule_pink",
+  "schedule_purple", "schedule_orange", "schedule_red"
+] as const;
 
-const dias = ["L", "M", "W", "J", "V"];
+// Course option interface
+interface CourseOption {
+  id: string;
+  sigle: string;
+  seccion: string;
+  nombre: string;
+}
 
-const bloqueMap: Record<string, { dia: string, hora: string }> = {
-  l1: { dia: "L", hora: "08:20" }, l2: { dia: "L", hora: "09:40" }, l3: { dia: "L", hora: "11:00" },
-  l4: { dia: "L", hora: "12:20" }, l5: { dia: "L", hora: "14:50" }, l6: { dia: "L", hora: "16:10" },
-  l7: { dia: "L", hora: "17:30" }, l8: { dia: "L", hora: "18:50" }, l9: { dia: "L", hora: "20:10" },
-  m1: { dia: "M", hora: "08:20" }, m2: { dia: "M", hora: "09:40" }, m3: { dia: "M", hora: "11:00" },
-  m4: { dia: "M", hora: "12:20" }, m5: { dia: "M", hora: "14:50" }, m6: { dia: "M", hora: "16:10" },
-  m7: { dia: "M", hora: "17:30" }, m8: { dia: "M", hora: "18:50" }, m9: { dia: "M", hora: "20:10" },
-  w1: { dia: "W", hora: "08:20" }, w2: { dia: "W", hora: "09:40" }, w3: { dia: "W", hora: "11:00" },
-  w4: { dia: "W", hora: "12:20" }, w5: { dia: "W", hora: "14:50" }, w6: { dia: "W", hora: "16:10" },
-  w7: { dia: "W", hora: "17:30" }, w8: { dia: "W", hora: "18:50" }, w9: { dia: "W", hora: "20:10" },
-  j1: { dia: "J", hora: "08:20" }, j2: { dia: "J", hora: "09:40" }, j3: { dia: "J", hora: "11:00" },
-  j4: { dia: "J", hora: "12:20" }, j5: { dia: "J", hora: "14:50" }, j6: { dia: "J", hora: "16:10" },
-  j7: { dia: "J", hora: "17:30" }, j8: { dia: "J", hora: "18:50" }, j9: { dia: "J", hora: "20:10" },
-  v1: { dia: "V", hora: "08:20" }, v2: { dia: "V", hora: "09:40" }, v3: { dia: "V", hora: "11:00" },
-  v4: { dia: "V", hora: "12:20" }, v5: { dia: "V", hora: "14:50" }, v6: { dia: "V", hora: "16:10" },
-  v7: { dia: "V", hora: "17:30" }, v8: { dia: "V", hora: "18:50" }, v9: { dia: "V", hora: "20:10" }
-};
+// Convert course data to sections format
+const courseSectionsData: CourseSections = convertCourseDataToSections(cursosJSON);
 
-const colores = [
-  "bg-green", "bg-muted", "bg-pink",
-  "bg-purple", "bg-orange", "bg-blue"
-];
-
-const opcionesCursos = Object.entries(cursosJSON).flatMap(([sigla, data]) =>
-  Object.keys(data.sections).map((seccion) => ({
-    id: `${sigla}-${seccion}`,
-    sigla,
+// Generate course options for the dropdown
+const courseOptions: CourseOption[] = Object.entries(cursosJSON).flatMap(([sigle, data]) =>
+  Object.keys((data as any).sections).map((seccion) => ({
+    id: `${sigle}-${seccion}`,
+    sigle,
     seccion,
-    nombre: data.name
+    nombre: (data as any).name
   }))
 );
 
-export default function HorarioPage() {
-  const [cursos, setCursos] = useState<string[]>(() => {
+// Course search and selection component
+function CourseSearch({ 
+  onCourseSelect, 
+  selectedCourses 
+}: { 
+  onCourseSelect: (courseId: string) => void;
+  selectedCourses: string[];
+}) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filteredOptions = courseOptions.filter(option =>
+    option.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    option.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSelect = (courseId: string) => {
+    if (!selectedCourses.includes(courseId)) {
+      onCourseSelect(courseId);
+      setSearchTerm("");
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <div className="relative">
+        <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setIsOpen(true);
+          }}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          className="w-full pl-10 pr-4 py-2.5 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          placeholder="Buscar curso (ej: IIC2214, Matemáticas)"
+        />
+      </div>
+      
+      {isOpen && searchTerm && (
+        <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto">
+          {filteredOptions.slice(0, 10).map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleSelect(option.id)}
+              disabled={selectedCourses.includes(option.id)}
+              className={cn(
+                "w-full px-4 py-3 text-left hover:bg-muted transition-colors",
+                "disabled:opacity-50 disabled:cursor-not-allowed"
+              )}
+            >
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-foreground">{option.id}</span>
+                <span className="text-sm text-muted-foreground truncate">{option.nombre}</span>
+              </div>
+            </button>
+          ))}
+          {filteredOptions.length === 0 && (
+            <div className="px-4 py-3 text-sm text-muted-foreground">
+              No se encontraron cursos
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Schedule grid component
+function ScheduleGrid({ 
+  matrix, 
+  selectedCourses 
+}: { 
+  matrix: ScheduleMatrix;
+  selectedCourses: string[];
+}) {
+  const conflicts = detectScheduleConflicts(matrix);
+  const hasConflicts = conflicts.length > 0;
+
+  return (
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div className="overflow-x-auto">
+        <div className="min-w-[600px] tablet:min-w-[700px] desktop:min-w-[800px]">
+          {/* Header */}
+          <div className="grid grid-cols-6 bg-muted/50 border-b border-border">
+            <div className="p-3 text-sm font-medium text-muted-foreground">
+              Horario
+            </div>
+            {DAYS.map((day) => (
+              <div key={day} className="p-3 text-sm font-medium text-center text-muted-foreground">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Time slots */}
+          {TIME_SLOTS.map((time, timeIndex) => (
+            <div key={time} className="grid grid-cols-6 border-b border-border hover:bg-muted/25 transition-colors">
+              {/* Time label */}
+              <div className="p-3 text-sm font-medium text-muted-foreground bg-muted/25">
+                {time}
+              </div>
+
+              {/* Day columns */}
+              {DAYS.map((day, dayIndex) => {
+                const classes = matrix[timeIndex][dayIndex];
+                const hasConflict = classes.length > 1;
+                
+                return (
+                  <div
+                    key={`${day}-${timeIndex}`}
+                    className={cn(
+                      "p-2 min-h-[60px] tablet:min-h-[70px] flex flex-col gap-1 items-center justify-center",
+                      hasConflict && "bg-red-light/30 border-red/20"
+                    )}
+                  >
+                    {classes.map((classInfo, index) => {
+                      const courseIndex = selectedCourses.findIndex(c => c === `${classInfo.courseId}-${classInfo.section}`);
+                      const colorVariant = COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length];
+                      
+                      return (
+                        <div
+                          key={`${classInfo.courseId}-${classInfo.section}-${index}`}
+                          className="w-full"
+                        >
+                          <Pill
+                            variant={colorVariant}
+                            size="xs"
+                            className="text-[10px] tablet:text-xs px-1.5 py-0.5 w-full justify-center min-w-0"
+                          >
+                            <div className="text-center">
+                              <div className="font-medium">{classInfo.courseId}-{classInfo.section}</div>
+                              <div className="text-[9px] tablet:text-[10px] opacity-80">{classInfo.type}</div>
+                            </div>
+                          </Pill>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Conflicts warning */}
+      {hasConflicts && (
+        <div className="p-4 bg-red-light/20 border-t border-red/20">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-red rounded-full"></div>
+            <span className="text-sm font-medium text-red">
+              Conflictos detectados: {conflicts.length} 
+            </span>
+          </div>
+          <p className="text-xs text-red/80 mt-1">
+            Hay {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''} de horario en tu selección
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Main component
+export default function ScheduleCreator() {
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("horarioCursos");
+      const saved = localStorage.getItem("scheduleCourses");
       return saved ? JSON.parse(saved) : [];
     }
     return [];
   });
 
-  const [input, setInput] = useState("");
-
+  // Save to localStorage whenever courses change
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("horarioCursos", JSON.stringify(cursos));
+      localStorage.setItem("scheduleCourses", JSON.stringify(selectedCourses));
     }
-  }, [cursos]);
+  }, [selectedCourses]);
 
-  const opcionesFiltradas = opcionesCursos.filter(op =>
-    `${op.sigla}-${op.seccion}`.toLowerCase().includes(input.toLowerCase())
-  );
+  // Create schedule matrix from selected courses
+  const scheduleMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
 
-  const pintarCelda = (dia: string, hora: string) => {
-    const celdas: JSX.Element[] = [];
-
-    for (let i = 0; i < cursos.length; i++) {
-      const cursoID = cursos[i];
-      const color = colores[i % colores.length];
-
-      const [sigla, seccion] = cursoID.split("-");
-      const curso = cursosJSON[sigla];
-      const bloques = curso?.sections?.[seccion]?.schedule ?? {};
-
-      for (const bloque in bloques) {
-        const map = bloqueMap[bloque];
-        if (map && map.dia === dia && map.hora === hora) {
-          const tipo = bloques[bloque][0];
-          celdas.push(
-            <div
-              key={`${dia}-${hora}-${cursoID}`}
-              className={`w-full px-1 py-0.5 rounded text-[11px] font-medium text-center border border-black/20 ${color}`}
-            >
-              <div>{`${sigla}-${seccion}`}</div>
-              <div className="text-[10px] font-normal opacity-80">{tipo}</div>
-            </div>
-          );
-        }
-      }
-    }
-
-    return celdas.length > 0 ? (
-      <div className="flex flex-col gap-[2px] items-center justify-center w-full h-full overflow-y-auto">
-        {celdas}
-      </div>
-    ) : "";
+  const handleCourseSelect = (courseId: string) => {
+    setSelectedCourses(prev => [...prev, courseId]);
   };
 
-  const obtenerColorCurso = (siglaSeccion: string) => {
-    const index = cursos.indexOf(siglaSeccion);
-    return index >= 0 ? colores[index % colores.length] : "";
+  const handleCourseRemove = (courseId: string) => {
+    setSelectedCourses(prev => prev.filter(c => c !== courseId));
   };
 
-  const eliminarCurso = (siglaSeccion: string) => {
-    setCursos(cursos.filter(c => c !== siglaSeccion));
+  const getCourseColor = (courseId: string) => {
+    const index = selectedCourses.indexOf(courseId);
+    return index >= 0 ? COLOR_VARIANTS[index % COLOR_VARIANTS.length] : "schedule_blue";
+  };
+
+  const getCourseInfo = (courseId: string) => {
+    const option = courseOptions.find(opt => opt.id === courseId);
+    return option || { id: courseId, sigle: "", seccion: "", nombre: "Curso no encontrado" };
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Creador de Horario</h1>
-
-      <div className="relative w-full mb-4">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="border p-2 rounded w-full"
-          placeholder="Ingresa código del curso, ej: IIC2214"
-        />
-        {input && (
-          <div className="absolute z-10 bg-white border rounded mt-1 max-h-48 overflow-y-auto w-full shadow-md">
-            {opcionesFiltradas.slice(0, 10).map((op) => (
-              <div
-                key={op.id}
-                className="px-3 py-2 hover:bg-gray-100 cursor-pointer flex flex-col"
-                onClick={() => {
-                  if (!cursos.includes(op.id)) {
-                    setCursos([...cursos, op.id]);
-                    setInput("");
-                  }
-                }}
-              >
-                <span className="font-semibold">{op.id}</span>
-                <span className="text-sm text-gray-500">{op.nombre}</span>
-              </div>
-            ))}
-            {opcionesFiltradas.length === 0 && (
-              <div className="px-3 py-2 text-sm text-gray-400">No se encontraron cursos</div>
-            )}
-          </div>
-        )}
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Creador de Horarios</h1>
+        <p className="text-muted-foreground">
+          Selecciona los cursos y secciones para crear tu horario personalizado
+        </p>
       </div>
 
-      <table className="table-fixed border-collapse w-full">
-        <thead>
-          <tr>
-            <th className="w-28 border p-2">Horario</th>
-            {dias.map((dia) => (
-              <th key={dia} className="border p-2 w-32">{dia}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {horarios.map(([inicio, fin], idx) => (
-            <tr key={inicio}>
-              <td className="border p-2 font-semibold text-center text-sm">{inicio} - {fin}</td>
-              {dias.map((dia) => (
-                <td key={dia + inicio} className="border h-20 text-center p-0 align-top">
-                  {pintarCelda(dia, inicio)}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Course Search */}
+      <div className="mb-8">
+        <div className="border border-border rounded-lg p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+              <SearchIcon className="h-5 w-5 fill-current" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold">Buscar Cursos</h2>
+              <p className="text-sm text-muted-foreground">
+                Ingresa el código del curso o nombre para agregarlo a tu horario
+              </p>
+            </div>
+          </div>
+          
+          <CourseSearch 
+            onCourseSelect={handleCourseSelect}
+            selectedCourses={selectedCourses}
+          />
+        </div>
+      </div>
 
-      {cursos.length > 0 && (
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold mb-2">Cursos agregados:</h2>
-          <div className="flex flex-wrap gap-2">
-            {cursos.map((siglaSeccion) => (
-              <span
-                key={siglaSeccion}
-                className={`px-3 py-1 rounded-full text-sm font-medium 
-                            ${obtenerColorCurso(siglaSeccion)} flex items-center gap-1`}
-              >
-                {siglaSeccion}
-                <button
-                  onClick={() => eliminarCurso(siglaSeccion)}
-                  className="text-xs bg-gray-200 rounded-full w-5 h-5 flex items-center justify-center hover:bg-gray-300"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
+      {/* Selected Courses */}
+      {selectedCourses.length > 0 && (
+        <div className="mb-8">
+          <div className="border border-border rounded-lg p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                <CalendarIcon className="h-5 w-5 fill-current" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold">Cursos Seleccionados</h2>
+                <p className="text-sm text-muted-foreground">
+                  {selectedCourses.length} curso{selectedCourses.length > 1 ? 's' : ''} en tu horario
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {selectedCourses.map((courseId) => {
+                const courseInfo = getCourseInfo(courseId);
+                const colorVariant = getCourseColor(courseId);
+                
+                return (
+                  <div
+                    key={courseId}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm",
+                      colorVariant === "schedule_blue" && "bg-blue-light text-blue border-blue/20",
+                      colorVariant === "schedule_green" && "bg-green-light text-green border-green/20",
+                      colorVariant === "schedule_pink" && "bg-pink-light text-pink border-pink/20",
+                      colorVariant === "schedule_purple" && "bg-purple-light text-purple border-purple/20",
+                      colorVariant === "schedule_orange" && "bg-orange-light text-orange border-orange/20",
+                      colorVariant === "schedule_red" && "bg-red-light text-red border-red/20"
+                    )}
+                  >
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-medium">{courseId}</span>
+                      <span className="text-xs opacity-80 truncate max-w-[150px] tablet:max-w-[200px]">
+                        {courseInfo.nombre}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleCourseRemove(courseId)}
+                      className="text-xs bg-background/50 hover:bg-background/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors flex-shrink-0"
+                      aria-label={`Eliminar ${courseId}`}
+                    >
+                      <CloseIcon className="w-3 h-3" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Grid */}
+      <div className="mb-8">
+        <div className="border border-border rounded-lg overflow-hidden">
+          <div className="px-6 py-4 bg-muted/50 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-light text-orange border border-orange/20 rounded-lg">
+                <CalendarIcon className="h-5 w-5 fill-current" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold">Tu Horario</h2>
+                <p className="text-sm text-muted-foreground">
+                  Visualiza tu horario semanal con todos los cursos seleccionados
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-6">
+            {selectedCourses.length > 0 ? (
+              <ScheduleGrid 
+                matrix={scheduleMatrix}
+                selectedCourses={selectedCourses}
+              />
+            ) : (
+              <div className="text-center py-12">
+                <div className="mb-4">
+                  <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+                </div>
+                <p className="text-lg font-medium text-muted-foreground mb-2">
+                  No hay cursos seleccionados
+                </p>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Agrega cursos usando el buscador de arriba para ver tu horario
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Legend */}
+      {selectedCourses.length > 0 && (
+        <div className="border border-border rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4">Leyenda</h3>
+          <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+            <div className="flex items-center gap-2 text-sm">
+              <Pill variant="schedule_blue" size="xs" className="text-[10px]">CLAS</Pill>
+              <span className="text-muted-foreground">Cátedra</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Pill variant="schedule_green" size="xs" className="text-[10px]">LAB</Pill>
+              <span className="text-muted-foreground">Laboratorio</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Pill variant="schedule_purple" size="xs" className="text-[10px]">AYUD</Pill>
+              <span className="text-muted-foreground">Ayudantía</span>
+            </div>
           </div>
         </div>
       )}
