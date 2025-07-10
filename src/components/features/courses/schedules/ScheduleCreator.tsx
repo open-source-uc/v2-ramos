@@ -27,8 +27,8 @@ const bloqueMap: Record<string, { dia: string, hora: string }> = {
 };
 
 const colores = [
-  "bg-green-300", "bg-yellow-300", "bg-pink-300",
-  "bg-purple-300", "bg-orange-300", "bg-teal-300"
+  "bg-green", "bg-muted", "bg-pink",
+  "bg-purple", "bg-orange", "bg-blue"
 ];
 
 const opcionesCursos = Object.entries(cursosJSON).flatMap(([sigla, data]) =>
