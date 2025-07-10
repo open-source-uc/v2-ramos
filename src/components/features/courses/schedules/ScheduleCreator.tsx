@@ -15,11 +15,12 @@ import {
 } from "@/lib/scheduleStorage";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { SearchIcon, WarningIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
+import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
-import { ScheduleLegend, getClassTypeLong } from "./ScheduleLegend";
+import { getClassTypeLong } from "./ScheduleLegend";
 import { Search, normalizeSearchText } from "@/components/features/search/SearchInput";
 import {
   Command,
@@ -187,7 +188,7 @@ function ScheduleGrid({
                     key={`${day}-${timeIndex}`}
                     className={cn(
                       "p-2 min-h-[60px] tablet:min-h-[70px] flex flex-col gap-1 items-center justify-center",
-                      hasConflict && "bg-red-light/30 border-red/20"
+                      hasConflict && "bg-red-light border-red/20"
                     )}
                   >
                     {classes.map((classInfo, index) => {
@@ -240,6 +241,7 @@ function ScheduleGrid({
 
 // Main component
 export default function ScheduleCreator() {
+  const [locked, setLocked] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>(() => getSavedCourses());
 
   // Save to localStorage whenever courses change
@@ -313,23 +315,35 @@ export default function ScheduleCreator() {
       {selectedCourses.length > 0 && (
         <div className="mb-8">
           <div className="border border-border rounded-lg p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
-                <CalendarIcon className="h-5 w-5 fill-current" />
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                  <SelectionIcon className="h-5 w-5 fill-current" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">Cursos Seleccionados</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedCourses.length} curso{selectedCourses.length > 1 ? 's' : ''} en tu horario
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold">Cursos Seleccionados</h2>
-                <p className="text-sm text-muted-foreground">
-                  {selectedCourses.length} curso{selectedCourses.length > 1 ? 's' : ''} en tu horario
-                </p>
-              </div>
+              <Button
+                onClick={() => setLocked(!locked)}
+                aria-label={locked ? "Unlock courses" : "Lock courses"}
+                variant="ghost_border"
+                size="icon"
+              >
+                {locked ? (
+                  <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
+                ) : (
+                  <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
+                )}
+              </Button>
             </div>
-            
             <div className="flex flex-wrap gap-2">
               {selectedCourses.map((courseId) => {
                 const courseInfo = getCourseInfo(courseId);
                 const colorVariant = getCourseColor(courseId);
-                
                 return (
                   <div
                     key={courseId}
@@ -347,13 +361,15 @@ export default function ScheduleCreator() {
                       <span className="font-medium">{courseInfo.sigle} - {courseInfo.nombre}</span>
                       <span className="text-xs opacity-80">Sección {courseInfo.seccion}</span>
                     </div>
-                    <button
-                      onClick={() => handleCourseRemove(courseId)}
-                      className="text-xs bg-background/50 hover:bg-background/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors flex-shrink-0"
-                      aria-label={`Eliminar ${courseId}`}
-                    >
-                      <CloseIcon className="w-3 h-3" />
-                    </button>
+                    {!locked && (
+                      <button
+                        onClick={() => handleCourseRemove(courseId)}
+                        className="text-xs bg-background/50 hover:bg-background/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors flex-shrink-0"
+                        aria-label={`Eliminar ${courseId}`}
+                      >
+                        <CloseIcon className="w-3 h-3" />
+                      </button>
+                    )}
                   </div>
                 );
               })}
