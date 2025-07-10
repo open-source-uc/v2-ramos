@@ -73,10 +73,10 @@ export default function Header() {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                  <a href="/horario">ORGANIZA</a>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <a href="/horario" className="hover:bg-primary-light hover:text-primary">ORGANIZA</a>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
                     ACERCA

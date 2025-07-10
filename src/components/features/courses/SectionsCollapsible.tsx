@@ -7,7 +7,8 @@ import {
 } from "@/components/ui/collapsible";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
-import { ToastManager, useToasts } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { createScheduleMatrix, TIME_SLOTS, DAYS, convertCourseDataToSections } from "@/lib/scheduleMatrix";
 import { addCourseToSchedule, isCourseInSchedule } from "@/lib/scheduleStorage";
@@ -135,7 +136,6 @@ export default function SectionsCollapsible({
     className = "" 
 }: SectionsCollapsibleProps) {
     const [refreshKey, setRefreshKey] = useState(0);
-    const { toasts, addToast, removeToast } = useToasts();
     
     // Get real course data from the JSON
     const courseData = (cursosJSON as any)[courseSigle];
@@ -147,9 +147,9 @@ export default function SectionsCollapsible({
 
     const handleAddToSchedule = (courseId: string, success: boolean) => {
         if (success) {
-            addToast(`${courseId} agregado a tu horario`, "success");
+            toast.success(`${courseId} agregado a tu horario`);
         } else {
-            addToast(`${courseId} ya está en tu horario`, "info");
+            toast.info(`${courseId} ya está en tu horario`);
         }
         // Force re-render to update button states
         setRefreshKey(prev => prev + 1);
@@ -229,6 +229,6 @@ export default function SectionsCollapsible({
                 </Collapsible>
             </div>
         </section>
-        <ToastManager toasts={toasts} removeToast={removeToast} />
+        <Toaster />
     </>);
 }

@@ -16,6 +16,8 @@ import {
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
 
@@ -229,12 +231,16 @@ export default function ScheduleCreator() {
   const handleCourseSelect = (courseId: string) => {
     if (addCourseToSchedule(courseId)) {
       setSelectedCourses(getSavedCourses());
+      toast.success(`${courseId} agregado a tu horario`);
+    } else {
+      toast.info(`${courseId} ya está en tu horario`);
     }
   };
 
   const handleCourseRemove = (courseId: string) => {
     if (removeCourseFromSchedule(courseId)) {
       setSelectedCourses(getSavedCourses());
+      toast.success(`${courseId} eliminado de tu horario`);
     }
   };
 
@@ -249,7 +255,8 @@ export default function ScheduleCreator() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <>
+      <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Creador de Horarios</h1>
@@ -395,6 +402,8 @@ export default function ScheduleCreator() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+      <Toaster />
+    </>
   );
 }
