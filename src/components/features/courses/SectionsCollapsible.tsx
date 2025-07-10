@@ -4,6 +4,7 @@ import {
   CollapsibleContent, 
   CollapsibleTrigger 
 } from "@/components/ui/collapsible";
+import { Pill } from "@/components/ui/pill";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { createScheduleMatrix, TIME_SLOTS, DAYS } from "@/lib/scheduleMatrix";
 
@@ -34,50 +35,55 @@ function ScheduleGrid({ matrix, sectionId }: { matrix: ScheduleMatrix; sectionId
                         ))}
                     </div>
                     
-                    {/* Time slots - only show slots that have classes */}
+                    {/* Time slots - always start from 08:20, then show consecutive slots with classes */}
                     {TIME_SLOTS.map((time, timeIndex) => {
-                        const hasAnyClass = DAYS.some((_, dayIndex) => matrix[timeIndex][dayIndex].length > 0);
-                        
-                        if (!hasAnyClass) return null;
-                        
-                        return (
-                            <div key={time} className="grid grid-cols-6 gap-1 mb-1">
-                                {/* Time label */}
-                                <div className="text-xs text-muted-foreground p-1 text-right w-10">
-                                    {time}
-                                </div>
-                                
-                                {/* Day columns */}
-                                {DAYS.map((day, dayIndex) => {
-                                    const classes = matrix[timeIndex][dayIndex];
-                                    const hasClass = classes.length > 0;
-                                    const classInfo = hasClass ? classes[0] : null;
-                                    
-                                    return (
-                                        <div
-                                            key={`${day}-${timeIndex}`}
-                                            className={`
-                                                text-xs p-1 rounded min-h-[24px] flex items-center justify-center
-                                                ${hasClass && classInfo
-                                                    ? classInfo.type === 'CLAS' 
-                                                        ? 'bg-blue-500'
-                                                        : classInfo.type === 'LAB'
-                                                        ? 'bg-green-500'
-                                                        : classInfo.type === 'AYUD'
-                                                        ? 'bg-purple-500'
-                                                        : 'bg-gray-500'
-                                                    : 'bg-transparent'
-                                                }
-                                            `}
-                                        >
-                                            {hasClass && classInfo && (
-                                                <div className="w-full h-full bg-current opacity-80 rounded"></div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                        // Always show from 08:20 onwards if there are any classes in this time slot or later
+                        const hasClassFromThisTimeOnwards = TIME_SLOTS.slice(timeIndex).some((_, futureIndex) =>
+                            DAYS.some((_, dayIndex) => matrix[timeIndex + futureIndex] && matrix[timeIndex + futureIndex][dayIndex].length > 0)
                         );
+                        
+                        // Only show if we're at 08:20 or later AND there are classes from this time onwards
+                        if (timeIndex === 0 || hasClassFromThisTimeOnwards) {
+                            return (
+                                <div key={time} className="grid grid-cols-6 gap-1 mb-1">
+                                    {/* Time label */}
+                                    <div className="text-xs text-muted-foreground p-1 text-right w-10">
+                                        {time}
+                                    </div>
+                                    
+                                    {/* Day columns */}
+                                    {DAYS.map((day, dayIndex) => {
+                                        const classes = matrix[timeIndex][dayIndex];
+                                        const hasClass = classes.length > 0;
+                                        const classInfo = hasClass ? classes[0] : null;
+                                        
+                                        return (
+                                            <div
+                                                key={`${day}-${timeIndex}`}
+                                                className="flex items-center justify-center min-h-[32px] p-1"
+                                            >
+                                                {hasClass && classInfo && (
+                                                    <Pill
+                                                        variant={
+                                                            classInfo.type === 'CLAS' ? 'schedule_blue' :
+                                                            classInfo.type === 'LAB' ? 'schedule_green' :
+                                                            classInfo.type === 'AYUD' ? 'schedule_purple' : 'schedule_red'
+                                                        }
+                                                        size="xs"
+                                                        className="text-[10px] px-1 py-0.5 min-w-0"
+                                                    >
+                                                        {classInfo.type === 'CLAS' ? 'CLA' : 
+                                                         classInfo.type === 'AYUD' ? 'AYU' : 
+                                                         classInfo.type}
+                                                    </Pill>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        }
+                        return null;
                     })}
                 </div>
             </div>
@@ -156,16 +162,16 @@ export default function SectionsCollapsible({
                         {/* Legend */}
                         <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border">
                             <div className="flex items-center gap-2 text-xs">
-                                <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                                <span className="text-muted-foreground">CLAS</span>
+                                <Pill variant="schedule_blue" size="xs" className="text-[10px]">CLA</Pill>
+                                <span className="text-muted-foreground">Cátedra</span>
                             </div>
                             <div className="flex items-center gap-2 text-xs">
-                                <div className="w-3 h-3 bg-green-500 rounded"></div>
-                                <span className="text-muted-foreground">LAB</span>
+                                <Pill variant="schedule_green" size="xs" className="text-[10px]">LAB</Pill>
+                                <span className="text-muted-foreground">Laboratorio</span>
                             </div>
                             <div className="flex items-center gap-2 text-xs">
-                                <div className="w-3 h-3 bg-purple-500 rounded"></div>
-                                <span className="text-muted-foreground">AYUD</span>
+                                <Pill variant="schedule_purple" size="xs" className="text-[10px]">AYU</Pill>
+                                <span className="text-muted-foreground">Ayudantía</span>
                             </div>
                         </div>
                     </CollapsibleContent>
