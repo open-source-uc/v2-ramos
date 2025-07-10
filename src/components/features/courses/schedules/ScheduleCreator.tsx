@@ -15,12 +15,11 @@ import {
 } from "@/lib/scheduleStorage";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
-import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
+import { SearchIcon, WarningIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
-import { ScheduleLegend } from "./ScheduleLegend";
+import { ScheduleLegend, getClassTypeLong } from "./ScheduleLegend";
 import { Search, normalizeSearchText } from "@/components/features/search/SearchInput";
 import {
   Command,
@@ -29,10 +28,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-} from "@/components/ui/popover";
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -132,8 +127,8 @@ function CourseSearch({
                         )}
                       />
                       <div className="flex flex-col gap-1 min-w-0 flex-1">
-                        <span className="font-medium text-foreground">{option.id}</span>
-                        <span className="text-sm text-muted-foreground truncate">{option.nombre}</span>
+                        <span className="font-medium text-foreground">{option.sigle} - {option.nombre}</span>
+                        <span className="text-sm text-muted-foreground">Sección {option.seccion}</span>
                       </div>
                     </CommandItem>
                   ))}
@@ -211,7 +206,7 @@ function ScheduleGrid({
                           >
                             <div className="text-center">
                               <div className="font-medium">{classInfo.courseId}-{classInfo.section}</div>
-                              <div className="text-[9px] tablet:text-[10px] opacity-80">{classInfo.type}</div>
+                              <div className="text-[9px] tablet:text-[10px] opacity-80">{getClassTypeLong(classInfo.type)}</div>
                             </div>
                           </Pill>
                         </div>
@@ -349,10 +344,8 @@ export default function ScheduleCreator() {
                     )}
                   >
                     <div className="flex flex-col min-w-0">
-                      <span className="font-medium">{courseId}</span>
-                      <span className="text-xs opacity-80 truncate max-w-[150px] tablet:max-w-[200px]">
-                        {courseInfo.nombre}
-                      </span>
+                      <span className="font-medium">{courseInfo.sigle} - {courseInfo.nombre}</span>
+                      <span className="text-xs opacity-80">Sección {courseInfo.seccion}</span>
                     </div>
                     <button
                       onClick={() => handleCourseRemove(courseId)}
@@ -409,14 +402,6 @@ export default function ScheduleCreator() {
         </div>
       </div>
 
-      {/* Legend */}
-      {selectedCourses.length > 0 && (
-        <div className="border border-border rounded-lg p-6">
-          <ScheduleLegend
-            compact={true}
-          />
-        </div>
-      )}
       </div>
       <Toaster />
     </>
