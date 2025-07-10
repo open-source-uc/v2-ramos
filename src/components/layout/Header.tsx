@@ -112,9 +112,8 @@ export default function Header() {
           </div>
           <div className="flex w-full items-center justify-between">
             <div className="flex gap-2">
-              <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
-              <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
-              <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
+              <ButtonNavbar text="BUSCACURSOS" url="https://buscacursos.uc.cl/" />
+              <ButtonNavbar text="INSCRIPCIÓN CURSOS" url="https://registration9.uc.cl/StudentRegistrationSsb/ssb/registration" />
             </div>
             <div className="flex items-center gap-2">
               <HighContrastToggle />
