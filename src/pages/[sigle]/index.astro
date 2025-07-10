@@ -266,7 +266,8 @@ const reportSuccessMessage = reportResult?.data?.message;
         <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:load />
 
         <!-- Secciones Section -->
-        <SectionsCollapsible 
+        <SectionsCollapsible
+            className="mt-8"
             sectionIds={sectionIds}
             placeholderSections={placeholderSections}
             courseSigle={course.sigle}

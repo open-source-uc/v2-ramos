@@ -1,4 +1,4 @@
-import { StarIcon, ChevronDownIcon } from "@/components/icons/icons";
+import { CalendarIcon, ChevronDownIcon } from "@/components/icons/icons";
 import { 
   Collapsible, 
   CollapsibleContent, 
@@ -105,29 +105,26 @@ export default function SectionsCollapsible({
     className = "" 
 }: Props) {
     return (
-        <section className={`mt-8 ${className}`}>
+        <section className={`${className}`}>
             <div className="border border-border rounded-md overflow-hidden">
                 <Collapsible>
                     <CollapsibleTrigger className="w-full px-6 py-4 text-left bg-background hover:bg-muted/50 transition-colors duration-200 flex items-center justify-between group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                         <div className="flex items-center gap-3 min-w-0 flex-1">
                             <div className="p-2 bg-orange-light text-orange border border-orange/20 rounded-lg flex-shrink-0">
-                                <StarIcon className="h-5 w-5 fill-current" />
+                                <CalendarIcon className="h-5 w-5 fill-current" />
                             </div>
                             <div className="min-w-0 flex-1">
                                 <h2 className="text-lg font-semibold text-foreground">
-                                    Secciones Disponibles
+                                    Secciones
                                 </h2>
                                 <p className="text-sm text-muted-foreground">
-                                    Horarios y ubicaciones de las diferentes secciones del curso
+                                    Conoce los horarios de las diferentes secciones del curso
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 ml-4 flex-shrink-0">
-                            <span className="text-sm text-muted-foreground">
-                                {sectionIds.length} sección{sectionIds.length !== 1 ? 'es' : ''}
-                            </span>
                             <span className="text-sm text-muted-foreground hidden tablet:inline">
-                                • Click para expandir
+                                Expandir
                             </span>
                             <ChevronDownIcon className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-hover:text-foreground group-data-[state=open]:rotate-180" />
                         </div>
