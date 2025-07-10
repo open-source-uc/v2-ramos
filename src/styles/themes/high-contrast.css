@@ -1,0 +1,62 @@
+.high-contrast {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0.2 0.4 260);
+  --primary-foreground: oklch(0.95 0.4 260 / 40%);
+  --muted: oklch(0.9 0 0);
+  --muted-foreground: oklch(0 0 0);
+  --accent: oklch(1 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --border: oklch(0 0 0);
+  --input: oklch(0 0 0);
+  --ring: oklch(0 0 0);
+  --red: oklch(0.3 0.5 19);
+  --red-light: oklch(0.95 0.5 19 / 40%);
+  --green: oklch(0.25 0.4 139.2308);
+  --green-light: oklch(0.95 0.4 139.2308 / 40%);
+  --blue: oklch(0.2 0.4 260);
+  --blue-light: oklch(0.95 0.4 260 / 40%);
+  --purple: oklch(0.3 0.5 324.31);
+  --purple-light: oklch(0.95 0.5 324.31 / 40%);
+  --pink: oklch(0.3 0.5 349.85);
+  --pink-light: oklch(0.95 0.5 349.85 / 40%);
+  --orange: oklch(0.3 0.4 35.74);
+  --orange-light: oklch(0.95 0.4 35.74 / 40%);
+}
+
+/* High contrast theme specific improvements */
+.high-contrast * {
+  /* Ensure all text has sufficient contrast */
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.high-contrast a {
+  /* Make links more distinguishable in high contrast */
+  font-weight: 500;
+}
+
+.high-contrast button {
+  /* Ensure buttons have strong borders */
+  border: 1px solid var(--foreground) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.high-contrast button:hover {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+}
+
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+  /* Ensure form elements have strong borders */
+  border: 1px solid var(--foreground) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}

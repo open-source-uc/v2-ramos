@@ -1,7 +1,7 @@
 ---
 import "@/styles/global.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer.astro";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer.astro";
 import { Banner } from "@/components/ui/banner";
 import MainHead from "@/layouts/MainHead.astro";
 
@@ -23,26 +23,25 @@ const {
     frontmatter={frontmatter}
     robots={robots}
   />
-  <body
-    class="bg-background text-foreground min-h-screen"
-  >
+  <body class="bg-background text-foreground min-h-screen">
     <!-- Banner de Anuncios -->
-    <Banner 
-      variant="pink" 
-      size="md" 
-      icon="VeryHappyIcon" 
-      dismissible={true} 
+    <Banner
+      variant="green"
+      size="md"
+      icon="VeryHappyIcon"
+      dismissible={true}
       bannerId="2025-3"
-      client:only="react"
+      client:load
     >
-    <strong>Página en Desarrollo</strong>: ¡Ahora con cuentas OSUC! Crea tu cuenta y empieza a reseñar cursos.
+      <strong>Página en Desarrollo</strong>: ¡Crea tu cuenta y comparte tus
+      reseñas!
     </Banner>
 
     <!-- Main -->
     <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
-      <Header client:only="react" />
+      <Header client:load />
       <slot />
       <Footer />
-    </main>   
+    </main>
   </body>
 </html>

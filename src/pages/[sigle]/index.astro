@@ -1,7 +1,6 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../services/courses";
 import Layout from "../../layouts/Layout.astro";
-import Id2NameRaw from "../../../migration/json/valores_unicos.json";
 import { getUserDataByToken } from "../../services/auth";
 import {
     HourglassIcon,
@@ -40,16 +39,19 @@ if (!sigle) {
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
+import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
     return Astro.redirect("/404");
 }
 const course = courseData.data;
-const id2NameData = Id2NameRaw as Record<string, string>;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
 const reviews = await getCourseReviews(Astro.locals, sigle, 10);
+
+// Get prerequisites with names
+const prerequisites = await getPrerequisitesWithNames(course.req);
 
 // Calculate statistics
 const sentiment = c
@@ -122,7 +124,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                 </Pill>
             </div>
             <div>
-                <p class="text-sm opacity-60 max-w-[75%]">{course.program}</p>
+                <p class="text-sm opacity-60 max-w-[75%]">{course.description}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
                 <Pill
@@ -133,18 +135,18 @@ const reportSuccessMessage = reportResult?.data?.message;
                     {course.credits} Créditos
                 </Pill>
                 {
-                    id2NameData[c.school_id] &&
-                        id2NameData[c.school_id] !== "Ninguna" && (
+                   course.school &&
+                         course.school !== "" && (
                             <Pill variant="blue" icon={BuildingIcon}>
-                                <span>{id2NameData[c.school_id]}</span>
+                                <span>{ course.school}</span>
                             </Pill>
                         )
                 }
                 {
-                    id2NameData[c.area_id] &&
-                        id2NameData[c.area_id] !== "Sin Área Asignada" && (
+                    course.area &&
+                        course.area !== "" && (
                             <Pill variant="pink" icon={AreaIcon}>
-                                {id2NameData[c.area_id]}
+                                {course.area}
                             </Pill>
                         )
                 }
@@ -252,6 +254,9 @@ const reportSuccessMessage = reportResult?.data?.message;
                 }
             </div>
         </section>
+
+        <!-- Prerequisites Section -->
+        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:load />
 
         <!-- Links de Interés -->
         <section class="mt-8">
@@ -365,7 +370,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                                     {review.comment_path && (
                                         <MarkdownReviewView
                                             path={review.comment_path}
-                                            client:only="react"
+                                            client:load
                                         />
                                     )}
 

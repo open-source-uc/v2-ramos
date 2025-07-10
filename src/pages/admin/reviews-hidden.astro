@@ -1,0 +1,213 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getHiddenReviews, getPendingReviews } from "@/services/admin.reviews";
+import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import { getToken } from "@/lib/auth";
+import { getUserDataByToken } from "@/services/auth";
+import { OsucPermissions } from "@/types/permissions";
+import { actions, isInputError } from "astro:actions";
+import { Button } from "@/components/ui/button";
+import { Pill } from "@/components/ui/pill";
+import {
+    ThumbUpIcon,
+    ThumbDownIcon,
+    StarIcon,
+    ClockIcon,
+    CalendarIcon,
+    WorkloadIcon,
+    AttendanceIcon,
+    EyeIcon,
+    CloseIcon,
+    HourglassIcon
+} from "@/components/icons/icons";
+import { formatWeeklyHours } from "@/lib/courseStats";
+
+// Authentication check
+const token = getToken(Astro.cookies);
+if (!token) {
+    return Astro.redirect("/");
+}
+
+const user = await getUserDataByToken(token);
+if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+    return Astro.redirect("/");
+}
+
+const pendingReviews = await getHiddenReviews(Astro.locals, token);
+
+const result = Astro.getActionResult(actions.updateReviewStatus);
+const successMessage = result?.data?.message;
+---
+
+<Layout>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <section class="border border-border rounded-md px-6 py-8 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <Button
+                            variant="ghost"
+                            href="/admin"
+                            size="sm"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            ← Volver al Panel
+                        </Button>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-2">Reseñas Ocultas</h1>
+                    <p class="text-muted-foreground">
+                        Revisa y modera las reseñas enviadas por los estudiantes
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Pill variant="yellow" icon={WorkloadIcon}>
+                        {pendingReviews.length} Cantidad
+                    </Pill>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success/Error Messages -->
+        {successMessage && (
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-md">
+                <p class="font-medium">{successMessage}</p>
+            </div>
+        )}
+        {!isInputError(result?.error) && result?.error?.message && (
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
+                <p class="font-medium">{result.error.message}</p>
+            </div>
+        )}
+
+        <!-- Reviews List -->
+        {pendingReviews.length > 0 ? (
+            <div class="space-y-6">
+                {pendingReviews.map((review: any, index: number) => (
+                    <div class="border border-border rounded-md overflow-hidden" id={review.id + "-pending"}>
+                        <!-- Review Header -->
+                        <div class="border-b border-border px-6 py-4 bg-yellow-50">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-sm font-bold">
+                                        {index + 1}
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold">{review.course_sigle}</h3>
+                                        <p class="text-sm text-muted-foreground">
+                                            Enviada: {new Date(review.created_at).toLocaleDateString('es-CL', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class={`flex gap-2 items-center p-2 border rounded-lg ${
+                                    review.like_dislike === 2
+                                        ? "bg-green-light text-green border-green/20"
+                                        : review.like_dislike === 1
+                                        ? "bg-blue-light text-blue border-blue/20" 
+                                        : "bg-red-light text-red border-red/20"
+                                }`}>
+                                    {review.like_dislike === 2 ? (
+                                        <StarIcon className="h-5 w-5 fill-current" />
+                                    ) : review.like_dislike === 1 ? (
+                                        <ThumbUpIcon className="h-5 w-5 fill-current" />
+                                    ) : (
+                                        <ThumbDownIcon className="h-5 w-5 fill-current" />
+                                    )}
+                                    <span class="text-sm font-semibold">
+                                        {review.like_dislike === 2
+                                            ? "Super Recomendación"
+                                            : review.like_dislike === 1
+                                              ? "Recomendación"
+                                              : "No Recomendación"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review Content -->
+                        <div class="p-6">
+                            {review.comment_path && (
+                                <div class="mb-6">
+                                    <MarkdownReviewView
+                                        path={review.comment_path}
+                                        client:load
+                                    />
+                                </div>
+                            )}
+
+                            <!-- Review Metadata -->
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <Pill variant="ghost_green" size="sm" icon={CalendarIcon}>
+                                    {review.year_taken} - {review.semester_taken === 1 ? "1er" : "2do"} sem
+                                </Pill>
+                                <Pill variant="ghost_blue" size="sm" icon={WorkloadIcon}>
+                                    {review.workload_vote === 0
+                                        ? "Carga Baja"
+                                        : review.workload_vote === 1
+                                        ? "Carga Media"
+                                        : "Carga Alta"}
+                                </Pill>
+                                <Pill variant="ghost_purple" size="sm" icon={AttendanceIcon}>
+                                    {review.attendance_type === 0
+                                        ? "Asistencia Obligatoria"
+                                        : review.attendance_type === 1
+                                        ? "Asistencia Opcional"
+                                        : "Sin Asistencia"}
+                                </Pill>
+                                {review.weekly_hours && (
+                                    <Pill variant="ghost_orange" size="sm" icon={HourglassIcon}>
+                                        {formatWeeklyHours(review.weekly_hours)}/sem
+                                    </Pill>
+                                )}
+                            </div>
+
+                            <!-- Action Form -->
+                            <form method="post" action={actions.deleteAnyReview} class="border border-border rounded-lg p-4 bg-gray-50">
+                                <input type="hidden" name="review_id" value={review.id} />
+                                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-end">                     
+                                    <div class="flex gap-2">
+                                        <Button
+                                            type="submit"
+                                            variant="default"
+                                            size="sm"
+                                        >
+                                            Borrar Reseña
+                                        </Button>
+                                        <Button
+                                            variant="outline"
+                                            href={`/${review.course_sigle}`}
+                                            size="sm"
+                                            icon={EyeIcon}
+                                        >
+                                            Ver Curso
+                                        </Button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        ) : (
+            <!-- Empty State -->
+            <div class="border border-border rounded-md p-12 text-center">
+                <div class="w-16 h-16 bg-green-light text-green rounded-full flex items-center justify-center mx-auto mb-4">
+                    <ThumbUpIcon className="h-8 w-8 fill-current" />
+                </div>
+                <h3 class="text-lg font-semibold mb-2">¡Todo al día!</h3>
+                <p class="text-muted-foreground mb-6">
+                    No hay reseñas pendientes de moderación en este momento.
+                </p>
+                <Button variant="outline" href="/admin">
+                    Volver al Panel de Administración
+                </Button>
+            </div>
+        )}
+    </div>
+</Layout>

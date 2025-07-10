@@ -1,7 +1,7 @@
 ---
 // component imports
 import ClientRouter from "astro/components/ClientRouter.astro";
-import Seo from "../components/Seo.astro";
+import Seo from "../components/layout/Seo.astro";
 
 const { title, description, image, frontmatter, robots } = Astro.props;
 ---
@@ -15,6 +15,11 @@ const { title, description, image, frontmatter, robots } = Astro.props;
   <meta name="description" content={description} />
 
   <ClientRouter />
-
+  <!-- Cloudflare Web Analytics -->
+  <script
+    defer
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "7874d2302e154e14ab08e25ea85909f9"}'
+  ></script><!-- End Cloudflare Web Analytics -->
   <Seo {title} {description} url={Astro.url} {image} {frontmatter} {robots} />
 </head>
