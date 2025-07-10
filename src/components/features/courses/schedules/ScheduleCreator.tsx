@@ -20,6 +20,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
+import { ScheduleLegend } from "./ScheduleLegend";
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -134,9 +135,9 @@ function ScheduleGrid({
   return (
     <div className="border border-border rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
-        <div className="min-w-[600px] tablet:min-w-[700px] desktop:min-w-[800px]">
+        <div className="min-w-[700px] tablet:min-w-[800px] desktop:min-w-[900px]">
           {/* Header */}
-          <div className="grid grid-cols-6 bg-muted/50 border-b border-border">
+          <div className="grid grid-cols-7 bg-muted/50 border-b border-border">
             <div className="p-3 text-sm font-medium text-muted-foreground">
               Horario
             </div>
@@ -149,7 +150,7 @@ function ScheduleGrid({
 
           {/* Time slots */}
           {TIME_SLOTS.map((time, timeIndex) => (
-            <div key={time} className="grid grid-cols-6 border-b border-border hover:bg-muted/25 transition-colors">
+            <div key={time} className="grid grid-cols-7 border-b border-border hover:bg-muted/25 transition-colors">
               {/* Time label */}
               <div className="p-3 text-sm font-medium text-muted-foreground bg-muted/25">
                 {time}
@@ -385,21 +386,9 @@ export default function ScheduleCreator() {
       {/* Legend */}
       {selectedCourses.length > 0 && (
         <div className="border border-border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Leyenda</h3>
-          <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
-            <div className="flex items-center gap-2 text-sm">
-              <Pill variant="schedule_blue" size="xs" className="text-[10px]">CLAS</Pill>
-              <span className="text-muted-foreground">Cátedra</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <Pill variant="schedule_green" size="xs" className="text-[10px]">LAB</Pill>
-              <span className="text-muted-foreground">Laboratorio</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <Pill variant="schedule_purple" size="xs" className="text-[10px]">AYUD</Pill>
-              <span className="text-muted-foreground">Ayudantía</span>
-            </div>
-          </div>
+          <ScheduleLegend
+            compact={true}
+          />
         </div>
       )}
       </div>

@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { createScheduleMatrix, TIME_SLOTS, DAYS, convertCourseDataToSections } from "@/lib/scheduleMatrix";
 import { addCourseToSchedule, isCourseInSchedule } from "@/lib/scheduleStorage";
+import { ScheduleLegend, getClassTypeColor, getClassTypeShort } from "./schedules/ScheduleLegend";
 import cursosJSON from "2025-1.json";
 
 interface Props {
@@ -47,8 +48,8 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">Sección {sectionId}</h3>
                 <Button
-                    variant={isInSchedule ? "outline" : "default"}
-                    size="sm"
+                    variant={isInSchedule ? "outline" : "ghost_blue"}
+                    size="xs"
                     onClick={handleAddToSchedule}
                     disabled={isInSchedule}
                     icon={PlusIcon}
@@ -59,9 +60,9 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
             
             {/* Minimalist Schedule Grid */}
             <div className="overflow-x-auto">
-                <div className="min-w-[280px]">
+                <div className="min-w-[320px]">
                     {/* Header with days */}
-                    <div className="grid grid-cols-6 gap-1 mb-2">
+                    <div className="grid grid-cols-7 gap-1 mb-2">
                         <div className="w-10"></div>
                         {DAYS.map(day => (
                             <div key={day} className="text-xs font-medium text-center text-muted-foreground p-1">
@@ -80,7 +81,7 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                         // Only show if we're at 08:20 or later AND there are classes from this time onwards
                         if (timeIndex === 0 || hasClassFromThisTimeOnwards) {
                             return (
-                                <div key={time} className="grid grid-cols-6 gap-1 mb-1">
+                                <div key={time} className="grid grid-cols-7 gap-1 mb-1">
                                     {/* Time label */}
                                     <div className="text-xs text-muted-foreground p-1 text-right w-10">
                                         {time}
@@ -99,17 +100,11 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                                             >
                                                 {hasClass && classInfo && (
                                                     <Pill
-                                                        variant={
-                                                            classInfo.type === 'CLAS' ? 'schedule_blue' :
-                                                            classInfo.type === 'LAB' ? 'schedule_green' :
-                                                            classInfo.type === 'AYUD' ? 'schedule_purple' : 'schedule_red'
-                                                        }
+                                                        variant={getClassTypeColor(classInfo.type)}
                                                         size="xs"
                                                         className="text-[10px] px-1 py-0.5 min-w-0"
                                                     >
-                                                        {classInfo.type === 'CLAS' ? 'CLA' : 
-                                                         classInfo.type === 'AYUD' ? 'AYU' : 
-                                                         classInfo.type}
+                                                        {getClassTypeShort(classInfo.type)}
                                                     </Pill>
                                                 )}
                                             </div>
@@ -144,6 +139,25 @@ export default function SectionsCollapsible({
     
     // Convert to the format expected by createScheduleMatrix
     const courseSectionsData = convertCourseDataToSections(cursosJSON);
+
+    // Extract unique class types present in this course's sections
+    const getClassTypesInSections = (): string[] => {
+        const classTypes = new Set<string>();
+        
+        Object.values(sections).forEach((section: any) => {
+            if (section.schedule) {
+                Object.values(section.schedule).forEach((timeSlot: any) => {
+                    if (Array.isArray(timeSlot) && timeSlot.length > 0) {
+                        classTypes.add(timeSlot[0]);
+                    }
+                });
+            }
+        });
+        
+        return Array.from(classTypes).sort();
+    };
+
+    const availableClassTypes = getClassTypesInSections();
 
     const handleAddToSchedule = (courseId: string, success: boolean) => {
         if (success) {
@@ -211,20 +225,16 @@ export default function SectionsCollapsible({
                         )}
                         
                         {/* Legend */}
-                        <div className="flex flex-wrap gap-3 mt-6 pt-4 border-t border-border">
-                            <div className="flex items-center gap-2 text-xs">
-                                <Pill variant="schedule_blue" size="xs" className="text-[10px]">CLA</Pill>
-                                <span className="text-muted-foreground">Cátedra</span>
+                        {availableClassTypes.length > 0 && (
+                            <div className="mt-6 pt-4 border-t border-border">
+                                <ScheduleLegend 
+                                    classTypes={availableClassTypes}
+                                    compact={true}
+                                    useShortNames={true}
+                                    className="text-xs"
+                                />
                             </div>
-                            <div className="flex items-center gap-2 text-xs">
-                                <Pill variant="schedule_green" size="xs" className="text-[10px]">LAB</Pill>
-                                <span className="text-muted-foreground">Laboratorio</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs">
-                                <Pill variant="schedule_purple" size="xs" className="text-[10px]">AYU</Pill>
-                                <span className="text-muted-foreground">Ayudantía</span>
-                            </div>
-                        </div>
+                        )}
                     </CollapsibleContent>
                 </Collapsible>
             </div>

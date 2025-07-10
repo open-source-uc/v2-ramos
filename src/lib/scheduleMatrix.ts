@@ -6,10 +6,10 @@ export const TIME_SLOTS = [
   "16:10", "17:30", "18:50", "20:10"
 ];
 
-// Días de la semana
-export const DAYS = ["L", "M", "W", "J", "V"];
+// Días de la semana (incluye sábado)
+export const DAYS = ["L", "M", "W", "J", "V", "S"];
 
-// Mapeo de bloques
+// Mapeo de bloques (L=Lunes, M=Martes, W=Miércoles, J=Jueves, V=Viernes, S=Sábado)
 export const BLOCK_MAP: Record<string, { dia: string, hora: string }> = {
   l1: { dia: "L", hora: "08:20" }, l2: { dia: "L", hora: "09:40" }, l3: { dia: "L", hora: "11:00" },
   l4: { dia: "L", hora: "12:20" }, l5: { dia: "L", hora: "14:50" }, l6: { dia: "L", hora: "16:10" },
@@ -25,7 +25,10 @@ export const BLOCK_MAP: Record<string, { dia: string, hora: string }> = {
   j7: { dia: "J", hora: "17:30" }, j8: { dia: "J", hora: "18:50" }, j9: { dia: "J", hora: "20:10" },
   v1: { dia: "V", hora: "08:20" }, v2: { dia: "V", hora: "09:40" }, v3: { dia: "V", hora: "11:00" },
   v4: { dia: "V", hora: "12:20" }, v5: { dia: "V", hora: "14:50" }, v6: { dia: "V", hora: "16:10" },
-  v7: { dia: "V", hora: "17:30" }, v8: { dia: "V", hora: "18:50" }, v9: { dia: "V", hora: "20:10" }
+  v7: { dia: "V", hora: "17:30" }, v8: { dia: "V", hora: "18:50" }, v9: { dia: "V", hora: "20:10" },
+  s1: { dia: "S", hora: "08:20" }, s2: { dia: "S", hora: "09:40" }, s3: { dia: "S", hora: "11:00" },
+  s4: { dia: "S", hora: "12:20" }, s5: { dia: "S", hora: "14:50" }, s6: { dia: "S", hora: "16:10" },
+  s7: { dia: "S", hora: "17:30" }, s8: { dia: "S", hora: "18:50" }, s9: { dia: "S", hora: "20:10" }
 };
 
 /**
@@ -195,7 +198,7 @@ export function generatePlaceholderSections(courseId: string): CourseSections {
           "l1": ["CLAS", "Aula 180"],
           "w1": ["CLAS", "Aula 180"],
           "v3": ["AYUD", "Aula 107"],
-          "v4": ["LAB", "Lab 303"]
+          "s2": ["LAB", "Lab 303"]
         }
       }
     }
