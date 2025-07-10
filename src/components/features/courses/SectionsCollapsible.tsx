@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CalendarIcon, ChevronDownIcon, PlusIcon } from "@/components/icons/icons";
+import { CalendarIcon, ChevronDownIcon, PlusIcon, BuildingIcon, LinkIcon } from "@/components/icons/icons";
 import { 
   Collapsible, 
   CollapsibleContent, 
@@ -30,6 +30,12 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
 }) {
     const [isInSchedule, setIsInSchedule] = useState(false);
     const courseId = `${courseSigle}-${sectionId}`;
+    
+    // Get section data for NRC and campus
+    const courseData = (cursosJSON as any)[courseSigle];
+    const sectionData = courseData?.sections?.[sectionId];
+    const nrc = sectionData?.nrc || "Sin NRC";
+    const campus = sectionData?.campus || "Sin campus";
     
     useEffect(() => {
         setIsInSchedule(isCourseInSchedule(courseId));
@@ -65,9 +71,9 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                     {isInSchedule ? "En mi horario" : "Agregar"}
                 </Button>
             </div>
-            
+
             {/* Minimalist Schedule Grid */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto mt-4">
                 <div className="min-w-[280px]">
                     {/* Header with days */}
                     <div className={`grid gap-0.5 tablet:gap-1 mb-1 tablet:mb-2`} style={{gridTemplateColumns: `32px repeat(${displayDays.length}, 1fr)`}}>
@@ -127,6 +133,19 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                         }
                         return null;
                     })}
+                </div>
+            </div>
+            
+            {/* Separator */}
+            <div className="border-t border-border mt-3 tablet:mt-4 pt-3 tablet:pt-4">
+                {/* Section Info Pills */}
+                <div className="flex items-center flex-wrap gap-2">
+                    <Pill variant="blue" icon={BuildingIcon} size="sm">
+                        {campus}
+                    </Pill>
+                    <Pill variant="green" icon={LinkIcon} size="sm">
+                        NRC {nrc}
+                    </Pill>
                 </div>
             </div>
         </div>
@@ -242,7 +261,7 @@ export default function SectionsCollapsible({
                                 <ScheduleLegend 
                                     classTypes={availableClassTypes}
                                     compact={true}
-                                    useShortNames={true}
+                                    useShortNames={false}
                                     className="text-xs"
                                 />
                             </div>

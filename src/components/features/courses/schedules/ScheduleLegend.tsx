@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 // Dictionary of class types with short (3 char) and long versions
 export const CLASS_TYPES = {
   'CLAS': {
-    short: 'CLS',
+    short: 'CAT',
     long: 'Cátedra'
   },
   'LAB': {
@@ -98,33 +98,30 @@ export function ScheduleLegend({
     : "grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3";
 
   return (
-    <div className={cn("space-y-3", className)}>
-      <h3 className="text-lg font-semibold">Leyenda</h3>
-      <div className={cn("grid gap-3", gridCols)}>
-        {validTypes.map((type) => {
-          const classInfo = CLASS_TYPES[type as keyof typeof CLASS_TYPES];
-          const colorVariant = CLASS_TYPE_COLORS[type as keyof typeof CLASS_TYPE_COLORS] || 'schedule_blue';
-          const displayName = useShortNames ? classInfo.short : classInfo.long;
-          
-          return (
-            <div 
-              key={type} 
-              className="flex items-center gap-2 text-sm"
+    <div className={cn("grid gap-3", gridCols)}>
+      {validTypes.map((type) => {
+        const classInfo = CLASS_TYPES[type as keyof typeof CLASS_TYPES];
+        const colorVariant = CLASS_TYPE_COLORS[type as keyof typeof CLASS_TYPE_COLORS] || 'schedule_blue';
+        const displayName = useShortNames ? classInfo.short : classInfo.long;
+        
+        return (
+          <div 
+            key={type} 
+            className="flex items-center gap-2 text-sm"
+          >
+            <Pill 
+              variant={colorVariant} 
+              size="xs" 
+              className="text-[10px] tablet:text-xs px-2 py-1 min-w-0"
             >
-              <Pill 
-                variant={colorVariant} 
-                size="xs" 
-                className="text-[10px] tablet:text-xs px-2 py-1 min-w-0"
-              >
-                {classInfo.short}
-              </Pill>
-              <span className="text-muted-foreground">
-                {displayName}
-              </span>
-            </div>
-          );
-        })}
-      </div>
+              {classInfo.short}
+            </Pill>
+            <span className="text-muted-foreground">
+              {displayName}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
