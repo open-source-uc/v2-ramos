@@ -80,7 +80,14 @@ export function Combobox({
             <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className={cn("w-full p-0", contentClassName)}>
+        <PopoverContent 
+          className={cn("w-full p-0", contentClassName)}
+          side="bottom"
+          align="start"
+          sideOffset={4}
+          avoidCollisions={true}
+          collisionPadding={8}
+        >
           <Command>
             <CommandInput placeholder={searchPlaceholder} />
             <CommandList>
