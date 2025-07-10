@@ -85,8 +85,7 @@ export function Combobox({
           side="bottom"
           align="start"
           sideOffset={4}
-          avoidCollisions={true}
-          collisionPadding={8}
+          avoidCollisions={false}
         >
           <Command>
             <CommandInput placeholder={searchPlaceholder} />
