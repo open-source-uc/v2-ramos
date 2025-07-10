@@ -18,10 +18,21 @@ import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon } from "@/components/icons/icons";
+import { SearchIcon, PlusIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
 import { ScheduleLegend } from "./ScheduleLegend";
 import { Search, normalizeSearchText } from "@/components/features/search/SearchInput";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -94,28 +105,42 @@ function CourseSearch({
       />
       
       {isOpen && normalizedSearchTerm && (
-        <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto">
-          {filteredOptions.slice(0, 10).map((option) => (
-            <button
-              key={option.id}
-              onClick={() => handleSelect(option.id)}
-              disabled={selectedCourses.includes(option.id)}
-              className={cn(
-                "w-full px-4 py-3 text-left hover:bg-muted transition-colors",
-                "disabled:opacity-50 disabled:cursor-not-allowed"
-              )}
-            >
-              <div className="flex flex-col gap-1">
-                <span className="font-medium text-foreground">{option.id}</span>
-                <span className="text-sm text-muted-foreground truncate">{option.nombre}</span>
-              </div>
-            </button>
-          ))}
-          {filteredOptions.length === 0 && (
-            <div className="px-4 py-3 text-sm text-muted-foreground">
-              No se encontraron cursos
-            </div>
-          )}
+        <div className="absolute z-10 w-full mt-1">
+          <div className="bg-background border border-border rounded-lg shadow-lg p-0">
+            <Command>
+              <CommandList className="max-h-64">
+                <CommandEmpty className="py-6 text-center text-sm text-muted-foreground">
+                  No se encontraron cursos
+                </CommandEmpty>
+                <CommandGroup>
+                  {filteredOptions.slice(0, 10).map((option) => (
+                    <CommandItem
+                      key={option.id}
+                      value={option.id}
+                      onSelect={() => handleSelect(option.id)}
+                      disabled={selectedCourses.includes(option.id)}
+                      className={cn(
+                        "flex items-center gap-2 px-4 py-3 cursor-pointer",
+                        "hover:bg-muted transition-colors",
+                        "disabled:opacity-50 disabled:cursor-not-allowed"
+                      )}
+                    >
+                      <CheckIcon
+                        className={cn(
+                          "h-4 w-4 shrink-0",
+                          selectedCourses.includes(option.id) ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      <div className="flex flex-col gap-1 min-w-0 flex-1">
+                        <span className="font-medium text-foreground">{option.id}</span>
+                        <span className="text-sm text-muted-foreground truncate">{option.nombre}</span>
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </div>
         </div>
       )}
     </div>
