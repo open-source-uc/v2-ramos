@@ -1,107 +1,228 @@
 /* Markdown content styles */
-.content-markdown {
+.content-markdown,
+.mdxeditor-diff-source-wrapper {
   @apply break-words overflow-hidden;
   word-wrap: break-word;
   hyphens: auto;
 }
 
-.content-markdown h1 {
+.content-markdown h1,
+.mdxeditor-diff-source-wrapper h1 {
   @apply text-xl sm:text-2xl font-bold mb-4 text-foreground break-words;
 }
 
-.content-markdown h2 {
+.content-markdown h2,
+.mdxeditor-diff-source-wrapper h2 {
   @apply text-lg sm:text-xl font-semibold mb-3 mt-6 text-foreground break-words;
 }
 
-.content-markdown h3 {
+.content-markdown h3,
+.mdxeditor-diff-source-wrapper h3 {
   @apply text-base sm:text-lg font-medium mb-2 mt-4 text-foreground break-words;
 }
 
-.content-markdown h4 {
+.content-markdown h4,
+.mdxeditor-diff-source-wrapper h4 {
   @apply text-sm sm:text-base font-medium mb-2 mt-3 text-foreground break-words;
 }
 
-.content-markdown p {
+.content-markdown p,
+.mdxeditor-diff-source-wrapper p {
   @apply mb-4 leading-relaxed text-foreground break-words;
 }
 
-.content-markdown ul, .content-markdown ol {
+.content-markdown ul,
+.content-markdown ol,
+.mdxeditor-diff-source-wrapper ul,
+.mdxeditor-diff-source-wrapper ol {
   @apply mb-4 pl-4 sm:pl-6 text-foreground;
 }
 
-.content-markdown ul {
+.content-markdown ul,
+.mdxeditor-diff-source-wrapper ul {
   @apply list-disc;
 }
 
-.content-markdown ol {
+.content-markdown ol,
+.mdxeditor-diff-source-wrapper ol {
   @apply list-decimal;
 }
 
-.content-markdown li {
+.content-markdown li,
+.mdxeditor-diff-source-wrapper li {
   @apply mb-1 break-words;
 }
 
-.content-markdown li::marker {
+.content-markdown li::marker,
+.mdxeditor-diff-source-wrapper li::marker {
   @apply text-foreground;
 }
 
-.content-markdown a {
+.content-markdown a,
+.mdxeditor-diff-source-wrapper a {
   @apply text-blue hover:underline break-words;
   word-break: break-all;
 }
 
-.content-markdown blockquote {
+.content-markdown blockquote,
+.mdxeditor-diff-source-wrapper blockquote {
   @apply border-l-4 border-blue pl-4 italic text-muted-foreground mb-4 break-words;
 }
 
-.content-markdown code {
+.content-markdown code,
+.mdxeditor-diff-source-wrapper code {
   @apply bg-muted px-1 py-0.5 rounded text-xs sm:text-sm break-all;
   word-break: break-all;
 }
 
-.content-markdown pre {
+.content-markdown pre,
+.mdxeditor-diff-source-wrapper pre {
   @apply bg-muted p-2 sm:p-4 rounded mb-4 overflow-x-auto text-xs sm:text-sm;
   max-width: 100%;
 }
 
-.content-markdown pre code {
+.content-markdown pre code,
+.mdxeditor-diff-source-wrapper pre code {
   @apply bg-transparent p-0;
   word-break: normal;
 }
 
-.content-markdown table {
+.content-markdown table,
+.mdxeditor-diff-source-wrapper table {
   @apply w-full mb-4 border-collapse;
   font-size: 0.875rem;
 }
 
 .content-markdown th,
-.content-markdown td {
+.content-markdown td,
+.mdxeditor-diff-source-wrapper th,
+.mdxeditor-diff-source-wrapper td {
   @apply border border-border px-2 sm:px-4 py-2 text-left break-words;
 }
 
-.content-markdown th {
+.content-markdown th,
+.mdxeditor-diff-source-wrapper th {
   @apply bg-muted font-medium;
 }
 
-.content-markdown img {
+.content-markdown img,
+.mdxeditor-diff-source-wrapper img {
   @apply max-w-full h-auto mb-4 rounded;
 }
 
-.content-markdown strong {
+.content-markdown strong,
+.mdxeditor-diff-source-wrapper strong {
   @apply font-semibold;
 }
 
-.content-markdown em {
+.content-markdown em,
+.mdxeditor-diff-source-wrapper em {
   @apply italic;
 }
 
 /* Responsive table wrapper */
-.content-markdown table {
+.content-markdown table,
+.mdxeditor-diff-source-wrapper table {
   @apply block overflow-x-auto whitespace-nowrap;
 }
 
 @media (min-width: 640px) {
-  .content-markdown table {
+  .content-markdown table,
+  .mdxeditor-diff-source-wrapper table {
     @apply table whitespace-normal;
   }
+}
+
+/* MDX Editor specific fixes */
+.mdxeditor-toolbar svg {
+  max-width: none;
+}
+
+.mdxeditor-toolbar :last-child {
+  position: unset;
+  background-color: var(--background) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.mdxeditor-toolbar :last-child > :first-child [data-state="on"] {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+.mdxeditor-toolbar  > span > :hover {
+  background-color: var(--color-blue-600) !important;
+  color: var(--foreground) !important;
+}
+
+/* MDXEditor toolbar theming */
+.mdxeditor-toolbar {
+  background-color: var(--background) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.mdxeditor-toolbar button {
+  color: var(--foreground) !important;
+}
+
+.mdxeditor-toolbar button:hover {
+  background-color: var(--muted) !important;
+}
+
+.mdxeditor-toolbar button[data-state="on"] {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+.mdxeditor-toolbar svg {
+  color: var(--foreground) !important;
+}
+
+.mdxeditor {
+  color: var(--foreground) !important;
+  background-color: var(--background) !important;
+}
+
+/* Elementos específicos adicionales */
+.mdxeditor-toolbar .mdxeditor-toolbar-separator {
+  background-color: var(--border) !important;
+}
+
+.mdxeditor-toolbar select,
+.mdxeditor-toolbar [role="combobox"] {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.mdxeditor-select-trigger {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.mdxeditor-select-content {
+  background-color: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.mdxeditor-popup {
+  background-color: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.mdxeditor-popup-container {
+  background-color: var(--popover) !important;
+  color: var(--popover-foreground) !important;
+}
+
+/* Fix para hover de elementos de lista */
+.mdxeditor-select-content [role="option"]:hover,
+.mdxeditor-popup [role="option"]:hover,
+.mdxeditor-popup-container [role="option"]:hover {
+  background-color: var(--color-blue-600) !important;
+  color: white !important;
 }

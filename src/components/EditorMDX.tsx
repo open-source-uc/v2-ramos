@@ -98,7 +98,7 @@ export default function EditorMDX() {
         <button
           ref={buttonRef}
           type="button"
-          className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded text-blue-700 font-medium flex items-center gap-1"
+          className="px-2 py-1 text-xs bg-background hover:bg-blue-100 border border-border rounded text-foreground font-medium flex items-center gap-1"
           onClick={() => setIsOpen(!isOpen)}
           title="Insertar Pill"
         >
@@ -113,7 +113,7 @@ export default function EditorMDX() {
                 onClick={() => setIsOpen(false)}
               />
               <div
-                className="bg-white border border-gray-300 rounded shadow-xl min-w-40 p-2"
+                className="bg-background border border-border rounded shadow-xl min-w-40 p-2"
                 style={{
                   zIndex: 9999,
                   position: "absolute",
@@ -124,37 +124,37 @@ export default function EditorMDX() {
                 }}
               >
                 <div className="mb-2">
-                  <label className="block text-xs font-medium mb-1 text-gray-700">
+                  <label className="block text-xs font-medium mb-1 text-foreground">
                     Tamaño:
                   </label>
                   <select
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs mb-2"
+                    className="w-full border border-border rounded px-2 py-1 text-xs mb-2"
                     value={pillSize}
                     onChange={(e) => setPillSize(e.target.value)}
                   >
                     {pillSizes.map((size) => (
-                      <option key={size.value} value={size.value}>
+                      <option key={size.value} value={size.value} className="bg-background border-border">
                         {size.label}
                       </option>
                     ))}
                   </select>
-                  <label className="block text-xs font-medium mb-1 text-gray-700">
+                  <label className="block text-xs font-medium mb-1 text-foreground">
                     Texto:
                   </label>
                   <input
-                    className="w-full border border-gray-300 rounded px-2 py-1 text-xs"
+                    className="w-full border border-border rounded px-2 py-1 text-xs"
                     type="text"
                     placeholder="Texto de la pill"
                     value={pillText}
                     onChange={(e) => setPillText(e.target.value)}
                   />
                 </div>
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-border">
                   {pillVariants.map((pill) => (
                     <button
                       key={pill.variant}
                       type="button"
-                      className="block w-full px-3 py-2 text-xs text-left hover:bg-gray-50 first:rounded-t last:rounded-b"
+                      className="block w-full px-3 py-2 text-foreground text-xs text-left hover:bg-blue-600 first:rounded-t last:rounded-b"
                       onClick={() => {
                         insertPill(pill.variant, pillSize, pillText || "Pill");
                         setIsOpen(false);
@@ -217,10 +217,9 @@ export default function EditorMDX() {
   return (
     <div className="relative w-full h-full space-y-4">
       {/* MDX Editor */}
-      <div className="border border-gray-300 rounded">
+      <div className="border border-border rounded-md">
         <MDXEditor
           ref={ref}
-          className="content-markdown"
           markdown={`# Editor MDX con Componentes UI
 
 ¡Usa tus componentes UI existentes!
