@@ -43,10 +43,18 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
         onAddToSchedule(courseId, success);
     };
 
+    // Check if there are Saturday classes
+    const hasSaturdayClasses = TIME_SLOTS.some((_, timeIndex) => 
+        matrix[timeIndex] && matrix[timeIndex][5] && matrix[timeIndex][5].length > 0 // Saturday is index 5
+    );
+
+    // Always show weekdays (L-V), add Saturday only if it has classes
+    const displayDays = hasSaturdayClasses ? DAYS : DAYS.slice(0, 5); // L-V or L-S
+
     return (
-        <div className="border border-border rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold">Sección {sectionId}</h3>
+        <div className="border border-border rounded-lg p-3 tablet:p-4">
+            <div className="flex items-center justify-between mb-2 tablet:mb-3">
+                <h3 className="text-base tablet:text-lg font-semibold">Sección {sectionId}</h3>
                 <Button
                     variant={isInSchedule ? "outline" : "ghost_blue"}
                     size="xs"
@@ -60,12 +68,12 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
             
             {/* Minimalist Schedule Grid */}
             <div className="overflow-x-auto">
-                <div className="min-w-[320px]">
+                <div className="min-w-[280px]">
                     {/* Header with days */}
-                    <div className="grid grid-cols-7 gap-1 mb-2">
-                        <div className="w-10"></div>
-                        {DAYS.map(day => (
-                            <div key={day} className="text-xs font-medium text-center text-muted-foreground p-1">
+                    <div className={`grid gap-0.5 tablet:gap-1 mb-1 tablet:mb-2`} style={{gridTemplateColumns: `32px repeat(${displayDays.length}, 1fr)`}}>
+                        <div className="w-8 tablet:w-12"></div>
+                        {displayDays.map(day => (
+                            <div key={day} className="text-[10px] tablet:text-xs font-medium text-center text-muted-foreground px-0.5 tablet:px-1 py-1">
                                 {day}
                             </div>
                         ))}
@@ -75,20 +83,24 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                     {TIME_SLOTS.map((time, timeIndex) => {
                         // Always show from 08:20 onwards if there are any classes in this time slot or later
                         const hasClassFromThisTimeOnwards = TIME_SLOTS.slice(timeIndex).some((_, futureIndex) =>
-                            DAYS.some((_, dayIndex) => matrix[timeIndex + futureIndex] && matrix[timeIndex + futureIndex][dayIndex].length > 0)
+                            displayDays.some((day) => {
+                                const dayIndex = DAYS.indexOf(day);
+                                return matrix[timeIndex + futureIndex] && matrix[timeIndex + futureIndex][dayIndex] && matrix[timeIndex + futureIndex][dayIndex].length > 0;
+                            })
                         );
                         
                         // Only show if we're at 08:20 or later AND there are classes from this time onwards
                         if (timeIndex === 0 || hasClassFromThisTimeOnwards) {
                             return (
-                                <div key={time} className="grid grid-cols-7 gap-1 mb-1">
+                                <div key={time} className={`grid gap-0.5 tablet:gap-1 mb-0.5 tablet:mb-1`} style={{gridTemplateColumns: `32px repeat(${displayDays.length}, 1fr)`}}>
                                     {/* Time label */}
-                                    <div className="text-xs text-muted-foreground p-1 text-right w-10">
+                                    <div className="text-[10px] tablet:text-xs text-muted-foreground px-0.5 tablet:px-1 py-1 text-right w-8 tablet:w-12">
                                         {time}
                                     </div>
                                     
                                     {/* Day columns */}
-                                    {DAYS.map((day, dayIndex) => {
+                                    {displayDays.map((day) => {
+                                        const dayIndex = DAYS.indexOf(day);
                                         const classes = matrix[timeIndex][dayIndex];
                                         const hasClass = classes.length > 0;
                                         const classInfo = hasClass ? classes[0] : null;
@@ -96,13 +108,13 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
                                         return (
                                             <div
                                                 key={`${day}-${timeIndex}`}
-                                                className="flex items-center justify-center min-h-[32px] p-1"
+                                                className="flex items-center justify-center min-h-[24px] tablet:min-h-[32px] px-0.5 tablet:px-1 py-1"
                                             >
                                                 {hasClass && classInfo && (
                                                     <Pill
                                                         variant={getClassTypeColor(classInfo.type)}
                                                         size="xs"
-                                                        className="text-[10px] px-1 py-0.5 min-w-0"
+                                                        className="text-[9px] tablet:text-[10px] px-1 py-0.5 min-w-0 leading-none"
                                                     >
                                                         {getClassTypeShort(classInfo.type)}
                                                     </Pill>
@@ -198,7 +210,7 @@ export default function SectionsCollapsible({
                     
                     <CollapsibleContent className="w-full border-t border-border px-6 py-4 bg-muted/20 overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1">
                         {sectionIds.length > 0 ? (
-                            <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                                 {sectionIds.map(sectionId => {
                                     const scheduleMatrix = createScheduleMatrix(
                                         courseSectionsData, 
