@@ -16,6 +16,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [searchValue, setSearchValue] = useState(initialSearchValue)
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
+  const [selectedCampus, setSelectedCampus] = useState<string>("all")
   const [courses, setCourses] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -44,7 +45,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
           for (const line of lines) {
             if (line.trim()) {
               const item = JSON.parse(line);
-              setCourses((prev) => [...prev, item]); // si usaste jq -c '.[]'
+              setCourses((prev) => [...prev, item]);
             }
           }
         }
@@ -54,7 +55,6 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
           const item = JSON.parse(buffer);
           setCourses((prev) => [...prev, item]);
         }
-        console.log("Courses fetched successfully:", courses);
       } catch (error) {
         console.error("Failed to fetch courses as stream:", error);
       } finally {
@@ -72,6 +72,14 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       .map((course) => course.area)
       .filter((area) => area && area !== "Ninguna"); // Filter out null/undefined and "Ninguna"
     return Array.from(new Set(areas)).sort();
+  }, [courses]);
+
+  // Get unique campuses from the data
+  const uniqueCampuses = useMemo(() => {
+    const campuses = courses
+      .flatMap((course) => course.campus || course.campus || []) // Handle both field names
+      .filter((campus) => campus && campus.trim() !== ""); // Filter out empty strings
+    return Array.from(new Set(campuses)).sort();
   }, [courses]);
 
   // Get unique schools from the data
@@ -116,12 +124,19 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       filtered = filtered.filter((course) => course.area === selectedArea);
     }
 
+    if (selectedCampus !== "all") {
+      filtered = filtered.filter((course) => {
+        const campusArray = course.campus || [];
+        return campusArray.includes(selectedCampus);
+      });
+    }
+
     if (selectedSchool !== "all") {
       filtered = filtered.filter((course) => course.school === selectedSchool);
     }
 
     return filtered;
-  }, [courses, selectedArea, selectedSchool]);
+  }, [courses, selectedArea, selectedCampus, selectedSchool]);
 
   const handleSearch = (normalizedValue: string) => {
     setSearchValue(normalizedValue);
@@ -129,6 +144,10 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
 
   const handleAreaChange = (value: string) => {
     setSelectedArea(value);
+  };
+
+  const handleCampusChange = (value: string) => {
+    setSelectedCampus(value);
   };
 
   const handleSchoolChange = (value: string) => {
