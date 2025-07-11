@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import cursosJSON from "2025-1.json";
-import { 
-  createScheduleMatrix, 
-  convertCourseDataToSections, 
-  detectScheduleConflicts, 
-  TIME_SLOTS, 
-  DAYS 
+import { useCoursesSections } from "@/components/hooks/useCoursesSections";
+import {
+  createScheduleMatrix,
+  detectScheduleConflicts,
+  TIME_SLOTS,
+  DAYS,
+  convertCourseDataToSections
 } from "@/lib/scheduleMatrix";
 import { 
   getSavedCourses, 
@@ -44,27 +44,30 @@ interface CourseOption {
   nombre: string;
 }
 
-// Convert course data to sections format
-const courseSectionsData: CourseSections = convertCourseDataToSections(cursosJSON);
-
-// Generate course options for the dropdown
-const courseOptions: CourseOption[] = Object.entries(cursosJSON).flatMap(([sigle, data]) => {
-  const courseData = data as any;
-  return Object.keys(courseData.sections || {}).map((seccion) => ({
-    id: `${sigle}-${seccion}`,
-    sigle,
-    seccion,
-    nombre: courseData.name || "Sin nombre"
-  }));
-});
+// Helper to generate course options from fetched data
+function getCourseOptions(courses: any[]): CourseOption[] {
+  return courses.flatMap((course) => {
+    if (!course.sections) return [];
+    return Object.keys(course.sections).map((seccion) => ({
+      id: `${course.sigle}-${seccion}`,
+      sigle: course.sigle,
+      seccion,
+      nombre: course.name || "Sin nombre"
+    }));
+  });
+}
 
 // Course search and selection component
-function CourseSearch({ 
-  onCourseSelect, 
-  selectedCourses 
-}: { 
+function CourseSearch({
+  onCourseSelect,
+  selectedCourses,
+  courseOptions,
+  isLoading
+}: {
   onCourseSelect: (courseId: string) => void;
   selectedCourses: string[];
+  courseOptions: CourseOption[];
+  isLoading: boolean;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [normalizedSearchTerm, setNormalizedSearchTerm] = useState("");
@@ -73,9 +76,8 @@ function CourseSearch({
   const filteredOptions = courseOptions.filter(option => {
     const normalizedId = normalizeSearchText(option.id);
     const normalizedName = normalizeSearchText(option.nombre);
-    
     return normalizedId.includes(normalizedSearchTerm) ||
-           normalizedName.includes(normalizedSearchTerm);
+      normalizedName.includes(normalizedSearchTerm);
   });
 
   const handleSelect = (courseId: string) => {
@@ -99,8 +101,14 @@ function CourseSearch({
         placeholder="Buscar curso (ej: IIC2214, Matemáticas)"
         initialValue={searchTerm}
       />
-      
-      {isOpen && normalizedSearchTerm && (
+
+      {isLoading ? (
+        <div className="absolute z-10 w-full mt-1">
+          <div className="bg-background border border-border rounded-lg shadow-lg p-0 text-center py-4 text-muted-foreground">
+            Cargando cursos...
+          </div>
+        </div>
+      ) : isOpen && normalizedSearchTerm && (
         <div className="absolute z-10 w-full mt-1">
           <div className="bg-background border border-border rounded-lg shadow-lg p-0">
             <Command>
@@ -243,13 +251,23 @@ function ScheduleGrid({
 export default function ScheduleCreator() {
   const [locked, setLocked] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>(() => getSavedCourses());
+  const hookResult = useCoursesSections();
+  const courses = Array.isArray(hookResult[0]) ? hookResult[0] : [];
+  const isLoading = typeof hookResult[1] === 'boolean' ? hookResult[1] : false;
+
+  // Generate course options from fetched data
+  const courseOptions = getCourseOptions(courses);
 
   // Save to localStorage whenever courses change
   useEffect(() => {
     saveCourses(selectedCourses);
   }, [selectedCourses]);
 
-  // Create schedule matrix from selected courses
+  // Create schedule matrix from selected courses and fetched data
+  // Use convertCourseDataToSections to get the correct structure
+  const courseSectionsData = convertCourseDataToSections(
+    Object.fromEntries(courses.map((c: any) => [c.sigle, c]))
+  );
   const scheduleMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
 
   const handleCourseSelect = (courseId: string) => {
@@ -281,142 +299,144 @@ export default function ScheduleCreator() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Creador de Horarios</h1>
-        <p className="text-muted-foreground">
-          Selecciona los cursos y secciones para crear tu horario personalizado
-        </p>
-      </div>
-
-      {/* Course Search */}
-      <div className="mb-8">
-        <div className="border border-border rounded-lg p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
-              <SearchIcon className="h-5 w-5 fill-current" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">Buscar Cursos</h2>
-              <p className="text-sm text-muted-foreground">
-                Ingresa el código del curso o nombre para agregarlo a tu horario
-              </p>
-            </div>
-          </div>
-          
-          <CourseSearch 
-            onCourseSelect={handleCourseSelect}
-            selectedCourses={selectedCourses}
-          />
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Creador de Horarios</h1>
+          <p className="text-muted-foreground">
+            Selecciona los cursos y secciones para crear tu horario personalizado
+          </p>
         </div>
-      </div>
 
-      {/* Selected Courses */}
-      {selectedCourses.length > 0 && (
+        {/* Course Search */}
         <div className="mb-8">
           <div className="border border-border rounded-lg p-6">
-            <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg">
+                <SearchIcon className="h-5 w-5 fill-current" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold">Buscar Cursos</h2>
+                <p className="text-sm text-muted-foreground">
+                  Ingresa el código del curso o nombre para agregarlo a tu horario
+                </p>
+              </div>
+            </div>
+
+            <CourseSearch
+              onCourseSelect={handleCourseSelect}
+              selectedCourses={selectedCourses}
+              courseOptions={courseOptions}
+              isLoading={isLoading}
+            />
+          </div>
+        </div>
+
+        {/* Selected Courses */}
+        {selectedCourses.length > 0 && (
+          <div className="mb-8">
+            <div className="border border-border rounded-lg p-6">
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
+                    <SelectionIcon className="h-5 w-5 fill-current" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold">Cursos Seleccionados</h2>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedCourses.length} curso{selectedCourses.length > 1 ? 's' : ''} en tu horario
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => setLocked(!locked)}
+                  aria-label={locked ? "Unlock courses" : "Lock courses"}
+                  variant="ghost_border"
+                  size="icon"
+                >
+                  {locked ? (
+                    <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {selectedCourses.map((courseId) => {
+                  const courseInfo = getCourseInfo(courseId);
+                  const colorVariant = getCourseColor(courseId);
+                  return (
+                    <div
+                      key={courseId}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm",
+                        colorVariant === "schedule_blue" && "bg-blue-light text-blue border-blue/20",
+                        colorVariant === "schedule_green" && "bg-green-light text-green border-green/20",
+                        colorVariant === "schedule_pink" && "bg-pink-light text-pink border-pink/20",
+                        colorVariant === "schedule_purple" && "bg-purple-light text-purple border-purple/20",
+                        colorVariant === "schedule_orange" && "bg-orange-light text-orange border-orange/20",
+                        colorVariant === "schedule_red" && "bg-red-light text-red border-red/20"
+                      )}
+                    >
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-medium">{courseInfo.sigle} - {courseInfo.nombre}</span>
+                        <span className="text-xs opacity-80">Sección {courseInfo.seccion}</span>
+                      </div>
+                      {!locked && (
+                        <button
+                          onClick={() => handleCourseRemove(courseId)}
+                          className="text-xs bg-background/50 hover:bg-background/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors flex-shrink-0"
+                          aria-label={`Eliminar ${courseId}`}
+                        >
+                          <CloseIcon className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Schedule Grid */}
+        <div className="mb-8">
+          <div className="border border-border rounded-lg overflow-hidden">
+            <div className="px-6 py-4 bg-muted/50 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-light text-green border border-green/20 rounded-lg">
-                  <SelectionIcon className="h-5 w-5 fill-current" />
+                <div className="p-2 bg-orange-light text-orange border border-orange/20 rounded-lg">
+                  <CalendarIcon className="h-5 w-5 fill-current" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold">Cursos Seleccionados</h2>
+                  <h2 className="text-lg font-semibold">Tu Horario</h2>
                   <p className="text-sm text-muted-foreground">
-                    {selectedCourses.length} curso{selectedCourses.length > 1 ? 's' : ''} en tu horario
+                    Visualiza tu horario semanal con todos los cursos seleccionados
                   </p>
                 </div>
               </div>
-              <Button
-                onClick={() => setLocked(!locked)}
-                aria-label={locked ? "Unlock courses" : "Lock courses"}
-                variant="ghost_border"
-                size="icon"
-              >
-                {locked ? (
-                  <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
-                ) : (
-                  <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
-                )}
-              </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {selectedCourses.map((courseId) => {
-                const courseInfo = getCourseInfo(courseId);
-                const colorVariant = getCourseColor(courseId);
-                return (
-                  <div
-                    key={courseId}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm",
-                      colorVariant === "schedule_blue" && "bg-blue-light text-blue border-blue/20",
-                      colorVariant === "schedule_green" && "bg-green-light text-green border-green/20",
-                      colorVariant === "schedule_pink" && "bg-pink-light text-pink border-pink/20",
-                      colorVariant === "schedule_purple" && "bg-purple-light text-purple border-purple/20",
-                      colorVariant === "schedule_orange" && "bg-orange-light text-orange border-orange/20",
-                      colorVariant === "schedule_red" && "bg-red-light text-red border-red/20"
-                    )}
-                  >
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-medium">{courseInfo.sigle} - {courseInfo.nombre}</span>
-                      <span className="text-xs opacity-80">Sección {courseInfo.seccion}</span>
-                    </div>
-                    {!locked && (
-                      <button
-                        onClick={() => handleCourseRemove(courseId)}
-                        className="text-xs bg-background/50 hover:bg-background/80 rounded-full w-5 h-5 flex items-center justify-center transition-colors flex-shrink-0"
-                        aria-label={`Eliminar ${courseId}`}
-                      >
-                        <CloseIcon className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Schedule Grid */}
-      <div className="mb-8">
-        <div className="border border-border rounded-lg overflow-hidden">
-          <div className="px-6 py-4 bg-muted/50 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-light text-orange border border-orange/20 rounded-lg">
-                <CalendarIcon className="h-5 w-5 fill-current" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold">Tu Horario</h2>
-                <p className="text-sm text-muted-foreground">
-                  Visualiza tu horario semanal con todos los cursos seleccionados
-                </p>
-              </div>
+            <div className="p-6">
+              {selectedCourses.length > 0 ? (
+                <ScheduleGrid
+                  matrix={scheduleMatrix}
+                  selectedCourses={selectedCourses}
+                />
+              ) : (
+                <div className="text-center py-12">
+                  <div className="mb-4">
+                    <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+                  </div>
+                  <p className="text-lg font-medium text-muted-foreground mb-2">
+                    No hay cursos seleccionados
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Agrega cursos usando el buscador de arriba para ver tu horario
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-          
-          <div className="p-6">
-            {selectedCourses.length > 0 ? (
-              <ScheduleGrid 
-                matrix={scheduleMatrix}
-                selectedCourses={selectedCourses}
-              />
-            ) : (
-              <div className="text-center py-12">
-                <div className="mb-4">
-                  <CalendarIcon className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
-                </div>
-                <p className="text-lg font-medium text-muted-foreground mb-2">
-                  No hay cursos seleccionados
-                </p>
-                <p className="text-sm text-muted-foreground mb-6">
-                  Agrega cursos usando el buscador de arriba para ver tu horario
-                </p>
-              </div>
-            )}
-          </div>
         </div>
-      </div>
 
       </div>
       <Toaster />
