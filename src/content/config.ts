@@ -21,7 +21,7 @@ const resources = defineCollection({
 
 const blogs = defineCollection({
     schema: resourcesSchema.extend({
-        tags: z.array(z.string())
+        tags: z.array(z.string()).optional()
     }),
 })
 
@@ -48,7 +48,7 @@ const recommendations = defineCollection({
         period: z.string(),
         faculty: z.string(),
         qualification: z.number().min(1).max(7),
-        tags: z.array(z.string()),
+        tags: z.array(z.string()).optional(),
         resume: z.string(),
     })
 })

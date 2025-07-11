@@ -1,6 +1,7 @@
 ---
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
+import TagSelector from "@/components/ui/TagSelector.astro";
 
 let message = "";
 let messageType = "";
@@ -29,55 +30,8 @@ if (Astro.request.method === "POST") {
   }
 }
 
-const schools = [
-  "Actividades Universitarias",
-  "Actuación",
-  "Agronomía Y Sistemas Naturales",
-  "Antropología",
-  "Arquitectura",
-  "Arte",
-  "Astrofísica",
-  "Bachillerato Inicia",
-  "CARA",
-  "Ciencia Política",
-  "Ciencias Biológicas",
-  "College",
-  "Comunicaciones",
-  "Construcción Civil",
-  "Cursos Deportivos",
-  "Cursos y Test de Inglés",
-  "Derecho",
-  "Desarrollo Sustentable",
-  "Diseño",
-  "Economía Y Administración",
-  "Educación",
-  "Escuela Ciencias De La Salud",
-  "Escuela De Enfermería",
-  "Escuela De Gobierno",
-  "Escuela De Graduados",
-  "Escuela De Medicina",
-  "Escuela De Odontología",
-  "Estudios Urbanos",
-  "Estética",
-  "Filosofía",
-  "Física",
-  "Geografía",
-  "Historia",
-  "Ing Matemática Y Computacional",
-  "Ingeniería",
-  "Ingeniería Biológica Y Médica",
-  "Instituto De Éticas Aplicadas",
-  "Letras",
-  "Matemáticas",
-  "Medicina Veterinaria",
-  "Música",
-  "Psicología",
-  "Química",
-  "Sociología",
-  "Teología",
-  "Trabajo Social",
-  "Villarrica",
-];
+const blogResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
+const blogData = (await blogResponse.json()) as { blogTags: string[] };
 ---
 
 <Layout>
@@ -215,6 +169,18 @@ const schools = [
                 />
               </div>
               <div class="space-y-2 min-w-0">
+                <label
+                  >Nombre de la iniciativa: <span class="text-red-500">*</span
+                  ></label
+                >
+                <input
+                  name="name"
+                  placeholder="Ingrese el nombre de la iniciativa"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+              <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">
                   Tiempo de lectura <span class="text-red-500">*</span>
                 </label>
@@ -236,6 +202,12 @@ const schools = [
                   </span>
                 </div>
               </div>
+              <TagSelector
+                name="tags"
+                label="Tags"
+                tags={blogData.blogTags}
+                placeholder="Selecciona las etiquetas..."
+              />
             </div>
 
             <!-- Resumen del blog - Ocupa toda la fila -->
@@ -244,7 +216,7 @@ const schools = [
                 Resumen del blog <span class="text-red-500">*</span>
               </label>
               <textarea
-                name="description"
+                name="resume"
                 placeholder="Breve descripción del contenido del blog. Explica de qué trata tu artículo y qué pueden esperar los lectores."
                 rows="4"
                 class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 resize-none"

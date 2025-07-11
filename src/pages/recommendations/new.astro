@@ -16,10 +16,11 @@ if (Astro.request.method === "POST") {
     });
 
     if (response.ok) {
-      message = "Blog creado exitosamente";
+      message = "Recomendación creada exitosamente";
       messageType = "success";
     } else {
-      message = "Error al crear el blog. Por favor, intenta nuevamente.";
+      message =
+        "Error al crear la recomendación. Por favor, intenta nuevamente.";
       messageType = "error";
     }
   } catch (error) {
@@ -29,55 +30,9 @@ if (Astro.request.method === "POST") {
   }
 }
 
-const schools = [
-  "Actividades Universitarias",
-  "Actuación",
-  "Agronomía Y Sistemas Naturales",
-  "Antropología",
-  "Arquitectura",
-  "Arte",
-  "Astrofísica",
-  "Bachillerato Inicia",
-  "CARA",
-  "Ciencia Política",
-  "Ciencias Biológicas",
-  "College",
-  "Comunicaciones",
-  "Construcción Civil",
-  "Cursos Deportivos",
-  "Cursos y Test de Inglés",
-  "Derecho",
-  "Desarrollo Sustentable",
-  "Diseño",
-  "Economía Y Administración",
-  "Educación",
-  "Escuela Ciencias De La Salud",
-  "Escuela De Enfermería",
-  "Escuela De Gobierno",
-  "Escuela De Graduados",
-  "Escuela De Medicina",
-  "Escuela De Odontología",
-  "Estudios Urbanos",
-  "Estética",
-  "Filosofía",
-  "Física",
-  "Geografía",
-  "Historia",
-  "Ing Matemática Y Computacional",
-  "Ingeniería",
-  "Ingeniería Biológica Y Médica",
-  "Instituto De Éticas Aplicadas",
-  "Letras",
-  "Matemáticas",
-  "Medicina Veterinaria",
-  "Música",
-  "Psicología",
-  "Química",
-  "Sociología",
-  "Teología",
-  "Trabajo Social",
-  "Villarrica",
-];
+const blogsResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
+const blogsData = (await blogsResponse.json()) as { schools?: string[] };
+const schools = blogsData.schools || [];
 ---
 
 <Layout>
@@ -197,19 +152,31 @@ const schools = [
             id="form-title"
             class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6"
           >
-            Información del blog
+            Información de la recomendación
           </h2>
 
           <form class="space-y-4 sm:space-y-6 min-w-0" method="POST">
-            <!-- Información básica del blog -->
+            <!-- Información básica de la recomendación -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">
-                  Título del blog <span class="text-red-500">*</span>
+                  Título de la recomendación <span class="text-red-500">*</span>
                 </label>
                 <input
                   name="title"
-                  placeholder="Ingrese el título del blog"
+                  placeholder="Ingrese el título de la recomendación"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+              <div class="space-y-2 min-w-0">
+                <label
+                  >Nombre de la iniciativa: <span class="text-red-500">*</span
+                  ></label
+                >
+                <input
+                  name="initiative"
+                  placeholder="Ingrese el nombre de la iniciativa"
                   class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                   required
                 />
@@ -282,14 +249,14 @@ const schools = [
               </div>
             </div>
 
-            <!-- Resumen del blog - Ocupa toda la fila -->
+            <!-- Resumen de la recomendación - Ocupa toda la fila -->
             <div class="space-y-2 min-w-0">
               <label class="text-sm font-medium text-foreground block">
-                Resumen del blog <span class="text-red-500">*</span>
+                Resumen de la recomendación <span class="text-red-500">*</span>
               </label>
               <textarea
                 name="resume"
-                placeholder="Breve descripción del contenido del blog. Explica de qué trata tu artículo y qué pueden esperar los lectores."
+                placeholder="Breve descripción del contenido de la recomendación. Explica de qué trata tu artículo y qué pueden esperar los lectores."
                 rows="4"
                 class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 resize-none"
                 required></textarea>
@@ -299,7 +266,9 @@ const schools = [
             <div class="border-t border-border pt-4 sm:pt-6">
               <div class="space-y-2 mb-4">
                 <label class="text-sm font-medium text-foreground block">
-                  Contenido del blog <span class="text-red-500">*</span>
+                  Contenido de la recomendación <span class="text-red-500"
+                    >*</span
+                  >
                 </label>
                 <p class="text-xs sm:text-sm text-muted-foreground">
                   Utiliza el editor para crear contenido enriquecido con
@@ -310,7 +279,10 @@ const schools = [
 
             <!-- Editor MDX -->
             <div class="min-w-0">
-              <EditorMDX submitText="Publicar Blog" client:only="react" />
+              <EditorMDX
+                submitText="Publicar Recomendación"
+                client:only="react"
+              />
             </div>
             <input
               type="text"
