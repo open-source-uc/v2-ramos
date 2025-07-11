@@ -28,6 +28,56 @@ if (Astro.request.method === "POST") {
     messageType = "error";
   }
 }
+
+const schools = [
+  "Actividades Universitarias",
+  "Actuación",
+  "Agronomía Y Sistemas Naturales",
+  "Antropología",
+  "Arquitectura",
+  "Arte",
+  "Astrofísica",
+  "Bachillerato Inicia",
+  "CARA",
+  "Ciencia Política",
+  "Ciencias Biológicas",
+  "College",
+  "Comunicaciones",
+  "Construcción Civil",
+  "Cursos Deportivos",
+  "Cursos y Test de Inglés",
+  "Derecho",
+  "Desarrollo Sustentable",
+  "Diseño",
+  "Economía Y Administración",
+  "Educación",
+  "Escuela Ciencias De La Salud",
+  "Escuela De Enfermería",
+  "Escuela De Gobierno",
+  "Escuela De Graduados",
+  "Escuela De Medicina",
+  "Escuela De Odontología",
+  "Estudios Urbanos",
+  "Estética",
+  "Filosofía",
+  "Física",
+  "Geografía",
+  "Historia",
+  "Ing Matemática Y Computacional",
+  "Ingeniería",
+  "Ingeniería Biológica Y Médica",
+  "Instituto De Éticas Aplicadas",
+  "Letras",
+  "Matemáticas",
+  "Medicina Veterinaria",
+  "Música",
+  "Psicología",
+  "Química",
+  "Sociología",
+  "Teología",
+  "Trabajo Social",
+  "Villarrica",
+];
 ---
 
 <Layout>
@@ -45,7 +95,7 @@ if (Astro.request.method === "POST") {
             id="page-title"
             class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground mb-2 break-words"
           >
-            Crear Nuevo Blog
+            Crear Una Nueva Recomendación
           </h1>
           <p class="text-sm sm:text-base lg:text-lg text-muted-foreground">
             Comparte tus experiencias y conocimientos con la comunidad
@@ -152,7 +202,7 @@ if (Astro.request.method === "POST") {
 
           <form class="space-y-4 sm:space-y-6 min-w-0" method="POST">
             <!-- Información básica del blog -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 min-w-0">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">
                   Título del blog <span class="text-red-500">*</span>
@@ -164,21 +214,6 @@ if (Astro.request.method === "POST") {
                   required
                 />
               </div>
-
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Facultad <span class="text-red-500">*</span>
-                </label>
-                <input
-                  name="faculty"
-                  placeholder="Ej. Ingeniería, Medicina, etc."
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 min-w-0">
               <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">
                   Tiempo de lectura <span class="text-red-500">*</span>
@@ -201,6 +236,50 @@ if (Astro.request.method === "POST") {
                   </span>
                 </div>
               </div>
+              <div class="space-y-2 min-w-0">
+                <label class="text-sm font-medium text-foreground block">
+                  Facultad <span class="text-red-500">*</span>
+                </label>
+                <select
+                  name="faculty"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="" disabled selected
+                    >Seleccione una facultad</option
+                  >
+                  {
+                    schools.map((school) => (
+                      <option value={school}>{school}</option>
+                    ))
+                  }
+                </select>
+              </div>
+              <div class="space-y-2 min-w-0">
+                <label class="text-sm font-medium text-foreground block">
+                  Código del curso <span class="text-red-500">*</span>
+                </label>
+                <input
+                  name="code"
+                  placeholder="Ingrese el código del curso"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
+              <div class="space-y-2 min-w-0">
+                <label class="text-sm font-medium text-foreground block"
+                  >Clasificación <span class="text-red-500">*</span></label
+                >
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  name="qualification"
+                  placeholder="Ingrese la clasificación del curso (1-5)"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                />
+              </div>
             </div>
 
             <!-- Resumen del blog - Ocupa toda la fila -->
@@ -209,7 +288,7 @@ if (Astro.request.method === "POST") {
                 Resumen del blog <span class="text-red-500">*</span>
               </label>
               <textarea
-                name="description"
+                name="resume"
                 placeholder="Breve descripción del contenido del blog. Explica de qué trata tu artículo y qué pueden esperar los lectores."
                 rows="4"
                 class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 resize-none"
@@ -233,42 +312,15 @@ if (Astro.request.method === "POST") {
             <div class="min-w-0">
               <EditorMDX submitText="Publicar Blog" client:only="react" />
             </div>
-            <input type="text" value="blogs" name="contentType" hidden />
+            <input
+              type="text"
+              value="recommendations"
+              name="contentType"
+              hidden
+            />
           </form>
         </div>
       </article>
     </section>
-
-    <!-- Estado del formulario -->
-    {
-      message && (
-        <section
-          class={`mt-6 border rounded-md p-4 sm:p-6 ${
-            messageType === "success"
-              ? "border-green-200 bg-green-50"
-              : "border-red-200 bg-red-50"
-          }`}
-          role="alert"
-          aria-live="polite"
-        >
-          <div class="flex items-center gap-2">
-            <span
-              class={`flex-shrink-0 ${
-                messageType === "success" ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {messageType === "success" ? "✅" : "❌"}
-            </span>
-            <p
-              class={`text-xs sm:text-sm font-medium ${
-                messageType === "success" ? "text-green-800" : "text-red-800"
-              }`}
-            >
-              {message}
-            </p>
-          </div>
-        </section>
-      )
-    }
   </main>
 </Layout>

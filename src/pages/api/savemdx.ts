@@ -8,16 +8,16 @@ export const POST: APIRoute = async ({ request }) => {
     name: "PlaceHolder User"
   }
   const contentType = formData.get("contentType");
-  const faculty = formData.get("faculty");
   const content = formData.get("content");
   const tags = ["tag1","tag2"];
   // Blog form
   const title = formData?.get("title");
   const readtime = formData?.get("readtime");
   const description = formData?.get("description");
-
+  
   // Recommendation form
   const code = formData?.get("code");
+  const faculty = formData?.get("faculty");
   const qualification = formData?.get("qualification");
 
   if (!content ) {
@@ -35,7 +35,6 @@ qualification: ${qualification}`
 `title: "${title}"
 readtime: ${readtime}
 description: "${description}"
-faculty: "${faculty}"
 author:
   name: "${user.name}"
   title: "${user.name}"`
