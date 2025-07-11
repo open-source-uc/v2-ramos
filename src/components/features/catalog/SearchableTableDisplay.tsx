@@ -7,7 +7,6 @@ import { DataTable } from "../../table/data-table"
 import { Combobox, type ComboboxOption } from "../../ui/combobox"
 import { Skeleton } from "../../ui/skeleton"
 import { cn } from "@/lib/utils"
-import type { InferEntrySchema, RenderedContent } from "astro:content"
 
 interface SearchableTableDisplayProps {
   initialSearchValue?: string;
