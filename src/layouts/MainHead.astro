@@ -15,6 +15,28 @@ const { title, description, image, frontmatter, robots } = Astro.props;
   <meta name="description" content={description} />
 
   <ClientRouter />
+  
+  <!-- Theme initialization script to prevent flash of light mode -->
+  <script>
+    (function() {
+      // Check user preferences immediately
+      const savedDarkTheme = localStorage.getItem("dark-theme");
+      const savedHighContrast = localStorage.getItem("high-contrast");
+      const prefersDarkTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersHighContrast = window.matchMedia("(prefers-contrast: high)").matches;
+      
+      // Apply dark theme if needed
+      if (savedDarkTheme === "true" || (savedDarkTheme === null && prefersDarkTheme)) {
+        document.documentElement.classList.add("dark");
+      }
+      
+      // Apply high contrast if needed
+      if (savedHighContrast === "true" || (savedHighContrast === null && prefersHighContrast)) {
+        document.documentElement.classList.add("high-contrast");
+      }
+    })();
+  </script>
+  
   <!-- Cloudflare Web Analytics -->
   <script
     defer

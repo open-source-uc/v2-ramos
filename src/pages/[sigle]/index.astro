@@ -1,5 +1,5 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames, getActualCampusesForCourse } from "../../lib/server/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../lib/server/courses";
 import Layout from "../../layouts/Layout.astro";
 import { getUserDataByToken } from "../../lib/server/auth";
 import {
@@ -20,7 +20,6 @@ import {
     ChevronDownIcon,
     CloseIcon,
     CheckIcon,
-    LocationIcon,
     LanguageIcon
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
@@ -46,6 +45,7 @@ import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
+import CourseCampuses from "@/components/features/courses/CourseCampuses";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -58,9 +58,6 @@ const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
-
-// Get actual campuses from sections data
-const actualCampuses = await getActualCampusesForCourse(sigle);
 
 // Calculate statistics
 const sentiment = c
@@ -151,15 +148,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                             </Pill>
                         )
                 }
-                                {
-                    actualCampuses &&
-                        actualCampuses.length > 0 && 
-                        actualCampuses.map((campus) => (
-                            <Pill key={campus} variant="blue" icon={LocationIcon}>
-                                {campus}
-                            </Pill>
-                        ))
-                }
+                <CourseCampuses courseSigle={course.sigle} client:load />
                 {
                     course.area &&
                         course.area !== "" && (
