@@ -1,5 +1,7 @@
 import type { CourseReview, CourseSummary, PrerequisiteGroup } from "@/types";
 import { parsePrerequisites } from "@/lib/courseReq";
+import fs from "fs";
+import path from "path";
 
 export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
   const result = await locals.runtime.env.DB.prepare(`
@@ -164,3 +166,44 @@ function addNamesToStructure(group: PrerequisiteGroup, courseNames: Map<string, 
   
   return updatedGroup;
 }
+
+/**
+ * Obtiene los campus reales donde se imparte un curso basado en las secciones disponibles
+ * @param sigle Sigla del curso
+ * @returns Array de campus donde el curso tiene secciones disponibles
+ */
+export const getActualCampusesForCourse = async (sigle: string): Promise<string[]> => {
+  try {
+    const ndjsonPath = path.join(process.cwd(), "migration", "ndjson", "2025-1.ndjson");
+    
+    if (!fs.existsSync(ndjsonPath)) {
+      return [];
+    }
+
+    const data = fs.readFileSync(ndjsonPath, "utf-8");
+    const lines = data.trim().split("\n");
+    
+    for (const line of lines) {
+      if (line.trim()) {
+        const courseData = JSON.parse(line);
+        if (courseData.sigle === sigle && courseData.sections) {
+          const campuses = new Set<string>();
+          
+          // Extract campuses from all sections
+          Object.values(courseData.sections).forEach((section: any) => {
+            if (section.campus) {
+              campuses.add(section.campus);
+            }
+          });
+          
+          return Array.from(campuses);
+        }
+      }
+    }
+    
+    return [];
+  } catch (error) {
+    console.error("Error reading sections data:", error);
+    return [];
+  }
+};

@@ -238,7 +238,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                         </Pill>
                       ))
                   ) : (
-                    <Pill variant="blue" size="sm" icon={LocationIcon}>No campus</Pill>
+                    <Pill variant="red" size="sm" icon={LocationIcon}>No campus</Pill>
                   )}
                 </div>
 

@@ -202,6 +202,29 @@ export default function SectionsCollapsible({
         setRefreshKey(prev => prev + 1);
     };
 
+    // If no sections available and not loading, show non-collapsible message
+    if (!isPending && sectionIds.length === 0) {
+        return (
+            <section className={`${className}`}>
+                <div className="border border-border rounded-md p-6 overflow-hidden">
+                    <div className="flex items-center gap-3 text-muted-foreground">
+                        <div className="p-2 bg-muted text-muted-foreground border border-border rounded-lg flex-shrink-0">
+                            <CalendarIcon className="h-5 w-5 fill-current" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                            <h2 className="text-lg font-semibold">
+                                Secciones
+                            </h2>
+                            <p className="text-sm">
+                                No hay secciones disponibles para este semestre
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <>
             <section className={`${className}`}>

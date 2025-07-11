@@ -1,5 +1,5 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../lib/server/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames, getActualCampusesForCourse } from "../../lib/server/courses";
 import Layout from "../../layouts/Layout.astro";
 import { getUserDataByToken } from "../../lib/server/auth";
 import {
@@ -58,6 +58,9 @@ const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
+
+// Get actual campuses from sections data
+const actualCampuses = await getActualCampusesForCourse(sigle);
 
 // Calculate statistics
 const sentiment = c
@@ -149,9 +152,9 @@ const reportSuccessMessage = reportResult?.data?.message;
                         )
                 }
                                 {
-                    course.campus &&
-                        course.campus.length > 0 && 
-                        course.campus.map((campus) => (
+                    actualCampuses &&
+                        actualCampuses.length > 0 && 
+                        actualCampuses.map((campus) => (
                             <Pill key={campus} variant="blue" icon={LocationIcon}>
                                 {campus}
                             </Pill>
