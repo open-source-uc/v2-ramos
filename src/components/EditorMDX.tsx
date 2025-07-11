@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import {
   MDXEditor,
   UndoRedo,
@@ -23,7 +22,6 @@ import {
   // Para componentes personalizados
   directivesPlugin,
   AdmonitionDirectiveDescriptor,
-  InsertAdmonition,
   // Para JSX components
   jsxPlugin,
   type JsxComponentDescriptor,
@@ -39,6 +37,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@radix-ui/react-select";
+
+// Importar componentes del editor
+import { ComponentDropdownMenu, PillMenuContent } from "@/components/editor";
 
 interface EditorMDXProps {
   // Contenido inicial del editor
@@ -133,20 +134,6 @@ Aquí tienes un <Pill variant="orange" size="sm">pill naranja</Pill> en medio de
 
 También puedes combinar **texto en negrita** con <Pill variant="pink" size="md">pills rosas</Pill> para crear contenido más dinámico.
 
-## Admoniciones
-
-:::note
-Esta es una nota informativa. Usa admoniciones para destacar información importante.
-:::
-
-:::tip
-¡Consejo útil! Las admoniciones son perfectas para dar consejos o sugerencias.
-:::
-
-:::danger
-¡Peligro! Esta información requiere atención especial.
-:::
-
 `;
 
   // Estado para mantener el contenido actualizado del editor
@@ -171,166 +158,15 @@ Esta es una nota informativa. Usa admoniciones para destacar información import
     onContentChange?.(emptyContent);
   }, [onContentChange]);
 
-  // Funciones para insertar componentes
-  const insertPill = (
-    variant: string = "blue",
-    size: string = "sm",
-    text: string = "Pill"
-  ) => {
-    const pillMarkdown = `<Pill variant="${variant}" size="${size}">${text}</Pill>`;
-    ref.current?.insertMarkdown(pillMarkdown);
-  };
+  // Funciones para insertar componentes - ahora se manejan en los componentes específicos
+  // (mantenido por compatibilidad, pero se puede remover)
 
-  // Componente de menú desplegable para Pills
-  const PillDropdownMenu = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
-    const buttonRef = React.useRef<HTMLButtonElement>(null);
-    const [menuPos, setMenuPos] = React.useState<{ top: number; left: number }>(
-      {
-        top: 0,
-        left: 0,
-      }
-    );
-    const [pillSize, setPillSize] = React.useState<string>("sm");
-    const [pillText, setPillText] = React.useState<string>("");
-
-    const pillVariants = [
-      { variant: "blue", label: "🔵 Azul" },
-      { variant: "green", label: "🟢 Verde" },
-      { variant: "red", label: "🔴 Rojo" },
-      { variant: "purple", label: "🟣 Morado" },
-      { variant: "orange", label: "🟠 Naranja" },
-      { variant: "pink", label: "🩷 Rosa" },
-    ];
-    const pillSizes = [
-      { value: "sm", label: "Pequeño (sm)" },
-      { value: "md", label: "Mediano (md)" },
-      { value: "lg", label: "Grande (lg)" },
-      { value: "xl", label: "Extra grande (xl)" },
-    ];
-
-    React.useEffect(() => {
-      if (isOpen && buttonRef.current) {
-        const rect = buttonRef.current.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const menuWidth = 200; // Ancho aproximado del menú
-        const menuHeight = 300; // Alto aproximado del menú
-
-        let left = rect.left + window.scrollX;
-        let top = rect.bottom + window.scrollY;
-
-        // Ajustar horizontalmente si se sale de la pantalla
-        if (left + menuWidth > viewportWidth) {
-          left = viewportWidth - menuWidth - 16; // 16px de margen
-        }
-        if (left < 16) {
-          left = 16; // Margen mínimo
-        }
-
-        // Ajustar verticalmente si se sale de la pantalla
-        if (top + menuHeight > viewportHeight + window.scrollY) {
-          top = rect.top + window.scrollY - menuHeight - 8; // Mostrar arriba del botón
-        }
-
-        setMenuPos({ top, left });
-      }
-    }, [isOpen]);
-
-    const handleCloseMenu = () => {
-      setIsOpen(false);
-    };
-
-    const handleInsertPill = (variant: string) => {
-      insertPill(variant, pillSize, pillText || "Pill");
-      setIsOpen(false);
-      setPillText("");
-    };
-
-    return (
-      <>
-        <Button
-          ref={buttonRef}
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-xs font-medium flex items-center gap-1 min-w-0 flex-shrink-0"
-        >
-          <span className="hidden sm:inline">💊 Pills ▼</span>
-          <span className="sm:hidden">💊</span>
-        </Button>
-        {isOpen &&
-          ReactDOM.createPortal(
-            <>
-              <div
-                className="fixed inset-0"
-                style={{ zIndex: 9998 }}
-                onClick={handleCloseMenu}
-              />
-              <div
-                style={{
-                  zIndex: 9999,
-                  position: "absolute",
-                  top: menuPos.top,
-                  left: menuPos.left,
-                  boxShadow:
-                    "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                }}
-              >
-                <Card className="min-w-40 max-w-xs w-full p-3 mx-2">
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-foreground">
-                        Tamaño:
-                      </label>
-                      <select
-                        className="w-full border border-border rounded px-2 py-1 text-xs bg-background"
-                        value={pillSize}
-                        onChange={(e) => setPillSize(e.target.value)}
-                      >
-                        {pillSizes.map((size) => (
-                          <option key={size.value} value={size.value}>
-                            {size.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1 text-foreground">
-                        Texto:
-                      </label>
-                      <Input
-                        inputSize="sm"
-                        placeholder="Texto de la pill"
-                        value={pillText}
-                        onChange={(e) => setPillText(e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1 max-h-48 overflow-y-auto">
-                    {pillVariants.map((pill) => (
-                      <Button
-                        key={pill.variant}
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start text-xs"
-                        onClick={() => handleInsertPill(pill.variant)}
-                      >
-                        {pill.label}
-                      </Button>
-                    ))}
-                  </div>
-                </Card>
-              </div>
-            </>,
-            document.body
-          )}
-      </>
-    );
-  };
+  // Componentes de menú desplegable para insertar componentes
+  const PillDropdownMenu = () => (
+    <ComponentDropdownMenu icon="💊" label="Pills">
+      <PillMenuContent editorRef={ref} />
+    </ComponentDropdownMenu>
+  );
 
   // Usar tus componentes UI existentes
   const jsxComponentDescriptors: JsxComponentDescriptor[] = [
@@ -427,10 +263,6 @@ Esta es una nota informativa. Usa admoniciones para destacar información import
 
                   {/* Menús desplegables para componentes */}
                   <PillDropdownMenu />
-
-                  <Separator />
-
-                  <InsertAdmonition />
                 </>
               ),
             }),

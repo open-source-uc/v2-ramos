@@ -43,6 +43,9 @@ author:
 tags:
 ${tags.map(tag => `  - ${tag}`).join("\n")}
 ---
+
+import { Pill } from "@/components/ui/pill";
+
 ${content}
 `
   const filePath = path.join(`src/content/${contentType}`, `${title || code}-${user.name.replaceAll(" ","")}.mdx`);
