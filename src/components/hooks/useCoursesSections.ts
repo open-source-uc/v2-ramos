@@ -7,7 +7,7 @@ type Course = {
 
 const CACHE_KEY = "coursesSectionsCache";
 
-export function useCoursesSections() {
+export function useCoursesSections(): [Course[], boolean] {
     const [courses, setCourses] = useState<Course[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 

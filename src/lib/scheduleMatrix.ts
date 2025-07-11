@@ -170,6 +170,30 @@ export function convertCourseDataToSections(coursesJSON: any): CourseSections {
 }
 
 /**
+ * Convierte los datos NDJSON de cursos al formato esperado por la utilidad de matriz de horarios
+ * @param coursesArray - Array de cursos desde NDJSON
+ * @returns Datos de secciones de cursos formateados
+ */
+export function convertNDJSONToSections(coursesArray: any[]): CourseSections {
+  const sections: CourseSections = {};
+  
+  for (const course of coursesArray) {
+    if (course.sigle && course.sections) {
+      sections[course.sigle] = {};
+      
+      for (const [sectionId, sectionData] of Object.entries(course.sections)) {
+        const section = sectionData as any;
+        sections[course.sigle][sectionId] = {
+          schedule: section.schedule || {}
+        };
+      }
+    }
+  }
+  
+  return sections;
+}
+
+/**
  * Genera datos de secciones de muestra para un curso (placeholder)
  * @param courseId - ID del curso
  * @returns Datos de secciones con horarios de ejemplo

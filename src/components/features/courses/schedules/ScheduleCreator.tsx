@@ -5,7 +5,7 @@ import {
   detectScheduleConflicts,
   TIME_SLOTS,
   DAYS,
-  convertCourseDataToSections
+  convertNDJSONToSections
 } from "@/lib/scheduleMatrix";
 import { 
   getSavedCourses, 
@@ -16,7 +16,6 @@ import {
 import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
@@ -264,10 +263,8 @@ export default function ScheduleCreator() {
   }, [selectedCourses]);
 
   // Create schedule matrix from selected courses and fetched data
-  // Use convertCourseDataToSections to get the correct structure
-  const courseSectionsData = convertCourseDataToSections(
-    Object.fromEntries(courses.map((c: any) => [c.sigle, c]))
-  );
+  // Use convertNDJSONToSections to get the correct structure
+  const courseSectionsData = convertNDJSONToSections(courses);
   const scheduleMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
 
   const handleCourseSelect = (courseId: string) => {
@@ -439,7 +436,6 @@ export default function ScheduleCreator() {
         </div>
 
       </div>
-      <Toaster />
     </>
   );
 }

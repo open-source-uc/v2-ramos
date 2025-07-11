@@ -7,10 +7,9 @@ import {
 } from "@/components/ui/collapsible";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import type { ScheduleMatrix, CourseSections } from "@/types";
-import { createScheduleMatrix, TIME_SLOTS, DAYS, convertCourseDataToSections } from "@/lib/scheduleMatrix";
+import { createScheduleMatrix, TIME_SLOTS, DAYS, convertNDJSONToSections } from "@/lib/scheduleMatrix";
 import { addCourseToSchedule, isCourseInSchedule } from "@/lib/scheduleStorage";
 import { ScheduleLegend, getClassTypeColor, getClassTypeShort } from "./schedules/ScheduleLegend";
 import { useCoursesSections } from "@/components/hooks/useCoursesSections";
@@ -22,18 +21,17 @@ interface Props {
     className?: string;
 }
 
-function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule }: {
+function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule, sectionData }: {
     matrix: ScheduleMatrix;
     sectionId: string;
     courseSigle: string;
     onAddToSchedule: (courseId: string, success: boolean) => void;
+    sectionData?: any;
 }) {
     const [isInSchedule, setIsInSchedule] = useState(false);
     const courseId = `${courseSigle}-${sectionId}`;
 
-    // Get section data for NRC and campus
-    const courseData = (cursosJSON as any)[courseSigle];
-    const sectionData = courseData?.sections?.[sectionId];
+    // Get section data for NRC and campus from NDJSON data
     const nrc = sectionData?.nrc || "Sin NRC";
     const campus = sectionData?.campus || "Sin campus";
 
@@ -162,20 +160,18 @@ export default function SectionsCollapsible({
     className = ""
 }: SectionsCollapsibleProps) {
     const [refreshKey, setRefreshKey] = useState(0);
-    const [courses, isPending] = useCoursesSections()
+    const [coursesData, isPending] = useCoursesSections()
+    
+    // Ensure coursesData is an array
+    const courses = Array.isArray(coursesData) ? coursesData : [];
 
-    // solo para que veas los cursos en la consola del NAVEGADOR
-    useEffect(() => {
-        console.log(courses);
-    }, [isPending])
-    // Get real course data from the JSON
-    const cursosJSON: any[] = []
-    const courseData = (cursosJSON as any)[courseSigle];
+    // Find the specific course from NDJSON data
+    const courseData = courses.find((course: any) => course.sigle === courseSigle);
     const sections = courseData?.sections || {};
     const sectionIds = Object.keys(sections);
 
     // Convert to the format expected by createScheduleMatrix
-    const courseSectionsData = convertCourseDataToSections(cursosJSON);
+    const courseSectionsData = courses.length > 0 ? convertNDJSONToSections(courses) : {};
 
     // Extract unique class types present in this course's sections
     const getClassTypesInSections = (): string[] => {
@@ -234,7 +230,7 @@ export default function SectionsCollapsible({
                         </CollapsibleTrigger>
 
                         <CollapsibleContent className="w-full border-t border-border px-6 py-4 bg-muted/20 overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1">
-                            {sectionIds.length > 0 ? (
+                            {!isPending && sectionIds.length > 0 ? (
                                 <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                                     {sectionIds.map(sectionId => {
                                         const scheduleMatrix = createScheduleMatrix(
@@ -249,9 +245,16 @@ export default function SectionsCollapsible({
                                                 sectionId={sectionId}
                                                 courseSigle={courseSigle}
                                                 onAddToSchedule={handleAddToSchedule}
+                                                sectionData={sections[sectionId]}
                                             />
                                         );
                                     })}
+                                </div>
+                            ) : isPending ? (
+                                <div className="text-center py-8">
+                                    <p className="text-muted-foreground">
+                                        Cargando secciones...
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="text-center py-8">
@@ -276,6 +279,6 @@ export default function SectionsCollapsible({
                     </Collapsible>
                 </div>
             </section>
-            <Toaster />
-        </>);
+        </>
+    );
 }
