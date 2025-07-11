@@ -143,10 +143,19 @@ const reportSuccessMessage = reportResult?.data?.message;
                 {
                    course.school &&
                          course.school !== "" && (
-                            <Pill variant="blue" icon={BuildingIcon}>
+                            <Pill variant="orange" icon={BuildingIcon}>
                                 <span>{ course.school}</span>
                             </Pill>
                         )
+                }
+                                {
+                    course.campus &&
+                        course.campus.length > 0 && 
+                        course.campus.map((campus) => (
+                            <Pill key={campus} variant="blue" icon={LocationIcon}>
+                                {campus}
+                            </Pill>
+                        ))
                 }
                 {
                     course.area &&
@@ -155,15 +164,6 @@ const reportSuccessMessage = reportResult?.data?.message;
                                 {course.area}
                             </Pill>
                         )
-                }
-                {
-                    course.campus &&
-                        course.campus.length > 0 && 
-                        course.campus.map((campus) => (
-                            <Pill key={campus} variant="orange" icon={LocationIcon}>
-                                {campus}
-                            </Pill>
-                        ))
                 }
                 {
                     course.is_removable &&
