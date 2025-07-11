@@ -6,6 +6,10 @@ import type { Course } from "../../table/columns"
 import { DataTable } from "../../table/data-table"
 import { Combobox, type ComboboxOption } from "../../ui/combobox"
 import { Skeleton } from "../../ui/skeleton"
+import { Switch } from "../../ui/switch"
+import { Button } from "../../ui/button"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../ui/collapsible"
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from "../../icons/icons"
 import { cn } from "@/lib/utils"
 
 interface SearchableTableDisplayProps {
@@ -17,6 +21,8 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [selectedCampus, setSelectedCampus] = useState<string>("all")
+  const [showRetirableOnly, setShowRetirableOnly] = useState(false)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -116,7 +122,20 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return options;
   }, [uniqueSchools]);
 
-  // Filter data based on both search and area selection
+  // Convert unique campuses to combobox options
+  const campusOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todos los campus" }
+    ];
+    
+    uniqueCampuses.forEach((campus) => {
+      options.push({ value: campus, label: campus });
+    });
+    
+    return options;
+  }, [uniqueCampuses]);
+
+  // Filter data based on all filter criteria
   const filteredData = useMemo(() => {
     let filtered = courses;
 
@@ -135,8 +154,15 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       filtered = filtered.filter((course) => course.school === selectedSchool);
     }
 
+    if (showRetirableOnly) {
+      filtered = filtered.filter((course) => {
+        const retirableArray = course.is_removable || [];
+        return retirableArray.some(removable => removable === true);
+      });
+    }
+
     return filtered;
-  }, [courses, selectedArea, selectedCampus, selectedSchool]);
+  }, [courses, selectedArea, selectedCampus, selectedSchool, showRetirableOnly]);
 
   const handleSearch = (normalizedValue: string) => {
     setSearchValue(normalizedValue);
@@ -153,6 +179,20 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const handleSchoolChange = (value: string) => {
     setSelectedSchool(value);
   };
+
+  const handleRetirableToggle = (checked: boolean) => {
+    setShowRetirableOnly(checked);
+  };
+
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedArea !== "all") count++;
+    if (selectedCampus !== "all") count++;
+    if (selectedSchool !== "all") count++;
+    if (showRetirableOnly) count++;
+    return count;
+  }, [selectedArea, selectedCampus, selectedSchool, showRetirableOnly]);
 
   return (
     <div className="container mx-auto py-4">
@@ -194,48 +234,135 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       ) : (
         <>
           {/* Search Component */}
-          <div className="flex flex-col gap-4 items-stretch justify-between tablet:flex-row tablet:items-center">
+          <div className="flex flex-col gap-4 items-stretch justify-between tablet:flex-row tablet:items-center mb-6">
             <Search
               onSearch={handleSearch}
               placeholder="Buscar por nombre o sigla..."
-              className="w-full tablet:max-w-md"
+              className="w-full"
               initialValue={initialSearchValue}
             />
-
-            <div className="flex flex-col-reverse items-stretch gap-4 w-full tablet:flex-row-reverse tablet:items-center">
-              {/* Area Filter */}
-              <Combobox
-                options={areaOptions}
-                value={selectedArea}
-                onValueChange={handleAreaChange}
-                placeholder="Áreas de Formación General"
-                searchPlaceholder="Buscar área..."
-                emptyMessage="No se encontraron áreas."
-                className="w-full tablet:max-w-[300px]"
-                buttonClassName={cn(
-                  selectedArea !== "all" &&
-                  "bg-primary-foreground text-primary border border-primary"
-                )}
-                aria-label="Filtrar por Área de Formación General"
-              />
-
-              {/* School Filter */}
-              <Combobox
-                options={schoolOptions}
-                value={selectedSchool}
-                onValueChange={handleSchoolChange}
-                placeholder="Facultades"
-                searchPlaceholder="Buscar facultad..."
-                emptyMessage="No se encontraron facultades."
-                className="w-full tablet:max-w-[300px]"
-                buttonClassName={cn(
-                  selectedSchool !== "all" &&
-                  "bg-primary-foreground text-primary border border-primary"
-                )}
-                aria-label="Filtrar por Unidad Académica"
-              />
-            </div>
           </div>
+
+          {/* Collapsible Filters */}
+          <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <div className="border border-border rounded-md mb-3">
+              <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-2 hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-md font-semibold">Filtros</h3>
+                  {activeFiltersCount > 0 && (
+                    <div className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs font-medium">
+                      {activeFiltersCount}
+                    </div>
+                  )}
+                </div>
+                {filtersOpen ? (
+                  <ChevronUpIcon className="h-5 w-5 text-muted-foreground" />
+                ) : (
+                  <ChevronDownIcon className="h-5 w-5 text-muted-foreground" />
+                )}
+              </CollapsibleTrigger>
+              
+              <CollapsibleContent className="border-t border-border">
+                <div className="p-6 space-y-6">
+                  {/* Filter Grid */}
+                  <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4">
+                    {/* Campus Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Campus</label>
+                      <Combobox
+                        options={campusOptions}
+                        value={selectedCampus}
+                        onValueChange={handleCampusChange}
+                        placeholder="Seleccionar campus"
+                        searchPlaceholder="Buscar campus..."
+                        emptyMessage="No se encontraron campus."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedCampus !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Campus"
+                      />
+                    </div>
+
+                    {/* Area Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Área de Formación General</label>
+                      <Combobox
+                        options={areaOptions}
+                        value={selectedArea}
+                        onValueChange={handleAreaChange}
+                        placeholder="Seleccionar área"
+                        searchPlaceholder="Buscar área..."
+                        emptyMessage="No se encontraron áreas."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedArea !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Área de Formación General"
+                      />
+                    </div>
+
+                    {/* School Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Unidad Académica</label>
+                      <Combobox
+                        options={schoolOptions}
+                        value={selectedSchool}
+                        onValueChange={handleSchoolChange}
+                        placeholder="Seleccionar unidad"
+                        searchPlaceholder="Buscar unidad..."
+                        emptyMessage="No se encontraron unidades."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedSchool !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Unidad Académica"
+                      />
+                    </div>
+
+                    {/* Retirable Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Solo Cursos Retirables</label>
+                      <div className="flex items-center space-x-2 pt-2">
+                        <Switch
+                          id="retirable-filter"
+                          checked={showRetirableOnly}
+                          onCheckedChange={handleRetirableToggle}
+                          aria-label="Mostrar solo cursos retirables"
+                        />
+                        <label htmlFor="retirable-filter" className="text-sm text-muted-foreground cursor-pointer">
+                          {showRetirableOnly ? "Activado" : "Desactivado"}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  {activeFiltersCount > 0 && (
+                    <div className="pt-4 border-t border-border">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={CloseIcon}
+                        onClick={() => {
+                          setSelectedArea("all");
+                          setSelectedCampus("all");
+                          setSelectedSchool("all");
+                          setShowRetirableOnly(false);
+                        }}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        Limpiar todos los filtros ({activeFiltersCount})
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
 
           {/* Data Table */}
           <DataTable data={filteredData} externalSearchValue={searchValue} />
