@@ -23,9 +23,8 @@ import {
 } from "@/components/ui/table";
 
 import {
-  BuildingIcon,
+  LocationIcon,
   AreaIcon,
-  HourglassIcon,
   OpenInFullIcon
 } from "@/components/icons/icons";
 
@@ -196,6 +195,7 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
             );
 
             return (
+              /* Versión para móvil */
               <div
                 key={row.id}
                 className="border border-border rounded-md p-4 cursor-pointer hover:bg-muted/50 transition-colors focus:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -227,9 +227,19 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                   {course.name}
                 </h3>
 
-                {/* Facultad y área */}
-                <div className="flex items-center gap-2 mb-3">
-                  <Pill variant="blue" size="sm" icon={BuildingIcon}>{course.school}</Pill>
+                {/* Campus */}
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  {course.campus && course.campus.filter(campus => campus && campus.trim() !== "").length > 0 ? (
+                    course.campus
+                      .filter(campus => campus && campus.trim() !== "")
+                      .map((campusItem, index) => (
+                        <Pill key={index} variant="blue" size="sm" icon={LocationIcon}>
+                          {campusItem}
+                        </Pill>
+                      ))
+                  ) : (
+                    <Pill variant="red" size="sm" icon={LocationIcon}>No campus</Pill>
+                  )}
                 </div>
 
                 {course.area && (

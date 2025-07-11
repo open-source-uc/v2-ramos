@@ -20,6 +20,12 @@ const pillVariants = cva(
         ghost_purple: "bg-transparent text-muted-foreground border-border",
         ghost_orange: "bg-transparent text-muted-foreground border-border",
         ghost_red: "bg-transparent text-muted-foreground border-border",
+        schedule_blue: "bg-primary-foreground text-primary border-primary/20 rounded-sm",
+        schedule_pink: "bg-pink-light text-pink border-pink/20 rounded-sm",
+        schedule_green: "bg-green-light text-green border-green/20 rounded-sm",
+        schedule_purple: "bg-purple-light text-purple border-purple/20 rounded-sm",
+        schedule_orange: "bg-orange-light text-orange border-orange/20 rounded-sm",
+        schedule_red: "bg-red-light text-red border-red/20 rounded-sm",
       },
       size: {
         xs: "gap-1 px-2 py-0.5 text-xs",

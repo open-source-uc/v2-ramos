@@ -10,19 +10,12 @@ read -p "Opción (1/2): " mode
 if [ "$mode" == "1" ]; then
     FLAG="--local"
 elif [ "$mode" == "2" ]; then
-    echo "Que estas intentando hacer? No borres la base de datos de produccion, por favor."
-    echo "Si necesitas hacer cambios, habla con rocka."
-    exit 1
+    FLAG="--remote"
 else
     echo "Opción inválida. Saliendo."
     exit 1
 fi
 
-# npx wrangler r2 object put v2-ramos/2025-1.json -f ./json/2025-1.json $FLAG
-# npx wrangler r2 object put v2-ramos/valores_unicos.json -f ./json/valores_unicos.json $FLAG
-
-npx wrangler d1 execute v2-ramos $FLAG --file=./sql/main.sql -y
-echo "main ready"
 
 echo "Insertando cursos"
 for file in ./sql/courses/*.sql; do

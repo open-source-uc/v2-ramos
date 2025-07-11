@@ -106,7 +106,7 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "school",
+    accessorKey: "campus",
     header: ({ column }) => {
       return (
         <Button
@@ -114,13 +114,28 @@ export const columns: ColumnDef<Course>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Facultad
+          Campus
           <SwapVertIcon />
         </Button>
       );
     },
     cell: ({ row }) => {
-      return <Pill variant="blue">{row.original.school}</Pill>;
+      const campusArray = row.original.campus || [];
+      
+      // Filter out empty strings and null/undefined values
+      const validCampus = campusArray.filter(campus => campus && campus.trim() !== "");
+      
+      if (validCampus.length === 0) {
+        return <div className="text-gray-500 text-sm">No campus</div>;
+      }
+      
+      return (
+        <div className="flex flex-wrap gap-1">
+          {validCampus.map((campusItem, index) => (
+            <Pill key={index} variant="blue">{campusItem}</Pill>
+          ))}
+        </div>
+      );
     },
   },
   {

@@ -1,7 +1,7 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames, getActualCampusesForCourse } from "../../lib/server/courses";
 import Layout from "../../layouts/Layout.astro";
-import { getUserDataByToken } from "../../services/auth";
+import { getUserDataByToken } from "../../lib/server/auth";
 import {
     HourglassIcon,
     CalendarIcon,
@@ -17,6 +17,11 @@ import {
     FlagIcon,
     StarIcon,
     ThumbDownIcon,
+    ChevronDownIcon,
+    CloseIcon,
+    CheckIcon,
+    LocationIcon,
+    LanguageIcon
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
@@ -40,6 +45,7 @@ import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
+import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -52,6 +58,9 @@ const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
+
+// Get actual campuses from sections data
+const actualCampuses = await getActualCampusesForCourse(sigle);
 
 // Calculate statistics
 const sentiment = c
@@ -137,10 +146,19 @@ const reportSuccessMessage = reportResult?.data?.message;
                 {
                    course.school &&
                          course.school !== "" && (
-                            <Pill variant="blue" icon={BuildingIcon}>
+                            <Pill variant="orange" icon={BuildingIcon}>
                                 <span>{ course.school}</span>
                             </Pill>
                         )
+                }
+                                {
+                    actualCampuses &&
+                        actualCampuses.length > 0 && 
+                        actualCampuses.map((campus) => (
+                            <Pill key={campus} variant="blue" icon={LocationIcon}>
+                                {campus}
+                            </Pill>
+                        ))
                 }
                 {
                     course.area &&
@@ -150,6 +168,27 @@ const reportSuccessMessage = reportResult?.data?.message;
                             </Pill>
                         )
                 }
+                {
+                    course.is_removable &&
+                        course.is_removable.length > 0 && (
+                            <Pill 
+                                variant={course.is_removable.some(removable => removable) ? "green" : "red"} 
+                                icon={course.is_removable.some(removable => removable) ? CheckIcon : CloseIcon}
+                            >
+                                {course.is_removable.some(removable => removable) ? "Retirable" : "No retirable"}
+                            </Pill>
+                        )
+                }
+                {
+                    course.is_english &&
+                        course.is_english.length > 0 && 
+                        course.is_english.some(english => english) && (
+                            <Pill variant="purple" icon={LanguageIcon}>
+                                Se dicta en Inglés
+                            </Pill>
+                        )
+                }
+                
             </div>
         </section>
 
@@ -256,13 +295,20 @@ const reportSuccessMessage = reportResult?.data?.message;
         </section>
 
         <!-- Prerequisites Section -->
-        <PrerequisitesSection prerequisites={prerequisites} className="mt-8 hidden" client:load />
+        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:load />
+
+        <!-- Secciones Section -->
+        <SectionsCollapsible
+            client:load
+            className="mt-8"
+            courseSigle={course.sigle}
+        />
 
         <!-- Links de Interés -->
         <section class="mt-8">
             <div class="border border-border rounded-md p-6">
                 <h2 class="text-2xl font-semibold mb-6">Links de Interés</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                     <Button
                         variant="outline"
                         href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`}

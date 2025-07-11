@@ -58,7 +58,7 @@ export default function PrerequisitesSection({ prerequisites, className = "" }: 
                         </div>
                         <div className="flex items-center gap-2 ml-4 flex-shrink-0">
                             <span className="text-sm text-muted-foreground hidden tablet:inline">
-                                Click para expandir
+                                Expandir
                             </span>
                             <ChevronDownIcon className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-hover:text-foreground group-data-[state=open]:rotate-180" />
                         </div>
