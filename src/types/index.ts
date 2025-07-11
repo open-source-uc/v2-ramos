@@ -120,6 +120,16 @@ export interface ScheduleBlock {
 
 export interface CourseSection {
     schedule: Record<string, [string, string]>; // código de bloque -> [tipo, aula]
+    nrc?: string;
+    section?: number;
+    format?: string;
+    campus?: string;
+    is_english?: boolean;
+    is_removable?: boolean;
+    is_special?: boolean;
+    total_quota?: number;
+    quota?: Record<string, number>;
+    name?: string; // Course name for display purposes
 }
 
 export interface CourseSections {
