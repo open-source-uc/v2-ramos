@@ -1,7 +1,7 @@
 ---
-import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../services/courses";
+import { getCourseBySigle, getCourseReviews, getCourseReviewByUserIdAndSigle, getPrerequisitesWithNames } from "../../lib/server/courses";
 import Layout from "../../layouts/Layout.astro";
-import { getUserDataByToken } from "../../services/auth";
+import { getUserDataByToken } from "../../lib/server/auth";
 import {
     HourglassIcon,
     CalendarIcon,
@@ -262,9 +262,9 @@ const reportSuccessMessage = reportResult?.data?.message;
 
         <!-- Secciones Section -->
         <SectionsCollapsible
+            client:load
             className="mt-8"
             courseSigle={course.sigle}
-            client:load 
         />
 
         <!-- Links de Interés -->

@@ -1,45 +1,9 @@
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MMM2012', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MRP1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MMM2013', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MMN1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MMN1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MMN1040', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNF1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNF1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNN1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNN1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MSG3007', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
-ON CONFLICT (sigle) DO NOTHING;
-
-INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MSG3008', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MRP1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
@@ -91,309 +55,345 @@ VALUES ('MSP3047', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNP3006', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTA1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNP3008', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTA1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('MNP3010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTA1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('ETI185', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTC1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('ETI2474', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTC1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0007', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTC1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET001A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTG1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET001B', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTG1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET002G', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTG1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET003G', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTI1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTI1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0101', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTI1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0103', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTO1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0105', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTO1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0107', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTO1040', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0111', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTP1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0113', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTP1010', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0115', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTP1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0117', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MTP3040', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET011F', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUR1000', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0121', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUR1020', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0123', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUR1040', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0125', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC3014', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0129', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC3015', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0131', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC3021', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0134', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC3024', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0135', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4004', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET013F', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4005', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET015F', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4009', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET018I', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4011', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET022E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4013', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0303', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4014', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0311', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC4016', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0313', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC701A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0315', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC704A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0321', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC706A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0323', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC709A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0325', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC711A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0327', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC713', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0331', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC715', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0333', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC717A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0335', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC719', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0336', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC721A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0345', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC723', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0347', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC725', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET0357', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC728', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET061P', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC731A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET077I', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC733', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET087E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC733A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET088I', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC735', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET090E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC737', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET1005', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC741', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET100E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC743', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET1011', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC748A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET131E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC752A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET1331', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC753A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET1333', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC762', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET1341', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC764', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET150N', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC767', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET150T', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC768A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET160P', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC770A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET161P', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC771', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET182E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC773', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET183E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC788', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET205E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC789', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET2311', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC801', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET2313', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC810A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET2315', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC810B', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET236E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC810C', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET3100', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC810D', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET3101', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC810E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET3106', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC828', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET3107', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC856A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET310E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC867A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET3111', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC874A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET313E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC876', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;
 
 INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
-VALUES ('LET328E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+VALUES ('MUC877', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC880', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC881', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC884', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC885A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC885B', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC885C', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC885D', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC885E', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
+ON CONFLICT (sigle) DO NOTHING;
+
+INSERT INTO course_summary (sigle, likes, superlikes, dislikes, votes_low_workload, votes_medium_workload, votes_high_workload, votes_mandatory_attendance, votes_optional_attendance, avg_weekly_hours, sort_index)
+VALUES ('MUC887A', 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0)
 ON CONFLICT (sigle) DO NOTHING;

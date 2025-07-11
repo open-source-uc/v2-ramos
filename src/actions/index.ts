@@ -3,7 +3,7 @@
 import { OsucPermissions } from "@/types/permissions";
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { getUserDataByToken } from "@/services/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import { getToken } from "@/lib/auth";
 import type { CourseReview } from "@/types";
 

@@ -3,9 +3,9 @@ import Layout from "@/layouts/Layout.astro";
 import {
     getCourseReviewByUserIdAndSigle,
     getCourseBySigle,
-} from "@/services/courses";
+} from "@/lib/server/courses";
 import { actions, isInputError } from "astro:actions";
-import { getUserDataByToken } from "@/services/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import RedirectLogin from "@/components/reviews/RedirectLogin";
 import { getEntry } from "astro:content";
 import {
@@ -46,9 +46,7 @@ const course = courseData.data;
 const c = await getCourseBySigle(Astro.locals, sigle);
 
 // Import ID to name mapping for schools and areas
-import Id2NameRaw from "../../../migration/json/valores_unicos.json";
 import { getToken } from "@/lib/auth";
-const id2NameData = Id2NameRaw as Record<string, string>;
 
 const token = getToken(Astro.cookies);
 const user = await getUserDataByToken(token);

@@ -9,6 +9,7 @@
 		"astro": "astro",
 		"deploy": "astro build && wrangler pages deploy",
 		"reload-courses": "bash migration/reload-courses.sh",
+		"reload-sections": "bash migration/reload-sections.sh",
 		"cf-typegen": "wrangler types",
 		"test": "vitest",
 		"test:ui": "vitest --ui",

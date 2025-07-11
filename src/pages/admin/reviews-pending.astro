@@ -1,9 +1,9 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getPendingReviews } from "@/services/admin.reviews";
+import { getPendingReviews } from "@/lib/server/admin.reviews";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import { getToken } from "@/lib/auth";
-import { getUserDataByToken } from "@/services/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import { OsucPermissions } from "@/types/permissions";
 import { actions, isInputError } from "astro:actions";
 import { Button } from "@/components/ui/button";
