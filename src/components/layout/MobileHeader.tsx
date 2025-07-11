@@ -7,11 +7,6 @@ import DarkThemeToggle from "../common/DarkThemeToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Catálogo de Cursos",
-    href: "/catalog",
-    description: "Descubre los cursos disponibles en este semestre en la universidad.",
-  },
-  {
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
@@ -104,9 +99,30 @@ export default function MobileHeader() {
               </div>
             </section>
             
-            {/* Courses section */}
+            {/* Navigation section */}
             <section className="border border-border rounded-md p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Cursos</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Navegación</h3>
+              <div className="space-y-3">
+                <a
+                  href="/catalog"
+                  onClick={closeMenu}
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-2 text-center text-sm font-medium transition-colors duration-200 w-full"
+                >
+                  CATÁLOGO
+                </a>
+                <a
+                  href="/horario"
+                  onClick={closeMenu}
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-2 text-center text-sm font-medium transition-colors duration-200 w-full"
+                >
+                  HORARIO
+                </a>
+              </div>
+            </section>
+            
+            {/* FAQ section */}
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">FAQ</h3>
               <div className="space-y-3">
                 {components.map((component) => (
                   <a
@@ -138,17 +154,6 @@ export default function MobileHeader() {
                   </div>
                   <p className="text-sm leading-snug opacity-90">
                     La comunidad estudiantil de innovación y desarrollo de software de la UC.
-                  </p>
-                </a>
-                
-                <a
-                  href="/resources/respect"
-                  onClick={closeMenu}
-                  className="hidden block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
-                >
-                  <div className="font-medium text-sm leading-none text-foreground">BuscaRamos: Un espacio libre de acoso</div>
-                  <p className="text-muted-foreground text-sm leading-snug mt-2">
-                    Conoce cómo mantenemos un ambiente seguro y respetuoso.
                   </p>
                 </a>
 
