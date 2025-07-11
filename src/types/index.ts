@@ -21,7 +21,7 @@ export interface CourseSummary {
     restr?: string;
     equiv?: string;
     format?: Array<string>;
-    compus?: Array<string>;
+    campus?: Array<string>;
     is_removable?: Array<boolean>;
     is_special?: Array<boolean>;
     is_english?: Array<boolean>;
@@ -54,7 +54,7 @@ export interface CourseStaticInfo {
     restr: string;
     equiv: string;
     format: Array<string>;
-    compus: Array<string>;
+    campus: Array<string>;
     is_removable: Array<boolean>;
     is_special: Array<boolean>;
     is_english: Array<boolean>;
