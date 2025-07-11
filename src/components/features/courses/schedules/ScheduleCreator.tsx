@@ -13,7 +13,7 @@ import {
   addCourseToSchedule,
   removeCourseFromSchedule 
 } from "@/lib/scheduleStorage";
-import type { ScheduleMatrix, CourseSections } from "@/types";
+import type { ScheduleMatrix } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -297,12 +297,18 @@ export default function ScheduleCreator() {
     <>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Creador de Horarios</h1>
-          <p className="text-muted-foreground">
-            Selecciona los cursos y secciones para crear tu horario personalizado
-          </p>
-        </div>
+        <section className="border border-border rounded-md px-6 py-8 mb-8">
+          <p className="text-sm text-muted-foreground">Herramientas</p>
+
+          <h1 className="pt-2 text-3xl font-bold mb-2">Creador de Horarios</h1>
+          
+          <div>
+            <p className="text-sm opacity-60 max-w-[75%]">
+              Selecciona los cursos y secciones para crear tu horario personalizado. Visualiza conflictos de horario y organiza tu semestre académico.
+            </p>
+          </div>
+          
+        </section>
 
         {/* Course Search */}
         <div className="mb-8">
