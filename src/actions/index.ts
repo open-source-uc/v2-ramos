@@ -247,7 +247,7 @@ export const server = {
                     reviewId: reviewId,
                     filePath: filePath,
                     wasUpdated: isUpdate,
-                    redirect: `/${state.course_sigle.toLowerCase()}`
+                    redirect: `/${state.course_sigle}`
                 };
 
             } catch (error) {
