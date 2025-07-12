@@ -11,7 +11,7 @@ export const POST: APIRoute = async ({ request }) => {
   // Blog form
   const title = formData?.get("title") as string;
   const readtime = formData?.get("readtime") as string;
-  const description = formData?.get("description") as string;
+  const resume = formData?.get("resume") as string;
 
   // Recommendation form
   const code = formData?.get("code") as string;
@@ -25,20 +25,21 @@ export const POST: APIRoute = async ({ request }) => {
   const fileContent = `---
 ${contentType == "recommendations" ? 
 `title: "${code}-${name}"
+code: "${code}"
 initiative: "${name}"
 period: "2025-1"
 faculty: "${faculty}"
-qualification: ${qualification}`
+qualification: ${qualification}
+resume: "${resume}"`
 : 
 `title: "${title}"
 readtime: ${readtime}
-description: "${description}"
+description: "${resume}"
 author:
   name: "${name}"
   title: "${name}"`
 }
-${tags.length > 0 ? `\ntags:\n${tags.map(tag => `  - ${tag}`).join("\n")}` : ""}
----
+${tags.length > 0 ? `\ntags:\n${tags.map(tag => `  - ${tag}`).join("\n")}---` : "---"}
 
 import { Pill } from "@/components/ui/pill";
 

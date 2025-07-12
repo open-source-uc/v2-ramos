@@ -1,7 +1,22 @@
 ---
+import { getToken } from "@/lib/auth";
+import { getUserDataByToken } from "@/services/auth";
+import { OsucPermissions } from "@/types/permissions";
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
 import TagSelector from "@/components/ui/TagSelector.astro";
+
+// Authentication check
+const token = getToken(Astro.cookies);
+if (!token) {
+  return Astro.redirect("/");
+}
+
+const user = await getUserDataByToken(token);
+console.log(user?.permissions);
+if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+  return Astro.redirect("/");
+}
 
 let message = "";
 let messageType = "";
