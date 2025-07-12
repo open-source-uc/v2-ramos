@@ -133,6 +133,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                 <p class="text-sm opacity-60 max-w-[75%]">{course.description}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
+                <CourseCampuses courseSigle={course.sigle} campus={course.campus} lastSemester={course.last_semester} client:load />
                 <Pill
                     variant="green"
                     icon={HourglassIcon}
@@ -148,7 +149,6 @@ const reportSuccessMessage = reportResult?.data?.message;
                             </Pill>
                         )
                 }
-                <CourseCampuses courseSigle={course.sigle} client:load />
                 {
                     course.area &&
                         course.area !== "" && (
