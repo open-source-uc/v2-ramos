@@ -14,7 +14,7 @@ if (!token) {
 
 const user = await getUserDataByToken(token);
 console.log(user?.permissions);
-if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
   return Astro.redirect("/");
 }
 
