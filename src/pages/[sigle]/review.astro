@@ -498,22 +498,6 @@ const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear);
                         </div>
                     </div>
 
-                    <!-- General Error -->
-                    {
-                        !isInputError(result?.error) &&
-                            result?.error?.message && (
-                                <div class="border border-destructive/20 rounded-md p-4 bg-destructive/5">
-                                    <div class="flex items-center gap-2">
-                                        <div class="p-1 bg-destructive/10 rounded-full">
-                                            <div class="w-2 h-2 bg-destructive rounded-full" />
-                                        </div>
-                                        <p class="font-medium text-destructive">
-                                            {result.error.message}
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                    }
 
                     <!-- Action Buttons -->
                     <div
