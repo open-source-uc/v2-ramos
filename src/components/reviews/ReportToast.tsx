@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface ReportToastProps {
@@ -13,15 +13,24 @@ interface ReportToastProps {
 }
 
 export function ReportToast({ result }: ReportToastProps) {
-  useEffect(() => {
-    if (!result) return;
+  const [hasShown, setHasShown] = useState(false);
 
-    if (result.error?.message) {
-      toast.error(result.error.message);
-    } else if (result.data?.message) {
-      toast.success(result.data.message);
-    }
-  }, [result]);
+  useEffect(() => {
+    if (!result || hasShown) return;
+
+    // Small delay to ensure the toaster is ready
+    const timer = setTimeout(() => {
+      if (result.error?.message) {
+        toast.error(result.error.message);
+        setHasShown(true);
+      } else if (result.data?.message) {
+        toast.success(result.data.message);
+        setHasShown(true);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [result, hasShown]);
 
   return null;
 }
