@@ -21,7 +21,7 @@ export interface CourseSummary {
     restr?: string;
     equiv?: string;
     format?: Array<string>;
-    compus?: Array<string>;
+    campus?: Array<string>;
     is_removable?: Array<boolean>;
     is_special?: Array<boolean>;
     is_english?: Array<boolean>;
@@ -49,12 +49,13 @@ export interface CourseStaticInfo {
     sigle: string;
     name: string;
     credits: number;
+    schedules?: Schedule[];
     req: string;
     conn: string;
     restr: string;
     equiv: string;
     format: Array<string>;
-    compus: Array<string>;
+    campus: Array<string>;
     is_removable: Array<boolean>;
     is_special: Array<boolean>;
     is_english: Array<boolean>;
@@ -76,8 +77,65 @@ export interface RecommendationData {
     resume: string;
 }
 
+export interface Schedule {
+    day: string;
+    start: string;
+    end: string;
+    classroom?: string;
+    section?: string;
+    teachers?: string[];
+}
+
 export interface Recommendation {
     id: string;
     slug: string;
     data: RecommendationData;
 }
+
+// Prerequisites types
+export interface PrerequisiteCourse {
+    sigle: string;
+    name?: string;
+    isCoreq: boolean; // true if the course has (c) suffix
+}
+
+export interface PrerequisiteGroup {
+    type: 'AND' | 'OR';
+    courses: PrerequisiteCourse[];
+    groups?: PrerequisiteGroup[];
+}
+
+export interface ParsedPrerequisites {
+    hasPrerequisites: boolean;
+    structure?: PrerequisiteGroup;
+}
+
+// Tipos para matriz de horarios
+export interface ScheduleBlock {
+    type: string;        // Tipo de clase (CLAS, LAB, AYUD)
+    classroom: string;   // Ubicación del aula
+    courseId: string;    // Identificador del curso
+    section: string;     // Identificador de la sección
+}
+
+export interface CourseSection {
+    schedule: Record<string, [string, string]>; // código de bloque -> [tipo, aula]
+    nrc?: string;
+    section?: number;
+    format?: string;
+    campus?: string;
+    is_english?: boolean;
+    is_removable?: boolean;
+    is_special?: boolean;
+    total_quota?: number;
+    quota?: Record<string, number>;
+    name?: string; // Course name for display purposes
+}
+
+export interface CourseSections {
+    [courseId: string]: {
+        [sectionId: string]: CourseSection;
+    };
+}
+
+export type ScheduleMatrix = ScheduleBlock[][][]; // [franjaHoraria][diaSemana][clases]

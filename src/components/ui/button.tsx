@@ -17,6 +17,7 @@ const buttonVariants = cva(
         secondary:
           "bg-muted text-muted-foreground hover:bg-muted/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost_border: "border border-border hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         ghost_blue: "bg-transparent text-primary border border-border hover:bg-primary-foreground hover:text-primary",
         ghost_pink: "bg-transparent text-pink border border-border hover:bg-pink-light hover:text-pink",
@@ -27,6 +28,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 px-4 py-2",
+        xs: "h-6 rounded-sm px-2 text-xs",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",

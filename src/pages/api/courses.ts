@@ -48,7 +48,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
                         course.restr = staticInfo?.restr ?? "";
                         course.equiv = staticInfo?.equiv ?? "";
                         course.format = staticInfo?.format ?? [];
-                        course.compus = staticInfo?.compus ?? [];
+                        course.campus = staticInfo?.campus ?? [];
                         course.is_removable = staticInfo?.is_removable ?? [];
                         course.is_special = staticInfo?.is_special ?? [];
                         course.is_english = staticInfo?.is_english ?? [];

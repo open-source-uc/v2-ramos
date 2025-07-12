@@ -20,14 +20,14 @@ import HighContrastToggle from "../common/HighContrastToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Catálogo de Cursos",
-    href: "/catalog",
-    description: "Descubre los cursos disponibles en este semestre en la universidad.",
-  },
-  {
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
+  },
+  {
+    title: "Preguntas Frecuentes",
+    href: "https://registrosacademicos.uc.cl/informacion-para-estudiantes/inscripcion-y-retiro-de-cursos/preguntas-frecuentes/",
+    description: "Resuelve tus dudas sobre los cursos, desde inscripciones, retiros y más.",
   }
 ];
 
@@ -54,18 +54,14 @@ export default function Header() {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
-                    CURSOS
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {components.map((component) => (
-                        <ListItem key={component.title} title={component.title} href={component.href}>
-                          {component.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <a href="/catalog" className="hover:bg-primary-light hover:text-primary">CATÁLOGO</a>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <a href="/horario" className="hover:bg-primary-light hover:text-primary">HORARIO</a>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
@@ -96,6 +92,20 @@ export default function Header() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="hover:bg-primary-light hover:text-primary">
+                    FAQ
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {components.map((component) => (
+                        <ListItem key={component.title} title={component.title} href={component.href}>
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
 
               </NavigationMenuList>
             </NavigationMenu>
@@ -107,9 +117,8 @@ export default function Header() {
           </div>
           <div className="flex w-full items-center justify-between">
             <div className="flex gap-2">
-              <ButtonNavbar text="BUSCACURSOS ORIGINAL" url="https://buscacursos.uc.cl/" />
-              <ButtonNavbar text="PORTAL UC" url="https://portal.uc.cl/" />
-              <ButtonNavbar text="CANVAS UC" url="https://cursos.canvas.uc.cl/" />
+              <ButtonNavbar text="BUSCACURSOS" url="https://buscacursos.uc.cl/" />
+              <ButtonNavbar text="INSCRIPCIÓN CURSOS" url="https://registration9.uc.cl/StudentRegistrationSsb/ssb/registration" />
             </div>
             <div className="flex items-center gap-2">
               <HighContrastToggle />

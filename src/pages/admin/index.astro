@@ -1,13 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getToken } from "@/lib/auth";
-import { getUserDataByToken } from "@/services/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import {
     getDashboardStats,
     getSystemHealth,
     getPendingReviews,
     getReportedReviews,
-} from "@/services/admin.reviews";
+} from "@/lib/server/admin.reviews";
 import { OsucPermissions } from "@/types/permissions";
 import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/ui/pill";

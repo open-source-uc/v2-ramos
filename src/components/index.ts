@@ -6,6 +6,7 @@ export * from './features/search';
 export * from './features/landing';
 export * from './features/catalog';
 export * from './features/blog';
+export * from './features/courses/schedules/ScheduleLegend';
 
 // Common components
 export * from './common';

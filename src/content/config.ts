@@ -53,7 +53,6 @@ const recommendations = defineCollection({
     })
 })
 
-
 const coursesStatic = defineCollection({
     loader: file("src/../migration/json/cursos-simplificado.json", {
         parser: (content) => {

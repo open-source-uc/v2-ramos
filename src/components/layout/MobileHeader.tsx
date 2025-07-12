@@ -7,14 +7,14 @@ import DarkThemeToggle from "../common/DarkThemeToggle";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Catálogo de Cursos",
-    href: "/catalog",
-    description: "Descubre los cursos disponibles en este semestre en la universidad.",
-  },
-  {
     title: "Sobre las Áreas de Formación General",
     href: "https://formaciongeneral.uc.cl/sobre-la-formacion-general/#conoce-las-%c3%a1reas-formativas",
     description: "Conoce las áreas de formación general y cómo se relacionan con los cursos.",
+  },
+  {
+    title: "Preguntas Frecuentes",
+    href: "https://registrosacademicos.uc.cl/informacion-para-estudiantes/inscripcion-y-retiro-de-cursos/preguntas-frecuentes/",
+    description: "Resuelve tus dudas sobre los cursos, desde inscripciones, retiros y más.",
   }
 ];
 
@@ -99,9 +99,30 @@ export default function MobileHeader() {
               </div>
             </section>
             
-            {/* Courses section */}
+            {/* Navigation section */}
             <section className="border border-border rounded-md p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Cursos</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Navegación</h3>
+              <div className="space-y-3">
+                <a
+                  href="/catalog"
+                  onClick={closeMenu}
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-2 text-center text-sm font-medium transition-colors duration-200 w-full"
+                >
+                  CATÁLOGO
+                </a>
+                <a
+                  href="/horario"
+                  onClick={closeMenu}
+                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-lg border-1 px-4 py-2 text-center text-sm font-medium transition-colors duration-200 w-full"
+                >
+                  HORARIO
+                </a>
+              </div>
+            </section>
+            
+            {/* FAQ section */}
+            <section className="border border-border rounded-md p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">FAQ</h3>
               <div className="space-y-3">
                 {components.map((component) => (
                   <a
@@ -135,17 +156,6 @@ export default function MobileHeader() {
                     La comunidad estudiantil de innovación y desarrollo de software de la UC.
                   </p>
                 </a>
-                
-                <a
-                  href="/resources/respect"
-                  onClick={closeMenu}
-                  className="hidden block p-4 border border-border rounded-md hover:bg-primary-light hover:text-primary hover:border-primary transition-colors"
-                >
-                  <div className="font-medium text-sm leading-none text-foreground">BuscaRamos: Un espacio libre de acoso</div>
-                  <p className="text-muted-foreground text-sm leading-snug mt-2">
-                    Conoce cómo mantenemos un ambiente seguro y respetuoso.
-                  </p>
-                </a>
 
                 <a
                   href="/team"
@@ -169,21 +179,14 @@ export default function MobileHeader() {
                   onClick={closeMenu}
                   className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  BuscaCursos Original
+                  BUSCACURSOS
                 </a>
                 <a
-                  href="https://portal.uc.cl/"
+                  href="https://registration9.uc.cl/StudentRegistrationSsb/ssb/registration"
                   onClick={closeMenu}
                   className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
                 >
-                  Portal UC
-                </a>
-                <a
-                  href="https://cursos.canvas.uc.cl/"
-                  onClick={closeMenu}
-                  className="bg-background text-input border-border hover:bg-primary-foreground hover:text-primary hover:border-primary inline-block rounded-md border px-4 py-3 text-center text-sm font-medium transition-colors duration-200 w-full"
-                >
-                  Canvas UC
+                  INSCRIPCIÓN CURSOS
                 </a>
               </div>
             </section>

@@ -17,7 +17,6 @@ export default defineConfig({
       enabled: true
     }
   }),
-
   vite: {
     plugins: [tailwindcss()],
   },
