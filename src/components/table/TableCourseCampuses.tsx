@@ -1,5 +1,5 @@
 import { Pill } from "@/components/ui/pill";
-import { getCampusPrefix } from "@/lib/currentSemester";
+import { getCampusPrefix, isCurrentSemester } from "@/lib/currentSemester";
 
 interface TableCourseCampusesProps {
     campus: string[];
@@ -16,9 +16,10 @@ export default function TableCourseCampuses({ campus, lastSemester }: TableCours
 
     const prefixText = getCampusPrefix(lastSemester);
     const campusText = validCampus.join(", ");
+    const pillVariant = isCurrentSemester(lastSemester) ? "blue" : "red";
 
     return (
-        <Pill variant="blue">
+        <Pill variant={pillVariant}>
             <div className="flex flex-col">
                 <span className="text-xs font-medium opacity-80">{prefixText}</span>
                 <span>{campusText}</span>
