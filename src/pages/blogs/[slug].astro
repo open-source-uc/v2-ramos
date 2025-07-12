@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import ContentPage from "@/components/common/ContentPage.astro";
-import { EditIcon, ClockIcon } from "../../../components/icons/icons";
+import { EditIcon, ClockIcon } from "@/components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
 import { Pill } from "@/components/ui/pill";
@@ -13,8 +13,7 @@ export async function getStaticPaths() {
 
   return blogs.map((blog) => ({
     params: {
-      author: createSlug(blog.data.author?.name || "unknown"),
-      title: createSlug(blog.data.title || blog.slug),
+      slug: createSlug(blog.data.title || blog.slug),
     },
     props: { blog },
   }));

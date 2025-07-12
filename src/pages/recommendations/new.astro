@@ -1,21 +1,20 @@
 ---
 import { getToken } from "@/lib/auth";
-import { getUserDataByToken } from "@/services/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import { OsucPermissions } from "@/types/permissions";
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
 
 // Authentication check
-const token = getToken(Astro.cookies);
-if (!token) {
-  return Astro.redirect("/");
-}
+// const token = getToken(Astro.cookies);
+// if (!token) {
+//   return Astro.redirect("/");
+// }
 
-const user = await getUserDataByToken(token);
-console.log(user?.permissions);
-if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
-  return Astro.redirect("/");
-}
+// const user = await getUserDataByToken(token);
+// if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+//   return Astro.redirect("/");
+// }
 
 let message = "";
 let messageType = "";
@@ -198,6 +197,25 @@ const schools = blogsData.schools || [];
               </div>
               <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">
+                  Facultad <span class="text-red-500">*</span>
+                </label>
+                <select
+                  name="faculty"
+                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
+                  required
+                >
+                  <option value="" disabled selected
+                    >Seleccione una facultad</option
+                  >
+                  {
+                    schools.map((school) => (
+                      <option value={school}>{school}</option>
+                    ))
+                  }
+                </select>
+              </div>
+              <div class="space-y-2 min-w-0">
+                <label class="text-sm font-medium text-foreground block">
                   Tiempo de lectura <span class="text-red-500">*</span>
                 </label>
                 <div class="relative min-w-0">
@@ -217,25 +235,6 @@ const schools = blogsData.schools || [];
                     min
                   </span>
                 </div>
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Facultad <span class="text-red-500">*</span>
-                </label>
-                <select
-                  name="faculty"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                  required
-                >
-                  <option value="" disabled selected
-                    >Seleccione una facultad</option
-                  >
-                  {
-                    schools.map((school) => (
-                      <option value={school}>{school}</option>
-                    ))
-                  }
-                </select>
               </div>
               <div class="space-y-2 min-w-0">
                 <label class="text-sm font-medium text-foreground block">

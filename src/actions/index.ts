@@ -45,6 +45,87 @@ const courseReviewSchema = z.object({
         .optional()
 });
 
+// Esquema para blogs
+const blogSchema = z.object({
+    title: z.string()
+        .min(1, "El título es requerido")
+        .max(200, "El título no puede exceder 200 caracteres"),
+    
+    period_time: z.string()
+        .min(1, "El período es requerido"),
+    
+    resume_text: z.string()
+        .min(1, "El resumen es requerido")
+        .max(500, "El resumen no puede exceder 500 caracteres"),
+    
+    readtime: z.number()
+        .int("El tiempo de lectura debe ser un número entero")
+        .min(1, "El tiempo de lectura debe ser al menos 1 minuto"),
+    
+    author_name: z.string()
+        .min(1, "El nombre del autor es requerido"),
+    
+    author_faculty: z.string()
+        .min(1, "La facultad del autor es requerida"),
+    
+    author_title: z.string().optional(),
+    
+    author_picture: z.string().optional(),
+    
+    author_link: z.string().optional(),
+    
+    tags: z.string()
+        .optional()
+        .transform(val => val ? val.split(',').map(tag => tag.trim()) : []),
+    
+    content: z.string()
+        .min(1, "El contenido es requerido")
+        .max(50000, "El contenido no puede exceder 50,000 caracteres")
+});
+
+// Esquema para recomendaciones
+const recommendationSchema = z.object({
+    title: z.string()
+        .min(1, "El título es requerido")
+        .max(200, "El título no puede exceder 200 caracteres"),
+    
+    period_time: z.string()
+        .min(1, "El período es requerido"),
+    
+    resume_text: z.string()
+        .min(1, "El resumen es requerido")
+        .max(500, "El resumen no puede exceder 500 caracteres"),
+    
+    readtime: z.number()
+        .int("El tiempo de lectura debe ser un número entero")
+        .min(1, "El tiempo de lectura debe ser al menos 1 minuto"),
+    
+    author_name: z.string()
+        .min(1, "El nombre del autor es requerido"),
+    
+    author_faculty: z.string()
+        .min(1, "La facultad del autor es requerida"),
+    
+    author_title: z.string().optional(),
+    
+    author_picture: z.string().optional(),
+    
+    author_link: z.string().optional(),
+    
+    code: z.string()
+        .min(1, "El código del curso es requerido")
+        .max(10, "El código no puede exceder 10 caracteres"),
+    
+    qualification: z.number()
+        .int("La calificación debe ser un número entero")
+        .min(1, "La calificación debe ser entre 1 y 5")
+        .max(5, "La calificación debe ser entre 1 y 5"),
+    
+    content: z.string()
+        .min(1, "El contenido es requerido")
+        .max(50000, "El contenido no puede exceder 50,000 caracteres")
+});
+
 // Función helper para subir texto Markdown a R2
 async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, filePath: string) {
     try {
@@ -75,6 +156,18 @@ async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, f
 function generateReviewPath(courseId: string, reviewId: number) {
     const timestamp = Date.now();
     return `reviews/${courseId}/${reviewId}-${timestamp}.md`;
+}
+
+// Función helper para generar path único para blogs
+function generateBlogPath(blogId: number) {
+    const timestamp = Date.now();
+    return `blogs/${blogId}-${timestamp}.md`;
+}
+
+// Función helper para generar path único para recomendaciones
+function generateRecommendationPath(recommendationId: number) {
+    const timestamp = Date.now();
+    return `recommendations/${recommendationId}-${timestamp}.md`;
 }
 
 export const server = {
@@ -558,6 +651,93 @@ export const server = {
                 throw new ActionError({
                     code: "INTERNAL_SERVER_ERROR",
                     message: "Error interno del servidor al eliminar la reseña"
+                });
+            }
+        }
+    }),
+    
+    createBlog: defineAction({
+        accept: "form",
+        input: blogSchema,
+        handler: async (state, ctx) => {
+            const { locals, cookies } = ctx;
+            
+            const token = getToken(cookies);
+            const user = await getUserDataByToken(token);
+            
+            if (!user) {
+                throw new ActionError({
+                    code: "UNAUTHORIZED",
+                    message: "Debes iniciar sesión para crear un blog"
+                });
+            }
+            
+            if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+                throw new ActionError({
+                    code: "FORBIDDEN", 
+                    message: "No tienes permisos para crear blogs"
+                });
+            }
+            
+            try {
+                // lo hare dsp
+                throw new ActionError({
+                    code: "NOT_IMPLEMENTED",
+                    message: "Funcionalidad aún no implementada"
+                });
+                
+            } catch (error) {
+                if (error instanceof ActionError) {
+                    throw error;
+                }
+                
+                console.error("Error creating blog:", error);
+                throw new ActionError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Error interno del servidor al crear el blog"
+                });
+            }
+        }
+    }),
+    
+    // Crear recomendación
+    createRecommendation: defineAction({
+        accept: "form",
+        input: recommendationSchema,
+        handler: async (state, ctx) => {
+            const { locals, cookies } = ctx;
+
+            const token = getToken(cookies);
+            const user = await getUserDataByToken(token);
+            
+            if (!user) {
+                throw new ActionError({
+                    code: "UNAUTHORIZED",
+                    message: "Debes iniciar sesión para crear un blog"
+                });
+            }
+            
+            if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+                throw new ActionError({
+                    code: "FORBIDDEN", 
+                    message: "No tienes permisos para crear recomendaciones"
+                });
+            }
+            try {
+                // Lo hare dps x2
+                throw new ActionError({
+                    code: "NOT_IMPLEMENTED",
+                    message: "Funcionalidad aún no implementada"
+                });
+            } catch (error) {
+                if (error instanceof ActionError) {
+                    throw error;
+                }
+                
+                console.error("Error creating blog:", error);
+                throw new ActionError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: "Error interno del servidor al crear el blog"
                 });
             }
         }

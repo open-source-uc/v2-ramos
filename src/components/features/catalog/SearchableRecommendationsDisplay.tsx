@@ -318,11 +318,13 @@ export function SearchableRecommendationsDisplay({
                       )}`,
                     }}
                   >
-                    {tags.map((tag: string, index: number) => (
-                      <Pill key={index} size="sm" variant="ghost_blue">
-                        {tag}
-                      </Pill>
-                    ))}
+                    {tags && tags.length > 0
+                      ? tags.map((tag: string, index: number) => (
+                          <Pill key={index} size="sm" variant="ghost_blue">
+                            {tag}
+                          </Pill>
+                        ))
+                      : ""}
                   </footer>
                 </article>
               </a>

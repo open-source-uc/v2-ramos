@@ -26,18 +26,18 @@ export const POST: APIRoute = async ({ request }) => {
 ${contentType == "recommendations" ? 
 `title: "${code}-${name}"
 code: "${code}"
-initiative: "${name}"
 period: "2025-1"
-faculty: "${faculty}"
 qualification: ${qualification}
-resume: "${resume}"`
+resume: "${resume}"
+author:
+  name: "${name}"
+  faculty: "${faculty}"`
 : 
 `title: "${title}"
 readtime: ${readtime}
 description: "${resume}"
 author:
   name: "${name}"
-  title: "${name}"`
 }
 ${tags.length > 0 ? `\ntags:\n${tags.map(tag => `  - ${tag}`).join("\n")}---` : "---"}
 

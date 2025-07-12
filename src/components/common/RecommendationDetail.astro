@@ -8,12 +8,10 @@ export interface Props {
   period: string;
   faculty: string;
   qualification: number;
-  tags: string[];
   children?: any;
 }
 
-const { title, code, initiative, period, faculty, qualification, tags } =
-  Astro.props;
+const { title, code, initiative, period, faculty, qualification } = Astro.props;
 ---
 
 <article class="border border-border rounded-lg p-6 w-full max-w-4xl mx-auto">
@@ -67,11 +65,11 @@ const { title, code, initiative, period, faculty, qualification, tags } =
     </span>
     <div
       class="font-semibold text-xl"
-      aria-label={`Calificación: ${qualification} de 7`}
+      aria-label={`Calificación: ${qualification} de 5`}
       style={`view-transition-name: qualification-${code}-${initiative.replace(/\s/g, "")}`}
     >
       <span class="text-2xl">{qualification}</span>
-      <span class="text-lg text-muted-foreground">/7</span>
+      <span class="text-lg text-muted-foreground">/5</span>
     </div>
   </div>
   <footer
@@ -80,16 +78,6 @@ const { title, code, initiative, period, faculty, qualification, tags } =
     role="list"
     style={`view-transition-name: tags-${code}-${initiative.replace(/\s/g, "")}`}
   >
-    {
-      tags.map((tag: string) => (
-        <span
-          class="inline-block bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full"
-          role="listitem"
-        >
-          {tag}
-        </span>
-      ))
-    }
   </footer>
 
   <div class="border-t border-border pt-6">

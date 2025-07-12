@@ -15,6 +15,7 @@ const blogs = await getCollection("blogs");
         Descubre blogs creados por la comunidad
       </h1>
     </div>
+
     {
       blogs.map((blog) => {
         const { data } = blog;

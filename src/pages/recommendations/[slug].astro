@@ -10,7 +10,7 @@ export async function getStaticPaths() {
 
   return recommendations.map((rec) => ({
     params: {
-      id: `${rec.data.code}-${rec.data.initiative.replace(/\s/g, "")}`,
+      slug: `${rec.data.code}-${rec.data.initiative.replace(/\s/g, "")}`,
     },
     props: { rec },
   }));

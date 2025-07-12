@@ -1,6 +1,7 @@
 import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 import { link } from "fs";
+import { title } from "process";
 
 const resourcesSchema =
     z.object({
@@ -19,10 +20,32 @@ const resources = defineCollection({
     schema: resourcesSchema,
 })
 
-const blogs = defineCollection({
-    schema: resourcesSchema.extend({
-        tags: z.array(z.string()).optional()
-    }),
+const articlesSchema = 
+    z.object({
+        title: z.string(),
+        period: z.string(),
+        resume: z.string(),
+        readtime: z.number(),
+        author: z.object({
+            name: z.string(),
+            faculty: z.string(),
+            title: z.string().optional(),
+            picture: z.string().optional(),
+            link: z.string().optional(),
+        }),
+    })
+    
+    const blogs = defineCollection({
+        schema: articlesSchema.extend({
+            tags: z.array(z.string()).optional(),
+    })
+})
+
+const recommendations = defineCollection({
+    schema: articlesSchema.extend({
+        code: z.string(),
+        qualificatoin: z.number().min(1).max(5),
+    })
 })
 
 const initiatives = defineCollection({
@@ -40,18 +63,6 @@ const initiatives = defineCollection({
     })
 });
 
-const recommendations = defineCollection({
-    schema: z.object({
-        title: z.string(),
-        code: z.string(),
-        initiative: z.string(),
-        period: z.string(),
-        faculty: z.string(),
-        qualification: z.number().min(1).max(7),
-        tags: z.array(z.string()).optional(),
-        resume: z.string(),
-    })
-})
 
 const coursesStatic = defineCollection({
     loader: file("src/../migration/json/cursos-simplificado.json", {

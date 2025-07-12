@@ -287,3 +287,72 @@ BEGIN
     )
   WHERE sigle = OLD.course_sigle;
 END;
+
+
+-- Tabla para blogs
+CREATE TABLE blogs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  period_time TEXT NOT NULL,
+  resume_text TEXT NOT NULL,
+  readtime INTEGER NOT NULL,
+  author_name TEXT NOT NULL,
+  author_faculty TEXT NOT NULL,
+  author_title TEXT,
+  author_picture TEXT,
+  author_link TEXT,
+  tags TEXT, -- Json String con los tags del blog
+  content_path TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+);
+
+-- Índices para la tabla blogs
+CREATE INDEX idx_blogs_user_id ON blogs(user_id);
+CREATE INDEX idx_blogs_created_at ON blogs(created_at DESC);
+CREATE INDEX idx_blogs_updated_at ON blogs(updated_at DESC);
+CREATE INDEX idx_blogs_author_faculty ON blogs(author_faculty);
+CREATE INDEX idx_blogs_readtime ON blogs(readtime DESC);
+CREATE INDEX idx_blogs_title ON blogs(title);
+CREATE INDEX idx_blogs_period_time ON blogs(period_time);
+
+-- Índices compuestos para búsquedas complejas en blogs
+CREATE INDEX idx_blogs_faculty_created ON blogs(author_faculty, created_at DESC);
+CREATE INDEX idx_blogs_user_created ON blogs(user_id, created_at DESC);
+
+CREATE TABLE recommendations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  period_time TEXT NOT NULL,
+  resume_text TEXT NOT NULL,
+  readtime INTEGER NOT NULL,
+  author_name TEXT NOT NULL,
+  author_faculty TEXT NOT NULL,
+  author_title TEXT,
+  author_picture TEXT,
+  author_link TEXT,
+  code TEXT NOT NULL,
+  qualification INTEGER CHECK (qualification >= 0 AND qualification <= 5),
+  content_path TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índices para la tabla recommendations
+CREATE INDEX idx_recommendations_user_id ON recommendations(user_id);
+CREATE INDEX idx_recommendations_created_at ON recommendations(created_at DESC);
+CREATE INDEX idx_recommendations_updated_at ON recommendations(updated_at DESC);
+CREATE INDEX idx_recommendations_code ON recommendations(code);
+CREATE INDEX idx_recommendations_qualification ON recommendations(qualification DESC);
+CREATE INDEX idx_recommendations_author_faculty ON recommendations(author_faculty);
+CREATE INDEX idx_recommendations_readtime ON recommendations(readtime DESC);
+CREATE INDEX idx_recommendations_title ON recommendations(title);
+CREATE INDEX idx_recommendations_period_name ON recommendations(period_name);
+
+-- Índices compuestos para búsquedas complejas en recommendations
+CREATE INDEX idx_recommendations_code_qualification ON recommendations(code, qualification DESC);
+CREATE INDEX idx_recommendations_faculty_created ON recommendations(author_faculty, created_at DESC);
+CREATE INDEX idx_recommendations_user_created ON recommendations(user_id, created_at DESC);
+CREATE INDEX idx_recommendations_code_created ON recommendations(code, created_at DESC);
