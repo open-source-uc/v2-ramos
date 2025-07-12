@@ -6,6 +6,7 @@ import { z } from "astro:schema";
 import { getUserDataByToken } from "@/lib/server/auth";
 import { getToken } from "@/lib/auth";
 import type { CourseReview } from "@/types";
+import { isFutureSemester } from "@/lib/currentSemester";
 
 const courseReviewSchema = z.object({
     course_sigle: z.string()
@@ -92,6 +93,14 @@ export const server = {
                 throw new ActionError({
                     code: "BAD_REQUEST",
                     message: `El año debe estar entre ${min_year} y ${max_year}`
+                });
+            }
+
+            // Validar que la combinación año-semestre no sea futuro
+            if (isFutureSemester(state.year_taken, state.semester_taken)) {
+                throw new ActionError({
+                    code: "BAD_REQUEST",
+                    message: "No puedes escribir una reseña para un semestre futuro"
                 });
             }
             // Verificar autenticación

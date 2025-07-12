@@ -3,12 +3,11 @@ import { LocationIcon } from "@/components/icons/icons";
 import { getCampusPrefix } from "@/lib/currentSemester";
 
 interface CourseCampusesProps {
-    courseSigle: string;
     campus: string[];
     lastSemester: string;
 }
 
-export default function CourseCampuses({ courseSigle, campus, lastSemester }: CourseCampusesProps) {
+export default function CourseCampuses({ campus, lastSemester }: CourseCampusesProps) {
     if (!campus || campus.length === 0) {
         return null;
     }

@@ -8,6 +8,7 @@ import { actions, isInputError } from "astro:actions";
 import { getUserDataByToken } from "@/lib/server/auth";
 import RedirectLogin from "@/components/reviews/RedirectLogin";
 import { getEntry } from "astro:content";
+import { getMaxAllowedYear, getAllowedSemestersForYear, parseSemester, CURRENT_SEMESTER } from "@/lib/currentSemester";
 import {
     CalendarIcon,
     WorkloadIcon,
@@ -68,8 +69,12 @@ if (defaultData.comment_path) {
 }
 
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
-const currentYear = new Date().getFullYear();
+const currentYear = getMaxAllowedYear();
 const isEditMode = defaultData && defaultData.id !== null;
+
+// Calculate allowed semesters for current year
+const currentSemesterInfo = parseSemester(CURRENT_SEMESTER);
+const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear);
 ---
 
 <Layout>
@@ -429,7 +434,7 @@ const isEditMode = defaultData && defaultData.id !== null;
                             <SelectInput
                                 icon={CalendarIcon}
                                 label="Semestre"
-                                description="Período académico cursado"
+                                description={`Período académico cursado (máximo ${CURRENT_SEMESTER})`}
                                 error={inputErrors.semester_taken}
                                 selectProps={{
                                     id: "semester_taken",
