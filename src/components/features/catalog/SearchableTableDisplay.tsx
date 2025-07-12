@@ -21,7 +21,9 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [selectedArea, setSelectedArea] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [selectedCampus, setSelectedCampus] = useState<string>("all")
+  const [selectedFormat, setSelectedFormat] = useState<string>("all")
   const [showRetirableOnly, setShowRetirableOnly] = useState(false)
+  const [showEnglishOnly, setShowEnglishOnly] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -96,6 +98,14 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return Array.from(new Set(schools)).sort();
   }, [courses]);
 
+  // Get unique formats from the data
+  const uniqueFormats = useMemo(() => {
+    const formats = courses
+      .flatMap((course) => Array.isArray(course.format) ? course.format : [course.format])
+      .filter((format) => format && typeof format === 'string' && format.trim() !== ""); // Filter out null/undefined and empty strings
+    return Array.from(new Set(formats)).sort();
+  }, [courses]);
+
   // Convert unique areas to combobox options
   const areaOptions = useMemo((): ComboboxOption[] => {
     const options: ComboboxOption[] = [
@@ -135,6 +145,19 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return options;
   }, [uniqueCampuses]);
 
+  // Convert unique formats to combobox options
+  const formatOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todos los formatos" }
+    ];
+    
+    uniqueFormats.forEach((format) => {
+      options.push({ value: format, label: format });
+    });
+    
+    return options;
+  }, [uniqueFormats]);
+
   // Filter data based on all filter criteria
   const filteredData = useMemo(() => {
     let filtered = courses;
@@ -154,6 +177,15 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       filtered = filtered.filter((course) => course.school === selectedSchool);
     }
 
+    if (selectedFormat !== "all") {
+      filtered = filtered.filter((course) => {
+        if (Array.isArray(course.format)) {
+          return course.format.includes(selectedFormat);
+        }
+        return course.format === selectedFormat;
+      });
+    }
+
     if (showRetirableOnly) {
       filtered = filtered.filter((course) => {
         const retirableArray = course.is_removable || [];
@@ -161,8 +193,17 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       });
     }
 
+    if (showEnglishOnly) {
+      filtered = filtered.filter((course) => {
+        if (Array.isArray(course.is_english)) {
+          return course.is_english.some(isEnglish => isEnglish === true);
+        }
+        return course.is_english === true;
+      });
+    }
+
     return filtered;
-  }, [courses, selectedArea, selectedCampus, selectedSchool, showRetirableOnly]);
+  }, [courses, selectedArea, selectedCampus, selectedSchool, selectedFormat, showRetirableOnly, showEnglishOnly]);
 
   const handleSearch = (normalizedValue: string) => {
     setSearchValue(normalizedValue);
@@ -184,15 +225,25 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     setShowRetirableOnly(checked);
   };
 
+  const handleFormatChange = (value: string) => {
+    setSelectedFormat(value);
+  };
+
+  const handleEnglishToggle = (checked: boolean) => {
+    setShowEnglishOnly(checked);
+  };
+
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (selectedArea !== "all") count++;
     if (selectedCampus !== "all") count++;
     if (selectedSchool !== "all") count++;
+    if (selectedFormat !== "all") count++;
     if (showRetirableOnly) count++;
+    if (showEnglishOnly) count++;
     return count;
-  }, [selectedArea, selectedCampus, selectedSchool, showRetirableOnly]);
+  }, [selectedArea, selectedCampus, selectedSchool, selectedFormat, showRetirableOnly, showEnglishOnly]);
 
   return (
     <div className="container mx-auto py-4">
@@ -250,7 +301,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                 <div className="flex items-center gap-3">
                   <h3 className="text-md font-semibold">Filtros</h3>
                   {activeFiltersCount > 0 && (
-                    <div className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs font-medium">
+                    <div className="bg-primary-foreground text-primary border border-primary-foreground rounded-full px-3 py-1 text-xs font-medium">
                       {activeFiltersCount}
                     </div>
                   )}
@@ -265,7 +316,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
               <CollapsibleContent className="border-t border-border">
                 <div className="p-6 space-y-6">
                   {/* Filter Grid */}
-                  <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
                     {/* Campus Filter */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Campus</label>
@@ -323,6 +374,44 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                       />
                     </div>
 
+                    {/* Format Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Formato</label>
+                      <Combobox
+                        options={formatOptions}
+                        value={selectedFormat}
+                        onValueChange={handleFormatChange}
+                        placeholder="Seleccionar formato"
+                        searchPlaceholder="Buscar formato..."
+                        emptyMessage="No se encontraron formatos."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedFormat !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Formato"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Switch Filters Row */}
+                  <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                    {/* English Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Solo Cursos en Inglés</label>
+                      <div className="flex items-center space-x-2 pt-2">
+                        <Switch
+                          id="english-filter"
+                          checked={showEnglishOnly}
+                          onCheckedChange={handleEnglishToggle}
+                          aria-label="Mostrar solo cursos en inglés"
+                        />
+                        <label htmlFor="english-filter" className="text-sm text-muted-foreground cursor-pointer">
+                          {showEnglishOnly ? "Activado" : "Desactivado"}
+                        </label>
+                      </div>
+                    </div>
+
                     {/* Retirable Filter */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Solo Cursos Retirables</label>
@@ -351,7 +440,9 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                           setSelectedArea("all");
                           setSelectedCampus("all");
                           setSelectedSchool("all");
+                          setSelectedFormat("all");
                           setShowRetirableOnly(false);
+                          setShowEnglishOnly(false);
                         }}
                         className="text-muted-foreground hover:text-foreground"
                       >

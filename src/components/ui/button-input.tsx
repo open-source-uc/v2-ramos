@@ -7,12 +7,12 @@ const buttonInputVariants = cva(
   {
     variants: {
       variant: {
-        default: "border border-border rounded-md hover:border-primary/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5",
-        blue: "border border-border rounded-md hover:border-blue-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50",
-        green: "border border-border rounded-md hover:border-green-300 has-[:checked]:border-green-500 has-[:checked]:bg-green-50",
-        red: "border border-border rounded-md hover:border-red-300 has-[:checked]:border-red-500 has-[:checked]:bg-red-50",
-        orange: "border border-border rounded-md hover:border-orange-300 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50",
-        purple: "border border-border rounded-md hover:border-purple-300 has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50",
+        default: "border border-border rounded-md hover:border-primary has-[:checked]:border-primary has-[:checked]:bg-primary-foreground has-[:checked]:text-primary",
+        blue: "border border-border rounded-md hover:border-blue has-[:checked]:border-blue has-[:checked]:bg-blue-light has-[:checked]:text-blue",
+        green: "border border-border rounded-md hover:border-green has-[:checked]:border-green has-[:checked]:bg-green-light has-[:checked]:text-green",
+        red: "border border-border rounded-md hover:border-red has-[:checked]:border-red has-[:checked]:bg-red-light has-[:checked]:text-red",
+        orange: "border border-border rounded-md hover:border-orange has-[:checked]:border-orange has-[:checked]:bg-orange-light has-[:checked]:text-orange",
+        purple: "border border-border rounded-md hover:border-purple has-[:checked]:border-purple has-[:checked]:bg-purple-light has-[:checked]:text-purple",
       },
       size: {
         default: "p-4",
@@ -34,11 +34,11 @@ const iconContainerVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent text-primary border-primary/20 group-has-[:checked]:bg-primary group-has-[:checked]:text-primary-foreground",
-        blue: "bg-transparent text-blue-600 border-blue/20 group-has-[:checked]:bg-blue-500 group-has-[:checked]:text-white",
-        green: "bg-transparent text-green-600 border-green/20 group-has-[:checked]:bg-green-500 group-has-[:checked]:text-white",
-        red: "bg-transparent text-red-600 border-red/20 group-has-[:checked]:bg-red-500 group-has-[:checked]:text-white",
-        orange: "bg-transparent text-orange-600 border-orange/20 group-has-[:checked]:bg-orange-500 group-has-[:checked]:text-white",
-        purple: "bg-transparent text-purple-600 border-purple/20 group-has-[:checked]:bg-purple-500 group-has-[:checked]:text-white",
+        blue: "bg-transparent text-blue-600 border-blue/20 group-has-[:checked]:bg-blue group-has-[:checked]:text-white",
+        green: "bg-transparent text-green-600 border-green/20 group-has-[:checked]:bg-green group-has-[:checked]:text-white",
+        red: "bg-transparent text-red-600 border-red/20 group-has-[:checked]:bg-red group-has-[:checked]:text-white",
+        orange: "bg-transparent text-orange-600 border-orange/20 group-has-[:checked]:bg-orange group-has-[:checked]:text-white",
+        purple: "bg-transparent text-purple-600 border-purple/20 group-has-[:checked]:bg-purple group-has-[:checked]:text-white",
       },
       size: {
         default: "p-2",

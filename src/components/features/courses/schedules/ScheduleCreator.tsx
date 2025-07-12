@@ -296,20 +296,7 @@ export default function ScheduleCreator() {
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <section className="border border-border rounded-md px-6 py-8 mb-8">
-          <p className="text-sm text-muted-foreground">Herramientas</p>
-
-          <h1 className="pt-2 text-3xl font-bold mb-2">Creador de Horarios</h1>
-          
-          <div>
-            <p className="text-sm opacity-60 max-w-[75%]">
-              Selecciona los cursos y secciones para crear tu horario personalizado. Visualiza conflictos de horario y organiza tu semestre académico.
-            </p>
-          </div>
-          
-        </section>
-
+        
         {/* Course Search */}
         <div className="mb-8">
           <div className="border border-border rounded-lg p-6">

@@ -7,7 +7,9 @@ import {
 import { actions, isInputError } from "astro:actions";
 import { getUserDataByToken } from "@/lib/server/auth";
 import RedirectLogin from "@/components/reviews/RedirectLogin";
+import { ReviewFormToast } from "@/components/reviews/ReviewFormToast";
 import { getEntry } from "astro:content";
+import { getMaxAllowedYear, getAllowedSemestersForYear, parseSemester, CURRENT_SEMESTER } from "@/lib/currentSemester";
 import {
     CalendarIcon,
     WorkloadIcon,
@@ -28,6 +30,12 @@ import { NumericInput } from "@/components/ui/numeric-input";
 import { SelectInput } from "@/components/ui/select-input";
 
 const result = Astro.getActionResult(actions.createCourseReview);
+
+// Handle redirect on success
+if (result && result.data?.redirect) {
+    const successMessage = result.data.message;
+    return Astro.redirect(`${result.data.redirect}?success=${encodeURIComponent(successMessage)}`);
+}
 
 const { sigle } = Astro.params;
 
@@ -68,8 +76,12 @@ if (defaultData.comment_path) {
 }
 
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
-const currentYear = new Date().getFullYear();
+const currentYear = getMaxAllowedYear();
 const isEditMode = defaultData && defaultData.id !== null;
+
+// Calculate allowed semesters for current year
+const currentSemesterInfo = parseSemester(CURRENT_SEMESTER);
+const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear);
 ---
 
 <Layout>
@@ -158,24 +170,6 @@ const isEditMode = defaultData && defaultData.id !== null;
                 </div>
             </div>
 
-            <!-- Success Message -->
-            {
-                result && result.data?.message && (
-                    <div class="px-6 py-4 bg-green-50 border-b border-green-200">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-green-500 rounded-full" />
-                            <p class="font-medium text-green-800">
-                                {result.data.message}
-                            </p>
-                        </div>
-                        {result.data.wasUpdated && (
-                            <p class="text-sm mt-1 text-green-700 ml-4">
-                                Tu reseña anterior ha sido sobrescrita.
-                            </p>
-                        )}
-                    </div>
-                )
-            }
 
             <!-- Review Form -->
             <div class="p-6">
@@ -429,7 +423,7 @@ const isEditMode = defaultData && defaultData.id !== null;
                             <SelectInput
                                 icon={CalendarIcon}
                                 label="Semestre"
-                                description="Período académico cursado"
+                                description={`Período académico cursado (máximo ${CURRENT_SEMESTER})`}
                                 error={inputErrors.semester_taken}
                                 selectProps={{
                                     id: "semester_taken",
@@ -563,5 +557,6 @@ const isEditMode = defaultData && defaultData.id !== null;
             </div>
         </section>
     </div>
+    <ReviewFormToast result={result} client:load />
     <RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>

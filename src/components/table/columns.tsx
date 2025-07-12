@@ -9,6 +9,7 @@ import {
   calculateSentiment,
   calculatePositivePercentage
 } from "@/lib/courseStats";
+import TableCourseCampuses from "./TableCourseCampuses";
 
 export type Course = {
   id: string;
@@ -120,21 +121,11 @@ export const columns: ColumnDef<Course>[] = [
       );
     },
     cell: ({ row }) => {
-      const campusArray = row.original.campus || [];
-      
-      // Filter out empty strings and null/undefined values
-      const validCampus = campusArray.filter(campus => campus && campus.trim() !== "");
-      
-      if (validCampus.length === 0) {
-        return <div className="text-gray-500 text-sm">No campus</div>;
-      }
-      
       return (
-        <div className="flex flex-wrap gap-1">
-          {validCampus.map((campusItem, index) => (
-            <Pill key={index} variant="blue">{campusItem}</Pill>
-          ))}
-        </div>
+        <TableCourseCampuses 
+          campus={row.original.campus || []} 
+          lastSemester={row.original.last_semester} 
+        />
       );
     },
   },

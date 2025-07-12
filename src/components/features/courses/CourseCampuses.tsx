@@ -1,45 +1,27 @@
-import { useCoursesSections } from "@/components/hooks/useCoursesSections";
 import { Pill } from "@/components/ui/pill";
 import { LocationIcon } from "@/components/icons/icons";
+import { getCampusPrefix } from "@/lib/currentSemester";
 
 interface CourseCampusesProps {
-    courseSigle: string;
+    campus: string[];
+    lastSemester: string;
 }
 
-export default function CourseCampuses({ courseSigle }: CourseCampusesProps) {
-    const [courses, isLoading] = useCoursesSections();
-
-    if (isLoading) {
+export default function CourseCampuses({ campus, lastSemester }: CourseCampusesProps) {
+    if (!campus || campus.length === 0) {
         return null;
     }
 
-    // Find the course data for the given sigle
-    const courseData = courses.find(course => course.sigle === courseSigle);
-
-    if (!courseData || !courseData.sections) {
-        return null;
-    }
-
-    // Extract unique campuses from all sections
-    const campuses = new Set<string>();
-    
-    Object.values(courseData.sections).forEach((section: any) => {
-        if (section.campus) {
-            campuses.add(section.campus);
-        }
-    });
-
-    const actualCampuses = Array.from(campuses);
-
-    if (actualCampuses.length === 0) {
-        return null;
-    }
+    const prefixText = getCampusPrefix(lastSemester);
 
     return (
         <>
-            {actualCampuses.map((campus) => (
-                <Pill key={campus} variant="blue" icon={LocationIcon}>
-                    {campus}
+            {campus.map((campusName) => (
+                <Pill key={campusName} variant="blue" icon={LocationIcon}>
+                    <div className="flex flex-col">
+                        <span className="text-xs font-medium opacity-80">{prefixText}</span>
+                        <span>{campusName}</span>
+                    </div>
                 </Pill>
             ))}
         </>
