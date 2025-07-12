@@ -42,6 +42,7 @@ if (!sigle) {
 
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import { SuccessToast } from "@/components/reviews/SuccessToast";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
@@ -95,10 +96,14 @@ const hasExistingReview = userReview && userReview.id !== null;
 const reportResult = Astro.getActionResult(actions.reportCourseReview);
 const reportSuccessMessage = reportResult?.data?.message;
 
+// Get success message from URL params (from review creation/update)
+const successMessage = Astro.url.searchParams.get('success');
+
 
 ---
 
 <Layout>
+    <SuccessToast successMessage={successMessage || undefined} client:load />
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- Información Fundamental del Curso -->
         {
