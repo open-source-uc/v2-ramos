@@ -7,6 +7,7 @@ import { getUserDataByToken } from "@/lib/server/auth";
 import { getToken } from "@/lib/auth";
 import type { CourseReview } from "@/types";
 import { isFutureSemester } from "@/lib/currentSemester";
+import type { get } from "http";
 
 const courseReviewSchema = z.object({
   course_sigle: z
@@ -62,14 +63,11 @@ const blogSchema = z.object({
   period_time: z.string().min(1, "El período es requerido"),
 
   readtime: z
-    .number()
-    .int("El tiempo de lectura debe ser un número entero")
-    .min(1, "El tiempo de lectura debe ser al menos 1 minuto"),
-
-  organization_id: z
-    .number()
-    .int("El ID de la organización debe ser un número entero")
-    .positive("El ID de la organización debe ser positivo"),
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val >= 1, {
+      message: "El tiempo de lectura debe ser un número entero mayor a 0",
+    }),
 
   tags: z
     .string()
@@ -92,14 +90,11 @@ const recommendationSchema = z.object({
   period_time: z.string().min(1, "El período es requerido"),
 
   readtime: z
-    .number()
-    .int("El tiempo de lectura debe ser un número entero")
-    .min(1, "El tiempo de lectura debe ser al menos 1 minuto"),
-
-  organization_id: z
-    .number()
-    .int("El ID de la organización debe ser un número entero")
-    .positive("El ID de la organización debe ser positivo"),
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val >= 1, {
+      message: "El tiempo de lectura debe ser un número entero mayor a 0",
+    }),
 
   code: z
     .string()
@@ -107,10 +102,11 @@ const recommendationSchema = z.object({
     .max(10, "El código no puede exceder 10 caracteres"),
 
   qualification: z
-    .number()
-    .int("La calificación debe ser un número entero")
-    .min(1, "La calificación debe ser entre 1 y 5")
-    .max(5, "La calificación debe ser entre 1 y 5"),
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val >= 1 && val <= 5, {
+      message: "La calificación debe ser un número entre 1 y 5",
+    }),
 
   content: z
     .string()
@@ -154,12 +150,12 @@ function generateReviewPath(courseId: string, reviewId: number) {
 
 function generateBlogPath(blogId: number) {
   const timestamp = Date.now();
-  return `blogs/${blogId}-${timestamp}.md`;
+  return `blogs/${blogId}-${timestamp}.mdx`;
 }
 
-function generateRecommendationPath(recommendationId: string) {
+function generateRecommendationPath(recommendationId: number) {
   const timestamp = Date.now();
-  return `recommendations/${recommendationId}-${timestamp}.md`;
+  return `recommendations/${recommendationId}-${timestamp}.mdx`;
 }
 
 // Funciones para generar el contenido MDX
@@ -173,10 +169,10 @@ function generateBlogMDX(blogData: any, organizationData: any) {
     ? `\n  ${organizationData.title.trim()}`
     : "";
   const authorSection = `author:
-  name: "${organizationData.name}"
+  name: "${organizationData.organization_name}"
   faculty: "${organizationData.faculty}"${authorTitle}
-  picture: "${organizationData.picture}"
-  link: "${organizationData.link}"`;
+  picture: "${organizationData.logo_url}"
+  link: "${organizationData.page_link}"`;
 
   return `---
 title = "${blogData.title}"
@@ -199,10 +195,10 @@ function generateRecommendationMDX(
     ? `\n  ${organizationData.title.trim()}`
     : "";
   const authorSection = `author:
-  name: "${organizationData.name}"
+  name: "${organizationData.organization_name}"
   faculty: "${organizationData.faculty}"${authorTitle}
-  picture: "${organizationData.picture}"
-  link: "${organizationData.link}"`;
+  picture: "${organizationData.logo_url}"
+  link: "${organizationData.page_link}"`;
 
   return `---
 title = "${recommendationData.code}-${recommendationData.title}"
@@ -731,6 +727,302 @@ export const server = {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Error interno del servidor al eliminar la reseña",
+        });
+      }
+    },
+  }),
+
+  // Crear un blog
+  createBlog: defineAction({
+    accept: "form",
+    input: blogSchema,
+    handler: async (state, ctx) => {
+      const { locals, cookies } = ctx;
+      const token = getToken(cookies);
+      const user = await getUserDataByToken(token);
+      const userId = user?.id;
+
+      if (!userId) {
+        throw new ActionError({
+          code: "UNAUTHORIZED",
+          message: "Debes iniciar sesión para crear un blog",
+        });
+      }
+      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: "No tienes permisos para crear blogs",
+        });
+      }
+
+      const organizationResult = await locals.runtime.env.DB.prepare(
+        `SELECT id, user_id, organization_name AS name, faculty, title, logo_url, page_link FROM organizations WHERE user_id = ?`
+      )
+        .bind(userId)
+        .first();
+
+      if (!organizationResult) {
+        throw new ActionError({
+          code: "NOT_FOUND",
+          message: "Organización no encontrada para este usuario",
+        });
+      }
+
+      // Verificar si el blog ya existe
+      try {
+        const existingBlog = await locals.runtime.env.DB.prepare(
+          "SELECT id FROM blogs WHERE title = ? AND user_id = ?"
+        )
+          .bind(state.title, userId)
+          .first();
+
+        if (existingBlog) {
+          throw new ActionError({
+            code: "CONFLICT",
+            message: "Ya tienes un blog con este título",
+          });
+        }
+
+        // Crear el blog en la base de datos primero para obtener el ID
+        const result = await locals.runtime.env.DB.prepare(
+          `
+                    INSERT INTO blogs (
+                        user_id, organization_id, title, period_time, readtime, tags, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                `
+        )
+          .bind(
+            userId,
+            organizationResult.id,
+            state.title,
+            state.period_time,
+            state.readtime,
+            state.tags.join(","),
+            null // Temporalmente null, se actualizará después
+          )
+          .run();
+
+        if (!result.success) {
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al crear el blog",
+          });
+        }
+
+        const blogId = result.meta.last_row_id;
+
+        // Generar el path del archivo y subirlo a R2
+        const filePath = generateBlogPath(blogId);
+
+        // Generar contenido MDX
+        const mdxContent = generateBlogMDX(state, organizationResult);
+
+        // Subir a R2
+        const uploadSuccess = await uploadMarkdownToR2(
+          locals,
+          mdxContent,
+          filePath
+        );
+
+        if (!uploadSuccess) {
+          // Si falla la subida, eliminar el blog de la base de datos
+          await locals.runtime.env.DB.prepare("DELETE FROM blogs WHERE id = ?")
+            .bind(blogId)
+            .run();
+
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al subir el contenido del blog",
+          });
+        }
+
+        // Actualizar el blog con el content_path
+        const updateResult = await locals.runtime.env.DB.prepare(
+          "UPDATE blogs SET content_path = ? WHERE id = ?"
+        )
+          .bind(filePath, blogId)
+          .run();
+
+        if (!updateResult.success) {
+          // Si falla la actualización, limpiar R2 y base de datos
+          await locals.runtime.env.R2.delete(filePath);
+          await locals.runtime.env.DB.prepare("DELETE FROM blogs WHERE id = ?")
+            .bind(blogId)
+            .run();
+
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al actualizar el blog con la ruta del archivo",
+          });
+        }
+
+        return {
+          message: "Blog creado exitosamente",
+          code: 201,
+          blogId: blogId,
+          filePath: filePath,
+        };
+      } catch (error) {
+        if (error instanceof ActionError) {
+          throw error;
+        }
+
+        console.error("Error creating blog:", error);
+
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error interno del servidor al crear el blog",
+        });
+      }
+    },
+  }),
+
+  createRecommendation: defineAction({
+    accept: "form",
+    input: recommendationSchema,
+    handler: async (state, ctx) => {
+      const { locals, cookies } = ctx;
+      const token = getToken(cookies);
+      const user = await getUserDataByToken(token);
+      const userId = user?.id;
+
+      if (!userId) {
+        throw new ActionError({
+          code: "UNAUTHORIZED",
+          message: "Debes iniciar sesión para crear una recomendación",
+        });
+      }
+      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: "No tienes permisos para crear recomendaciones",
+        });
+      }
+
+      const organizationResult = await locals.runtime.env.DB.prepare(
+        "SELECT id, organization_name as name, faculty, title, logo_url as picture, page_link as link FROM organizations WHERE user_id = ?"
+      )
+        .bind(userId)
+        .first();
+
+      if (!organizationResult) {
+        throw new ActionError({
+          code: "NOT_FOUND",
+          message: "Organización no encontrada para este usuario",
+        });
+      }
+
+      // Verificar si la recomendación ya existe
+      try {
+        const existingRecommendation = await locals.runtime.env.DB.prepare(
+          "SELECT id FROM recommendations WHERE title = ? AND user_id = ?"
+        )
+          .bind(state.title, userId)
+          .first();
+
+        if (existingRecommendation) {
+          throw new ActionError({
+            code: "CONFLICT",
+            message: "Ya tienes una recomendación con este título",
+          });
+        }
+
+        // Crear la recomendación en la base de datos primero para obtener el ID
+        const result = await locals.runtime.env.DB.prepare(
+          `
+                    INSERT INTO recommendations (
+                        user_id, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `
+        )
+          .bind(
+            userId,
+            organizationResult.id,
+            organizationResult.faculty,
+            state.title,
+            state.period_time,
+            state.readtime,
+            state.code,
+            state.qualification,
+            null // Temporalmente null, se actualizará después
+          )
+          .run();
+
+        if (!result.success) {
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al crear la recomendación",
+          });
+        }
+
+        const recommendationId = result.meta.last_row_id;
+
+        // Generar el path del archivo y subirlo a R2
+        const filePath = generateRecommendationPath(recommendationId);
+
+        // Generar contenido MDX
+        const mdxContent = generateRecommendationMDX(state, organizationResult);
+
+        // Subir a R2
+        const uploadSuccess = await uploadMarkdownToR2(
+          locals,
+          mdxContent,
+          filePath
+        );
+
+        if (!uploadSuccess) {
+          // Si falla la subida, eliminar la recomendación de la base de datos
+          await locals.runtime.env.DB.prepare(
+            "DELETE FROM recommendations WHERE id = ?"
+          )
+            .bind(recommendationId)
+            .run();
+
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al subir el contenido de la recomendación",
+          });
+        }
+
+        // Actualizar la recomendación con el content_path
+        const updateResult = await locals.runtime.env.DB.prepare(
+          "UPDATE recommendations SET content_path = ? WHERE id = ?"
+        )
+          .bind(filePath, recommendationId)
+          .run();
+
+        if (!updateResult.success) {
+          // Si falla la actualización, limpiar R2 y base de datos
+          await locals.runtime.env.R2.delete(filePath);
+          await locals.runtime.env.DB.prepare(
+            "DELETE FROM recommendations WHERE id = ?"
+          )
+            .bind(recommendationId)
+            .run();
+
+          throw new ActionError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              "Error al actualizar la recomendación con la ruta del archivo",
+          });
+        }
+
+        return {
+          message: "Recomendación creada exitosamente",
+          code: 201,
+          recommendationId: recommendationId,
+          filePath: filePath,
+        };
+      } catch (error) {
+        if (error instanceof ActionError) {
+          throw error;
+        }
+
+        console.error("Error creating recommendation:", error);
+
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error interno del servidor al crear la recomendación",
         });
       }
     },

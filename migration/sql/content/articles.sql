@@ -20,7 +20,7 @@ CREATE TABLE blogs (
   period_time TEXT NOT NULL,
   readtime INTEGER NOT NULL,
   tags TEXT, -- Json String con los tags del blog
-  content_path TEXT NOT NULL,
+  content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -35,7 +35,7 @@ CREATE TABLE recommendations (
   readtime INTEGER NOT NULL,
   code TEXT NOT NULL,
   qualification INTEGER CHECK (qualification >= 0 AND qualification <= 5),
-  content_path TEXT NOT NULL,
+  content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

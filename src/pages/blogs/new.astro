@@ -2,6 +2,7 @@
 import { getToken } from "@/lib/auth";
 import { getUserDataByToken } from "@/lib/server/auth";
 import { OsucPermissions } from "@/types/permissions";
+import { actions } from "astro:actions";
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
 import TagSelector from "@/components/ui/TagSelector.astro";
@@ -13,36 +14,22 @@ if (!token) {
 }
 
 const user = await getUserDataByToken(token);
-console.log(user?.permissions);
-if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
   return Astro.redirect("/");
 }
 
 let message = "";
 let messageType = "";
 
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
+// Verificar si hay un resultado de la acción
+const result = Astro.getActionResult(actions.createBlog);
 
-    // Enviar los datos a la API
-    const response = await fetch(new URL("/api/savemdx", Astro.url.origin), {
-      method: "POST",
-      body: data,
-    });
-
-    if (response.ok) {
-      message = "Blog creado exitosamente";
-      messageType = "success";
-    } else {
-      message = "Error al crear el blog. Por favor, intenta nuevamente.";
-      messageType = "error";
-    }
-  } catch (error) {
-    console.error("Error al procesar el formulario:", error);
-    message = "Error al procesar el formulario. Por favor, intenta nuevamente.";
-    messageType = "error";
-  }
+if (result && !result.error) {
+  message = result.data?.message || "Blog creado exitosamente";
+  messageType = "success";
+} else if (result?.error) {
+  message = result.error.message || "Error al crear el blog";
+  messageType = "error";
 }
 
 const blogResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
@@ -169,7 +156,11 @@ const blogData = (await blogResponse.json()) as { blogTags: string[] };
             Información del blog
           </h2>
 
-          <form class="space-y-4 sm:space-y-6 min-w-0" method="POST">
+          <form
+            class="space-y-4 sm:space-y-6 min-w-0"
+            method="POST"
+            action={actions.createBlog}
+          >
             <!-- Información básica del blog -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2 min-w-0">
@@ -184,13 +175,12 @@ const blogData = (await blogResponse.json()) as { blogTags: string[] };
                 />
               </div>
               <div class="space-y-2 min-w-0">
-                <label
-                  >Nombre de la iniciativa: <span class="text-red-500">*</span
-                  ></label
-                >
+                <label class="text-sm font-medium text-foreground block">
+                  Período <span class="text-red-500">*</span>
+                </label>
                 <input
-                  name="name"
-                  placeholder="Ingrese el nombre de la iniciativa"
+                  name="period_time"
+                  placeholder="Ej: 2024-1, 2024-2"
                   class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                   required
                 />
@@ -225,19 +215,6 @@ const blogData = (await blogResponse.json()) as { blogTags: string[] };
               />
             </div>
 
-            <!-- Resumen del blog - Ocupa toda la fila -->
-            <div class="space-y-2 min-w-0">
-              <label class="text-sm font-medium text-foreground block">
-                Resumen del blog <span class="text-red-500">*</span>
-              </label>
-              <textarea
-                name="resume"
-                placeholder="Breve descripción del contenido del blog. Explica de qué trata tu artículo y qué pueden esperar los lectores."
-                rows="4"
-                class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 resize-none"
-                required></textarea>
-            </div>
-
             <!-- Separador -->
             <div class="border-t border-border pt-4 sm:pt-6">
               <div class="space-y-2 mb-4">
@@ -255,7 +232,6 @@ const blogData = (await blogResponse.json()) as { blogTags: string[] };
             <div class="min-w-0">
               <EditorMDX submitText="Publicar Blog" client:only="react" />
             </div>
-            <input type="text" value="blogs" name="contentType" hidden />
           </form>
         </div>
       </article>

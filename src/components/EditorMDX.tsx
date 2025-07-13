@@ -275,7 +275,7 @@ También puedes combinar **texto en negrita** con <Pill variant="pink" size="md"
         name="content"
         value={editorContent}
         onChange={() => {}} // Solo lectura, se actualiza desde el editor
-        style={{ display: "none" }}
+        hidden
         readOnly
       />
     </div>
