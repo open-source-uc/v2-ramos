@@ -49,9 +49,9 @@ export function Search({
       <div className="relative flex-1">
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
           {isSearching ? (
-            <LoadingIcon className="h-4 w-4 fill-input animate-spin" />
+            <LoadingIcon className="h-4 w-4 fill-border animate-spin" />
           ) : (
-            <SearchIcon className="h-4 w-4 fill-input" />
+            <SearchIcon className="h-4 w-4 fill-border" />
           )}
         </div>
         <Input
