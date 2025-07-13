@@ -151,8 +151,36 @@ export const columns: ColumnDef<Course>[] = [
   },
   {
     accessorKey: "reviews",
-    header: () => {
-      return <div className="text-left font-semibold">Reseñas</div>;
+    header: ({ column }) => {
+      return (
+        <Button
+          className="font-semibold flex gap-2 items-center my-2"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Reseñas
+          <SwapVertIcon />
+        </Button>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original;
+      const b = rowB.original;
+      
+      // Calculate positivity percentage for both rows
+      const positivityA = calculatePositivePercentage(a.likes, a.superlikes, a.dislikes);
+      const positivityB = calculatePositivePercentage(b.likes, b.superlikes, b.dislikes);
+      
+      // Primary sort: by positivity percentage
+      if (positivityA !== positivityB) {
+        return positivityA - positivityB;
+      }
+      
+      // Secondary sort: by total review count (more reviews = higher rank)
+      const totalA = a.likes + a.superlikes + a.dislikes;
+      const totalB = b.likes + b.superlikes + b.dislikes;
+      
+      return totalA - totalB;
     },
     cell: ({ row }) => {
       const { superlikes, likes, dislikes } = row.original;
