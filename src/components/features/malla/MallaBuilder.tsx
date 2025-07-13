@@ -39,13 +39,15 @@ const CourseCard = ({
   locked, 
   onDelete, 
   onHover, 
-  onHoverEnd 
+  onHoverEnd,
+  isHighlighted = false
 }: { 
   course: MallaCourse; 
   locked: boolean; 
   onDelete: (courseId: string) => void;
   onHover: (courseSigle: string) => void;
   onHoverEnd: () => void;
+  isHighlighted?: boolean;
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: course.id,
@@ -60,7 +62,10 @@ const CourseCard = ({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "bg-background hover:bg-muted/50 transition-colors border rounded-md p-3 shadow-sm relative",
+        "transition-colors border rounded-md p-3 shadow-sm relative",
+        isHighlighted 
+          ? "bg-primary/20 border-primary hover:bg-primary/30" 
+          : "bg-background hover:bg-muted/50",
         isDragging && "opacity-50"
       )}
       onMouseEnter={() => onHover(course.sigle)}
@@ -142,7 +147,8 @@ const SemesterColumn = ({
   locked,
   onRemoveCourse,
   onCourseHover,
-  onCourseHoverEnd
+  onCourseHoverEnd,
+  highlightedCourses
 }: { 
   semester: MallaSemester; 
   onAddCourse: (semesterId: string) => void;
@@ -151,6 +157,7 @@ const SemesterColumn = ({
   onRemoveCourse: (courseId: string) => void;
   onCourseHover: (courseSigle: string) => void;
   onCourseHoverEnd: () => void;
+  highlightedCourses: Set<string>;
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: semester.id,
@@ -196,6 +203,7 @@ const SemesterColumn = ({
             onDelete={onRemoveCourse} 
             onHover={onCourseHover}
             onHoverEnd={onCourseHoverEnd}
+            isHighlighted={highlightedCourses.has(course.sigle)}
           />
         ))}
         
@@ -260,6 +268,7 @@ export const MallaBuilder = () => {
   const [locked, setLocked] = useState(false);
   const [hoveredCourse, setHoveredCourse] = useState<string | null>(null);
   const [prerequisites, setPrerequisites] = useState<string[]>([]);
+  const [highlightedCourses, setHighlightedCourses] = useState<Set<string>>(new Set());
 
   // Initialize data on component mount
   useEffect(() => {
@@ -383,20 +392,44 @@ export const MallaBuilder = () => {
       const response = await fetch(`/api/course-dependencies?sigle=${encodeURIComponent(courseSigle)}`);
       if (response.ok) {
         const data: { dependencies: string[] } = await response.json();
-        setPrerequisites(data.dependencies || []);
+        const dependencyList = data.dependencies || [];
+        setPrerequisites(dependencyList);
+        
+        // Find which prerequisite courses are present in the malla and highlight them
+        const coursesToHighlight = findCoursesInMalla(dependencyList);
+        setHighlightedCourses(coursesToHighlight);
       } else {
         console.error('Failed to fetch prerequisites');
         setPrerequisites([]);
+        setHighlightedCourses(new Set());
       }
     } catch (error) {
       console.error('Error fetching prerequisites:', error);
       setPrerequisites([]);
+      setHighlightedCourses(new Set());
     }
   };
 
   const handleCourseHoverEnd = () => {
     setHoveredCourse(null);
     setPrerequisites([]);
+    setHighlightedCourses(new Set());
+  };
+
+  // Helper function to find courses in malla that match prerequisites
+  const findCoursesInMalla = (prerequisiteSigles: string[]): Set<string> => {
+    const coursesInMalla = new Set<string>();
+    
+    // Go through all semesters and courses to find matches
+    mallaData.semesters.forEach(semester => {
+      semester.courses.forEach(course => {
+        if (prerequisiteSigles.includes(course.sigle)) {
+          coursesInMalla.add(course.sigle);
+        }
+      });
+    });
+    
+    return coursesInMalla;
   };
 
   if (isLoading) {
@@ -476,6 +509,7 @@ export const MallaBuilder = () => {
                     onRemoveCourse={handleRemoveCourse}
                     onCourseHover={handleCourseHover}
                     onCourseHoverEnd={handleCourseHoverEnd}
+                    highlightedCourses={highlightedCourses}
                   />
                 ))}
               </div>
@@ -568,6 +602,7 @@ export const MallaBuilder = () => {
             onDelete={handleRemoveCourse} 
             onHover={handleCourseHover}
             onHoverEnd={handleCourseHoverEnd}
+            isHighlighted={highlightedCourses.has(draggedCourse.sigle)}
           />
         )}
       </DragOverlay>
