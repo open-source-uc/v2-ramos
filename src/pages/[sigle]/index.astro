@@ -42,6 +42,8 @@ if (!sigle) {
 
 import { getEntry } from "astro:content";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import { SuccessToast } from "@/components/reviews/SuccessToast";
+import { ReportToast } from "@/components/reviews/ReportToast";
 import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
@@ -95,31 +97,21 @@ const hasExistingReview = userReview && userReview.id !== null;
 const reportResult = Astro.getActionResult(actions.reportCourseReview);
 const reportSuccessMessage = reportResult?.data?.message;
 
+// Get success message from URL params (from review creation/update)
+const successMessage = Astro.url.searchParams.get('success');
+
 
 ---
 
 <Layout>
+    <SuccessToast successMessage={successMessage || undefined} client:load />
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- Información Fundamental del Curso -->
-        {
-            reportSuccessMessage && (
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-                    <p class="font-medium">{reportSuccessMessage}</p>
-                </div>
-            )
-        }
-        {
-            !isInputError(reportResult?.error) && reportResult?.error?.message && (
-                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                    <p class="font-medium">{reportResult.error.message}</p>
-                </div>
-            )
-        }
         <section class="border border-border rounded-md px-6 py-8">
             <p class="text-sm">{course.sigle}</p>
 
             <div class="pt-2 flex items-center justify-between">
-                <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
+                <h1 class="text-3xl font-bold mb-2 max-w-[75%]">{course.name}</h1>
                 <Pill
                     variant="green"
                     size="xl"
@@ -133,6 +125,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                 <p class="text-sm opacity-60 max-w-[75%]">{course.description}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
+                <CourseCampuses campus={course.campus} lastSemester={course.last_semester} client:load />
                 <Pill
                     variant="green"
                     icon={HourglassIcon}
@@ -148,7 +141,6 @@ const reportSuccessMessage = reportResult?.data?.message;
                             </Pill>
                         )
                 }
-                <CourseCampuses courseSigle={course.sigle} client:load />
                 {
                     course.area &&
                         course.area !== "" && (
@@ -307,7 +299,7 @@ const reportSuccessMessage = reportResult?.data?.message;
                         icon={LinkIcon}
                         aria-label="Ver Secciones del Curso en Busca Cursos"
                     >
-                        Ver Secciones
+                        Ver en Busca Cursos
                     </Button>
 
                     <Button
@@ -510,4 +502,5 @@ const reportSuccessMessage = reportResult?.data?.message;
             </div>
         </section>
     </div>
+    <ReportToast result={reportResult} client:load />
 </Layout>
