@@ -41,6 +41,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = "";
+        let firstDataLoaded = false;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -55,6 +56,12 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
             if (line.trim()) {
               const item = JSON.parse(line);
               setCourses((prev) => [...prev, item]);
+              
+              // Set loading to false as soon as the first data loads
+              if (!firstDataLoaded) {
+                setIsLoading(false);
+                firstDataLoaded = true;
+              }
             }
           }
         }
@@ -63,10 +70,14 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
         if (buffer.trim()) {
           const item = JSON.parse(buffer);
           setCourses((prev) => [...prev, item]);
+          
+          // Set loading to false if this is the first (and only) item
+          if (!firstDataLoaded) {
+            setIsLoading(false);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch courses as stream:", error);
-      } finally {
         setIsLoading(false);
       }
     };

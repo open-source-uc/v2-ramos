@@ -20,7 +20,8 @@ import { toast } from "sonner";
 import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
 import { getClassTypeLong } from "./ScheduleLegend";
-import { Search, normalizeSearchText } from "@/components/features/search/SearchInput";
+import { Search } from "@/components/features/search/SearchInput";
+import { useFuseSearch } from "@/components/hooks/useFuseSearch";
 import {
   Command,
   CommandEmpty,
@@ -69,28 +70,28 @@ function CourseSearch({
   isLoading: boolean;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [normalizedSearchTerm, setNormalizedSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const filteredOptions = courseOptions.filter(option => {
-    const normalizedId = normalizeSearchText(option.id);
-    const normalizedName = normalizeSearchText(option.nombre);
-    return normalizedId.includes(normalizedSearchTerm) ||
-      normalizedName.includes(normalizedSearchTerm);
+  const fuseSearch = useFuseSearch({
+    data: courseOptions,
+    keys: ['id', 'nombre', 'sigle'],
+    threshold: 0.3,
+    minMatchCharLength: 1,
   });
+
+  const filteredOptions = fuseSearch(searchTerm);
 
   const handleSelect = (courseId: string) => {
     if (!selectedCourses.includes(courseId)) {
       onCourseSelect(courseId);
       setSearchTerm("");
-      setNormalizedSearchTerm("");
       setIsOpen(false);
     }
   };
 
-  const handleSearch = (normalizedValue: string) => {
-    setNormalizedSearchTerm(normalizedValue);
-    setIsOpen(normalizedValue.length > 0);
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setIsOpen(value.length > 0);
   };
 
   return (
@@ -99,6 +100,7 @@ function CourseSearch({
         onSearch={handleSearch}
         placeholder="Buscar curso (ej: IIC2214, Matemáticas)"
         initialValue={searchTerm}
+        useFuzzySearch={true}
       />
 
       {isLoading ? (
@@ -107,7 +109,7 @@ function CourseSearch({
             Cargando cursos...
           </div>
         </div>
-      ) : isOpen && normalizedSearchTerm && (
+      ) : isOpen && searchTerm && (
         <div className="absolute z-10 w-full mt-1">
           <div className="bg-background border border-border rounded-lg shadow-lg p-0">
             <Command>
@@ -305,9 +307,9 @@ export default function ScheduleCreator() {
                 <SearchIcon className="h-5 w-5 fill-current" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold">Buscar Cursos</h2>
+                <h2 className="text-lg font-semibold">Buscar</h2>
                 <p className="text-sm text-muted-foreground">
-                  Ingresa el código del curso o nombre para agregarlo a tu horario
+                  Agrega cursos a tu horario usando el buscador
                 </p>
               </div>
             </div>
@@ -399,7 +401,7 @@ export default function ScheduleCreator() {
                 <div>
                   <h2 className="text-lg font-semibold">Tu Horario</h2>
                   <p className="text-sm text-muted-foreground">
-                    Visualiza tu horario semanal con todos los cursos seleccionados
+                    Visualiza tu horario semanal
                   </p>
                 </div>
               </div>

@@ -17,7 +17,7 @@ import {
   navigationMenuTriggerStyle,
 } from "../ui/navigation-menu";
 import HighContrastToggle from "../common/HighContrastToggle";
-import CommandSearch from "../features/command/commandSearch";
+import CommandSearchTrigger from "../features/command/CommandSearchTrigger";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -112,7 +112,7 @@ export default function Header() {
             </NavigationMenu>
 
             <div className="flex items-center text-nowrap gap-2">
-              <CommandSearch />
+              <CommandSearchTrigger />
               <ButtonNavbar
                 text="CUENTA OSUC"
                 url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`} />
