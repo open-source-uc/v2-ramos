@@ -48,7 +48,6 @@ import { getToken } from "@/lib/auth";
 import PrerequisitesSection from "@/components/features/courses/PrerequisitesSection";
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
 import CourseCampuses from "@/components/features/courses/CourseCampuses";
-import { ReviewSort } from "@/components/features/courses/ReviewSort";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -57,10 +56,7 @@ if (!courseData) {
 const course = courseData.data;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
-
-// Get sort parameter from URL
-const sortBy = Astro.url.searchParams.get('sort') as 'recent' | 'positivity' || 'recent';
-const reviews = await getCourseReviews(Astro.locals, sigle, 10, sortBy);
+const reviews = await getCourseReviews(Astro.locals, sigle, 10);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);
@@ -356,19 +352,6 @@ const successMessage = Astro.url.searchParams.get('success');
                             )}
                         </div>
                     </div>
-                    {reviews && reviews.length > 0 && (
-                        <div class="mt-4 flex justify-end">
-                            <ReviewSort 
-                                currentSort={sortBy} 
-                                onSortChange={(newSort) => {
-                                    const url = new URL(window.location.href);
-                                    url.searchParams.set('sort', newSort);
-                                    window.location.href = url.toString();
-                                }}
-                                client:load
-                            />
-                        </div>
-                    )}
                 </div>
 
                 {reviews && reviews.length > 0 ? (
