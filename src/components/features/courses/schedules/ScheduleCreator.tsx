@@ -305,9 +305,9 @@ export default function ScheduleCreator() {
                 <SearchIcon className="h-5 w-5 fill-current" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold">Buscar Cursos</h2>
+                <h2 className="text-lg font-semibold">Buscar</h2>
                 <p className="text-sm text-muted-foreground">
-                  Ingresa el código del curso o nombre para agregarlo a tu horario
+                  Agrega cursos a tu horario usando el buscador
                 </p>
               </div>
             </div>
@@ -399,7 +399,7 @@ export default function ScheduleCreator() {
                 <div>
                   <h2 className="text-lg font-semibold">Tu Horario</h2>
                   <p className="text-sm text-muted-foreground">
-                    Visualiza tu horario semanal con todos los cursos seleccionados
+                    Visualiza tu horario semanal
                   </p>
                 </div>
               </div>
