@@ -9,7 +9,10 @@ import {
   PlusIcon, 
   AreaIcon,
   BuildingIcon,
-  CalendarIcon 
+  CalendarIcon,
+  CloseIcon,
+  LockClosedIcon,
+  LockOpenIcon 
 } from '@/components/icons/icons';
 import { cn } from '@/lib/utils';
 import { formatSemester } from '@/lib/currentSemester';
@@ -22,6 +25,7 @@ import {
   removeSemester,
   moveCourseBetweenSemesters,
   getCreditsForSemester,
+  removeCourseFromMalla,
   type MallaCourse,
   type MallaSemester,
   type MallaData
@@ -30,7 +34,7 @@ import type { Course } from '@/components/table/columns';
 
 
 // Draggable Course Card Component
-const CourseCard = ({ course }: { course: MallaCourse }) => {
+const CourseCard = ({ course, locked, onDelete }: { course: MallaCourse; locked: boolean; onDelete: (courseId: string) => void }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: course.id,
   });
@@ -43,34 +47,63 @@ const CourseCard = ({ course }: { course: MallaCourse }) => {
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
       className={cn(
-        "bg-background hover:bg-muted/50 transition-colors cursor-grab active:cursor-grabbing border rounded-md p-3 shadow-sm",
+        "bg-background hover:bg-muted/50 transition-colors border rounded-md p-3 shadow-sm relative",
         isDragging && "opacity-50"
       )}
     >
       <div className="space-y-3">
         {/* Course header */}
         <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
+          <div 
+            className="flex-1 min-w-0 cursor-grab active:cursor-grabbing"
+            {...listeners}
+            {...attributes}
+          >
             <p className="text-xs text-muted-foreground font-mono">{course.sigle}</p>
             <h3 className="font-semibold text-sm leading-tight">{course.name}</h3>
           </div>
-          <Pill variant="green" size="sm" icon={HourglassIcon}>
-            {course.credits}
-          </Pill>
+          <div className="flex items-center gap-2 relative z-10">
+            <Pill variant="green" size="sm" icon={HourglassIcon}>
+              {course.credits}
+            </Pill>
+            {!locked && (
+              <Button
+                variant="ghost"
+                size="xs"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onDelete(course.id);
+                }}
+                className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                aria-label={`Eliminar ${course.sigle}`}
+              >
+                <CloseIcon className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
         </div>
 
-        {/* Course description */}
+        {/* Course description - also draggable */}
         {course.description && (
-          <p className="text-xs text-muted-foreground line-clamp-2">
-            {course.description}
-          </p>
+          <div 
+            className="cursor-grab active:cursor-grabbing"
+            {...listeners}
+            {...attributes}
+          >
+            <p className="text-xs text-muted-foreground line-clamp-2">
+              {course.description}
+            </p>
+          </div>
         )}
 
-        {/* Course metadata */}
-        <div className="flex flex-wrap gap-1">
+        {/* Course metadata - also draggable */}
+        <div 
+          className="flex flex-wrap gap-1 cursor-grab active:cursor-grabbing"
+          {...listeners}
+          {...attributes}
+        >
           {course.area && (
             <Pill variant="pink" size="xs" icon={AreaIcon}>
               {course.area}
@@ -91,11 +124,15 @@ const CourseCard = ({ course }: { course: MallaCourse }) => {
 const SemesterColumn = ({ 
   semester, 
   onAddCourse, 
-  onDeleteSemester 
+  onDeleteSemester,
+  locked,
+  onRemoveCourse
 }: { 
   semester: MallaSemester; 
   onAddCourse: (semesterId: string) => void;
   onDeleteSemester: (semesterId: string) => void;
+  locked: boolean;
+  onRemoveCourse: (courseId: string) => void;
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: semester.id,
@@ -134,7 +171,7 @@ const SemesterColumn = ({
         className="p-2 space-y-2 min-h-[400px]"
       >
         {semester.courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard key={course.id} course={course} locked={locked} onDelete={onRemoveCourse} />
         ))}
         
         {/* Empty state hint */}
@@ -195,6 +232,7 @@ export const MallaBuilder = () => {
   const [commandOpen, setCommandOpen] = useState(false);
   const [selectedSemesterId, setSelectedSemesterId] = useState<string>('');
   const [draggedCourse, setDraggedCourse] = useState<MallaCourse | null>(null);
+  const [locked, setLocked] = useState(false);
 
   // Initialize data on component mount
   useEffect(() => {
@@ -306,6 +344,12 @@ export const MallaBuilder = () => {
     }
   };
 
+  const handleRemoveCourse = (courseId: string) => {
+    if (removeCourseFromMalla(courseId)) {
+      setMallaData(getSavedMallaData());
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -329,14 +373,25 @@ export const MallaBuilder = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-6">
-        {/* Add semester button */}
+        {/* Header with lock button and add semester button */}
         <div className="flex justify-between items-center">
-          <div className="hidden tablet:block"></div>
+          <Button
+            onClick={() => setLocked(!locked)}
+            variant="ghost_border"
+            size="icon"
+            aria-label={locked ? "Desbloquear cursos" : "Bloquear cursos"}
+          >
+            {locked ? (
+              <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
+            ) : (
+              <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
+            )}
+          </Button>
           <Button
             variant="outline"
             onClick={handleAddSemester}
             icon={CalendarIcon}
-            className="w-full tablet:w-auto"
+            className="w-full tablet:w-auto max-w-[200px]"
           >
             <span className="tablet:hidden">Agregar Semestre</span>
             <span className="hidden tablet:inline">Agregar Semestre</span>
@@ -368,6 +423,8 @@ export const MallaBuilder = () => {
                     semester={semester}
                     onAddCourse={handleAddCourse}
                     onDeleteSemester={handleDeleteSemester}
+                    locked={locked}
+                    onRemoveCourse={handleRemoveCourse}
                   />
                 ))}
               </div>
@@ -425,7 +482,7 @@ export const MallaBuilder = () => {
       
       {/* Drag overlay */}
       <DragOverlay>
-        {draggedCourse && <CourseCard course={draggedCourse} />}
+        {draggedCourse && <CourseCard course={draggedCourse} locked={locked} onDelete={handleRemoveCourse} />}
       </DragOverlay>
     </DndContext>
   );

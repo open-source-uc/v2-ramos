@@ -113,6 +113,12 @@ export function addCourseToSemester(course: MallaCourse, semesterId: string): bo
   semester.courses.push(course);
   
   saveMallaData(currentData);
+  
+  // Sync to schedule storage if this is the current semester
+  if (semesterId === CURRENT_SEMESTER) {
+    syncCurrentSemesterToSchedule();
+  }
+  
   return true;
 }
 
@@ -122,17 +128,27 @@ export function addCourseToSemester(course: MallaCourse, semesterId: string): bo
 export function removeCourseFromMalla(courseId: string): boolean {
   const currentData = getSavedMallaData();
   let removed = false;
+  let wasFromCurrentSemester = false;
   
   currentData.semesters.forEach(semester => {
     const initialLength = semester.courses.length;
     semester.courses = semester.courses.filter(course => course.id !== courseId);
     if (semester.courses.length !== initialLength) {
       removed = true;
+      if (semester.id === CURRENT_SEMESTER) {
+        wasFromCurrentSemester = true;
+      }
     }
   });
   
   if (removed) {
     saveMallaData(currentData);
+    
+    // Sync to schedule storage if course was removed from current semester
+    if (wasFromCurrentSemester) {
+      syncCurrentSemesterToSchedule();
+    }
+    
     return true;
   }
   
@@ -171,6 +187,12 @@ export function moveCourseBetweenSemesters(courseId: string, targetSemesterId: s
   targetSemester.courses.push(courseToMove);
   
   saveMallaData(currentData);
+  
+  // Sync to schedule storage if either source or target is the current semester
+  if (sourceSemester.id === CURRENT_SEMESTER || targetSemester.id === CURRENT_SEMESTER) {
+    syncCurrentSemesterToSchedule();
+  }
+  
   return true;
 }
 
@@ -214,6 +236,12 @@ export function removeSemester(semesterId: string): boolean {
   
   currentData.semesters = remainingSemesters;
   saveMallaData(currentData);
+  
+  // Sync to schedule storage if we removed the current semester
+  if (semesterId === CURRENT_SEMESTER) {
+    syncCurrentSemesterToSchedule();
+  }
+  
   return true;
 }
 
@@ -234,6 +262,7 @@ export function clearMallaData(): void {
     semesters: [generateInitialSemester()]
   };
   saveMallaData(initialData);
+  syncCurrentSemesterToSchedule();
 }
 
 /**
@@ -262,4 +291,29 @@ export function getTotalMallaCredits(): number {
   return currentData.semesters.reduce((total, semester) => 
     total + semester.courses.reduce((semTotal, course) => semTotal + course.credits, 0), 0
   );
+}
+
+/**
+ * Sync current semester courses to schedule storage
+ * Call this after modifying courses in the current semester
+ */
+export function syncCurrentSemesterToSchedule(): void {
+  if (typeof window === "undefined") return;
+  
+  const currentData = getSavedMallaData();
+  const currentSemester = currentData.semesters.find(s => s.id === CURRENT_SEMESTER);
+  
+  if (!currentSemester) return;
+  
+  // Convert malla courses back to schedule format
+  const scheduleIds = currentSemester.courses
+    .map(course => `${course.sigle}-1`) // Default to section 1
+    .filter(id => id.includes('-')); // Ensure valid format
+  
+  // Update schedule storage
+  try {
+    localStorage.setItem("scheduleCourses", JSON.stringify(scheduleIds));
+  } catch (error) {
+    console.error("Error syncing to schedule storage:", error);
+  }
 }
