@@ -22,8 +22,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import TableCourseCampuses from "./TableCourseCampuses";
+
 import {
-  LocationIcon,
   AreaIcon,
   OpenInFullIcon
 } from "@/components/icons/icons";
@@ -226,40 +227,37 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
                   {course.name}
                 </h3>
 
-                {/* Campus */}
-                <div className="flex items-center gap-2 mb-3 flex-wrap">
-                  {course.campus && course.campus.filter(campus => campus && campus.trim() !== "").length > 0 ? (
-                    course.campus
-                      .filter(campus => campus && campus.trim() !== "")
-                      .map((campusItem, index) => (
-                        <Pill key={index} variant="blue" size="sm" icon={LocationIcon}>
-                          {campusItem}
-                        </Pill>
-                      ))
-                  ) : (
-                    <Pill variant="red" size="sm" icon={LocationIcon}>No campus</Pill>
-                  )}
-                </div>
-
-                {course.area && (
-                  <div className="flex items-center gap-2 mb-3">
-
-                    <Pill variant="pink" size="sm" icon={AreaIcon}>{course.area}</Pill>
-                  </div>
-                )}
-                {/* Reseñas con componente Sentiment */}
-                <div className="flex items-center justify-between mb-2">
-                  {totalReviews === 0 ? (
-                    <Sentiment sentiment="question" size="xs" />
-                  ) : (
-                    <Sentiment
-                      sentiment={sentimentType}
-                      size="xs"
-                      percentage={positivePercentage}
-                      reviewCount={totalReviews}
-                      ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
+                <div className="flex flex-col gap-2">
+                  {/* Campus */}
+                  <div className="flex items-center">
+                    <TableCourseCampuses
+                      variant="with-icon"
+                      campus={course.campus || []}
+                      lastSemester={course.last_semester}
                     />
+                  </div>
+
+                  {/* Área de Formación General */}
+                  {course.area && (
+                    <div className="flex items-center">
+
+                      <Pill variant="pink" size="sm" icon={AreaIcon}>{course.area}</Pill>
+                    </div>
                   )}
+                  {/* Reseñas con componente Sentiment */}
+                  <div className="flex items-center justify-between">
+                    {totalReviews === 0 ? (
+                      <Sentiment sentiment="question" size="xs" />
+                    ) : (
+                      <Sentiment
+                        sentiment={sentimentType}
+                        size="xs"
+                        percentage={positivePercentage}
+                        reviewCount={totalReviews}
+                        ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
+                      />
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-row-reverse mt-4 text-xs text-muted-foreground items-center gap-1">
                   <OpenInFullIcon className="inline-block h-4 w-4" /> Presiona para ver detalles
