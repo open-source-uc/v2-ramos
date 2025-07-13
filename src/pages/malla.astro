@@ -1,0 +1,23 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { MallaBuilder } from "@/components/features/malla/MallaBuilder";
+---
+
+<Layout>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <section class="mb-8">
+            <div class="border border-border rounded-md px-6 py-8">
+                <h1 class="text-3xl font-bold mb-2">Planificador de Malla</h1>
+                <p class="text-sm opacity-60 max-w-[75%]">
+                    Organiza tus cursos por semestres para planificar tu carrera universitaria. 
+                    Arrastra los cursos entre semestres para crear tu plan académico ideal.
+                    Los cursos de tu horario actual aparecerán en el semestre correspondiente.
+                </p>
+            </div>
+        </section>
+
+        <!-- Malla Builder -->
+        <MallaBuilder client:load />
+    </div>
+</Layout>
