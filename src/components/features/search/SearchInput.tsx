@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { SearchIcon, LoadingIcon } from "@/components/icons/icons"
 
 interface SearchProps {
   onSearch: (searchTerm: string) => void
@@ -10,6 +11,7 @@ interface SearchProps {
   className?: string
   initialValue?: string
   normalizeText?: boolean // Option to enable/disable text normalization
+  isSearching?: boolean // New prop to indicate loading state
 }
 
 // Function to normalize text for searching (handle special characters)
@@ -25,7 +27,8 @@ export function Search({
   placeholder = "Buscar por nombre o sigla...",
   className = "",
   initialValue = "",
-  normalizeText = true // Default to true for better search experience
+  normalizeText = true, // Default to true for better search experience
+  isSearching = false // Default to false
 }: SearchProps) {
   const [searchTerm, setSearchTerm] = useState(initialValue)
 
@@ -44,12 +47,19 @@ export function Search({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <div className="relative flex-1">
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+          {isSearching ? (
+            <LoadingIcon className="h-4 w-4 fill-input animate-spin" />
+          ) : (
+            <SearchIcon className="h-4 w-4 fill-input" />
+          )}
+        </div>
         <Input
-          variant="search"
           type="text"
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
+          className="pl-10"
         />
         {searchTerm && (
           <Button

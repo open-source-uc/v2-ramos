@@ -27,6 +27,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [courses, setCourses] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isSearching, setIsSearching] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -205,6 +206,18 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return filtered;
   }, [courses, selectedArea, selectedCampus, selectedSchool, selectedFormat, showRetirableOnly, showEnglishOnly]);
 
+  // Add debounced search effect
+  useEffect(() => {
+    if (searchValue !== initialSearchValue) {
+      setIsSearching(true)
+      const timer = setTimeout(() => {
+        setIsSearching(false)
+      }, 300) // Show loading for 300ms after user stops typing
+
+      return () => clearTimeout(timer)
+    }
+  }, [searchValue, initialSearchValue])
+
   const handleSearch = (normalizedValue: string) => {
     setSearchValue(normalizedValue);
   };
@@ -291,6 +304,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
               placeholder="Buscar por nombre o sigla..."
               className="w-full"
               initialValue={initialSearchValue}
+              isSearching={isSearching}
             />
           </div>
 

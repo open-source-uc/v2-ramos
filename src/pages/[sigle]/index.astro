@@ -111,7 +111,7 @@ const successMessage = Astro.url.searchParams.get('success');
             <p class="text-sm">{course.sigle}</p>
 
             <div class="pt-2 flex items-center justify-between">
-                <h1 class="text-3xl font-bold mb-2">{course.name}</h1>
+                <h1 class="text-3xl font-bold mb-2 max-w-[75%]">{course.name}</h1>
                 <Pill
                     variant="green"
                     size="xl"
@@ -299,7 +299,7 @@ const successMessage = Astro.url.searchParams.get('success');
                         icon={LinkIcon}
                         aria-label="Ver Secciones del Curso en Busca Cursos"
                     >
-                        Ver Secciones
+                        Ver en Busca Cursos
                     </Button>
 
                     <Button

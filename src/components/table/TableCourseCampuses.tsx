@@ -11,7 +11,7 @@ export default function TableCourseCampuses({ campus, lastSemester }: TableCours
     const validCampus = campus?.filter(campusItem => campusItem && campusItem.trim() !== "") || [];
     
     if (validCampus.length === 0) {
-        return <div className="text-muted-foreground text-sm">No campus</div>;
+        return <div></div>;
     }
 
     const prefixText = getCampusPrefix(lastSemester);
