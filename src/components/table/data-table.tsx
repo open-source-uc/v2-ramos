@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { columns, type Course } from "./columns";
+import Fuse from "fuse.js";
 
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   type SortingState,
 } from "@tanstack/react-table";
@@ -36,15 +36,6 @@ import {
   calculatePositivePercentage,
 } from "@/lib/courseStats";
 
-// Utility function to normalize text by removing accents and converting to lowercase
-const normalizeText = (text: string): string => {
-  return text
-    .toLowerCase()
-    .normalize("NFD") // Decompose accented characters
-    .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
-    .replace(/[^\w\s]/g, ""); // Remove special characters except word characters and spaces
-};
-
 interface DataTableProps {
   data: Course[];
   externalSearchValue?: string;
@@ -54,33 +45,41 @@ export function DataTable({ data, externalSearchValue = "" }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState(externalSearchValue);
 
+  // Create Fuse instance with configuration for fuzzy searching
+  const fuse = useMemo(() => {
+    return new Fuse(data, {
+      keys: ['name', 'sigle'],
+      threshold: 0.3,
+      ignoreLocation: true,
+      includeScore: true,
+      minMatchCharLength: 2,
+    });
+  }, [data]);
+
+  // Filter data using Fuse.js before passing to table
+  const filteredData = useMemo(() => {
+    if (!globalFilter || globalFilter.trim() === '') {
+      return data;
+    }
+    
+    const searchResults = fuse.search(globalFilter);
+    return searchResults.map(result => result.item);
+  }, [data, globalFilter, fuse]);
+
   // Update internal filter when external search value changes
   useEffect(() => {
     setGlobalFilter(externalSearchValue);
   }, [externalSearchValue]);
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: (row, columnId, value) => {
-      const name = row.getValue("name") as string;
-      const sigle = row.getValue("sigle") as string;
-      const searchValue = normalizeText(value);
-
-      return (
-        normalizeText(name).includes(searchValue) ||
-        normalizeText(sigle).includes(searchValue)
-      );
-    },
-    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
-      globalFilter,
     },
   });
 
