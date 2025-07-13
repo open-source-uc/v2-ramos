@@ -2,6 +2,7 @@ import * as React from "react"
 import {
   ArrowUpRightIcon,
   SearchIcon,
+  LoadingIcon,
 } from "@/components/icons/icons"
 
 import {
@@ -22,6 +23,7 @@ export default function CommandSearch() {
   const [courses, setCourses] = React.useState<Course[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
+  const [isSearching, setIsSearching] = React.useState(false)
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -98,6 +100,20 @@ export default function CommandSearch() {
       .slice(0, 4) // Limit to 4 courses
   }, [courses, searchQuery])
 
+  // Add debounced search effect for loading state
+  React.useEffect(() => {
+    if (searchQuery.trim()) {
+      setIsSearching(true)
+      const timer = setTimeout(() => {
+        setIsSearching(false)
+      }, 300) // Show loading for 300ms after user stops typing
+
+      return () => clearTimeout(timer)
+    } else {
+      setIsSearching(false)
+    }
+  }, [searchQuery])
+
   const handleSearchChange = (value: string) => {
     setSearchQuery(value)
   }
@@ -113,7 +129,11 @@ export default function CommandSearch() {
         onClick={() => setOpen(true)}
         aria-label="Buscar cursos y comandos"
       >
-        <SearchIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+        {isSearching ? (
+          <LoadingIcon className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
+        ) : (
+          <SearchIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+        )}
         <span className="grow text-left font-normal text-sm">Buscar...</span>
         <kbd className="hidden inline-flex h-5 items-center rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
           ⌘K
