@@ -518,3 +518,9 @@ export function LanguageIcon({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="m459-88 180.31-486h81.92L901.54-88h-72.23l-39.62-100H566.85L527.23-88H459ZM130.77-204.38l-47.31-47.31 189.85-190.62q-41.23-45-82.62-107.15Q149.31-611.62 138-646h76.23q11.62 26.62 44.73 76.73 33.12 50.12 60.66 80.65 54.23-57 94.23-116.84 40-59.85 64.38-120.54H55.38v-66H310v-49.23h66V-792h254.62v66h-77.85q-19.92 64.77-68.08 137.77-48.15 73-118.77 146.38l87.39 91.16-24.39 70.23-110.3-113.31-187.85 189.39Zm459.54-49.77h175.92l-87.46-225.47-88.46 225.47Z"/></svg>
   );
 }
+
+export function ArrowUpRightIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M252.54-250.46 207-296l389.23-391H243.54v-66h466v466h-66v-352.69l-391 389.23Z"/></svg>
+  );
+}
