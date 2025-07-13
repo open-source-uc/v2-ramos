@@ -8,7 +8,7 @@ CREATE TABLE organizations (
     logo_url TEXT NOT NULL, -- URL del logo de la organización
     page_link TEXT NOT NULL UNIQUE, -- Link interno de la página (ej: "/organizations/cai")
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 );
 
 -- Tabla para blogs
@@ -22,7 +22,8 @@ CREATE TABLE blogs (
   tags TEXT, -- Json String con los tags del blog
   content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE recommendations (
@@ -37,8 +38,38 @@ CREATE TABLE recommendations (
   qualification INTEGER CHECK (qualification >= 0 AND qualification <= 5),
   content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE RESTRICT
 );
+
+-- Triggers para actualizar updated_at automáticamente
+CREATE TRIGGER update_organizations_updated_at
+    AFTER UPDATE ON organizations
+    FOR EACH ROW
+    BEGIN
+        UPDATE organizations
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE id = NEW.id;
+    END;
+
+CREATE TRIGGER update_blogs_updated_at
+    AFTER UPDATE ON blogs
+    FOR EACH ROW
+    BEGIN
+        UPDATE blogs
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE id = NEW.id;
+    END;
+
+CREATE TRIGGER update_recommendations_updated_at
+    AFTER UPDATE ON recommendations
+    FOR EACH ROW
+    BEGIN
+        UPDATE recommendations
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE id = NEW.id;
+    END;
+
 
 -- Índices para la tabla organizations
 CREATE INDEX idx_organizations_user_id ON organizations(user_id);

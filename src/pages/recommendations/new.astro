@@ -13,7 +13,7 @@ if (!token) {
 }
 
 const user = await getUserDataByToken(token);
-if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
+if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
   return Astro.redirect("/");
 }
 
@@ -40,6 +40,36 @@ const schools = blogsData.schools || [];
   <main
     class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"
   >
+    {
+      message && (
+        <section
+          class={`border rounded-md p-4 sm:p-6 mb-6 ${
+            messageType === "success"
+              ? "border-green-200 bg-green-50"
+              : "border-red-200 bg-red-50"
+          }`}
+          role="alert"
+          aria-live="polite"
+        >
+          <div class="flex items-center gap-2">
+            <span
+              class={`flex-shrink-0 ${
+                messageType === "success" ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {messageType === "success" ? "✅" : "❌"}
+            </span>
+            <p
+              class={`text-xs sm:text-sm font-medium ${
+                messageType === "success" ? "text-green-800" : "text-red-800"
+              }`}
+            >
+              {message}
+            </p>
+          </div>
+        </section>
+      )
+    }
     <!-- Header Section -->
     <header class="mb-8 sm:mb-12">
       <section

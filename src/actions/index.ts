@@ -166,7 +166,7 @@ function generateBlogMDX(blogData: any, organizationData: any) {
       ? `\ntags:\n${tagsArray.map((tag: string) => `  - ${tag}`).join("\n")}`
       : "";
   const authorTitle = organizationData.title
-    ? `\n  ${organizationData.title.trim()}`
+    ? `\n  title: "${organizationData.title.trim()}"`
     : "";
   const authorSection = `author:
   name: "${organizationData.organization_name}"
@@ -175,9 +175,9 @@ function generateBlogMDX(blogData: any, organizationData: any) {
   link: "${organizationData.page_link}"`;
 
   return `---
-title = "${blogData.title}"
-period = "${blogData.period_time}"
-readtime = ${blogData.readtime}
+title: "${blogData.title}"
+period: "${blogData.period_time}"
+readtime: ${blogData.readtime}
 ${authorSection}${tagsSection}
 ---
 
@@ -201,10 +201,10 @@ function generateRecommendationMDX(
   link: "${organizationData.page_link}"`;
 
   return `---
-title = "${recommendationData.code}-${recommendationData.title}"
+title: "${recommendationData.code}-${recommendationData.title}"
 code: "${recommendationData.code}"
 period: "${recommendationData.period_time}"
-readtime = ${recommendationData.readtime}
+readtime: ${recommendationData.readtime}
 qualifiation: ${recommendationData.qualification}
 ${authorSection}
 ---
@@ -596,7 +596,7 @@ export const server = {
         });
       }
 
-      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+      if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
         throw new ActionError({
           code: "FORBIDDEN",
           message: "No tienes permisos para eliminar reseñas",
@@ -665,7 +665,7 @@ export const server = {
         });
       }
 
-      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+      if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
         throw new ActionError({
           code: "FORBIDDEN",
           message: "No tienes permisos para eliminar reseñas",
@@ -748,7 +748,7 @@ export const server = {
           message: "Debes iniciar sesión para crear un blog",
         });
       }
-      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+      if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
         throw new ActionError({
           code: "FORBIDDEN",
           message: "No tienes permisos para crear blogs",
@@ -756,7 +756,7 @@ export const server = {
       }
 
       const organizationResult = await locals.runtime.env.DB.prepare(
-        `SELECT id, user_id, organization_name AS name, faculty, title, logo_url, page_link FROM organizations WHERE user_id = ?`
+        `SELECT id, user_id, organization_name, faculty, title, logo_url, page_link FROM organizations WHERE user_id = ?`
       )
         .bind(userId)
         .first();
@@ -892,7 +892,7 @@ export const server = {
           message: "Debes iniciar sesión para crear una recomendación",
         });
       }
-      if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+      if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
         throw new ActionError({
           code: "FORBIDDEN",
           message: "No tienes permisos para crear recomendaciones",
