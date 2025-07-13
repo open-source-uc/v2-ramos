@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer.astro";
 import { Banner } from "@/components/ui/banner";
 import { Toaster } from "@/components/ui/sonner";
+import CommandWrapper from "@/components/features/command/CommandWrapper";
 import MainHead from "@/layouts/MainHead.astro";
 
 const {
@@ -25,26 +26,28 @@ const {
     robots={robots}
   />
   <body class="bg-background text-foreground min-h-screen">
-    <!-- Banner de Anuncios -->
-    <Banner
-      variant="pink"
-      size="md"
-      icon="VeryHappyIcon"
-      dismissible={true}
-      bannerId="2025-07-11"
-      client:load
-    >
-      <strong>Página en Desarrollo</strong>: ¡Ahora con prerequisitos, secciones y armado de horarios!
-    </Banner>
+    <CommandWrapper client:load>
+      <!-- Banner de Anuncios -->
+      <Banner
+        variant="pink"
+        size="md"
+        icon="VeryHappyIcon"
+        dismissible={true}
+        bannerId="2025-07-11"
+        client:load
+      >
+        <strong>Página en Desarrollo</strong>: ¡Ahora con prerequisitos, secciones y armado de horarios!
+      </Banner>
 
-    <!-- Main -->
-    <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
-      <Header client:load />
-      <slot />
-      <Footer />
-    </main>
-    
-    <!-- Global Toaster for notifications -->
-    <Toaster client:load />
+      <!-- Main -->
+      <main class="flex flex-col gap-4 px-2 sm:px-4 tablet:px-8">
+        <Header client:load />
+        <slot />
+        <Footer />
+      </main>
+      
+      <!-- Global Toaster for notifications -->
+      <Toaster client:load />
+    </CommandWrapper>
   </body>
 </html>

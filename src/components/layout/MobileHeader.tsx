@@ -4,7 +4,7 @@ import * as React from "react";
 import { MenuIcon, CloseIcon } from "../icons/icons";
 import HighContrastToggle from "../common/HighContrastToggle";
 import DarkThemeToggle from "../common/DarkThemeToggle";
-import CommandSearch from "../features/command/commandSearch";
+import CommandSearchTrigger from "../features/command/CommandSearchTrigger";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -45,7 +45,7 @@ export default function MobileHeader() {
 
         <div className="flex items-center gap-2">
 
-          <CommandSearch />
+          <CommandSearchTrigger />
           
           <button
             onClick={toggleMenu}

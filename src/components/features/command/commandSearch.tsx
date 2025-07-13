@@ -15,27 +15,16 @@ import {
 } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import { useFuseSearch } from "@/components/hooks/useFuseSearch"
+import { useCommand } from "@/components/providers/CommandProvider"
 import type { Course } from "@/components/table/columns"
 import { Pill } from "@/components/ui/pill"
 
 export default function CommandSearch() {
-  const [open, setOpen] = React.useState(false)
+  const { isOpen: open, setIsOpen: setOpen } = useCommand()
   const [courses, setCourses] = React.useState<Course[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [isSearching, setIsSearching] = React.useState(false)
-
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
-      }
-    }
-
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
 
   React.useEffect(() => {
     if (open && courses.length === 0) {
@@ -114,27 +103,7 @@ export default function CommandSearch() {
   }
 
   return (
-    <>
-      <button
-        className={cn(
-          "inline-flex w-full max-w-sm items-center gap-3 rounded-lg border border-border bg-background px-3 py-1 text-sm",
-          "text-muted-foreground/70 transition-colors hover:bg-muted/50",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
-        )}
-        onClick={() => setOpen(true)}
-        aria-label="Buscar cursos y comandos"
-      >
-        {isSearching ? (
-          <LoadingIcon className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
-        ) : (
-          <SearchIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-        )}
-        <span className="grow text-left font-normal text-sm">Buscar...</span>
-        <kbd className="hidden inline-flex h-5 items-center rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
-          ⌘K
-        </kbd>
-      </button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput 
           placeholder="Buscar cursos por nombre o sigla..." 
           onValueChange={handleSearchChange}
@@ -195,6 +164,5 @@ export default function CommandSearch() {
           )}
         </CommandList>
       </CommandDialog>
-    </>
   )
 }
