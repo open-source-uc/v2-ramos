@@ -12,6 +12,7 @@ interface SearchProps {
   initialValue?: string
   normalizeText?: boolean // Option to enable/disable text normalization
   isSearching?: boolean // New prop to indicate loading state
+  useFuzzySearch?: boolean // Option to use Fuse.js for normalization
 }
 
 // Function to normalize text for searching (handle special characters)
@@ -28,15 +29,22 @@ export function Search({
   className = "",
   initialValue = "",
   normalizeText = true, // Default to true for better search experience
-  isSearching = false // Default to false
+  isSearching = false, // Default to false
+  useFuzzySearch = false // Default to false to maintain backward compatibility
 }: SearchProps) {
   const [searchTerm, setSearchTerm] = useState(initialValue)
 
   const handleSearch = (value: string) => {
     setSearchTerm(value)
-    // Pass both original and normalized text to the parent component
-    const searchValue = normalizeText ? normalizeSearchText(value) : value
-    onSearch(searchValue)
+    
+    // If using fuzzy search, pass the original value (Fuse.js handles normalization)
+    // Otherwise, use the existing normalization logic
+    if (useFuzzySearch) {
+      onSearch(value)
+    } else {
+      const searchValue = normalizeText ? normalizeSearchText(value) : value
+      onSearch(searchValue)
+    }
   }
 
   const clearSearch = () => {

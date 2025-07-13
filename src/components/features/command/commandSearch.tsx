@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
-import { normalizeSearchText } from "@/components/features/search/SearchInput"
+import { useFuseSearch } from "@/components/hooks/useFuseSearch"
 import type { Course } from "@/components/table/columns"
 import { Pill } from "@/components/ui/pill"
 
@@ -82,23 +82,18 @@ export default function CommandSearch() {
     }
   }
 
+  const fuseSearch = useFuseSearch({
+    data: courses,
+    keys: ['name', 'sigle'],
+    threshold: 0.3,
+    minMatchCharLength: 1,
+  });
+
   const filteredCourses = React.useMemo(() => {
     if (!searchQuery.trim()) return []
-
-    const normalizedQuery = normalizeSearchText(searchQuery)
     
-    return courses
-      .filter((course) => {
-        const normalizedSigle = normalizeSearchText(course.sigle || "")
-        const normalizedName = normalizeSearchText(course.name || "")
-        
-        return (
-          normalizedSigle.includes(normalizedQuery) ||
-          normalizedName.includes(normalizedQuery)
-        )
-      })
-      .slice(0, 4) // Limit to 4 courses
-  }, [courses, searchQuery])
+    return fuseSearch(searchQuery).slice(0, 4) // Limit to 4 courses
+  }, [fuseSearch, searchQuery])
 
   // Add debounced search effect for loading state
   React.useEffect(() => {
