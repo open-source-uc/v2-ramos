@@ -119,15 +119,15 @@ function splitByOperator(expression: string, operator: 'y' | 'o'): string[] {
 function extractCourses(text: string): PrerequisiteCourse[] {
   const courses: PrerequisiteCourse[] = [];
   
-  // Identificar cursos y correquisitos
-  const matches = text.match(/[A-Z]{2,4}\d{1,4}[A-Z]?(?:\(c\))?/g) || [];
+  // Identificar cursos y correquisitos - updated regex to handle longer course codes
+  const matches = text.match(/[A-Z]{2,}[0-9]+[A-Z]*(?:\(c\))?/g) || [];
   
   for (const match of matches) {
     if (match) {
       const isCoreq = match.endsWith('(c)');
       const sigle = isCoreq ? match.slice(0, -3) : match;
       
-      if (/^[A-Z]{2,4}\d{1,4}[A-Z]?$/.test(sigle)) {
+      if (/^[A-Z]{2,}[0-9]+[A-Z]*$/.test(sigle)) {
         courses.push({
           sigle,
           isCoreq
@@ -151,4 +151,5 @@ function isBalancedParentheses(text: string): boolean {
   }
   return count === 0;
 }
+
 

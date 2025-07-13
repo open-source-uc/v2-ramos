@@ -34,7 +34,19 @@ import type { Course } from '@/components/table/columns';
 
 
 // Draggable Course Card Component
-const CourseCard = ({ course, locked, onDelete }: { course: MallaCourse; locked: boolean; onDelete: (courseId: string) => void }) => {
+const CourseCard = ({ 
+  course, 
+  locked, 
+  onDelete, 
+  onHover, 
+  onHoverEnd 
+}: { 
+  course: MallaCourse; 
+  locked: boolean; 
+  onDelete: (courseId: string) => void;
+  onHover: (courseSigle: string) => void;
+  onHoverEnd: () => void;
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: course.id,
   });
@@ -51,6 +63,8 @@ const CourseCard = ({ course, locked, onDelete }: { course: MallaCourse; locked:
         "bg-background hover:bg-muted/50 transition-colors border rounded-md p-3 shadow-sm relative",
         isDragging && "opacity-50"
       )}
+      onMouseEnter={() => onHover(course.sigle)}
+      onMouseLeave={onHoverEnd}
     >
       <div className="space-y-3">
         {/* Course header */}
@@ -126,13 +140,17 @@ const SemesterColumn = ({
   onAddCourse, 
   onDeleteSemester,
   locked,
-  onRemoveCourse
+  onRemoveCourse,
+  onCourseHover,
+  onCourseHoverEnd
 }: { 
   semester: MallaSemester; 
   onAddCourse: (semesterId: string) => void;
   onDeleteSemester: (semesterId: string) => void;
   locked: boolean;
   onRemoveCourse: (courseId: string) => void;
+  onCourseHover: (courseSigle: string) => void;
+  onCourseHoverEnd: () => void;
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: semester.id,
@@ -171,7 +189,14 @@ const SemesterColumn = ({
         className="p-2 space-y-2 min-h-[400px]"
       >
         {semester.courses.map((course) => (
-          <CourseCard key={course.id} course={course} locked={locked} onDelete={onRemoveCourse} />
+          <CourseCard 
+            key={course.id} 
+            course={course} 
+            locked={locked} 
+            onDelete={onRemoveCourse} 
+            onHover={onCourseHover}
+            onHoverEnd={onCourseHoverEnd}
+          />
         ))}
         
         {/* Empty state hint */}
@@ -233,6 +258,8 @@ export const MallaBuilder = () => {
   const [selectedSemesterId, setSelectedSemesterId] = useState<string>('');
   const [draggedCourse, setDraggedCourse] = useState<MallaCourse | null>(null);
   const [locked, setLocked] = useState(false);
+  const [hoveredCourse, setHoveredCourse] = useState<string | null>(null);
+  const [prerequisites, setPrerequisites] = useState<string[]>([]);
 
   // Initialize data on component mount
   useEffect(() => {
@@ -350,6 +377,28 @@ export const MallaBuilder = () => {
     }
   };
 
+  const handleCourseHover = async (courseSigle: string) => {
+    setHoveredCourse(courseSigle);
+    try {
+      const response = await fetch(`/api/course-dependencies?sigle=${encodeURIComponent(courseSigle)}`);
+      if (response.ok) {
+        const data: { dependencies: string[] } = await response.json();
+        setPrerequisites(data.dependencies || []);
+      } else {
+        console.error('Failed to fetch prerequisites');
+        setPrerequisites([]);
+      }
+    } catch (error) {
+      console.error('Error fetching prerequisites:', error);
+      setPrerequisites([]);
+    }
+  };
+
+  const handleCourseHoverEnd = () => {
+    setHoveredCourse(null);
+    setPrerequisites([]);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -425,6 +474,8 @@ export const MallaBuilder = () => {
                     onDeleteSemester={handleDeleteSemester}
                     locked={locked}
                     onRemoveCourse={handleRemoveCourse}
+                    onCourseHover={handleCourseHover}
+                    onCourseHoverEnd={handleCourseHoverEnd}
                   />
                 ))}
               </div>
@@ -432,6 +483,34 @@ export const MallaBuilder = () => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </div>
+
+        {/* Prerequisites display */}
+        {hoveredCourse && (
+          <div className="border border-border rounded-md p-4 bg-muted/30">
+            <h3 className="font-semibold text-sm mb-2">
+              Prerrequisitos de {hoveredCourse}:
+            </h3>
+            {prerequisites.length > 0 ? (
+              <div className="text-sm text-muted-foreground">
+                <p className="mb-2">Este curso depende de los siguientes cursos:</p>
+                <div className="flex flex-wrap gap-2">
+                  {prerequisites.map((prereq) => (
+                    <span 
+                      key={prereq} 
+                      className="bg-background border rounded px-2 py-1 text-xs font-mono"
+                    >
+                      {prereq}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Este curso no tiene prerrequisitos.
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Summary section */}
         <div className="border border-border rounded-md p-6">
@@ -482,7 +561,15 @@ export const MallaBuilder = () => {
       
       {/* Drag overlay */}
       <DragOverlay>
-        {draggedCourse && <CourseCard course={draggedCourse} locked={locked} onDelete={handleRemoveCourse} />}
+        {draggedCourse && (
+          <CourseCard 
+            course={draggedCourse} 
+            locked={locked} 
+            onDelete={handleRemoveCourse} 
+            onHover={handleCourseHover}
+            onHoverEnd={handleCourseHoverEnd}
+          />
+        )}
       </DragOverlay>
     </DndContext>
   );
