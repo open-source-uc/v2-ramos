@@ -2,8 +2,6 @@
 import { getCollection } from "astro:content";
 import BlogCard from "@/components/features/blog/BlogCard.tsx";
 import Layout from "@/layouts/Layout.astro";
-
-const blogs = await getCollection("blogs");
 ---
 
 <Layout>
@@ -15,7 +13,7 @@ const blogs = await getCollection("blogs");
         Descubre blogs creados por la comunidad
       </h1>
     </div>
-    {
+    <!-- {
       blogs.map((blog) => {
         const { data } = blog;
         const { title, author, readtime, description, tags } = data;
@@ -32,6 +30,6 @@ const blogs = await getCollection("blogs");
           </div>
         );
       })
-    }
+    } -->
   </main>
 </Layout>
