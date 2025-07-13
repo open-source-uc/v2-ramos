@@ -45,6 +45,33 @@ export interface CourseReview {
     updated_at: string;
 }
 
+export interface Blogs {
+    id: number;
+    user_id: number;
+    title: string;
+    period_time: string; // Format: YYYY-S
+    readtime: number; // in minutes
+    organization_id: number;
+    tags: string[];
+    content: string;
+    created_at: string; // Date when the blog was created
+    updated_at: string; // Date when the blog was last updated
+}
+
+export interface Recomendations {
+    id: number;
+    user_id: number;
+    title: string;
+    code: string; // Course code
+    initiative: string; // Initiative name
+    period: string; // Format: YYYY-S
+    faculty: string; // Faculty name
+    qualification: number; // Rating from 1 to 5
+    tags: string[]; // Tags associated with the recommendation
+    created_at: string; // Date when the recommendation was created
+    updated_at: string; // Date when the recommendation was last updated
+}
+
 export interface CourseStaticInfo {
     sigle: string;
     name: string;
