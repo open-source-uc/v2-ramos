@@ -37,13 +37,13 @@ const t = tunnel();
 
 export type { DragEndEvent } from '@dnd-kit/core';
 
-type KanbanItemProps = {
+export type KanbanItemProps = {
   id: string;
   name: string;
   column: string;
 } & Record<string, unknown>;
 
-type KanbanColumnProps = {
+export type KanbanColumnProps = {
   id: string;
   name: string;
 } & Record<string, unknown>;
