@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useCoursesSections } from "@/components/hooks/useCoursesSections";
 import {
   createScheduleMatrix,
   detectScheduleConflicts,
   TIME_SLOTS,
   DAYS,
-  convertNDJSONToSections
+  convertNDJSONToSections,
+  applySectionSuggestions,
+  shuffleSections,
+  getAvailableSections
 } from "@/lib/scheduleMatrix";
 import { 
   getSavedCourses, 
@@ -13,11 +16,11 @@ import {
   addCourseToSchedule,
   removeCourseFromSchedule 
 } from "@/lib/scheduleStorage";
-import type { ScheduleMatrix } from "@/types";
+import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon } from "@/components/icons/icons";
+import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon, ShuffleIcon} from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
 import { getClassTypeLong } from "./ScheduleLegend";
 import { Search } from "@/components/features/search/SearchInput";
@@ -29,6 +32,9 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+
+const ConflictResolver = lazy(() => import("./ConflictResolver"));
+const ScheduleCombinations = lazy(() => import("./ScheduleCombinations"));
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -157,10 +163,16 @@ function CourseSearch({
 // Schedule grid component
 function ScheduleGrid({ 
   matrix, 
-  selectedCourses 
+  selectedCourses,
+  courseSectionsData,
+  courseOptions,
+  onApplySuggestions
 }: { 
   matrix: ScheduleMatrix;
   selectedCourses: string[];
+  courseSectionsData: CourseSections;
+  courseOptions: CourseOption[];
+  onApplySuggestions: (newCourses: string[]) => void;
 }) {
   const conflicts = detectScheduleConflicts(matrix);
   const hasConflicts = conflicts.length > 0;
@@ -235,15 +247,29 @@ function ScheduleGrid({
       {/* Conflicts warning */}
       {hasConflicts && (
         <div className="p-4 bg-red-light/20 border-t border-red/20">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-red rounded-full"></div>
-            <span className="text-sm font-medium text-red">
-              Conflictos detectados: {conflicts.length} 
-            </span>
+          <div className="flex flex-col tablet:flex-row tablet:items-center justify-between gap-8 tablet:gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-red rounded-full"></div>
+              <div>
+                <span className="text-sm font-medium text-red">
+                  Conflictos detectados: {conflicts.length} 
+                </span>
+                <p className="text-xs text-red/80 mt-1">
+                  Hay {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''} de horario en tu selección
+                </p>
+              </div>
+            </div>
+            
+            <Suspense fallback={<div className="animate-pulse bg-muted h-8 w-32 rounded"></div>}>
+              <ConflictResolver
+                selectedCourses={selectedCourses}
+                courseSections={courseSectionsData}
+                courseOptions={courseOptions}
+                onApplySuggestions={onApplySuggestions}
+                hasConflicts={hasConflicts}
+              />
+            </Suspense>
           </div>
-          <p className="text-xs text-red/80 mt-1">
-            Hay {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''} de horario en tu selección
-          </p>
         </div>
       )}
     </div>
@@ -254,6 +280,7 @@ function ScheduleGrid({
 export default function ScheduleCreator() {
   const [locked, setLocked] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState<string[]>(() => getSavedCourses());
+  const [isShuffling, setIsShuffling] = useState(false);
   const hookResult = useCoursesSections();
   const courses = Array.isArray(hookResult[0]) ? hookResult[0] : [];
   const isLoading = typeof hookResult[1] === 'boolean' ? hookResult[1] : false;
@@ -271,6 +298,13 @@ export default function ScheduleCreator() {
   const courseSectionsData = convertNDJSONToSections(courses);
   const scheduleMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
 
+  // Check if there are courses with multiple sections available for shuffling
+  const hasShufflableCourses = selectedCourses.some(courseSelection => {
+    const [courseId] = courseSelection.split('-');
+    const availableSections = getAvailableSections(courseId, courseSectionsData);
+    return availableSections.length > 1;
+  });
+
   const handleCourseSelect = (courseId: string) => {
     if (addCourseToSchedule(courseId)) {
       setSelectedCourses(getSavedCourses());
@@ -287,6 +321,67 @@ export default function ScheduleCreator() {
     }
   };
 
+  const handleApplySuggestions = (newCourses: string[]) => {
+    setSelectedCourses(newCourses);
+    saveCourses(newCourses);
+    toast.success("Conflictos resueltos - se han aplicado los cambios de sección");
+  };
+
+  const handleShuffleSections = async () => {
+    if (selectedCourses.length === 0) return;
+    
+    // Verificar si hay cursos con múltiples secciones
+    const coursesWithMultipleSections = selectedCourses.filter(courseSelection => {
+      const [courseId] = courseSelection.split('-');
+      const availableSections = getAvailableSections(courseId, courseSectionsData);
+      return availableSections.length > 1;
+    });
+    
+    if (coursesWithMultipleSections.length === 0) {
+      toast.info("No hay cursos con secciones alternativas para mezclar");
+      return;
+    }
+    
+    setIsShuffling(true);
+    
+    try {
+      // Add a small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      const shuffledCourses = shuffleSections(selectedCourses, courseSectionsData);
+      
+      // Verificar si hubo cambios
+      const hasChanges = shuffledCourses.some((course, index) => course !== selectedCourses[index]);
+      
+      if (hasChanges) {
+        setSelectedCourses(shuffledCourses);
+        saveCourses(shuffledCourses);
+        
+        // Contar cursos que cambiaron de sección
+        const changedCourses = shuffledCourses.filter((course, index) => course !== selectedCourses[index]);
+        
+        // Verificar si la nueva combinación tiene menos conflictos
+        const oldMatrix = createScheduleMatrix(courseSectionsData, selectedCourses);
+        const newMatrix = createScheduleMatrix(courseSectionsData, shuffledCourses);
+        const oldConflicts = detectScheduleConflicts(oldMatrix).length;
+        const newConflicts = detectScheduleConflicts(newMatrix).length;
+        
+        if (newConflicts < oldConflicts) {
+          toast.success(`¡Mezcla exitosa! ${changedCourses.length} curso(s) cambiaron de sección y se redujeron los conflictos`);
+        } else if (newConflicts === 0 && oldConflicts > 0) {
+          toast.success(`¡Perfecto! ${changedCourses.length} curso(s) cambiaron de sección y no hay conflictos`);
+        } else {
+          toast.success(`Secciones mezcladas: ${changedCourses.length} curso(s) cambiaron de sección`);
+        }
+      } else {
+        // Incluso si no hubo cambios, mostrar que se ejecutó la mezcla
+        toast.info(`Mezcla realizada: las secciones aleatorias coincidieron con las actuales`);
+      }
+    } finally {
+      setIsShuffling(false);
+    }
+  };
+
   const getCourseColor = (courseId: string) => {
     const index = selectedCourses.indexOf(courseId);
     return index >= 0 ? COLOR_VARIANTS[index % COLOR_VARIANTS.length] : "schedule_blue";
@@ -294,7 +389,7 @@ export default function ScheduleCreator() {
 
   const getCourseInfo = (courseId: string) => {
     const option = courseOptions.find(opt => opt.id === courseId);
-    return option || { id: courseId, sigle: "", seccion: "", nombre: "Curso no encontrado" };
+    return option || { id: courseId, sigle: "", seccion: "", nombre: "Curso no encontrado", nrc: "N/A" };
   };
 
   return (
@@ -341,18 +436,35 @@ export default function ScheduleCreator() {
                     </p>
                   </div>
                 </div>
-                <Button
-                  onClick={() => setLocked(!locked)}
-                  aria-label={locked ? "Unlock courses" : "Lock courses"}
-                  variant="ghost_border"
-                  size="icon"
-                >
-                  {locked ? (
-                    <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
-                  ) : (
-                    <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
-                  )}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleShuffleSections}
+                    aria-label="Shuffle sections"
+                    variant="ghost_border"
+                    size="icon"
+                    disabled={!hasShufflableCourses || isShuffling}
+                    title={hasShufflableCourses ? "Mezclar secciones al azar" : "No hay secciones alternativas"}
+                    className={isShuffling ? "animate-pulse" : "hidden"}
+                  >
+                    <ShuffleIcon className={cn(
+                      "h-5 w-5 text-muted-foreground transition-transform",
+                      isShuffling && "animate-spin"
+                    )} />
+                  </Button>
+                  <Button
+                    onClick={() => setLocked(!locked)}
+                    aria-label={locked ? "Unlock courses" : "Lock courses"}
+                    variant="ghost_border"
+                    size="icon"
+                    title={locked ? "Desbloquear cursos" : "Bloquear cursos"}
+                  >
+                    {locked ? (
+                      <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
+                    ) : (
+                      <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </Button>
+                </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 {selectedCourses.map((courseId) => {
@@ -414,6 +526,9 @@ export default function ScheduleCreator() {
                 <ScheduleGrid
                   matrix={scheduleMatrix}
                   selectedCourses={selectedCourses}
+                  courseSectionsData={courseSectionsData}
+                  courseOptions={courseOptions}
+                  onApplySuggestions={handleApplySuggestions}
                 />
               ) : (
                 <div className="text-center py-12">
@@ -431,6 +546,26 @@ export default function ScheduleCreator() {
             </div>
           </div>
         </div>
+
+        {/* Schedule Combinations */}
+        <Suspense fallback={
+          <div className="border border-border rounded-lg p-6">
+            <div className="animate-pulse flex items-center gap-3">
+              <div className="w-12 h-12 bg-muted rounded-lg"></div>
+              <div className="space-y-2">
+                <div className="h-4 bg-muted rounded w-48"></div>
+                <div className="h-3 bg-muted rounded w-64"></div>
+              </div>
+            </div>
+          </div>
+        }>
+          <ScheduleCombinations
+            selectedCourses={selectedCourses}
+            courseSections={courseSectionsData}
+            onApplyCombination={handleApplySuggestions}
+            className="mb-8"
+          />
+        </Suspense>
 
       </div>
     </>

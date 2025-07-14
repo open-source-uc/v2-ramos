@@ -28,7 +28,7 @@ export function MarkdownReviewView({ path }: { path: string }) {
     }
 
     return (
-        <article className="prose max-w-none">
+        <article className="prose max-w-none content-markdown">
             <ReactMarkdown>{text}</ReactMarkdown>
         </article>
     );
