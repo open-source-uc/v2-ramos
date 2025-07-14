@@ -5,7 +5,8 @@ import {
   detectScheduleConflicts,
   TIME_SLOTS,
   DAYS,
-  convertNDJSONToSections
+  convertNDJSONToSections,
+  applySectionSuggestions
 } from "@/lib/scheduleMatrix";
 import { 
   getSavedCourses, 
@@ -29,6 +30,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import ConflictResolver from "./ConflictResolver";
 
 // Define color variants for different courses
 const COLOR_VARIANTS = [
@@ -157,10 +159,16 @@ function CourseSearch({
 // Schedule grid component
 function ScheduleGrid({ 
   matrix, 
-  selectedCourses 
+  selectedCourses,
+  courseSectionsData,
+  courseOptions,
+  onApplySuggestions
 }: { 
   matrix: ScheduleMatrix;
   selectedCourses: string[];
+  courseSectionsData: any;
+  courseOptions: CourseOption[];
+  onApplySuggestions: (newCourses: string[]) => void;
 }) {
   const conflicts = detectScheduleConflicts(matrix);
   const hasConflicts = conflicts.length > 0;
@@ -235,15 +243,27 @@ function ScheduleGrid({
       {/* Conflicts warning */}
       {hasConflicts && (
         <div className="p-4 bg-red-light/20 border-t border-red/20">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-red rounded-full"></div>
-            <span className="text-sm font-medium text-red">
-              Conflictos detectados: {conflicts.length} 
-            </span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-red rounded-full"></div>
+              <div>
+                <span className="text-sm font-medium text-red">
+                  Conflictos detectados: {conflicts.length} 
+                </span>
+                <p className="text-xs text-red/80 mt-1">
+                  Hay {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''} de horario en tu selección
+                </p>
+              </div>
+            </div>
+            
+            <ConflictResolver
+              selectedCourses={selectedCourses}
+              courseSections={courseSectionsData}
+              courseOptions={courseOptions}
+              onApplySuggestions={onApplySuggestions}
+              hasConflicts={hasConflicts}
+            />
           </div>
-          <p className="text-xs text-red/80 mt-1">
-            Hay {conflicts.length} conflicto{conflicts.length > 1 ? 's' : ''} de horario en tu selección
-          </p>
         </div>
       )}
     </div>
@@ -287,6 +307,12 @@ export default function ScheduleCreator() {
     }
   };
 
+  const handleApplySuggestions = (newCourses: string[]) => {
+    setSelectedCourses(newCourses);
+    saveCourses(newCourses);
+    toast.success("Conflictos resueltos - se han aplicado los cambios de sección");
+  };
+
   const getCourseColor = (courseId: string) => {
     const index = selectedCourses.indexOf(courseId);
     return index >= 0 ? COLOR_VARIANTS[index % COLOR_VARIANTS.length] : "schedule_blue";
@@ -294,7 +320,7 @@ export default function ScheduleCreator() {
 
   const getCourseInfo = (courseId: string) => {
     const option = courseOptions.find(opt => opt.id === courseId);
-    return option || { id: courseId, sigle: "", seccion: "", nombre: "Curso no encontrado" };
+    return option || { id: courseId, sigle: "", seccion: "", nombre: "Curso no encontrado", nrc: "N/A" };
   };
 
   return (
@@ -414,6 +440,9 @@ export default function ScheduleCreator() {
                 <ScheduleGrid
                   matrix={scheduleMatrix}
                   selectedCourses={selectedCourses}
+                  courseSectionsData={courseSectionsData}
+                  courseOptions={courseOptions}
+                  onApplySuggestions={handleApplySuggestions}
                 />
               ) : (
                 <div className="text-center py-12">
