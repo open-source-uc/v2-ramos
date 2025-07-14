@@ -8,15 +8,15 @@ import { getEntry } from "astro:content";
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
-    // if (!API_SECRET) {
-    //     return new Response("Internal Server Error: API_SECRET", { status: 500 });
-    // }
+    if (!API_SECRET) {
+        return new Response("Internal Server Error: API_SECRET", { status: 500 });
+    }
 
-    // const authHeader = request.headers.get("Authorization");
+    const authHeader = request.headers.get("Authorization");
 
-    // if (!authHeader || authHeader !== `Bearer ${API_SECRET}`) {
-    //     return new Response("Unauthorized", { status: 401 });
-    // }
+    if (!authHeader || authHeader !== `Bearer ${API_SECRET}`) {
+        return new Response("Unauthorized", { status: 401 });
+    }
 
 
     try {
