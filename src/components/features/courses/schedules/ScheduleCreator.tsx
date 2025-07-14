@@ -42,6 +42,7 @@ interface CourseOption {
   sigle: string;
   seccion: string;
   nombre: string;
+  nrc: string;
 }
 
 // Helper to generate course options from fetched data
@@ -52,7 +53,8 @@ function getCourseOptions(courses: any[]): CourseOption[] {
       id: `${course.sigle}-${seccion}`,
       sigle: course.sigle,
       seccion,
-      nombre: course.name || "Sin nombre"
+      nombre: course.name || "Sin nombre",
+      nrc: course.sections[seccion].nrc || "N/A"
     }));
   });
 }
@@ -371,7 +373,7 @@ export default function ScheduleCreator() {
                     >
                       <div className="flex flex-col min-w-0">
                         <span className="font-medium">{courseInfo.sigle} - {courseInfo.nombre}</span>
-                        <span className="text-xs opacity-80">Sección {courseInfo.seccion}</span>
+                        <span className="text-xs opacity-80">Sección {courseInfo.seccion} - NRC {courseInfo.nrc}</span>
                       </div>
                       {!locked && (
                         <button

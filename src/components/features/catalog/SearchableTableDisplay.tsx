@@ -11,6 +11,7 @@ import { Button } from "../../ui/button"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../ui/collapsible"
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from "../../icons/icons"
 import { cn } from "@/lib/utils"
+import { isCurrentSemester } from "@/lib/currentSemester"
 
 interface SearchableTableDisplayProps {
   initialSearchValue?: string;
@@ -22,6 +23,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [selectedCampus, setSelectedCampus] = useState<string>("all")
   const [selectedFormat, setSelectedFormat] = useState<string>("all")
+  const [selectedSemester, setSelectedSemester] = useState<string>("all")
   const [showRetirableOnly, setShowRetirableOnly] = useState(false)
   const [showEnglishOnly, setShowEnglishOnly] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -118,6 +120,29 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return Array.from(new Set(formats)).sort();
   }, [courses]);
 
+  // Get unique semesters from the data
+  const uniqueSemesters = useMemo(() => {
+    const semesters = courses
+      .map((course) => course.last_semester)
+      .filter((semester) => semester && semester.trim() !== ""); // Filter out null/undefined and empty strings
+    const uniqueSet = Array.from(new Set(semesters));
+    
+    // Sort semesters with current semester first, then by year and semester number
+    return uniqueSet.sort((a, b) => {
+      // Current semester always comes first
+      if (isCurrentSemester(a)) return -1;
+      if (isCurrentSemester(b)) return 1;
+      
+      // Parse semesters for comparison
+      const [yearA, semA] = a.split('-').map(Number);
+      const [yearB, semB] = b.split('-').map(Number);
+      
+      // Sort by year descending, then by semester descending
+      if (yearA !== yearB) return yearB - yearA;
+      return semB - semA;
+    });
+  }, [courses]);
+
   // Convert unique areas to combobox options
   const areaOptions = useMemo((): ComboboxOption[] => {
     const options: ComboboxOption[] = [
@@ -170,6 +195,21 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return options;
   }, [uniqueFormats]);
 
+  // Convert unique semesters to combobox options
+  const semesterOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todos los semestres" }
+    ];
+    
+    uniqueSemesters.forEach((semester) => {
+      const isCurrentSem = isCurrentSemester(semester);
+      const label = isCurrentSem ? `${semester} (actual)` : semester;
+      options.push({ value: semester, label });
+    });
+    
+    return options;
+  }, [uniqueSemesters]);
+
   // Filter data based on all filter criteria
   const filteredData = useMemo(() => {
     let filtered = courses;
@@ -214,8 +254,12 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       });
     }
 
+    if (selectedSemester !== "all") {
+      filtered = filtered.filter((course) => course.last_semester === selectedSemester);
+    }
+
     return filtered;
-  }, [courses, selectedArea, selectedCampus, selectedSchool, selectedFormat, showRetirableOnly, showEnglishOnly]);
+  }, [courses, selectedArea, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
 
   // Add debounced search effect
   useEffect(() => {
@@ -257,6 +301,10 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     setShowEnglishOnly(checked);
   };
 
+  const handleSemesterChange = (value: string) => {
+    setSelectedSemester(value);
+  };
+
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     let count = 0;
@@ -264,10 +312,11 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     if (selectedCampus !== "all") count++;
     if (selectedSchool !== "all") count++;
     if (selectedFormat !== "all") count++;
+    if (selectedSemester !== "all") count++;
     if (showRetirableOnly) count++;
     if (showEnglishOnly) count++;
     return count;
-  }, [selectedArea, selectedCampus, selectedSchool, selectedFormat, showRetirableOnly, showEnglishOnly]);
+  }, [selectedArea, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
 
   return (
     <div className="container mx-auto py-4">
@@ -417,6 +466,25 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                         aria-label="Filtrar por Formato"
                       />
                     </div>
+
+                    {/* Semester Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Último Semestre</label>
+                      <Combobox
+                        options={semesterOptions}
+                        value={selectedSemester}
+                        onValueChange={handleSemesterChange}
+                        placeholder="Seleccionar semestre"
+                        searchPlaceholder="Buscar semestre..."
+                        emptyMessage="No se encontraron semestres."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedSemester !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Último Semestre"
+                      />
+                    </div>
                   </div>
 
                   {/* Switch Filters Row */}
@@ -466,6 +534,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                           setSelectedCampus("all");
                           setSelectedSchool("all");
                           setSelectedFormat("all");
+                          setSelectedSemester("all");
                           setShowRetirableOnly(false);
                           setShowEnglishOnly(false);
                         }}
