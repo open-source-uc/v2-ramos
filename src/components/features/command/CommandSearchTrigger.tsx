@@ -9,6 +9,12 @@ export default function CommandSearchTrigger() {
   const { setIsOpen } = useCommand();
   const [isSearching, setIsSearching] = React.useState(false);
 
+  const handleClick = () => {
+    // Dispatch custom event to communicate across hydration boundaries
+    window.dispatchEvent(new CustomEvent('openCommandSearch'));
+    setIsOpen(true);
+  };
+
   return (
     <button
       className={cn(
@@ -16,7 +22,7 @@ export default function CommandSearchTrigger() {
         "text-muted-foreground/70 transition-colors hover:bg-muted/50",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
       )}
-      onClick={() => setIsOpen(true)}
+      onClick={handleClick}
       aria-label="Buscar cursos y comandos"
     >
       {isSearching ? (

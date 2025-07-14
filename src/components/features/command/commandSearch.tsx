@@ -26,6 +26,7 @@ export default function CommandSearch() {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [isSearching, setIsSearching] = React.useState(false)
 
+
   React.useEffect(() => {
     if (open && courses.length === 0) {
       fetchCourses()
