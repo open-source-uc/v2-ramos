@@ -554,3 +554,9 @@ export function ShuffleIcon({ className }: { className?: string }) {
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M574.23-168v-53h130L555.38-369.85l36.54-35.53L739-258.31v-126.15h53V-168H574.23Zm-369.92 0L168-204.31 702.69-739H574.23v-53H792v215.46h-53v-126.15L204.31-168Zm160.15-392L168-756.46 203.54-792 400-595.54 364.46-560Z"/></svg>
   );
 }
+
+export function CategoryIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="M281.38-518.77 484-851.54l202.62 332.77H281.38Zm426.26 452q-72.33 0-121.6-50.85-49.27-50.85-49.27-124.02 0-71.5 49.27-121.54 49.27-50.05 121.6-50.05 72.33 0 123.96 49.63 51.63 49.63 51.63 122.46 0 72.83-51.63 123.6-51.63 50.77-123.96 50.77Zm-578.87-24v-302.46h302.46v302.46H128.77Z"/></svg>
+  );
+}

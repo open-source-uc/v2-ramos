@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CalendarIcon, ChevronDownIcon, PlusIcon, BuildingIcon, LinkIcon } from "@/components/icons/icons";
+import { CalendarIcon, ChevronDownIcon, PlusIcon, BuildingIcon, LinkIcon, CategoryIcon, AttendanceIcon } from "@/components/icons/icons";
 import {
     Collapsible,
     CollapsibleContent,
@@ -34,6 +34,8 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule, section
     // Get section data for NRC and campus from NDJSON data
     const nrc = sectionData?.nrc || "Sin NRC";
     const campus = sectionData?.campus || "Sin campus";
+    const category = sectionData?.category || "";
+    const format = sectionData?.format || "Sin formato";
 
     useEffect(() => {
         setIsInSchedule(isCourseInSchedule(courseId));
@@ -143,6 +145,14 @@ function ScheduleGrid({ matrix, sectionId, courseSigle, onAddToSchedule, section
                     </Pill>
                     <Pill variant="green" icon={LinkIcon} size="sm">
                         NRC {nrc}
+                    </Pill>
+                    {category && (
+                        <Pill variant="purple" icon={CategoryIcon} size="sm">
+                            {category}
+                        </Pill>
+                    )}
+                    <Pill variant="orange" icon={AttendanceIcon} size="sm">
+                        {format}
                     </Pill>
                 </div>
             </div>
