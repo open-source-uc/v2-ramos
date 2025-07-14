@@ -5,6 +5,9 @@ import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
 import type { Blogs, Organization } from "@/types";
 import { MarkdownReviewView } from "@/components";
+import { getUserDataByToken } from "@/lib/server/auth";
+import { getToken } from "@/lib/auth";
+import { OsucPermissions } from "@/types/permissions";
 
 export const prerender = true;
 
@@ -21,26 +24,19 @@ export async function getStaticPaths() {
 }
 
 const { blog } = Astro.props;
-const userOrgRes = await fetch(
-  `http://localhost:4322/api/user/${blog.user_id}`
-);
-
+const token = getToken(Astro.cookies);
+const userData = await getUserDataByToken(token);
+let showButton = false;
+if (token) {
+  showButton =
+    Number(userData?.id) === blog.user_id ||
+    (Array.isArray(userData?.permissions) &&
+      userData.permissions.includes(OsucPermissions.userIsRoot));
+}
 const organizationRes = await fetch(
   `http://localhost:4322/api/organization/${blog.organization_id}`
 );
 const organizationData = (await organizationRes.json()) as Organization;
-const mdxContent = fetch(
-  new URL(`/api/blog?path=${blog.content_path}`, Astro.url.origin)
-)
-  .then(async (res) => {
-    if (!res.ok) throw new Error("Failed to fetch MDX content");
-    const content = await res.text();
-    return content;
-  })
-  .catch((error) => {
-    console.error("Error fetching MDX content:", error);
-    return ""; // Return empty content on error
-  });
 ---
 
 <Layout>
@@ -57,6 +53,7 @@ const mdxContent = fetch(
       buttonText: "Ver Más Blogs",
       buttonHref: "/blogs",
     }}
+    showEditButton={showButton}
   >
     <MarkdownReviewView path={blog.content_path} client:load />
   </ContentPage>

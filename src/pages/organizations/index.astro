@@ -1,0 +1,59 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import OrganizationCard from "@/components/common/OrganizationCard.tsx";
+
+export const prerender = true;
+
+const organizations = await getCollection("organizations");
+
+// Sort organizations by name
+const sortedOrganizations = organizations.sort((a, b) =>
+  a.data.name.localeCompare(b.data.name, "es", { sensitivity: "base" })
+);
+---
+
+<Layout>
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+        Organizaciones Estudiantiles
+      </h1>
+      <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
+        Descubre las organizaciones estudiantiles que están transformando la
+        experiencia universitaria. Proyectos creados por y para estudiantes.
+      </p>
+    </header>
+    <!-- Organizations Grid -->
+    <section aria-label="Lista de organizaciones estudiantiles">
+      {
+        sortedOrganizations.length > 0 ? (
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {sortedOrganizations.map((organization) => (
+              <OrganizationCard
+                name={organization.data.name}
+                title={organization.data.title}
+                faculty={organization.data.faculty}
+                picture={organization.data.picture}
+                description={undefined}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-16" role="status" aria-live="polite">
+            <div class="border border-dashed border-border rounded-lg p-12">
+              <h2 class="text-xl font-semibold text-foreground mb-2">
+                No hay organizaciones disponibles
+              </h2>
+              <p class="text-muted-foreground">
+                Estamos trabajando para agregar más organizaciones estudiantiles
+                pronto.
+              </p>
+            </div>
+          </div>
+        )
+      }
+    </section>
+  </main>
+</Layout>

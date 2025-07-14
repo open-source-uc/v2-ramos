@@ -14,8 +14,9 @@ interface Props {
     buttonText: string;
     buttonHref: string;
   };
+  showEditButton?: boolean;
 }
-
+let { showEditButton } = Astro.props;
 const {
   contentData,
   organizationData,
@@ -76,6 +77,7 @@ const defaultNavigationSection = isResource
       };
 
 const finalNavigationSection = navigationSection || defaultNavigationSection;
+showEditButton = false;
 ---
 
 <div class="flex flex-col gap-4 max-w-4xl mx-auto px-4 sm:px-6 py-8 w-full">
@@ -90,12 +92,25 @@ const finalNavigationSection = navigationSection || defaultNavigationSection;
   <header
     class="border border-border rounded-md px-4 sm:px-6 py-6 sm:py-8 mb-4"
   >
-    <h1 class="text-2xl sm:text-3xl font-bold pb-4 break-words">
-      {contentData.title}
-    </h1>
+    <div class="flex items-center justify-between gap-4">
+      <h1 class="text-2xl sm:text-3xl font-bold pb-4 break-words">
+        {contentData.title}
+      </h1>
+      {
+        showEditButton && (
+          <a
+            href="#"
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Editar reseña"
+          >
+            ✏️ Editar
+          </a>
+        )
+      }
+    </div>
     <div class="flex items-center gap-3 mt-2 overflow-hidden">
       <a
-        href={organizationData.page_link || "#"}
+        href={`/${organizationData.page_link}` || "#"}
         target="_blank"
         rel="noopener noreferrer"
         class="block"
@@ -110,7 +125,7 @@ const finalNavigationSection = navigationSection || defaultNavigationSection;
         <div class="text-sm text-muted-foreground truncate">
           Por
           <a
-            href={organizationData.page_link}
+            href={`/${organizationData.page_link}`}
             target="_blank"
             rel="noopener noreferrer"
             class="font-medium text-foreground hover:text-blue transition-colors"

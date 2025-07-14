@@ -20,7 +20,8 @@ const resources = defineCollection({
 })
 
 
-const initiatives = defineCollection({
+
+const organizations = defineCollection({
     schema: z.object({
         title: z.string(),
         name: z.string(),
@@ -106,4 +107,4 @@ const agradecimientos = defineCollection({
 });
 
 
-export const collections = { resources, initiatives, coursesStatic, contribuidores, agradecimientos };
+export const collections = { resources, organizations, coursesStatic, contribuidores, agradecimientos };

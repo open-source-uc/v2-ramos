@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BlogsScroll from "@/components/features/blog/BlogsScroll.tsx";
 import Layout from "@/layouts/Layout.astro";
-import MarkdownReviewView from "@/components/reviews/MarkdownReviewView.tsx";
+import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView.tsx";
 import BlogCard from "@/components/features/blog/BlogCard.tsx";
 import { Pill } from "@/components/ui/pill";
 import {
@@ -14,22 +14,31 @@ import {
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const initiatives = await getCollection("initiatives");
-  return initiatives.map((initiative) => ({
+  const organizations = await getCollection("organizations");
+  return organizations.map((organization) => ({
     params: {
-      name: initiative.data.name.toLowerCase().replace(/\s+/g, "-"),
+      name: organization.data.name.toLowerCase().replace(/\s+/g, "-"),
     },
-    props: { initiative },
+    props: { organization },
   }));
 }
 
-const blogs = await getCollection("blogs", (blog) => {
-  return blog.data.author?.name === Astro.props.initiative.data.name;
-});
+const { organization } = Astro.props;
+const { title, name, picture, faculty, rrss } = organization.data;
+const { Content } = await organization.render();
 
-const { initiative } = Astro.props;
-const { title, name, picture, faculty, rrss } = initiative.data;
-const { Content } = await initiative.render();
+// Obtener blogs desde la API (R2/BD)
+let blogs: any[] = [];
+try {
+  // La API actual no filtra por organización, así que filtramos en el cliente
+  const res = await fetch(`http://localhost:4321/api/blogs`);
+  if (res.ok) {
+    const allBlogs = (await res.json()) as any[];
+    blogs = allBlogs.filter((blog) => blog.organization_name === name);
+  }
+} catch (e) {
+  blogs = [];
+}
 ---
 
 <Layout>
@@ -37,9 +46,9 @@ const { Content } = await initiative.render();
     <!-- Hero Section -->
     <a
       class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors mb-4"
-      href={`/initiatives`}
+      href={`/organizations`}
     >
-      ← Ver más iniciativas
+      ← Ver más organizaciones
     </a>
     <header class="mb-12">
       <section
@@ -56,7 +65,7 @@ const { Content } = await initiative.render();
               </Pill>
             </div>
             <h1
-              id="initiative-title"
+              id="organization-title"
               class="text-4xl lg:text-5xl font-bold text-foreground mb-2"
             >
               {name}
@@ -85,11 +94,11 @@ const { Content } = await initiative.render();
         <article class="border border-border rounded-md overflow-hidden">
           <div class="p-8">
             <h2 id="description-title" class="text-xl font-semibold">
-              Descripción de la iniciativa
+              Descripción de la organización
             </h2>
-            <RenderMarkdown border={false}>
+            <div class="content-markdown">
               <Content />
-            </RenderMarkdown>
+            </div>
           </div>
         </article>
       </section>
@@ -122,7 +131,7 @@ const { Content } = await initiative.render();
             ) : (
               <div class="text-center py-8" role="status" aria-live="polite">
                 <p class="text-muted-foreground text-sm">
-                  No hay blogs disponibles para esta iniciativa
+                  No hay blogs disponibles para esta organización
                 </p>
               </div>
             )

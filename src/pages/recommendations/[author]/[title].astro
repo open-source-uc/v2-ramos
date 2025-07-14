@@ -3,8 +3,11 @@ import { ContentPage } from "@/components/common";
 import { ClockIcon, EditIcon } from "@/components/icons/icons";
 import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
 import Layout from "@/layouts/Layout.astro";
+import { getToken } from "@/lib/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
 import { createSlug } from "@/lib/utils";
 import type { Organization, Recommendations } from "@/types";
+import { OsucPermissions } from "@/types/permissions";
 
 export const prerender = true;
 
@@ -25,18 +28,15 @@ const organizationRes = await fetch(
   `http://localhost:4322/api/organization/${recommendation.organization_id}`
 );
 const organizationData = (await organizationRes.json()) as Organization;
-const mdxContent = fetch(
-  new URL(`/api/blog?path=${recommendation.content_path}`, Astro.url.origin)
-)
-  .then(async (res) => {
-    if (!res.ok) throw new Error("Failed to fetch MDX content");
-    const content = await res.text();
-    return content;
-  })
-  .catch((error) => {
-    console.error("Error fetching MDX content:", error);
-    return ""; // Return empty content on error
-  });
+const token = getToken(Astro.cookies);
+const userData = await getUserDataByToken(token);
+let showButton = false;
+if (token) {
+  showButton =
+    Number(userData?.id) === recommendation.user_id ||
+    (Array.isArray(userData?.permissions) &&
+      userData.permissions.includes(OsucPermissions.userIsRoot));
+}
 ---
 
 <Layout>
@@ -53,6 +53,7 @@ const mdxContent = fetch(
       buttonText: "Ver Más Recomendaciones",
       buttonHref: "/recommendations",
     }}
+    showEditButton={showButton}
   >
     <MarkdownReviewView path={recommendation.content_path} client:load />
   </ContentPage>
