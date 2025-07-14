@@ -4,7 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import type { Blogs } from "@/types";
 
 const blogsResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
-const blogsData = (await blogsResponse.json()) as Blogs[];
+const blogsData: Blogs[] = await blogsResponse.json();
 console.log(blogsData);
 ---
 
@@ -19,16 +19,24 @@ console.log(blogsData);
     </div>
     {
       blogsData.map((blog) => {
-        const { title, user_id, organization_name, period_time, readtime, tags } = blog;
-        
+        const {
+          title,
+          user_name,
+          organization_name,
+          period_time,
+          readtime,
+          tags,
+        } = blog;
+        let newTags = tags.split(",").map((tag) => tag.trim());
         return (
           <div class="p-2 flex justify-center">
             <BlogCard
               title={title}
-              authorName={}
-              description={description}
+              authorName={user_name}
+              organizationName={organization_name}
+              description={""}
               readtime={readtime}
-              tags={tags || []}
+              tags={newTags || []}
             />
           </div>
         );

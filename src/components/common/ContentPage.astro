@@ -1,20 +1,11 @@
 ---
+import type { Blogs, Organization } from "@/types";
 import { Pill } from "../ui/pill";
 
 interface Props {
-  title: string;
-  description: string;
-  author?:
-    | string
-    | {
-        name: string;
-        title?: string;
-        picture?: string;
-        link?: string;
-      };
-  readtime?: number;
+  blogContent: Blogs;
+  organizationData: Organization;
   contentType: "resource" | "blog";
-  tags?: string[];
   primaryPillIcon?: any;
   secondaryPillIcon?: any;
   navigationSection?: {
@@ -26,25 +17,19 @@ interface Props {
 }
 
 const {
-  title,
-  description,
-  author,
-  readtime,
+  blogContent,
+  organizationData,
   contentType,
   primaryPillIcon,
   secondaryPillIcon,
   navigationSection,
 } = Astro.props;
 
-// Author can be a string or an object with name, title, picture, and link
-const authorData =
-  typeof author === "string"
-    ? { name: author, title: null, picture: null, link: null }
-    : author;
-
 // Default labels based on content type
 const contentTypeLabel = contentType === "resource" ? "Recurso" : "Artículo";
-
+const tags = blogContent.tags
+  ? blogContent.tags.split(",").map((tag) => tag.trim())
+  : [];
 // Default navigation section
 const defaultNavigationSection =
   contentType === "resource"
@@ -75,82 +60,56 @@ const finalNavigationSection = navigationSection || defaultNavigationSection;
   </a>
   <section class="border border-border rounded-md px-4 sm:px-6 py-6 sm:py-8">
     <div>
-      <h1 class="text-2xl sm:text-3xl font-bold pb-4 break-words">{title}</h1>
-      <p class="text-sm opacity-60 max-w-full sm:max-w-[80%] break-words">
-        {description}
-      </p>
-      {
-        authorData && (
-          <div class="flex items-center gap-3 mt-4 overflow-hidden">
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-              {authorData.picture ? (
-                <a
-                  href={authorData.link || "#"}
-                  target={authorData.link ? "_blank" : undefined}
-                  rel={authorData.link ? "noopener noreferrer" : undefined}
-                  class="block"
-                >
-                  <img
-                    src={authorData.picture}
-                    alt={`Foto de ${authorData.name}`}
-                    class="w-10 h-10 rounded-full object-cover border-2 border-border hover:border-blue transition-colors"
-                  />
-                </a>
-              ) : (
-                <div class="w-10 h-10 rounded-full bg-muted border-2 border-border flex items-center justify-center">
-                  <span class="text-sm font-medium text-muted-foreground">
-                    {authorData.name?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="flex flex-col min-w-0">
-                <div class="text-sm text-muted-foreground truncate">
-                  Por{" "}
-                  {authorData.link ? (
-                    <a
-                      href={authorData.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="font-medium text-foreground hover:text-blue transition-colors"
-                    >
-                      {authorData.name}
-                    </a>
-                  ) : (
-                    <span class="font-medium text-foreground">
-                      {authorData.name}
-                    </span>
-                  )}
-                </div>{" "}
-                {authorData.title && (
-                  <div class="text-xs text-muted-foreground truncate">
-                    {authorData.title}
-                  </div>
-                )}
-              </div>
+      <h1 class="text-2xl sm:text-3xl font-bold pb-4 break-words">
+        {blogContent.title}
+      </h1>
+      <div class="flex items-center gap-3 mt-4 overflow-hidden">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <a
+            href={organizationData.page_link || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block"
+          >
+            <img
+              src={organizationData.logo_url}
+              alt={`Logo de ${organizationData.organization_name}`}
+              class="w-10 h-10 rounded-full object-cover border-2 border-border hover:border-blue transition-colors"
+            />
+          </a>
+          <div class="flex flex-col min-w-0">
+            <div class="text-sm text-muted-foreground truncate">
+              Por
+              <a
+                href={organizationData.page_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium text-foreground hover:text-blue transition-colors"
+              >
+                {organizationData.organization_name}
+              </a>
+            </div>
+            <div class="text-xs text-muted-foreground truncate">
+              Cargo: <span class="text-foreground">{blogContent.user_role}</span
+              >
             </div>
           </div>
-        )
-      }
+        </div>
+      </div>
     </div>
     <div class="flex items-center flex-wrap gap-2 mt-6 sm:mt-8">
       <Pill variant="blue" size="sm" icon={primaryPillIcon} className="">
         {contentTypeLabel}
       </Pill>
+      <Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
+        {blogContent.readtime} Minutos de lectura
+      </Pill>
       {
-        readtime && (
-          <Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
-            {readtime} Minutos de lectura
+        tags.map((tag) => (
+          <Pill variant="ghost_red" size="sm" className="">
+            {tag}
           </Pill>
-        )
-      }
-      {
-        Astro.props.tags &&
-          Astro.props.tags.length > 0 &&
-          Astro.props.tags.map((tag) => (
-            <Pill variant="ghost_red" size="sm" className="">
-              {tag}
-            </Pill>
-          ))
+        ))
       }
     </div>
   </section>

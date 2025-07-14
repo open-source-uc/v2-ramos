@@ -821,13 +821,14 @@ export const server = {
         const result = await locals.runtime.env.DB.prepare(
           `
                     INSERT INTO blogs (
-                        user_id, user_name, organization_id, organization_name, title, period_time, readtime, tags, content_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        user_id, user_name, user_role, organization_id, organization_name, title, period_time, readtime, tags, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
         )
           .bind(
             userId,
             userOrg.user_name,
+            userOrg.role,
             state.organization_id,
             organizationData.organization_name,
             state.title,
@@ -981,13 +982,14 @@ export const server = {
         const result = await locals.runtime.env.DB.prepare(
           `
                     INSERT INTO recommendations (
-                        user_id, user_name, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        user_id, user_name, user_role, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
         )
           .bind(
             userId,
             userOrg.user_name,
+            userOrg.role,
             state.organization_id,
             organizationData.faculty,
             state.title,

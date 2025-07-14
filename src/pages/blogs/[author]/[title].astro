@@ -5,44 +5,46 @@ import { EditIcon, ClockIcon } from "../../../components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
 import { Pill } from "@/components/ui/pill";
+import type { Blogs, Organization } from "@/types";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const blogs = await getCollection("blogs");
-
+  const response = await fetch("http://localhost:4321/api/blogs");
+  const blogs: Blogs[] = await response.json();
   return blogs.map((blog) => ({
     params: {
-      author: createSlug(blog.data.author?.name || "unknown"),
-      title: createSlug(blog.data.title || blog.slug),
+      author: createSlug(blog.organization_name),
+      title: createSlug(blog.title),
     },
     props: { blog },
   }));
 }
 
 const { blog } = Astro.props;
-const { data } = blog;
-const { title, author, readtime, description, tags } = data;
-const { Content } = await render(blog);
+const userOrgRes = await fetch(
+  `http://localhost:4322/api/user/${blog.user_id}`
+);
+
+const organizationRes = await fetch(
+  `http://localhost:4322/api/organization/${blog.organization_id}`
+);
+const organizationData = (await organizationRes.json()) as Organization;
 ---
 
 <Layout>
   <ContentPage
-    title={title}
-    description={description}
-    author={author}
-    readtime={readtime}
+    blogContent={blog}
+    organizationData={organizationData}
     contentType="blog"
-    tags={tags}
     primaryPillIcon={EditIcon}
     secondaryPillIcon={ClockIcon}
     navigationSection={{
       title: "¿Te gustó este blog?",
-      description: "Descubre más contenido interesante en nuestro blog.",
+      description:
+        "Descubre más contenido interesante en los blogs que tenemos para ofrecerte.",
       buttonText: "Ver Más Artículos",
       buttonHref: "/blogs",
     }}
-  >
-    <Content />
-  </ContentPage>
+  />
 </Layout>
