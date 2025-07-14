@@ -13,10 +13,11 @@ import {
   CloseIcon,
   LockClosedIcon,
   LockOpenIcon,
-  EyeIcon
+  EyeIcon,
+  SwapVertIcon
 } from '@/components/icons/icons';
 import { cn } from '@/lib/utils';
-import { formatSemester, CURRENT_SEMESTER, isCurrentSemester, isPreviousSemester } from '@/lib/currentSemester';
+import { formatSemester, isCurrentSemester, isPreviousSemester } from '@/lib/currentSemester';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { CourseSearchCommand } from './CourseSearchCommand';
 import {
@@ -63,7 +64,9 @@ const CourseCard = ({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "transition-colors border rounded-md p-3 shadow-sm relative",
+        "transition-colors border rounded-md shadow-sm relative touch-manipulation",
+        // Mobile-first: larger padding and better touch targets
+        "p-4 tablet:p-3",
         isHighlighted 
           ? "bg-primary/20 border-primary hover:bg-primary/30" 
           : "bg-background hover:bg-muted/50",
@@ -71,19 +74,21 @@ const CourseCard = ({
       )}
       onMouseEnter={() => onHover(course.sigle)}
       onMouseLeave={onHoverEnd}
+      onTouchStart={() => onHover(course.sigle)}
+      onTouchEnd={onHoverEnd}
     >
       <div className="space-y-3">
         {/* Course header */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div 
-            className="flex-1 min-w-0 cursor-grab active:cursor-grabbing"
+            className="flex-1 min-w-0 cursor-grab active:cursor-grabbing touch-manipulation"
             {...listeners}
             {...attributes}
           >
             <p className="text-xs text-muted-foreground font-mono">{course.sigle}</p>
-            <h3 className="font-semibold text-sm leading-tight">{course.name}</h3>
+            <h3 className="font-semibold text-sm tablet:text-sm leading-tight">{course.name}</h3>
           </div>
-          <div className="flex items-center gap-2 relative z-10">
+          <div className="flex items-center gap-2 relative z-10 flex-shrink-0">
             <Pill variant="green" size="sm" icon={HourglassIcon}>
               {course.credits}
             </Pill>
@@ -96,10 +101,10 @@ const CourseCard = ({
                   e.preventDefault();
                   onDelete(course.id);
                 }}
-                className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                className="h-8 w-8 tablet:h-6 tablet:w-6 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 touch-manipulation"
                 aria-label={`Eliminar ${course.sigle}`}
               >
-                <CloseIcon className="h-3 w-3" />
+                <CloseIcon className="h-4 w-4 tablet:h-3 tablet:w-3" />
               </Button>
             )}
           </div>
@@ -120,7 +125,7 @@ const CourseCard = ({
 
         {/* Course metadata - also draggable */}
         <div 
-          className="flex flex-wrap gap-1 cursor-grab active:cursor-grabbing"
+          className="flex flex-wrap gap-2 cursor-grab active:cursor-grabbing touch-manipulation"
           {...listeners}
           {...attributes}
         >
@@ -131,7 +136,7 @@ const CourseCard = ({
           )}
           {course.school && (
             <Pill variant="orange" size="xs" icon={BuildingIcon}>
-              <span className="truncate max-w-[100px]">{course.school}</span>
+              <span className="truncate max-w-[120px] tablet:max-w-[100px]">{course.school}</span>
             </Pill>
           )}
         </div>
@@ -140,7 +145,8 @@ const CourseCard = ({
   );
 };
 
-// Droppable Semester Column Component
+
+// Unified Semester Component that works for both layouts
 const SemesterColumn = ({ 
   semester, 
   onAddCourse, 
@@ -150,7 +156,8 @@ const SemesterColumn = ({
   onRemoveCourse,
   onCourseHover,
   onCourseHoverEnd,
-  highlightedCourses
+  highlightedCourses,
+  mobileViewMode
 }: { 
   semester: MallaSemester; 
   onAddCourse: (semesterId: string) => void;
@@ -161,16 +168,23 @@ const SemesterColumn = ({
   onCourseHover: (courseSigle: string) => void;
   onCourseHoverEnd: () => void;
   highlightedCourses: Set<string>;
+  mobileViewMode?: 'vertical' | 'horizontal';
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: semester.id,
   });
 
+  const isVerticalMobile = mobileViewMode === 'vertical';
+
   return (
     <div
       className={cn(
-        "min-h-[500px] flex-shrink-0 w-[280px] tablet:w-[300px] desktop:w-[320px] border rounded-md bg-secondary",
-        isOver && "ring-2 ring-primary"
+        "border rounded-md bg-secondary touch-manipulation",
+        isOver && "ring-2 ring-primary",
+        // Responsive layout
+        isVerticalMobile 
+          ? "w-full tablet:w-[300px] desktop:w-[320px] min-h-[200px] tablet:min-h-[500px]" 
+          : "min-h-[500px] flex-shrink-0 w-[260px] tablet:w-[280px] desktop:w-[300px]"
       )}
     >
       {/* Header */}
@@ -214,27 +228,43 @@ const SemesterColumn = ({
       {/* Course cards area */}
       <div 
         ref={setNodeRef}
-        className="p-2 space-y-2 min-h-[400px]"
+        className={cn(
+          "min-h-[120px]",
+          isVerticalMobile 
+            ? "p-4 space-y-3 tablet:p-2 tablet:space-y-2 tablet:min-h-[400px]"
+            : "p-2 space-y-2 min-h-[400px]"
+        )}
       >
-        {semester.courses.map((course) => (
-          <CourseCard 
-            key={course.id} 
-            course={course} 
-            locked={locked} 
-            onDelete={onRemoveCourse} 
-            onHover={onCourseHover}
-            onHoverEnd={onCourseHoverEnd}
-            isHighlighted={highlightedCourses.has(course.sigle)}
-          />
-        ))}
-        
-        {/* Empty state hint */}
-        {semester.courses.length === 0 && (
-          <div className="flex-1 flex items-center justify-center p-8 text-center">
+        {semester.courses.length > 0 ? (
+          <div className={cn(
+            isVerticalMobile 
+              ? "space-y-3 tablet:space-y-2"
+              : "space-y-2"
+          )}>
+            {semester.courses.map((course) => (
+              <CourseCard 
+                key={course.id} 
+                course={course} 
+                locked={locked} 
+                onDelete={onRemoveCourse} 
+                onHover={onCourseHover}
+                onHoverEnd={onCourseHoverEnd}
+                isHighlighted={highlightedCourses.has(course.sigle)}
+              />
+            ))}
+          </div>
+        ) : (
+          /* Empty state hint */
+          <div className={cn(
+            "flex-1 flex items-center justify-center text-center",
+            isVerticalMobile ? "p-6 tablet:p-8" : "p-8"
+          )}>
             <div className="text-muted-foreground">
               <CalendarIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-xs">
-                Arrastra cursos aquí o usa el botón para agregar
+              <p className={cn(
+                isVerticalMobile ? "text-sm tablet:text-xs" : "text-xs"
+              )}>
+                {isVerticalMobile ? "Toca el botón + para agregar cursos" : "Arrastra cursos aquí o usa el botón para agregar"}
               </p>
             </div>
           </div>
@@ -291,6 +321,7 @@ export const MallaBuilder = () => {
   const [prerequisites, setPrerequisites] = useState<string[]>([]);
   const [highlightedCourses, setHighlightedCourses] = useState<Set<string>>(new Set());
   const [hiddenSemesters, setHiddenSemesters] = useState<Set<string>>(new Set());
+  const [mobileViewMode, setMobileViewMode] = useState<'horizontal' | 'vertical'>('vertical');
 
   // Initialize data on component mount
   useEffect(() => {
@@ -490,27 +521,42 @@ export const MallaBuilder = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-6">
-        {/* Header with lock button and add semester button */}
-        <div className="flex justify-between items-center">
-          <Button
-            onClick={() => setLocked(!locked)}
-            variant="ghost_border"
-            size="icon"
-            aria-label={locked ? "Desbloquear cursos" : "Bloquear cursos"}
-          >
-            {locked ? (
-              <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
-            ) : (
-              <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
-            )}
-          </Button>
+        {/* Header with controls */}
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setLocked(!locked)}
+              variant="ghost_border"
+              size="icon"
+              aria-label={locked ? "Desbloquear cursos" : "Bloquear cursos"}
+            >
+              {locked ? (
+                <LockClosedIcon className="h-5 w-5 text-muted-foreground" />
+              ) : (
+                <LockOpenIcon className="h-5 w-5 text-muted-foreground" />
+              )}
+            </Button>
+            
+            {/* Mobile view toggle */}
+            <Button
+              onClick={() => setMobileViewMode(prev => prev === 'vertical' ? 'horizontal' : 'vertical')}
+              variant="ghost_border"
+              size="icon"
+              className="tablet:hidden"
+              aria-label="Cambiar vista"
+              title={mobileViewMode === 'vertical' ? 'Cambiar a vista horizontal' : 'Cambiar a vista vertical'}
+            >
+              <SwapVertIcon className="h-5 w-5 text-muted-foreground" />
+            </Button>
+          </div>
+          
           <Button
             variant="outline"
             onClick={handleAddSemester}
             icon={CalendarIcon}
-            className="w-full tablet:w-auto max-w-[200px]"
+            className="flex-shrink-0"
           >
-            <span className="tablet:hidden">Agregar Semestre</span>
+            <span className="tablet:hidden">Nuevo</span>
             <span className="hidden tablet:inline">Agregar Semestre</span>
           </Button>
         </div>
@@ -545,61 +591,87 @@ export const MallaBuilder = () => {
           </div>
         )}
         
-        {/* Horizontal scrollable semester container */}
+        {/* Semester container */}
         <div className="relative border border-border rounded-md overflow-hidden">
-          {/* Scroll hint for mobile */}
-          {mallaData.semesters.length > 1 && (
+          {/* Scroll hint for mobile horizontal */}
+          {mobileViewMode === 'horizontal' && mallaData.semesters.length > 1 && (
             <div className="absolute top-4 right-4 z-10 tablet:hidden">
               <div className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full border border-primary/20">
                 Desliza →
               </div>
             </div>
           )}
-          <ScrollArea className="w-full">
-            <div className="p-4 pb-6">
-              <div className={cn(
-                "flex gap-4 min-h-[600px]",
-                // Mobile: single column takes most of screen width
-                "w-max",
-                // Ensure minimum space for drag and drop
-                "px-2"
-              )}>
+          
+          {/* Mobile vertical layout */}
+          {mobileViewMode === 'vertical' && (
+            <div className="tablet:hidden">
+              <div className="p-4 space-y-4">
                 {mallaData.semesters
                   .filter(semester => !hiddenSemesters.has(semester.id))
                   .map((semester) => (
-                  <SemesterColumn
-                    key={semester.id}
-                    semester={semester}
-                    onAddCourse={handleAddCourse}
-                    onDeleteSemester={handleDeleteSemester}
-                    onToggleVisibility={handleToggleSemesterVisibility}
-                    locked={locked}
-                    onRemoveCourse={handleRemoveCourse}
-                    onCourseHover={handleCourseHover}
-                    onCourseHoverEnd={handleCourseHoverEnd}
-                    highlightedCourses={highlightedCourses}
-                  />
-                ))}
+                    <SemesterColumn
+                      key={semester.id}
+                      semester={semester}
+                      onAddCourse={handleAddCourse}
+                      onDeleteSemester={handleDeleteSemester}
+                      onToggleVisibility={handleToggleSemesterVisibility}
+                      locked={locked}
+                      onRemoveCourse={handleRemoveCourse}
+                      onCourseHover={handleCourseHover}
+                      onCourseHoverEnd={handleCourseHoverEnd}
+                      highlightedCourses={highlightedCourses}
+                      mobileViewMode={mobileViewMode}
+                    />
+                  ))}
               </div>
             </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+          )}
+          
+          {/* Horizontal layout for mobile horizontal mode and desktop */}
+          <div className={cn(
+            mobileViewMode === 'horizontal' ? "tablet:hidden" : "hidden tablet:block"
+          )}>
+              <ScrollArea className="w-full">
+                <div className="p-4 pb-6 w-fit">
+                  <div className="flex gap-3 min-h-[600px]">
+                    {mallaData.semesters
+                      .filter(semester => !hiddenSemesters.has(semester.id))
+                      .map((semester) => (
+                        <SemesterColumn
+                          key={semester.id}
+                          semester={semester}
+                          onAddCourse={handleAddCourse}
+                          onDeleteSemester={handleDeleteSemester}
+                          onToggleVisibility={handleToggleSemesterVisibility}
+                          locked={locked}
+                          onRemoveCourse={handleRemoveCourse}
+                          onCourseHover={handleCourseHover}
+                          onCourseHoverEnd={handleCourseHoverEnd}
+                          highlightedCourses={highlightedCourses}
+                          mobileViewMode={mobileViewMode}
+                        />
+                      ))}
+                  </div>
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
         </div>
 
-        {/* Prerequisites display */}
+        {/* Prerequisites display - enhanced for mobile */}
         {hoveredCourse && (
-          <div className="border border-border rounded-md p-4 bg-muted/30">
-            <h3 className="font-semibold text-sm mb-2">
+          <div className="border border-border rounded-md p-3 tablet:p-4 bg-muted/30">
+            <h3 className="font-semibold text-sm tablet:text-sm mb-2">
               Prerrequisitos de {hoveredCourse}:
             </h3>
             {prerequisites.length > 0 ? (
               <div className="text-sm text-muted-foreground">
-                <p className="mb-2">Este curso depende de los siguientes cursos:</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="mb-3 tablet:mb-2">Este curso depende de los siguientes cursos:</p>
+                <div className="grid grid-cols-2 tablet:flex tablet:flex-wrap gap-2">
                   {prerequisites.map((prereq) => (
                     <span 
                       key={prereq} 
-                      className="bg-background border rounded px-2 py-1 text-xs font-mono"
+                      className="bg-background border rounded px-2 py-1 text-xs font-mono text-center tablet:text-left"
                     >
                       {prereq}
                     </span>
@@ -615,24 +687,26 @@ export const MallaBuilder = () => {
         )}
 
         {/* Summary section */}
-        <div className="border border-border rounded-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Resumen de la Malla</h2>
+        <div className="border border-border rounded-md p-4 tablet:p-6">
+          <h2 className="text-lg tablet:text-xl font-semibold mb-4">Resumen de la Malla</h2>
           {/* Responsive grid that adjusts based on number of semesters */}
           <ScrollArea className="w-full">
             <div className={cn(
-              "grid gap-4 pb-2",
+              "grid gap-3 tablet:gap-4 pb-2",
               // Mobile-first: 2 columns, then adapt based on number of semesters
               "grid-cols-2",
               mallaData.semesters.length > 2 && "tablet:grid-cols-3",
               mallaData.semesters.length > 3 && "desktop:grid-cols-4",
               mallaData.semesters.length > 4 && "desktop:grid-cols-5"
             )}>
-              {mallaData.semesters.map((semester) => {
+              {mallaData.semesters
+                .filter(semester => !hiddenSemesters.has(semester.id))
+                .map((semester) => {
                 const credits = getCreditsForSemester(semester.id);
                 return (
-                  <div key={semester.id} className="text-center min-w-0">
-                    <p className="text-sm font-medium truncate">{semester.name}</p>
-                    <p className="text-lg font-bold text-green-600">{credits}</p>
+                  <div key={semester.id} className="text-center min-w-0 p-2 tablet:p-0">
+                    <p className="text-xs tablet:text-sm font-medium truncate">{semester.name}</p>
+                    <p className="text-xl tablet:text-lg font-bold text-green-600">{credits}</p>
                     <p className="text-xs text-muted-foreground">créditos</p>
                   </div>
                 );
@@ -641,10 +715,12 @@ export const MallaBuilder = () => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
           <div className="mt-4 pt-4 border-t border-border">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col tablet:flex-row tablet:justify-between tablet:items-center gap-2">
               <span className="text-sm font-medium">Total de créditos planificados:</span>
-              <span className="text-xl font-bold">
-                {mallaData.semesters.reduce((total, semester) => 
+              <span className="text-2xl tablet:text-xl font-bold">
+                {mallaData.semesters
+                  .filter(semester => !hiddenSemesters.has(semester.id))
+                  .reduce((total, semester) => 
                   total + semester.courses.reduce((semTotal, course) => semTotal + course.credits, 0), 0
                 )}
               </span>
