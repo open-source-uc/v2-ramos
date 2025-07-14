@@ -2,7 +2,7 @@
  * Semestre actual
  * Se debe actualizar al inicio de cada semestre
  */
-export const CURRENT_SEMESTER = "2025-1";
+export const CURRENT_SEMESTER = "2025-2";
 
 /**
  * Chequea si el semestre dado es el semestre actual
@@ -53,17 +53,17 @@ export function formatSemester(year: number, semesterNumber: number): string {
  */
 export function isFutureSemester(year: number, semesterNumber: number): boolean {
   const current = parseSemester(CURRENT_SEMESTER);
-  
+
   // Si el año es mayor al actual, es futuro
   if (year > current.year) {
     return true;
   }
-  
+
   // Si es el mismo año, comparar semestres
   if (year === current.year && semesterNumber > current.semesterNumber) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -82,12 +82,12 @@ export function getMaxAllowedYear(): number {
  */
 export function getAllowedSemestersForYear(year: number): number[] {
   const current = parseSemester(CURRENT_SEMESTER);
-  
+
   // Si es un año anterior al actual, permitir todos los semestres
   if (year < current.year) {
     return [1, 2, 3];
   }
-  
+
   // Si es el año actual, solo permitir semestres hasta el actual
   if (year === current.year) {
     const allowedSemesters = [];
@@ -96,7 +96,7 @@ export function getAllowedSemestersForYear(year: number): number[] {
     }
     return allowedSemesters;
   }
-  
+
   // Si es un año futuro, no permitir ningún semestre
   return [];
 }
