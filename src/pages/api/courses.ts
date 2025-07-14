@@ -1,10 +1,6 @@
 import type { APIRoute } from "astro";
-// import CoursesRaw from "../../../migration/json/cursos-simplificado.json";
 import type { CourseStaticInfo, CourseSummary } from "@/types";
 import { getEntry } from "astro:content";
-
-
-// const coursesData = CoursesRaw as Record<string, CourseStaticInfo>;
 
 export const GET: APIRoute = async ({ request, locals }) => {
     const API_SECRET = import.meta.env.API_SECRET;
@@ -24,7 +20,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
             SELECT 
             id,
             sigle,
-            superlikes,
+            superlikes, 
             likes,
             dislikes,
             votes_low_workload,
