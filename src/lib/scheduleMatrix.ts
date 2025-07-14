@@ -407,3 +407,66 @@ export function applySectionSuggestions(
   
   return updatedCourses;
 }
+
+/**
+ * Genera una combinación aleatoria de secciones para los cursos seleccionados
+ * @param selectedCourses - Array de cursos seleccionados actual
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @returns Nueva lista de cursos con secciones aleatorias
+ */
+export function shuffleSections(
+  selectedCourses: string[],
+  courseSections: CourseSections
+): string[] {
+  return selectedCourses.map(courseSelection => {
+    const [courseId] = courseSelection.split('-');
+    const availableSections = getAvailableSections(courseId, courseSections);
+    
+    if (availableSections.length <= 1) {
+      // Si solo hay una sección disponible, mantener la actual
+      return courseSelection;
+    }
+    
+    // Seleccionar una sección completamente aleatoria (incluyendo la actual)
+    const randomSection = availableSections[Math.floor(Math.random() * availableSections.length)];
+    return `${courseId}-${randomSection}`;
+  });
+}
+
+/**
+ * Genera múltiples combinaciones aleatorias y retorna la mejor (con menos conflictos)
+ * @param selectedCourses - Array de cursos seleccionados actual
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @param attempts - Número de intentos aleatorios (default: 10)
+ * @returns La mejor combinación encontrada
+ */
+export function shuffleSectionsOptimal(
+  selectedCourses: string[],
+  courseSections: CourseSections,
+  attempts: number = 10
+): string[] {
+  let bestCombination = selectedCourses;
+  let bestConflictCount = Infinity;
+  
+  // Evaluar la combinación actual
+  const currentMatrix = createScheduleMatrix(courseSections, selectedCourses);
+  const currentConflicts = detectScheduleConflicts(currentMatrix);
+  bestConflictCount = currentConflicts.length;
+  
+  // Generar múltiples combinaciones aleatorias
+  for (let i = 0; i < attempts; i++) {
+    const shuffledCourses = shuffleSections(selectedCourses, courseSections);
+    const matrix = createScheduleMatrix(courseSections, shuffledCourses);
+    const conflicts = detectScheduleConflicts(matrix);
+    
+    if (conflicts.length < bestConflictCount) {
+      bestCombination = shuffledCourses;
+      bestConflictCount = conflicts.length;
+      
+      // Si encontramos una combinación sin conflictos, usar esa
+      if (conflicts.length === 0) break;
+    }
+  }
+  
+  return bestCombination;
+}

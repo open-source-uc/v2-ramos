@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -38,10 +38,17 @@ export default function ConflictResolver({
   const [isOpen, setIsOpen] = useState(false);
   const [resolution, setResolution] = useState<ConflictResolutionResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleAnalyzeConflicts = async () => {
     setIsLoading(true);
     try {
+      // Add a small delay to ensure proper rendering
+      await new Promise(resolve => setTimeout(resolve, 100));
       const result = findConflictResolution(selectedCourses, courseSections, courseOptions);
       setResolution(result);
     } catch (error) {
@@ -82,7 +89,7 @@ export default function ConflictResolver({
     };
   };
 
-  if (!hasConflicts) return null;
+  if (!hasConflicts || !isMounted) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
