@@ -1,0 +1,270 @@
+---
+export interface ComboboxOption {
+  value: string;
+  label: string;
+}
+
+export interface Props {
+  class?: string;
+  options?: ComboboxOption[];
+  placeholder?: string;
+  searchPlaceholder?: string;
+  emptyMessage?: string;
+  value?: string;
+  name?: string;
+  [key: string]: any;
+}
+
+const {
+  class: className,
+  options = [],
+  placeholder = "Selecciona tu unidad académica...",
+  searchPlaceholder = "Buscar unidad académica...",
+  emptyMessage = "No se encontraron unidades académicas.",
+  value = "",
+  name,
+  ...props
+} = Astro.props;
+
+import { cn } from "@/lib/utils";
+
+// Si options no viene, muestra vacío (no fallback a carreras)
+const frameworks = options.length > 0 ? options : [];
+---
+
+<div data-slot="combobox" class={cn("relative", className)} {...props}>
+  <!-- Always render hidden input for form submission -->
+
+  <input
+    type="hidden"
+    name={name}
+    data-slot="combobox-hidden-input"
+    value={value || ""}
+  />
+
+  <!-- Trigger Button -->
+  <button
+    data-slot="combobox-trigger"
+    data-placeholder={placeholder}
+    type="button"
+    role="combobox"
+    tabindex="0"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    class={cn(
+      "w-full flex items-center justify-between gap-2 rounded-lg text-sm font-medium cursor-pointer transition-all disabled:pointer-events-none disabled:opacity-50 outline-none border border-border bg-background shadow-sm hover:bg-accent focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50",
+      "h-11 px-4 py-2",
+      className
+    )}
+  >
+    <span data-slot="combobox-value" class="truncate text-left w-full">{placeholder}</span>
+    <svg
+      class="opacity-50 w-4 h-4"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path d="M8 9l4-4 4 4M16 15l-4 4-4-4"></path>
+    </svg>
+  </button>
+
+  <!-- Dropdown Content -->
+  <div
+    data-slot="combobox-content"
+    class="w-full absolute top-full left-0 z-50 min-w-[220px] max-w-[400px] bg-background border border-border rounded-lg shadow-lg mt-1 hidden"
+  >
+    <!-- Search Input -->
+    <div class="flex items-center border-b border-border px-3 py-2 gap-2">
+      <svg
+        class="w-4 h-4 shrink-0 opacity-50"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="M21 21l-4.35-4.35"></path>
+      </svg>
+      <input
+        data-slot="combobox-search"
+        type="text"
+        placeholder={searchPlaceholder}
+        tabindex="-1"
+        autocomplete="off"
+        class="flex h-8 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+      />
+    </div>
+
+    <!-- Options List -->
+    <div data-slot="combobox-list" class="max-h-60 overflow-y-auto divide-y divide-border">
+      {
+        frameworks.length > 0 ? frameworks.map((framework) => (
+          <div
+            data-slot="combobox-item"
+            data-value={framework.value}
+            class="flex cursor-pointer items-center rounded-md px-3 py-2 text-sm outline-none hover:bg-accent transition-colors select-none"
+          >
+            <span class="truncate">{framework.label}</span>
+            <svg
+              data-slot="combobox-check"
+              class="ml-auto w-4 h-4 opacity-0 text-primary"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+        )) : null
+      }
+
+      <!-- Empty state -->
+      <div data-slot="combobox-empty" class="py-6 text-center text-sm text-muted-foreground hidden">
+        {emptyMessage}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  [data-slot="combobox-content"] {
+    animation: slideDown 200ms ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  // Use event delegation to ensure comboboxes always work, even after form submissions
+  document.addEventListener('click', function(e) {
+    const trigger = (e.target as HTMLElement).closest('[data-slot="combobox-trigger"]');
+    if (!trigger) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const combobox = trigger.closest('[data-slot="combobox"]');
+    if (!combobox) return;
+    
+    const content = combobox.querySelector('[data-slot="combobox-content"]') as HTMLElement;
+    const search = combobox.querySelector('[data-slot="combobox-search"]') as HTMLInputElement;
+    
+    if (!content || !search) return;
+    
+    // Toggle dropdown
+    const isOpen = content.style.display === 'block';
+    content.style.display = isOpen ? 'none' : 'block';
+    trigger.setAttribute('aria-expanded', (!isOpen).toString());
+    
+    if (!isOpen) {
+      // Opening
+      search.value = "";
+      const items = combobox.querySelectorAll('[data-slot="combobox-item"]');
+      items.forEach((i) => ((i as HTMLElement).style.display = ""));
+      
+      const emptyState = combobox.querySelector('[data-slot="combobox-empty"]') as HTMLElement;
+      if (emptyState) emptyState.style.display = "none";
+      
+      setTimeout(() => {
+        search.focus();
+      }, 10);
+    }
+  });
+
+  // Handle item selection
+  document.addEventListener('click', function(e) {
+    const item = (e.target as HTMLElement).closest('[data-slot="combobox-item"]');
+    if (!item) return;
+    
+    const combobox = item.closest('[data-slot="combobox"]');
+    if (!combobox) return;
+    
+    const value = item.getAttribute('data-value') || '';
+    const label = item.textContent?.trim() || '';
+    
+    const valueDisplay = combobox.querySelector('[data-slot="combobox-value"]') as HTMLElement;
+    const hiddenInput = combobox.querySelector('[data-slot="combobox-hidden-input"]') as HTMLInputElement;
+    const content = combobox.querySelector('[data-slot="combobox-content"]') as HTMLElement;
+    const trigger = combobox.querySelector('[data-slot="combobox-trigger"]') as HTMLElement;
+    
+    if (valueDisplay) valueDisplay.textContent = label;
+    if (hiddenInput) hiddenInput.value = value;
+    
+    // Update visual state
+    const items = combobox.querySelectorAll('[data-slot="combobox-item"]');
+    items.forEach((i) => {
+      const check = i.querySelector('[data-slot="combobox-check"]') as HTMLElement;
+      if (check) check.style.opacity = "0";
+    });
+    
+    const selectedCheck = item.querySelector('[data-slot="combobox-check"]') as HTMLElement;
+    if (selectedCheck) selectedCheck.style.opacity = "1";
+    
+    // Close dropdown
+    if (content) content.style.display = 'none';
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  });
+
+  // Handle search (optimized: only filter visible, not all, and debounce input)
+  let comboboxSearchTimeout: ReturnType<typeof setTimeout> | undefined;
+  document.addEventListener('input', function(e) {
+    const search = e.target as HTMLElement;
+    if (!search.matches('[data-slot="combobox-search"]')) return;
+
+    const combobox = search.closest('[data-slot="combobox"]');
+    if (!combobox) return;
+
+    // Debounce to avoid filtering on every keystroke
+    if (comboboxSearchTimeout) clearTimeout(comboboxSearchTimeout);
+    comboboxSearchTimeout = setTimeout(() => {
+      const searchTerm = (search as HTMLInputElement).value.toLowerCase();
+      const items = combobox.querySelectorAll('[data-slot="combobox-item"]');
+      const emptyState = combobox.querySelector('[data-slot="combobox-empty"]') as HTMLElement;
+
+      let visibleItems = 0;
+      // Only check first 500 items for performance, then hide the rest
+      let shown = 0;
+      items.forEach((item, idx) => {
+        if (shown > 500) {
+          (item as HTMLElement).style.display = 'none';
+          return;
+        }
+        const text = item.textContent?.toLowerCase() || "";
+        const shouldShow = text.includes(searchTerm);
+        (item as HTMLElement).style.display = shouldShow ? "" : "none";
+        if (shouldShow) {
+          visibleItems++;
+          shown++;
+        }
+      });
+
+      if (emptyState) {
+        emptyState.style.display = visibleItems === 0 ? "block" : "none";
+      }
+    }, 80); // 80ms debounce
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    const target = e.target as HTMLElement;
+    if (!target.closest('[data-slot="combobox"]')) {
+      document.querySelectorAll('[data-slot="combobox-content"]').forEach(content => {
+        (content as HTMLElement).style.display = 'none';
+      });
+      document.querySelectorAll('[data-slot="combobox-trigger"]').forEach(trigger => {
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+</script>

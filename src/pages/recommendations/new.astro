@@ -5,6 +5,7 @@ import { OsucPermissions } from "@/types/permissions";
 import { actions } from "astro:actions";
 import EditorMDX from "@/components/EditorMDX.tsx";
 import Layout from "@/layouts/Layout.astro";
+import Combox from "@/components/common/Combox.astro";
 
 // Authentication check
 const token = getToken(Astro.cookies);
@@ -256,11 +257,20 @@ if (result && !result.error) {
                 <label class="text-sm font-medium text-foreground block">
                   Código del curso <span class="text-red-500">*</span>
                 </label>
-                <input
+                <Combox
                   name="code"
-                  placeholder="Ingrese el código del curso"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
                   required
+                  placeholder="Selecciona el curso..."
+                  searchPlaceholder="Buscar por código o nombre..."
+                  emptyMessage="No se encontraron cursos."
+                  options={Object.entries(
+                    await import(
+                      "/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json"
+                    )
+                  ).map(([sigle, data]) => ({
+                    value: sigle,
+                    label: `${sigle} - ${data.name}`,
+                  }))}
                 />
               </div>
               <div class="space-y-2 min-w-0">
