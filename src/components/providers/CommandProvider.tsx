@@ -13,6 +13,10 @@ const CommandContext = React.createContext<CommandContextType | undefined>(undef
 export function CommandProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleSetIsOpen = React.useCallback((open: boolean) => {
+    setIsOpen(open);
+  }, []);
+
   const toggleOpen = React.useCallback(() => {
     setIsOpen(prev => !prev);
   }, []);
@@ -25,12 +29,21 @@ export function CommandProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
+    const handleOpenCommand = () => {
+      handleSetIsOpen(true);
+    };
+
     document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, [toggleOpen]);
+    window.addEventListener("openCommandSearch", handleOpenCommand);
+    
+    return () => {
+      document.removeEventListener("keydown", down);
+      window.removeEventListener("openCommandSearch", handleOpenCommand);
+    };
+  }, [toggleOpen, handleSetIsOpen]);
 
   return (
-    <CommandContext.Provider value={{ isOpen, setIsOpen, toggleOpen }}>
+    <CommandContext.Provider value={{ isOpen, setIsOpen: handleSetIsOpen, toggleOpen }}>
       {children}
     </CommandContext.Provider>
   );

@@ -44,7 +44,6 @@ export default function MobileHeader() {
         </a>
 
         <div className="flex items-center gap-2">
-
           <CommandSearchTrigger />
           
           <button
