@@ -126,14 +126,14 @@ const componentId = `tag-selector-${Math.random().toString(36).substr(2, 9)}`;
             tag +
             '">×</button>';
           selectedTagsContainer.appendChild(tagElement);
-
-          // Crear el input oculto
-          const hiddenInput = document.createElement("input");
-          hiddenInput.type = "hidden";
-          hiddenInput.name = name;
-          hiddenInput.value = tag;
-          hiddenInputsContainer.appendChild(hiddenInput);
         });
+
+        // Crear un solo input oculto con todas las tags separadas por coma
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = name;
+        hiddenInput.value = currentSelectedTags.join(",");
+        hiddenInputsContainer.appendChild(hiddenInput);
 
         // Agregar event listeners a los botones de remover
         container.querySelectorAll(".remove-tag").forEach(function (button) {

@@ -1,7 +1,11 @@
 ---
-import { getCollection } from "astro:content";
 import BlogCard from "@/components/features/blog/BlogCard.tsx";
 import Layout from "@/layouts/Layout.astro";
+import type { Blogs } from "@/types";
+
+const blogsResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
+const blogsData = (await blogsResponse.json()) as Blogs[];
+console.log(blogsData);
 ---
 
 <Layout>
@@ -13,16 +17,15 @@ import Layout from "@/layouts/Layout.astro";
         Descubre blogs creados por la comunidad
       </h1>
     </div>
-    <!-- {
-      blogs.map((blog) => {
-        const { data } = blog;
-        const { title, author, readtime, description, tags } = data;
-
+    {
+      blogsData.map((blog) => {
+        const { title, user_id, organization_name, period_time, readtime, tags } = blog;
+        
         return (
           <div class="p-2 flex justify-center">
             <BlogCard
               title={title}
-              authorName={author?.name || "Desconocido"}
+              authorName={}
               description={description}
               readtime={readtime}
               tags={tags || []}
@@ -30,6 +33,6 @@ import Layout from "@/layouts/Layout.astro";
           </div>
         );
       })
-    } -->
+    }
   </main>
 </Layout>
