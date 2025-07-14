@@ -223,6 +223,11 @@ export function removeSemester(semesterId: string): boolean {
     return false;
   }
   
+  // Don't allow removing the current semester
+  if (semesterId === CURRENT_SEMESTER) {
+    return false;
+  }
+  
   const semesterToRemove = currentData.semesters.find(s => s.id === semesterId);
   if (!semesterToRemove) return false;
   

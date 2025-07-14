@@ -12,10 +12,11 @@ import {
   CalendarIcon,
   CloseIcon,
   LockClosedIcon,
-  LockOpenIcon 
+  LockOpenIcon,
+  EyeIcon
 } from '@/components/icons/icons';
 import { cn } from '@/lib/utils';
-import { formatSemester } from '@/lib/currentSemester';
+import { formatSemester, CURRENT_SEMESTER, isCurrentSemester, isPreviousSemester } from '@/lib/currentSemester';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { CourseSearchCommand } from './CourseSearchCommand';
 import {
@@ -144,6 +145,7 @@ const SemesterColumn = ({
   semester, 
   onAddCourse, 
   onDeleteSemester,
+  onToggleVisibility,
   locked,
   onRemoveCourse,
   onCourseHover,
@@ -153,6 +155,7 @@ const SemesterColumn = ({
   semester: MallaSemester; 
   onAddCourse: (semesterId: string) => void;
   onDeleteSemester: (semesterId: string) => void;
+  onToggleVisibility: (semesterId: string) => void;
   locked: boolean;
   onRemoveCourse: (courseId: string) => void;
   onCourseHover: (courseSigle: string) => void;
@@ -178,16 +181,34 @@ const SemesterColumn = ({
             {getCreditsForSemester(semester.id)} créditos totales
           </p>
         </div>
-        {/* Delete semester button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDeleteSemester(semester.id)}
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 ml-2"
-          aria-label={`Eliminar semestre ${semester.name}`}
-        >
-          ×
-        </Button>
+        <div className="flex items-center gap-1 ml-2">
+          {/* Hide/Show button for previous semester */}
+          {isPreviousSemester(semester.id) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onToggleVisibility(semester.id)}
+              className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-muted ml-2"
+              aria-label={`Ocultar semestre ${semester.name}`}
+              title="Ocultar semestre anterior"
+            >
+              ×
+            </Button>
+          )}
+          
+          {/* Delete semester button - hide for current semester */}
+          {!isCurrentSemester(semester.id) && !isPreviousSemester(semester.id) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onDeleteSemester(semester.id)}
+              className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              aria-label={`Eliminar semestre ${semester.name}`}
+            >
+              ×
+            </Button>
+          )}
+        </div>
       </div>
       
       {/* Course cards area */}
@@ -269,6 +290,7 @@ export const MallaBuilder = () => {
   const [hoveredCourse, setHoveredCourse] = useState<string | null>(null);
   const [prerequisites, setPrerequisites] = useState<string[]>([]);
   const [highlightedCourses, setHighlightedCourses] = useState<Set<string>>(new Set());
+  const [hiddenSemesters, setHiddenSemesters] = useState<Set<string>>(new Set());
 
   // Initialize data on component mount
   useEffect(() => {
@@ -352,6 +374,7 @@ export const MallaBuilder = () => {
   
   const handleDeleteSemester = (semesterId: string) => {
     if (mallaData.semesters.length <= 1) return; // Don't delete last semester
+    if (isCurrentSemester(semesterId)) return; // Don't delete current semester
     
     if (removeSemester(semesterId)) {
       setMallaData(getSavedMallaData());
@@ -384,6 +407,18 @@ export const MallaBuilder = () => {
     if (removeCourseFromMalla(courseId)) {
       setMallaData(getSavedMallaData());
     }
+  };
+
+  const handleToggleSemesterVisibility = (semesterId: string) => {
+    setHiddenSemesters(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(semesterId)) {
+        newSet.delete(semesterId);
+      } else {
+        newSet.add(semesterId);
+      }
+      return newSet;
+    });
   };
 
   const handleCourseHover = async (courseSigle: string) => {
@@ -480,6 +515,36 @@ export const MallaBuilder = () => {
           </Button>
         </div>
         
+        {/* Hidden semesters indicator */}
+        {hiddenSemesters.size > 0 && (
+          <div className="border border-dashed border-border rounded-md p-3 bg-muted/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {hiddenSemesters.size} semestre{hiddenSemesters.size > 1 ? 's' : ''} oculto{hiddenSemesters.size > 1 ? 's' : ''}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                {Array.from(hiddenSemesters).map(semesterId => {
+                  const semester = mallaData.semesters.find(s => s.id === semesterId);
+                  return semester ? (
+                    <Button
+                      key={semesterId}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleToggleSemesterVisibility(semesterId)}
+                      className="h-7 px-2 text-xs"
+                    >
+                      <EyeIcon className="h-3 w-3 mr-1" />
+                      {semester.name}
+                    </Button>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+        
         {/* Horizontal scrollable semester container */}
         <div className="relative border border-border rounded-md overflow-hidden">
           {/* Scroll hint for mobile */}
@@ -499,12 +564,15 @@ export const MallaBuilder = () => {
                 // Ensure minimum space for drag and drop
                 "px-2"
               )}>
-                {mallaData.semesters.map((semester) => (
+                {mallaData.semesters
+                  .filter(semester => !hiddenSemesters.has(semester.id))
+                  .map((semester) => (
                   <SemesterColumn
                     key={semester.id}
                     semester={semester}
                     onAddCourse={handleAddCourse}
                     onDeleteSemester={handleDeleteSemester}
+                    onToggleVisibility={handleToggleSemesterVisibility}
                     locked={locked}
                     onRemoveCourse={handleRemoveCourse}
                     onCourseHover={handleCourseHover}

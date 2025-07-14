@@ -2,7 +2,7 @@
  * Semestre actual
  * Se debe actualizar al inicio de cada semestre
  */
-export const CURRENT_SEMESTER = "2025-1";
+export const CURRENT_SEMESTER = "2025-2";
 
 /**
  * Chequea si el semestre dado es el semestre actual
@@ -99,4 +99,32 @@ export function getAllowedSemestersForYear(year: number): number[] {
   
   // Si es un año futuro, no permitir ningún semestre
   return [];
+}
+
+/**
+ * Obtiene el semestre anterior al actual
+ * @returns semestre anterior en formato "YYYY-N"
+ */
+export function getPreviousSemester(): string {
+  const current = parseSemester(CURRENT_SEMESTER);
+  
+  let previousYear = current.year;
+  let previousSemester = current.semesterNumber - 1;
+  
+  // If we're in first semester, go to previous year's second semester
+  if (previousSemester < 1) {
+    previousYear = current.year - 1;
+    previousSemester = 2;
+  }
+  
+  return formatSemester(previousYear, previousSemester);
+}
+
+/**
+ * Chequea si el semestre dado es el semestre anterior al actual
+ * @param semester - Semestre en el formato "YYYY-N"
+ * @returns verdadero si es el semestre anterior, falso en caso contrario
+ */
+export function isPreviousSemester(semester: string): boolean {
+  return semester === getPreviousSemester();
 }
