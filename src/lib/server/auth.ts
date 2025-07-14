@@ -1,22 +1,35 @@
 import type { AstroCookies } from "astro";
 
-export async function getUserDataByToken(token: string): Promise<{ message: string, permissions: string[], id: string } | null> {
-    const response = await fetch("https://auth.osuc.dev/api", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-        }
-    });
+const OsucApi = "http://localhost:4322/api";
 
-    if (response.ok) {
-        const data: any = await response.json();
-        return {
-            message: data.message,
-            permissions: data.permissions,
-            id: data.userId
-        };
-    }
+export async function getUserDataByToken(token: string): Promise<{
+  message: string;
+  permissions: string[];
+  organizations: {
+    id: number;
+    name: string;
+    user_name: string;
+    role: string;
+  }[];
+  id: string;
+} | null> {
+  const response = await fetch(OsucApi, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
 
-    return null;
+  if (response.ok) {
+    const data: any = await response.json();
+    return {
+      message: data.message,
+      permissions: data.permissions,
+      id: data.userId,
+      organizations: data.organizations,
+    };
+  }
+
+  return null;
 }

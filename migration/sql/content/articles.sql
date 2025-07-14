@@ -1,36 +1,26 @@
--- Tabla para organizaciones estudiantiles
-CREATE TABLE organizations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL, -- ID de la cuenta de la organización
-    organization_name TEXT NOT NULL UNIQUE,
-    faculty TEXT NOT NULL, -- Facultad a la que pertenece la organización
-    title TEXT, -- Título opcional (ej: "CAI", "Representante de Carrera")
-    logo_url TEXT NOT NULL, -- URL del logo de la organización
-    page_link TEXT NOT NULL UNIQUE, -- Link interno de la página (ej: "/organizations/cai")
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-);
-
 -- Tabla para blogs
 CREATE TABLE blogs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
+  user_name TEXT NOT NULL,
   organization_id INTEGER NOT NULL,
+  organization_name TEXT NOT NULL,
   title TEXT NOT NULL,
   period_time TEXT NOT NULL,
   readtime INTEGER NOT NULL,
-  tags TEXT, -- Json String con los tags del blog
+  tags TEXT, -- tag1,tag2,tag3,...
   content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE RESTRICT
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE recommendations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
+  user_name TEXT NOT NULL,
   organization_id INTEGER NOT NULL,
-  faculty TEXT NOT NULL, -- Facultad a la que pertenece la recomendación
+  organization_name TEXT NOT NULL,
+  faculty TEXT NOT NULL,
   title TEXT NOT NULL,
   period_time TEXT NOT NULL,
   readtime INTEGER NOT NULL,
@@ -38,20 +28,10 @@ CREATE TABLE recommendations (
   qualification INTEGER CHECK (qualification >= 0 AND qualification <= 5),
   content_path TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE RESTRICT
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Triggers para actualizar updated_at automáticamente
-CREATE TRIGGER update_organizations_updated_at
-    AFTER UPDATE ON organizations
-    FOR EACH ROW
-    BEGIN
-        UPDATE organizations
-        SET updated_at = CURRENT_TIMESTAMP
-        WHERE id = NEW.id;
-    END;
-
 CREATE TRIGGER update_blogs_updated_at
     AFTER UPDATE ON blogs
     FOR EACH ROW
@@ -71,12 +51,6 @@ CREATE TRIGGER update_recommendations_updated_at
     END;
 
 
--- Índices para la tabla organizations
-CREATE INDEX idx_organizations_user_id ON organizations(user_id);
-CREATE INDEX idx_organizations_faculty ON organizations(faculty);
-CREATE INDEX idx_organizations_organization_name ON organizations(organization_name);
-CREATE INDEX idx_organizations_page_link ON organizations(page_link);
-CREATE INDEX idx_organizations_created_at ON organizations(created_at);
 
 -- Índices para la tabla blogs
 CREATE INDEX idx_blogs_user_id ON blogs(user_id);
@@ -99,4 +73,3 @@ CREATE INDEX idx_recommendations_created_at ON recommendations(created_at);
 CREATE INDEX idx_blogs_org_period ON blogs(organization_id, period_time);
 CREATE INDEX idx_recommendations_faculty_code ON recommendations(faculty, code);
 CREATE INDEX idx_recommendations_qualification_faculty ON recommendations(qualification, faculty);
-CREATE INDEX idx_organizations_faculty_created ON organizations(faculty, created_at);

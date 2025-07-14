@@ -45,32 +45,53 @@ export interface CourseReview {
   updated_at: string;
 }
 
+export interface Organization {
+  id: number;
+  organization_name: string;
+  organization_acronym: string;
+  faculty: string;
+  logo_url: string;
+  page_link: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserOrganization {
+  id: number;
+  organization_id: number;
+  user_name: string; // Name of the user
+  user_id: number;
+  user_role: string; // Role in the organization (e.g., admin, member)
+}
+
 export interface Blogs {
   id: number;
   user_id: number;
   organization_id: number;
+  organization_name: string;
   title: string;
   period_time: string; // Format: YYYY-S
   readtime: number; // in minutes
-  tags: string; // Json String with blog tags
+  tags: string;
   content_path: string;
-  created_at: string; // Date when the blog was created
-  updated_at: string; // Date when the blog was last updated
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Recomendations {
   id: number;
   user_id: number;
   organization_id: number;
-  faculty: string; // Faculty name
+  organization_name: string; // Name of the organization
+  faculty: string;
   title: string;
   period_time: string; // Format: YYYY-S
   readtime: number; // in minutes
   code: string; // Course code
-  qualification: number; // Rating from 0 to 5
+  qualification: number;
   content_path: string;
-  created_at: string; // Date when the recommendation was created
-  updated_at: string; // Date when the recommendation was last updated
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CourseStaticInfo {

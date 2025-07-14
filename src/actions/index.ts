@@ -5,9 +5,11 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 import { getUserDataByToken } from "@/lib/server/auth";
 import { getToken } from "@/lib/auth";
-import type { CourseReview } from "@/types";
+import type { CourseReview, Organization, UserOrganization } from "@/types";
 import { isFutureSemester } from "@/lib/currentSemester";
 import type { get } from "http";
+
+const organizationApi = "http://localhost:4322/api/organization";
 
 const courseReviewSchema = z.object({
   course_sigle: z
@@ -62,6 +64,13 @@ const blogSchema = z.object({
 
   period_time: z.string().min(1, "El período es requerido"),
 
+  organization_id: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "La organización es requerida",
+    }),
+
   readtime: z
     .string()
     .transform((val) => parseInt(val, 10))
@@ -70,9 +79,15 @@ const blogSchema = z.object({
     }),
 
   tags: z
-    .string()
+    .union([z.string(), z.null()])
     .optional()
-    .transform((val) => (val ? val.split(",").map((tag) => tag.trim()) : [])),
+    .transform((val) => {
+      if (val == null) return [];
+      if (typeof val === "string" && val.length > 0) {
+        return val.split(",").map((tag) => tag.trim());
+      }
+      return [];
+    }),
 
   content: z
     .string()
@@ -86,6 +101,13 @@ const recommendationSchema = z.object({
     .string()
     .min(1, "El título es requerido")
     .max(200, "El título no puede exceder 200 caracteres"),
+
+  organization_id: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "La organización es requerida",
+    }),
 
   period_time: z.string().min(1, "El período es requerido"),
 
@@ -159,18 +181,17 @@ function generateRecommendationPath(recommendationId: number) {
 }
 
 // Funciones para generar el contenido MDX
-function generateBlogMDX(blogData: any, organizationData: any) {
+function generateBlogMDX(userOrg: any, blogData: any, organizationData: any) {
   const tagsArray = Array.isArray(blogData.tags) ? blogData.tags : [];
   const tagsSection =
     tagsArray.length > 0
       ? `\ntags:\n${tagsArray.map((tag: string) => `  - ${tag}`).join("\n")}`
       : "";
-  const authorTitle = organizationData.title
-    ? `\n  title: "${organizationData.title.trim()}"`
-    : "";
   const authorSection = `author:
-  name: "${organizationData.organization_name}"
-  faculty: "${organizationData.faculty}"${authorTitle}
+  name: "${userOrg.user_name}"
+  role: "${userOrg.role}"
+  organization_name: "${organizationData.organization_name}"
+  organization_faculty: "${organizationData.faculty}"
   picture: "${organizationData.logo_url}"
   link: "${organizationData.page_link}"`;
 
@@ -188,15 +209,15 @@ ${blogData.content}
 }
 
 function generateRecommendationMDX(
+  userOrg: any,
   recommendationData: any,
   organizationData: any
 ) {
-  const authorTitle = organizationData.title
-    ? `\n  ${organizationData.title.trim()}`
-    : "";
   const authorSection = `author:
-  name: "${organizationData.organization_name}"
-  faculty: "${organizationData.faculty}"${authorTitle}
+  name: "${userOrg.user_name}"
+  role: "${userOrg.role}"
+  organization_name: "${organizationData.organization_name}"
+  organization_faculty: "${organizationData.faculty}"
   picture: "${organizationData.logo_url}"
   link: "${organizationData.page_link}"`;
 
@@ -755,20 +776,26 @@ export const server = {
         });
       }
 
-      const organizationResult = await locals.runtime.env.DB.prepare(
-        `SELECT id, user_id, organization_name, faculty, title, logo_url, page_link FROM organizations WHERE user_id = ?`
-      )
-        .bind(userId)
-        .first();
-
-      if (!organizationResult) {
+      const organizationResult = await fetch(
+        `${organizationApi}/${state.organization_id}`
+      );
+      if (!organizationResult.ok) {
         throw new ActionError({
           code: "NOT_FOUND",
-          message: "Organización no encontrada para este usuario",
+          message: "Organización no encontrada",
         });
       }
+      const organizationData =
+        (await organizationResult.json()) as Organization;
 
-      // Verificar si el blog ya existe
+      let userOrg;
+      for (const org of user.organizations) {
+        if (org.id === state.organization_id) {
+          userOrg = org;
+          break;
+        }
+      }
+
       try {
         const existingBlog = await locals.runtime.env.DB.prepare(
           "SELECT id FROM blogs WHERE title = ? AND user_id = ?"
@@ -784,20 +811,29 @@ export const server = {
         }
 
         // Crear el blog en la base de datos primero para obtener el ID
+        if (!userOrg) {
+          throw new ActionError({
+            code: "FORBIDDEN",
+            message: "No perteneces a la organización seleccionada",
+          });
+        }
+
         const result = await locals.runtime.env.DB.prepare(
           `
                     INSERT INTO blogs (
-                        user_id, organization_id, title, period_time, readtime, tags, content_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                        user_id, user_name, organization_id, organization_name, title, period_time, readtime, tags, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
         )
           .bind(
             userId,
-            organizationResult.id,
+            userOrg.user_name,
+            state.organization_id,
+            organizationData.organization_name,
             state.title,
             state.period_time,
             state.readtime,
-            state.tags.join(","),
+            (state.tags ?? []).join(","),
             null // Temporalmente null, se actualizará después
           )
           .run();
@@ -815,7 +851,7 @@ export const server = {
         const filePath = generateBlogPath(blogId);
 
         // Generar contenido MDX
-        const mdxContent = generateBlogMDX(state, organizationResult);
+        const mdxContent = generateBlogMDX(userOrg, state, organizationData);
 
         // Subir a R2
         const uploadSuccess = await uploadMarkdownToR2(
@@ -899,16 +935,30 @@ export const server = {
         });
       }
 
-      const organizationResult = await locals.runtime.env.DB.prepare(
-        "SELECT id, organization_name as name, faculty, title, logo_url as picture, page_link as link FROM organizations WHERE user_id = ?"
-      )
-        .bind(userId)
-        .first();
-
-      if (!organizationResult) {
+      const organizationResult = await fetch(
+        `${organizationApi}/${state.organization_id}`
+      );
+      if (!organizationResult.ok) {
         throw new ActionError({
           code: "NOT_FOUND",
           message: "Organización no encontrada para este usuario",
+        });
+      }
+      const organizationData =
+        (await organizationResult.json()) as Organization;
+
+      let userOrg;
+      for (const org of user.organizations) {
+        if (org.id === state.organization_id) {
+          userOrg = org;
+          break;
+        }
+      }
+
+      if (!userOrg) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: "No perteneces a la organización seleccionada",
         });
       }
 
@@ -931,14 +981,15 @@ export const server = {
         const result = await locals.runtime.env.DB.prepare(
           `
                     INSERT INTO recommendations (
-                        user_id, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        user_id, user_name, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
         )
           .bind(
             userId,
-            organizationResult.id,
-            organizationResult.faculty,
+            userOrg.user_name,
+            state.organization_id,
+            organizationData.faculty,
             state.title,
             state.period_time,
             state.readtime,
@@ -961,7 +1012,11 @@ export const server = {
         const filePath = generateRecommendationPath(recommendationId);
 
         // Generar contenido MDX
-        const mdxContent = generateRecommendationMDX(state, organizationResult);
+        const mdxContent = generateRecommendationMDX(
+          userOrg,
+          state,
+          organizationData
+        );
 
         // Subir a R2
         const uploadSuccess = await uploadMarkdownToR2(

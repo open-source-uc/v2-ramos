@@ -1,79 +1,35 @@
 import type { APIRoute } from "astro";
+import type { Blogs } from "@/types";
 
-export const GET: APIRoute = async ({ request }) => {
-  const schools = [
-    "Actividades Universitarias",
-    "Actuación",
-    "Agronomía Y Sistemas Naturales",
-    "Antropología",
-    "Arquitectura",
-    "Arte",
-    "Astrofísica",
-    "Bachillerato Inicia",
-    "CARA",
-    "Ciencia Política",
-    "Ciencias Biológicas",
-    "College",
-    "Comunicaciones",
-    "Construcción Civil",
-    "Cursos Deportivos",
-    "Cursos y Test de Inglés",
-    "Derecho",
-    "Desarrollo Sustentable",
-    "Diseño",
-    "Economía Y Administración",
-    "Educación",
-    "Escuela Ciencias De La Salud",
-    "Escuela De Enfermería",
-    "Escuela De Gobierno",
-    "Escuela De Graduados",
-    "Escuela De Medicina",
-    "Escuela De Odontología",
-    "Estudios Urbanos",
-    "Estética",
-    "Filosofía",
-    "Física",
-    "Geografía",
-    "Historia",
-    "Ing Matemática Y Computacional",
-    "Ingeniería",
-    "Ingeniería Biológica Y Médica",
-    "Instituto De Éticas Aplicadas",
-    "Letras",
-    "Matemáticas",
-    "Medicina Veterinaria",
-    "Música",
-    "Psicología",
-    "Química",
-    "Sociología",
-    "Teología",
-    "Trabajo Social",
-    "Villarrica",
-  ];
-  const blogTags = [
-    'Salud mental',
-    'Nutrición',
-    'Ejercicio',
-    'Manejo del estrés',
-    'Descanso y sueño',
-    'Equilibrio vida-estudio',
-    'Auto-motivación',
-    'Bienestar emocional',
-    'Hábitos saludables',
-    'Vida en campus',
-    'Actividades extracurriculares',
-    'Voluntariado',
-    'Networking',
-    'Grupos de estudio',
-    'Eventos universitarios',
-    'Prácticas profesionales',
-    'Preparación de CV',
-    'Entrevistas'
-  ];
-  return new Response(JSON.stringify({ schools, blogTags }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    }
-  });
-}
+export const GET: APIRoute = async ({ request, locals }) => {
+  try {
+    const result = await locals.runtime.env.DB.prepare(
+      `
+      SELECT 
+        id,
+        user_id,
+        organization_id,
+        organization_name,
+        title,
+        period_time,
+        readtime,
+        tags,
+        content_path,
+        created_at,
+        updated_at
+      FROM blogs
+      ORDER BY created_at DESC
+    `
+    ).all<Blogs>();
+
+    return new Response(JSON.stringify(result.results), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    return new Response("Internal Server Error", { status: 500 });
+  }
+};
