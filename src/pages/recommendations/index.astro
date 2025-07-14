@@ -2,16 +2,41 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { SearchableRecommendationsDisplay } from "../../components/features/catalog/SearchableRecommendationsDisplay";
+import type { Recommendations } from "@/types";
+import BlogCard from "@/components/features/blog/BlogCard";
 
-const searchParam = Astro.url.searchParams.get("search") || "";
+const recommendationsRespone = await fetch(
+  new URL("/api/recommendations", Astro.url.origin)
+);
+const recommendations: Recommendations[] = await recommendationsRespone.json();
 ---
 
 <Layout>
-  <!-- <main class="container mx-auto py-4">
-    <SearchableRecommendationsDisplay
-      recommendations={recommendations}
-      initialSearchValue={searchParam}
-      client:load
-    />
-  </main> -->
+  <main class="grid md:grid-cols-2 lg:grid-cols-3">
+    <div
+      class="w-full h-[60vh] lg:h-[70vh] flex flex-col justify-center lg:col-start-1 lg:col-end-4 md:col-start-1 md:col-end-3"
+    >
+      <h1 class="text-3xl md:text-5xl text-center font-bold">
+        Descubre las recomendaciones creadas por la comunidad
+      </h1>
+    </div>
+    {
+      recommendations.map((blog) => {
+        const { title, user_name, organization_name, period_time, readtime } =
+          blog;
+        return (
+          <div class="p-2 flex justify-center">
+            <BlogCard
+              title={title}
+              authorName={user_name}
+              organizationName={organization_name}
+              description={""}
+              readtime={readtime}
+              tags={[]}
+            />
+          </div>
+        );
+      })
+    }
+  </main>
 </Layout>

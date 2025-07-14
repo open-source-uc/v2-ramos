@@ -80,7 +80,7 @@ export interface Blogs {
   updated_at: string;
 }
 
-export interface Recomendations {
+export interface Recommendations {
   id: number;
   user_id: number;
   user_name: string;

@@ -12,14 +12,16 @@ export const GET: APIRoute = async ({ request, locals }) => {
         user_role,
         organization_id,
         organization_name,
+        faculty,
         title,
         period_time,
         readtime,
-        tags,
+        code,
+        qualification,
         content_path,
         created_at,
         updated_at
-      FROM blogs
+      FROM recommendations
       ORDER BY created_at DESC
     `
     ).all<Blogs>();
@@ -35,4 +37,3 @@ export const GET: APIRoute = async ({ request, locals }) => {
     return new Response("Internal Server Error", { status: 500 });
   }
 };
-

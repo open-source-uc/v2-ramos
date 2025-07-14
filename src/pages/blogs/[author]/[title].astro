@@ -1,11 +1,12 @@
 ---
-import { getCollection, render } from "astro:content";
 import ContentPage from "@/components/common/ContentPage.astro";
 import { EditIcon, ClockIcon } from "../../../components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
 import { Pill } from "@/components/ui/pill";
 import type { Blogs, Organization } from "@/types";
+import Markdown from "react-markdown";
+import { MarkdownReviewView } from "@/components";
 
 export const prerender = true;
 
@@ -30,6 +31,18 @@ const organizationRes = await fetch(
   `http://localhost:4322/api/organization/${blog.organization_id}`
 );
 const organizationData = (await organizationRes.json()) as Organization;
+const mdxContent = fetch(
+  new URL(`/api/blog?path=${blog.content_path}`, Astro.url.origin)
+)
+  .then(async (res) => {
+    if (!res.ok) throw new Error("Failed to fetch MDX content");
+    const content = await res.text();
+    return content;
+  })
+  .catch((error) => {
+    console.error("Error fetching MDX content:", error);
+    return ""; // Return empty content on error
+  });
 ---
 
 <Layout>
@@ -46,5 +59,7 @@ const organizationData = (await organizationRes.json()) as Organization;
       buttonText: "Ver Más Artículos",
       buttonHref: "/blogs",
     }}
-  />
+  >
+    <MarkdownReviewView path={blog.content_path} client:load />
+  </ContentPage>
 </Layout>

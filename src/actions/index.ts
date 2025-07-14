@@ -180,62 +180,6 @@ function generateRecommendationPath(recommendationId: number) {
   return `recommendations/${recommendationId}-${timestamp}.mdx`;
 }
 
-// Funciones para generar el contenido MDX
-function generateBlogMDX(userOrg: any, blogData: any, organizationData: any) {
-  const tagsArray = Array.isArray(blogData.tags) ? blogData.tags : [];
-  const tagsSection =
-    tagsArray.length > 0
-      ? `\ntags:\n${tagsArray.map((tag: string) => `  - ${tag}`).join("\n")}`
-      : "";
-  const authorSection = `author:
-  name: "${userOrg.user_name}"
-  role: "${userOrg.role}"
-  organization_name: "${organizationData.organization_name}"
-  organization_faculty: "${organizationData.faculty}"
-  picture: "${organizationData.logo_url}"
-  link: "${organizationData.page_link}"`;
-
-  return `---
-title: "${blogData.title}"
-period: "${blogData.period_time}"
-readtime: ${blogData.readtime}
-${authorSection}${tagsSection}
----
-
-import { Pill } from "@components/ui/pill";
-
-${blogData.content}
-`;
-}
-
-function generateRecommendationMDX(
-  userOrg: any,
-  recommendationData: any,
-  organizationData: any
-) {
-  const authorSection = `author:
-  name: "${userOrg.user_name}"
-  role: "${userOrg.role}"
-  organization_name: "${organizationData.organization_name}"
-  organization_faculty: "${organizationData.faculty}"
-  picture: "${organizationData.logo_url}"
-  link: "${organizationData.page_link}"`;
-
-  return `---
-title: "${recommendationData.code}-${recommendationData.title}"
-code: "${recommendationData.code}"
-period: "${recommendationData.period_time}"
-readtime: ${recommendationData.readtime}
-qualifiation: ${recommendationData.qualification}
-${authorSection}
----
-
-import { Pill } from "@components/ui/pill"
-
-${recommendationData.content}
-`;
-}
-
 export const server = {
   // Crear o sobrescribir una reseña existente
   createCourseReview: defineAction({
@@ -851,13 +795,10 @@ export const server = {
         // Generar el path del archivo y subirlo a R2
         const filePath = generateBlogPath(blogId);
 
-        // Generar contenido MDX
-        const mdxContent = generateBlogMDX(userOrg, state, organizationData);
-
         // Subir a R2
         const uploadSuccess = await uploadMarkdownToR2(
           locals,
-          mdxContent,
+          state.content,
           filePath
         );
 
@@ -903,7 +844,6 @@ export const server = {
         if (error instanceof ActionError) {
           throw error;
         }
-
         console.error("Error creating blog:", error);
 
         throw new ActionError({
@@ -982,8 +922,8 @@ export const server = {
         const result = await locals.runtime.env.DB.prepare(
           `
                     INSERT INTO recommendations (
-                        user_id, user_name, user_role, organization_id, faculty, title, period_time, readtime, code, qualification, content_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        user_id, user_name, user_role, organization_id, organization_name, faculty, title, period_time, readtime, code, qualification, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 `
         )
           .bind(
@@ -991,6 +931,7 @@ export const server = {
             userOrg.user_name,
             userOrg.role,
             state.organization_id,
+            userOrg.name,
             organizationData.faculty,
             state.title,
             state.period_time,
@@ -1013,17 +954,10 @@ export const server = {
         // Generar el path del archivo y subirlo a R2
         const filePath = generateRecommendationPath(recommendationId);
 
-        // Generar contenido MDX
-        const mdxContent = generateRecommendationMDX(
-          userOrg,
-          state,
-          organizationData
-        );
-
         // Subir a R2
         const uploadSuccess = await uploadMarkdownToR2(
           locals,
-          mdxContent,
+          state.content,
           filePath
         );
 
