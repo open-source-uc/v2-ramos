@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { SearchableRecommendationsDisplay } from "../../components/features/catalog/SearchableRecommendationsDisplay";
 import type { Recommendations } from "@/types";
-import BlogCard from "@/components/features/blog/BlogCard";
+import ContentCard from "@/components/features/blog/BlogCard";
 
 const recommendationsRespone = await fetch(
   new URL("/api/recommendations", Astro.url.origin)
@@ -21,22 +21,32 @@ const recommendations: Recommendations[] = await recommendationsRespone.json();
       </h1>
     </div>
     {
-      recommendations.map((blog) => {
-        const { title, user_name, organization_name, period_time, readtime } =
-          blog;
-        return (
-          <div class="p-2 flex justify-center">
-            <BlogCard
-              title={title}
-              authorName={user_name}
-              organizationName={organization_name}
-              description={""}
-              readtime={readtime}
-              tags={[]}
-            />
-          </div>
-        );
-      })
+      recommendations.map((rec) => (
+        <div class="w-full p-2">
+          <ContentCard
+            title={rec.title}
+            type="recommendations"
+            authorName={rec.user_name}
+            organizationName={rec.organization_name}
+            description=""
+            readtime={rec.readtime}
+            tags={[]}
+            period_time={rec.period_time}
+            faculty={"faculty" in rec ? rec.faculty : undefined}
+            code={"code" in rec ? rec.code : undefined}
+            qualification={
+              "qualification" in rec ? rec.qualification : undefined
+            }
+            organization_id={
+              "organization_id" in rec ? rec.organization_id : undefined
+            }
+            user_role={"user_role" in rec ? rec.user_role : undefined}
+            user_id={"user_id" in rec ? rec.user_id : undefined}
+            created_at={"created_at" in rec ? rec.created_at : undefined}
+            updated_at={"updated_at" in rec ? rec.updated_at : undefined}
+          />
+        </div>
+      ))
     }
   </main>
 </Layout>

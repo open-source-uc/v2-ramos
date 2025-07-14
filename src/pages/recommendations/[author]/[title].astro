@@ -1,0 +1,59 @@
+---
+import { ContentPage } from "@/components/common";
+import { ClockIcon, EditIcon } from "@/components/icons/icons";
+import { MarkdownReviewView } from "@/components/reviews/MarkdownReviewView";
+import Layout from "@/layouts/Layout.astro";
+import { createSlug } from "@/lib/utils";
+import type { Organization, Recommendations } from "@/types";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const response = await fetch("http://localhost:4321/api/recommendations");
+  const recommendations: Recommendations[] = await response.json();
+  return recommendations.map((recommendation) => ({
+    params: {
+      author: createSlug(recommendation.organization_name),
+      title: createSlug(recommendation.title),
+    },
+    props: { recommendation },
+  }));
+}
+
+const { recommendation } = Astro.props;
+const organizationRes = await fetch(
+  `http://localhost:4322/api/organization/${recommendation.organization_id}`
+);
+const organizationData = (await organizationRes.json()) as Organization;
+const mdxContent = fetch(
+  new URL(`/api/blog?path=${recommendation.content_path}`, Astro.url.origin)
+)
+  .then(async (res) => {
+    if (!res.ok) throw new Error("Failed to fetch MDX content");
+    const content = await res.text();
+    return content;
+  })
+  .catch((error) => {
+    console.error("Error fetching MDX content:", error);
+    return ""; // Return empty content on error
+  });
+---
+
+<Layout>
+  <ContentPage
+    contentData={recommendation}
+    organizationData={organizationData}
+    contentType="recommendation"
+    primaryPillIcon={EditIcon}
+    secondaryPillIcon={ClockIcon}
+    navigationSection={{
+      title: "¿Te gustó esta recomendación?",
+      description:
+        "Descubre más contenido interesante en las recomendaciones que tenemos para ofrecerte.",
+      buttonText: "Ver Más Recomendaciones",
+      buttonHref: "/recommendations",
+    }}
+  >
+    <MarkdownReviewView path={recommendation.content_path} client:load />
+  </ContentPage>
+</Layout>

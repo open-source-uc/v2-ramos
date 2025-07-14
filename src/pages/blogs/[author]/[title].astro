@@ -1,11 +1,9 @@
 ---
 import ContentPage from "@/components/common/ContentPage.astro";
-import { EditIcon, ClockIcon } from "../../../components/icons/icons";
+import { EditIcon, ClockIcon } from "@/components/icons/icons";
 import Layout from "@/layouts/Layout.astro";
 import { createSlug } from "@/lib/utils";
-import { Pill } from "@/components/ui/pill";
 import type { Blogs, Organization } from "@/types";
-import Markdown from "react-markdown";
 import { MarkdownReviewView } from "@/components";
 
 export const prerender = true;
@@ -47,7 +45,7 @@ const mdxContent = fetch(
 
 <Layout>
   <ContentPage
-    blogContent={blog}
+    contentData={blog}
     organizationData={organizationData}
     contentType="blog"
     primaryPillIcon={EditIcon}
@@ -56,7 +54,7 @@ const mdxContent = fetch(
       title: "¿Te gustó este blog?",
       description:
         "Descubre más contenido interesante en los blogs que tenemos para ofrecerte.",
-      buttonText: "Ver Más Artículos",
+      buttonText: "Ver Más Blogs",
       buttonHref: "/blogs",
     }}
   >

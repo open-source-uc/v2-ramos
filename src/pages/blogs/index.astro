@@ -28,14 +28,18 @@ const blogsData: Blogs[] = await blogsResponse.json();
         } = blog;
         let newTags = tags.split(",").map((tag) => tag.trim());
         return (
-          <div class="p-2 flex justify-center">
+          <div class="p-2 w-full">
             <BlogCard
               title={title}
+              type="blogs"
               authorName={user_name}
               organizationName={organization_name}
-              description={""}
+              description=""
               readtime={readtime}
               tags={newTags || []}
+              period_time={blog.period_time}
+              user_role={blog.user_role}
+              created_at={blog.created_at}
             />
           </div>
         );
