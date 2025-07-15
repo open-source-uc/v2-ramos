@@ -1,5 +1,41 @@
 {
 	"files.associations": {
 		"wrangler.json": "jsonc"
-	}
+	},
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always",
+		"source.fixAll.eslint": "always"
+	},
+	"eslint.validate": ["javascript", "typescript", "astro", "typescriptreact", "javascriptreact"],
+	"files.eol": "\n",
+	"[astro]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
+	},
+	"[typescript]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
+	},
+	"[typescriptreact]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
+	},
+	"[javascript]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
+	},
+	"[javascriptreact]": {
+		"editor.tabSize": 2,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false
+	},
+	"prettier.configPath": ".prettierrc",
+	"prettier.useEditorConfig": true,
+	"vim.autoformat": true
 }
