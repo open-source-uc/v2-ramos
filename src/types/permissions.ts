@@ -1,5 +1,5 @@
 export enum OsucPermissions {
-    userCanEditAndCreateReview = "publications@global",
-    userIsRoot = "root@global",
-    userCanCreateBlogs = "blogs@buscaramos",
+	userCanEditAndCreateReview = 'publications@global',
+	userIsRoot = 'root@global',
+	userCanCreateBlogs = 'blogs@buscaramos',
 }

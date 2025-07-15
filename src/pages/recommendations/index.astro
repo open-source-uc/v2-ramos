@@ -1,52 +1,46 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
-import { SearchableRecommendationsDisplay } from "../../components/features/catalog/SearchableRecommendationsDisplay";
-import type { Recommendations } from "@/types";
-import ContentCard from "@/components/features/blog/BlogCard";
+import Layout from '../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { SearchableRecommendationsDisplay } from '../../components/features/catalog/SearchableRecommendationsDisplay'
+import type { Recommendations } from '@/types'
+import ContentCard from '@/components/features/blog/BlogCard'
 
-const recommendationsRespone = await fetch(
-  new URL("/api/recommendations", Astro.url.origin)
-);
-const recommendations: Recommendations[] = await recommendationsRespone.json();
+const recommendationsRespone = await fetch(new URL('/api/recommendations', Astro.url.origin))
+const recommendations: Recommendations[] = await recommendationsRespone.json()
 ---
 
 <Layout>
-  <main class="grid md:grid-cols-2 lg:grid-cols-3">
-    <div
-      class="w-full h-[60vh] lg:h-[70vh] flex flex-col justify-center lg:col-start-1 lg:col-end-4 md:col-start-1 md:col-end-3"
-    >
-      <h1 class="text-3xl md:text-5xl text-center font-bold">
-        Descubre las recomendaciones creadas por la comunidad
-      </h1>
-    </div>
-    {
-      recommendations.map((rec) => (
-        <div class="w-full p-2">
-          <ContentCard
-            title={rec.title}
-            type="recommendations"
-            authorName={rec.user_name}
-            organizationName={rec.organization_name}
-            description=""
-            readtime={rec.readtime}
-            tags={[]}
-            period_time={rec.period_time}
-            faculty={"faculty" in rec ? rec.faculty : undefined}
-            code={"code" in rec ? rec.code : undefined}
-            qualification={
-              "qualification" in rec ? rec.qualification : undefined
-            }
-            organization_id={
-              "organization_id" in rec ? rec.organization_id : undefined
-            }
-            user_role={"user_role" in rec ? rec.user_role : undefined}
-            user_id={"user_id" in rec ? rec.user_id : undefined}
-            created_at={"created_at" in rec ? rec.created_at : undefined}
-            updated_at={"updated_at" in rec ? rec.updated_at : undefined}
-          />
-        </div>
-      ))
-    }
-  </main>
+	<main class="grid md:grid-cols-2 lg:grid-cols-3">
+		<div
+			class="flex h-[60vh] w-full flex-col justify-center md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4 lg:h-[70vh]"
+		>
+			<h1 class="text-center text-3xl font-bold md:text-5xl">
+				Descubre las recomendaciones creadas por la comunidad
+			</h1>
+		</div>
+		{
+			recommendations.map((rec) => (
+				<div class="w-full p-2">
+					<ContentCard
+						title={rec.title}
+						type="recommendations"
+						authorName={rec.user_name}
+						organizationName={rec.organization_name}
+						description=""
+						readtime={rec.readtime}
+						tags={[]}
+						period_time={rec.period_time}
+						faculty={'faculty' in rec ? rec.faculty : undefined}
+						code={'code' in rec ? rec.code : undefined}
+						qualification={'qualification' in rec ? rec.qualification : undefined}
+						organization_id={'organization_id' in rec ? rec.organization_id : undefined}
+						user_role={'user_role' in rec ? rec.user_role : undefined}
+						user_id={'user_id' in rec ? rec.user_id : undefined}
+						created_at={'created_at' in rec ? rec.created_at : undefined}
+						updated_at={'updated_at' in rec ? rec.updated_at : undefined}
+					/>
+				</div>
+			))
+		}
+	</main>
 </Layout>

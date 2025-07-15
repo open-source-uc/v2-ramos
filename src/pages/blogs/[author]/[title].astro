@@ -1,60 +1,59 @@
 ---
-import ContentPage from "@/components/common/ContentPage.astro";
-import { EditIcon, ClockIcon } from "@/components/icons/icons";
-import Layout from "@/layouts/Layout.astro";
-import { createSlug } from "@/lib/utils";
-import type { Blogs, Organization } from "@/types";
-import { MarkdownReviewView } from "@/components";
-import { getUserDataByToken } from "@/lib/server/auth";
-import { getToken } from "@/lib/auth";
-import { OsucPermissions } from "@/types/permissions";
+import ContentPage from '@/components/common/ContentPage.astro'
+import { EditIcon, ClockIcon } from '@/components/icons/icons'
+import Layout from '@/layouts/Layout.astro'
+import { createSlug } from '@/lib/utils'
+import type { Blogs, Organization } from '@/types'
+import { MarkdownReviewView } from '@/components'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { getToken } from '@/lib/auth'
+import { OsucPermissions } from '@/types/permissions'
 
-export const prerender = true;
+export const prerender = true
 
 export async function getStaticPaths() {
-  const response = await fetch("http://localhost:4321/api/blogs");
-  const blogs: Blogs[] = await response.json();
-  return blogs.map((blog) => ({
-    params: {
-      author: createSlug(blog.organization_name),
-      title: createSlug(blog.title),
-    },
-    props: { blog },
-  }));
+	const response = await fetch('http://localhost:4321/api/blogs')
+	const blogs: Blogs[] = await response.json()
+	return blogs.map((blog) => ({
+		params: {
+			author: createSlug(blog.organization_name),
+			title: createSlug(blog.title),
+		},
+		props: { blog },
+	}))
 }
 
-const { blog } = Astro.props;
-const token = getToken(Astro.cookies);
-const userData = await getUserDataByToken(token);
-let showButton = false;
+const { blog } = Astro.props
+const token = getToken(Astro.cookies)
+const userData = await getUserDataByToken(token)
+let showButton = false
 if (token) {
-  showButton =
-    Number(userData?.id) === blog.user_id ||
-    (Array.isArray(userData?.permissions) &&
-      userData.permissions.includes(OsucPermissions.userIsRoot));
+	showButton =
+		Number(userData?.id) === blog.user_id ||
+		(Array.isArray(userData?.permissions) &&
+			userData.permissions.includes(OsucPermissions.userIsRoot))
 }
 const organizationRes = await fetch(
-  `http://localhost:4322/api/organization/${blog.organization_id}`
-);
-const organizationData = (await organizationRes.json()) as Organization;
+	`http://localhost:4322/api/organization/${blog.organization_id}`
+)
+const organizationData = (await organizationRes.json()) as Organization
 ---
 
 <Layout>
-  <ContentPage
-    contentData={blog}
-    organizationData={organizationData}
-    contentType="blog"
-    primaryPillIcon={EditIcon}
-    secondaryPillIcon={ClockIcon}
-    navigationSection={{
-      title: "¿Te gustó este blog?",
-      description:
-        "Descubre más contenido interesante en los blogs que tenemos para ofrecerte.",
-      buttonText: "Ver Más Blogs",
-      buttonHref: "/blogs",
-    }}
-    showEditButton={showButton}
-  >
-    <MarkdownReviewView path={blog.content_path} client:load />
-  </ContentPage>
+	<ContentPage
+		contentData={blog}
+		organizationData={organizationData}
+		contentType="blog"
+		primaryPillIcon={EditIcon}
+		secondaryPillIcon={ClockIcon}
+		navigationSection={{
+			title: '¿Te gustó este blog?',
+			description: 'Descubre más contenido interesante en los blogs que tenemos para ofrecerte.',
+			buttonText: 'Ver Más Blogs',
+			buttonHref: '/blogs',
+		}}
+		showEditButton={showButton}
+	>
+		<MarkdownReviewView path={blog.content_path} client:load />
+	</ContentPage>
 </Layout>

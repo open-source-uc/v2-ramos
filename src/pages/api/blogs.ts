@@ -1,10 +1,10 @@
-import type { APIRoute } from "astro";
-import type { Blogs } from "@/types";
+import type { APIRoute } from 'astro'
+import type { Blogs } from '@/types'
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  try {
-    const result = await locals.runtime.env.DB.prepare(
-      `
+	try {
+		const result = await locals.runtime.env.DB.prepare(
+			`
       SELECT 
         id,
         user_id,
@@ -22,17 +22,16 @@ export const GET: APIRoute = async ({ request, locals }) => {
       FROM blogs
       ORDER BY created_at DESC
     `
-    ).all<Blogs>();
+		).all<Blogs>()
 
-    return new Response(JSON.stringify(result.results), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching blogs:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
-};
-
+		return new Response(JSON.stringify(result.results), {
+			status: 200,
+			headers: {
+				'Content-Type': 'application/json; charset=utf-8',
+			},
+		})
+	} catch (error) {
+		console.error('Error fetching blogs:', error)
+		return new Response('Internal Server Error', { status: 500 })
+	}
+}

@@ -1,8 +1,8 @@
 {
-  "title": "BuscaRamos",
-  "description": "Tu plataforma para explorar ramos, reseñarlos y mucho más. Encuentra ramos de la universidad, revisa sus reseñas y comparte tus experiencias.",
-  "image": {
-    "src": "/images/opengraph.png",
-    "alt": "BuscaRamos"
-  }
+	"title": "BuscaRamos",
+	"description": "Tu plataforma para explorar ramos, reseñarlos y mucho más. Encuentra ramos de la universidad, revisa sus reseñas y comparte tus experiencias.",
+	"image": {
+		"src": "/images/opengraph.png",
+		"alt": "BuscaRamos"
+	}
 }

@@ -1,137 +1,164 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="Términos y Condiciones">
-  <div class="min-h-screen py-12">
-    <div class="max-w-4xl mx-auto px-4">
-      <!-- Header -->
-      <div class="mb-12">
-        <h1 class="text-4xl font-bold text-foreground mb-4">Términos y Condiciones</h1>
-        <p class="text-lg text-muted-foreground">
-          Última actualización: {new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
-      </div>
+	<div class="min-h-screen py-12">
+		<div class="mx-auto max-w-4xl px-4">
+			<!-- Header -->
+			<div class="mb-12">
+				<h1 class="text-foreground mb-4 text-4xl font-bold">Términos y Condiciones</h1>
+				<p class="text-muted-foreground text-lg">
+					Última actualización: {
+						new Date().toLocaleDateString('es-CL', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})
+					}
+				</p>
+			</div>
 
-      <!-- Content -->
-      <div class="prose prose-lg max-w-none">
-        <div class="space-y-8">
-          <!-- Aceptación de términos -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">1. Aceptación de los Términos</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Al acceder y utilizar la plataforma "BuscaRamos" (en adelante, "la Plataforma"), usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con alguno de estos términos, no debe utilizar la Plataforma.
-            </p>
-          </section>
+			<!-- Content -->
+			<div class="prose prose-lg max-w-none">
+				<div class="space-y-8">
+					<!-- Aceptación de términos -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							1. Aceptación de los Términos
+						</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Al acceder y utilizar la plataforma "BuscaRamos" (en adelante, "la Plataforma"), usted
+							acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con
+							alguno de estos términos, no debe utilizar la Plataforma.
+						</p>
+					</section>
 
-          <!-- Descripción del servicio -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">2. Descripción del Servicio</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              La Plataforma es un proyecto independiente no oficial que proporciona información sobre cursos universitarios, reseñas y recomendaciones. <strong>No está afiliado, asociado, autorizado, respaldado por, o de ninguna manera conectado oficialmente con la Pontificia Universidad Católica de Chile.</strong>
-            </p>
-            <p class="text-muted-foreground leading-relaxed">
-              Los servicios incluyen:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Catálogo de cursos con información básica</li>
-              <li>Sistema de reseñas y evaluaciones de cursos</li>
-              <li>Recomendaciones personalizadas</li>
-              <li>Recursos educativos complementarios</li>
-            </ul>
-          </section>
+					<!-- Descripción del servicio -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">2. Descripción del Servicio</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							La Plataforma es un proyecto independiente no oficial que proporciona información
+							sobre cursos universitarios, reseñas y recomendaciones. <strong
+								>No está afiliado, asociado, autorizado, respaldado por, o de ninguna manera
+								conectado oficialmente con la Pontificia Universidad Católica de Chile.</strong
+							>
+						</p>
+						<p class="text-muted-foreground leading-relaxed">Los servicios incluyen:</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Catálogo de cursos con información básica</li>
+							<li>Sistema de reseñas y evaluaciones de cursos</li>
+							<li>Recomendaciones personalizadas</li>
+							<li>Recursos educativos complementarios</li>
+						</ul>
+					</section>
 
-          <!-- Uso aceptable -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">3. Uso Aceptable</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Al utilizar la Plataforma, usted se compromete a:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Proporcionar información veraz y actualizada</li>
-              <li>Respetar los derechos de otros usuarios</li>
-              <li>No publicar contenido ofensivo, difamatorio o inapropiado</li>
-              <li>No intentar acceder a áreas restringidas del sistema</li>
-              <li>No utilizar la Plataforma para actividades ilegales</li>
-            </ul>
-          </section>
+					<!-- Uso aceptable -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">3. Uso Aceptable</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Al utilizar la Plataforma, usted se compromete a:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Proporcionar información veraz y actualizada</li>
+							<li>Respetar los derechos de otros usuarios</li>
+							<li>No publicar contenido ofensivo, difamatorio o inapropiado</li>
+							<li>No intentar acceder a áreas restringidas del sistema</li>
+							<li>No utilizar la Plataforma para actividades ilegales</li>
+						</ul>
+					</section>
 
-          <!-- Contenido del usuario -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">4. Contenido del Usuario</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Al enviar reseñas, comentarios o cualquier otro contenido a la Plataforma, usted:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Garantiza que tiene el derecho de publicar dicho contenido</li>
-              <li>Otorga una licencia no exclusiva para usar, modificar y mostrar su contenido</li>
-              <li>Acepta que su contenido puede ser moderado o eliminado</li>
-              <li>Se responsabiliza por la veracidad y legalidad de su contenido</li>
-            </ul>
-          </section>
+					<!-- Contenido del usuario -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">4. Contenido del Usuario</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Al enviar reseñas, comentarios o cualquier otro contenido a la Plataforma, usted:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Garantiza que tiene el derecho de publicar dicho contenido</li>
+							<li>Otorga una licencia no exclusiva para usar, modificar y mostrar su contenido</li>
+							<li>Acepta que su contenido puede ser moderado o eliminado</li>
+							<li>Se responsabiliza por la veracidad y legalidad de su contenido</li>
+						</ul>
+					</section>
 
-          <!-- Privacidad -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">5. Privacidad</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              El manejo de sus datos personales se rige por nuestra <a href="/privacy" class="text-blue-600 hover:text-blue-800 underline">Política de Privacidad</a>, la cual forma parte integral de estos términos.
-            </p>
-          </section>
+					<!-- Privacidad -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">5. Privacidad</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							El manejo de sus datos personales se rige por nuestra <a
+								href="/privacy"
+								class="text-blue-600 underline hover:text-blue-800">Política de Privacidad</a
+							>, la cual forma parte integral de estos términos.
+						</p>
+					</section>
 
-          <!-- Limitación de responsabilidad -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">6. Limitación de Responsabilidad</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              La Plataforma se proporciona "tal como está" sin garantías de ningún tipo. No nos hacemos responsables por:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>La exactitud o actualidad de la información de los cursos</li>
-              <li>Las opiniones expresadas en las reseñas de usuarios</li>
-              <li>Daños directos o indirectos derivados del uso de la Plataforma</li>
-              <li>Interrupciones temporales del servicio</li>
-            </ul>
-          </section>
+					<!-- Limitación de responsabilidad -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							6. Limitación de Responsabilidad
+						</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							La Plataforma se proporciona "tal como está" sin garantías de ningún tipo. No nos
+							hacemos responsables por:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>La exactitud o actualidad de la información de los cursos</li>
+							<li>Las opiniones expresadas en las reseñas de usuarios</li>
+							<li>Daños directos o indirectos derivados del uso de la Plataforma</li>
+							<li>Interrupciones temporales del servicio</li>
+						</ul>
+					</section>
 
-          <!-- Modificaciones -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">7. Modificaciones</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Nos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios serán efectivos inmediatamente después de su publicación en la Plataforma. Es su responsabilidad revisar periódicamente estos términos.
-            </p>
-          </section>
+					<!-- Modificaciones -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">7. Modificaciones</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Nos reservamos el derecho de modificar estos términos en cualquier momento. Los
+							cambios serán efectivos inmediatamente después de su publicación en la Plataforma. Es
+							su responsabilidad revisar periódicamente estos términos.
+						</p>
+					</section>
 
-          <!-- Terminación -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">8. Terminación</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Podemos suspender o terminar su acceso a la Plataforma en cualquier momento, con o sin causa, y con o sin previo aviso. Usted también puede dejar de usar la Plataforma en cualquier momento.
-            </p>
-          </section>
+					<!-- Terminación -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">8. Terminación</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Podemos suspender o terminar su acceso a la Plataforma en cualquier momento, con o sin
+							causa, y con o sin previo aviso. Usted también puede dejar de usar la Plataforma en
+							cualquier momento.
+						</p>
+					</section>
 
-          <!-- Ley aplicable -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">9. Ley Aplicable</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Estos términos se rigen por las leyes de Chile. Cualquier disputa será resuelta en los tribunales competentes de Santiago, Chile.
-            </p>
-          </section>
+					<!-- Ley aplicable -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">9. Ley Aplicable</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Estos términos se rigen por las leyes de Chile. Cualquier disputa será resuelta en los
+							tribunales competentes de Santiago, Chile.
+						</p>
+					</section>
 
-          <!-- Contacto -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">10. Contacto</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Si tiene preguntas sobre estos términos, puede contactarnos a través de nuestros canales oficiales en GitHub o redes sociales.
-            </p>
-          </section>
-        </div>
-      </div>
+					<!-- Contacto -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">10. Contacto</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Si tiene preguntas sobre estos términos, puede contactarnos a través de nuestros
+							canales oficiales en GitHub o redes sociales.
+						</p>
+					</section>
+				</div>
+			</div>
 
-      <!-- Back to home -->
-      <div class="mt-12 pt-8 border-t border-border">
-        <a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-          ← Volver al inicio
-        </a>
-      </div>
-    </div>
-  </div>
+			<!-- Back to home -->
+			<div class="border-border mt-12 border-t pt-8">
+				<a
+					href="/"
+					class="inline-flex items-center text-blue-600 transition-colors hover:text-blue-800"
+				>
+					← Volver al inicio
+				</a>
+			</div>
+		</div>
+	</div>
 </Layout>

@@ -1,225 +1,289 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="Política de Privacidad">
-  <div class="min-h-screen py-12">
-    <div class="max-w-4xl mx-auto px-4">
-      <!-- Header -->
-      <div class="mb-12">
-        <h1 class="text-4xl font-bold text-foreground mb-4">Política de Privacidad (WIP)</h1>
-        <p class="text-lg text-muted-foreground">
-          Última actualización: {new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </p>
-      </div>
+	<div class="min-h-screen py-12">
+		<div class="mx-auto max-w-4xl px-4">
+			<!-- Header -->
+			<div class="mb-12">
+				<h1 class="text-foreground mb-4 text-4xl font-bold">Política de Privacidad (WIP)</h1>
+				<p class="text-muted-foreground text-lg">
+					Última actualización: {
+						new Date().toLocaleDateString('es-CL', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})
+					}
+				</p>
+			</div>
 
-      <!-- Content -->
-      <div class="prose prose-lg max-w-none">
-        <div class="space-y-8">
-          <!-- Introducción -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">1. Introducción</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              En "BuscaRamo" (en adelante, "la Plataforma"), nos comprometemos a proteger su privacidad y manejar sus datos personales de manera responsable. Esta política explica cómo recopilamos, utilizamos, almacenamos y protegemos su información.
-            </p>
-            <div class="bg-primary-foreground border border-border rounded-lg p-4 mt-4">
-              <p class="text-primary text-sm">
-                <strong>Importante:</strong> Este es un proyecto independiente no oficial que no está afiliado con la Pontificia Universidad Católica de Chile.
-              </p>
-            </div>
-          </section>
+			<!-- Content -->
+			<div class="prose prose-lg max-w-none">
+				<div class="space-y-8">
+					<!-- Introducción -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">1. Introducción</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							En "BuscaRamo" (en adelante, "la Plataforma"), nos comprometemos a proteger su
+							privacidad y manejar sus datos personales de manera responsable. Esta política explica
+							cómo recopilamos, utilizamos, almacenamos y protegemos su información.
+						</p>
+						<div class="bg-primary-foreground border-border mt-4 rounded-lg border p-4">
+							<p class="text-primary text-sm">
+								<strong>Importante:</strong> Este es un proyecto independiente no oficial que no está
+								afiliado con la Pontificia Universidad Católica de Chile.
+							</p>
+						</div>
+					</section>
 
-          <!-- Información que recopilamos -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">2. Información que Recopilamos</h2>
-            
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-              <p class="text-green-800 text-sm">
-                <strong>Política de Datos Mínimos:</strong> Nuestra plataforma está diseñada para recopilar la mínima cantidad de información posible para su funcionamiento.
-              </p>
-            </div>
+					<!-- Información que recopilamos -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							2. Información que Recopilamos
+						</h2>
 
-            <h3 class="text-xl font-medium text-foreground mb-3">2.1 Información proporcionada voluntariamente</h3>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2 mb-4">
-              <li><strong>Nombre de usuario únicamente:</strong> Solo recopilamos un nombre de usuario que usted elije libremente</li>
-              <li>Reseñas y comentarios sobre cursos que publique</li>
-              <li>Preferencias de cursos y filtros de búsqueda (almacenados localmente en su navegador)</li>
-            </ul>
+						<div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
+							<p class="text-sm text-green-800">
+								<strong>Política de Datos Mínimos:</strong> Nuestra plataforma está diseñada para recopilar
+								la mínima cantidad de información posible para su funcionamiento.
+							</p>
+						</div>
 
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <p class="text-blue-800 text-sm">
-                <strong>Nota importante:</strong> No recopilamos direcciones de correo electrónico, números de teléfono, nombres reales, ni ningún otro dato personal identificable.
-              </p>
-            </div>
+						<h3 class="text-foreground mb-3 text-xl font-medium">
+							2.1 Información proporcionada voluntariamente
+						</h3>
+						<ul class="text-muted-foreground mb-4 ml-4 list-inside list-disc space-y-2">
+							<li>
+								<strong>Nombre de usuario únicamente:</strong> Solo recopilamos un nombre de usuario
+								que usted elije libremente
+							</li>
+							<li>Reseñas y comentarios sobre cursos que publique</li>
+							<li>
+								Preferencias de cursos y filtros de búsqueda (almacenados localmente en su
+								navegador)
+							</li>
+						</ul>
 
-            <h3 class="text-xl font-medium text-foreground mb-3">2.2 Información técnica básica</h3>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Información básica de navegación (páginas visitadas, tiempo de permanencia)</li>
-              <li>Datos técnicos anónimos para mejorar el rendimiento del sitio</li>
-              <li>Cookies esenciales para el funcionamiento de la plataforma</li>
-            </ul>
-          </section>
+						<div class="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+							<p class="text-sm text-blue-800">
+								<strong>Nota importante:</strong> No recopilamos direcciones de correo electrónico, números
+								de teléfono, nombres reales, ni ningún otro dato personal identificable.
+							</p>
+						</div>
 
-          <!-- Cómo utilizamos la información -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">3. Cómo Utilizamos su Información</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Utilizamos la información recopilada únicamente para:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Permitir que publique reseñas de cursos bajo un nombre de usuario</li>
-              <li>Mostrar sus reseñas públicamente asociadas a su nombre de usuario</li>
-              <li>Proporcionar funcionalidades básicas de búsqueda y navegación</li>
-              <li>Mejorar el rendimiento y funcionamiento de la plataforma</li>
-              <li>Moderar contenido para mantener la calidad de las reseñas</li>
-            </ul>
-            
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
-              <p class="text-yellow-800 text-sm">
-                <strong>Limitación de uso:</strong> No utilizamos su información para marketing, publicidad dirigida, ni la compartimos con terceros para fines comerciales.
-              </p>
-            </div>
-          </section>
+						<h3 class="text-foreground mb-3 text-xl font-medium">2.2 Información técnica básica</h3>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Información básica de navegación (páginas visitadas, tiempo de permanencia)</li>
+							<li>Datos técnicos anónimos para mejorar el rendimiento del sitio</li>
+							<li>Cookies esenciales para el funcionamiento de la plataforma</li>
+						</ul>
+					</section>
 
-          <!-- Cookies y tecnologías similares -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">4. Cookies y Tecnologías Similares</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Utilizamos cookies y almacenamiento local mínimamente para:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2 mb-4">
-              <li>Mantener su sesión de usuario activa</li>
-              <li>Recordar sus preferencias de filtros de búsqueda</li>
-              <li>Mejorar la funcionalidad básica del sitio</li>
-              <li>Análisis anónimo básico del uso del sitio</li>
-            </ul>
-            <p class="text-muted-foreground leading-relaxed">
-              <strong>No utilizamos cookies de seguimiento ni publicitarias.</strong> Puede controlar el uso de cookies a través de la configuración de su navegador, aunque esto podría afectar algunas funcionalidades básicas de la plataforma.
-            </p>
-          </section>
+					<!-- Cómo utilizamos la información -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							3. Cómo Utilizamos su Información
+						</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Utilizamos la información recopilada únicamente para:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Permitir que publique reseñas de cursos bajo un nombre de usuario</li>
+							<li>Mostrar sus reseñas públicamente asociadas a su nombre de usuario</li>
+							<li>Proporcionar funcionalidades básicas de búsqueda y navegación</li>
+							<li>Mejorar el rendimiento y funcionamiento de la plataforma</li>
+							<li>Moderar contenido para mantener la calidad de las reseñas</li>
+						</ul>
 
-          <!-- Compartir información -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">5. Compartir Información</h2>
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-              <p class="text-green-800 text-sm">
-                <strong>Política estricta:</strong> No vendemos, alquilamos ni compartimos su información personal con terceros para fines comerciales.
-              </p>
-            </div>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              La única información que se hace pública es:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2 mb-4">
-              <li>Su nombre de usuario asociado a las reseñas que publique</li>
-              <li>El contenido de sus reseñas de cursos</li>
-            </ul>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Podemos compartir información únicamente en estas circunstancias limitadas:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Cuando sea requerido por ley o autoridades competentes</li>
-              <li>Para proteger la seguridad de la plataforma y sus usuarios</li>
-              <li>En caso de transferencia de la plataforma (previa notificación)</li>
-            </ul>
-          </section>
+						<div class="mt-4 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+							<p class="text-sm text-yellow-800">
+								<strong>Limitación de uso:</strong> No utilizamos su información para marketing, publicidad
+								dirigida, ni la compartimos con terceros para fines comerciales.
+							</p>
+						</div>
+					</section>
 
-          <!-- Seguridad de datos -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">6. Seguridad de Datos</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Implementamos medidas de seguridad técnicas y organizacionales para proteger su información:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Cifrado de datos en tránsito y en reposo</li>
-              <li>Acceso restringido a información personal</li>
-              <li>Monitoreo regular de sistemas de seguridad</li>
-              <li>Auditorías de seguridad periódicas</li>
-            </ul>
-          </section>
+					<!-- Cookies y tecnologías similares -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							4. Cookies y Tecnologías Similares
+						</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Utilizamos cookies y almacenamiento local mínimamente para:
+						</p>
+						<ul class="text-muted-foreground mb-4 ml-4 list-inside list-disc space-y-2">
+							<li>Mantener su sesión de usuario activa</li>
+							<li>Recordar sus preferencias de filtros de búsqueda</li>
+							<li>Mejorar la funcionalidad básica del sitio</li>
+							<li>Análisis anónimo básico del uso del sitio</li>
+						</ul>
+						<p class="text-muted-foreground leading-relaxed">
+							<strong>No utilizamos cookies de seguimiento ni publicitarias.</strong> Puede controlar
+							el uso de cookies a través de la configuración de su navegador, aunque esto podría afectar
+							algunas funcionalidades básicas de la plataforma.
+						</p>
+					</section>
 
-          <!-- Retención de datos -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">7. Retención de Datos</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Dado que solo recopilamos nombres de usuario:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2 mb-4">
-              <li><strong>Nombres de usuario y reseñas:</strong> Se conservan mientras la cuenta esté activa</li>
-              <li><strong>Datos técnicos:</strong> Se mantienen por períodos cortos para análisis básico de funcionamiento</li>
-              <li><strong>Eliminación:</strong> Puede solicitar la eliminación de su cuenta y todas sus reseñas en cualquier momento</li>
-            </ul>
-            <p class="text-muted-foreground leading-relaxed">
-              No conservamos información personal identificable más allá del nombre de usuario que usted elija.
-            </p>
-          </section>
+					<!-- Compartir información -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">5. Compartir Información</h2>
+						<div class="mb-4 rounded-lg border border-green-200 bg-green-50 p-4">
+							<p class="text-sm text-green-800">
+								<strong>Política estricta:</strong> No vendemos, alquilamos ni compartimos su información
+								personal con terceros para fines comerciales.
+							</p>
+						</div>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							La única información que se hace pública es:
+						</p>
+						<ul class="text-muted-foreground mb-4 ml-4 list-inside list-disc space-y-2">
+							<li>Su nombre de usuario asociado a las reseñas que publique</li>
+							<li>El contenido de sus reseñas de cursos</li>
+						</ul>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Podemos compartir información únicamente en estas circunstancias limitadas:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Cuando sea requerido por ley o autoridades competentes</li>
+							<li>Para proteger la seguridad de la plataforma y sus usuarios</li>
+							<li>En caso de transferencia de la plataforma (previa notificación)</li>
+						</ul>
+					</section>
 
-          <!-- Sus derechos -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">8. Sus Derechos</h2>
-            <p class="text-muted-foreground leading-relaxed mb-4">
-              Dado que solo manejamos nombres de usuario, sus derechos incluyen:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2">
-              <li>Ver todas las reseñas asociadas a su nombre de usuario</li>
-              <li>Editar o eliminar sus reseñas en cualquier momento</li>
-              <li>Solicitar la eliminación completa de su cuenta y datos</li>
-              <li>Cambiar su nombre de usuario (sujeto a disponibilidad)</li>
-              <li>Acceder a información sobre qué datos básicos tenemos</li>
-              <li>Retirar su consentimiento y dejar de usar la plataforma</li>
-            </ul>
-            
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-              <p class="text-blue-800 text-sm">
-                <strong>Proceso simple:</strong> Dado que no recopilamos información personal sensible, el ejercicio de estos derechos es directo y rápido.
-              </p>
-            </div>
-          </section>
+					<!-- Seguridad de datos -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">6. Seguridad de Datos</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Implementamos medidas de seguridad técnicas y organizacionales para proteger su
+							información:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Cifrado de datos en tránsito y en reposo</li>
+							<li>Acceso restringido a información personal</li>
+							<li>Monitoreo regular de sistemas de seguridad</li>
+							<li>Auditorías de seguridad periódicas</li>
+						</ul>
+					</section>
 
-          <!-- Servicios de terceros -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">9. Servicios de Terceros</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              La Plataforma puede contener enlaces a sitios web de terceros o utilizar servicios de terceros para análisis. Esta política de privacidad no se aplica a estos servicios externos. Le recomendamos revisar las políticas de privacidad de estos terceros.
-            </p>
-          </section>
+					<!-- Retención de datos -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">7. Retención de Datos</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Dado que solo recopilamos nombres de usuario:
+						</p>
+						<ul class="text-muted-foreground mb-4 ml-4 list-inside list-disc space-y-2">
+							<li>
+								<strong>Nombres de usuario y reseñas:</strong> Se conservan mientras la cuenta esté activa
+							</li>
+							<li>
+								<strong>Datos técnicos:</strong> Se mantienen por períodos cortos para análisis básico
+								de funcionamiento
+							</li>
+							<li>
+								<strong>Eliminación:</strong> Puede solicitar la eliminación de su cuenta y todas sus
+								reseñas en cualquier momento
+							</li>
+						</ul>
+						<p class="text-muted-foreground leading-relaxed">
+							No conservamos información personal identificable más allá del nombre de usuario que
+							usted elija.
+						</p>
+					</section>
 
-          <!-- Menores de edad -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">10. Menores de Edad</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              La Plataforma está dirigida a estudiantes universitarios y no recopilamos intencionalmente información personal de menores de 18 años. Si descubrimos que hemos recopilado información de un menor, la eliminaremos de inmediato.
-            </p>
-          </section>
+					<!-- Sus derechos -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">8. Sus Derechos</h2>
+						<p class="text-muted-foreground mb-4 leading-relaxed">
+							Dado que solo manejamos nombres de usuario, sus derechos incluyen:
+						</p>
+						<ul class="text-muted-foreground ml-4 list-inside list-disc space-y-2">
+							<li>Ver todas las reseñas asociadas a su nombre de usuario</li>
+							<li>Editar o eliminar sus reseñas en cualquier momento</li>
+							<li>Solicitar la eliminación completa de su cuenta y datos</li>
+							<li>Cambiar su nombre de usuario (sujeto a disponibilidad)</li>
+							<li>Acceder a información sobre qué datos básicos tenemos</li>
+							<li>Retirar su consentimiento y dejar de usar la plataforma</li>
+						</ul>
 
-          <!-- Cambios en la política -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">11. Cambios en esta Política</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Podemos actualizar esta política de privacidad periódicamente. Los cambios significativos serán notificados através de la Plataforma o por otros medios apropiados. La fecha de la última actualización se indica al inicio de esta política.
-            </p>
-          </section>
+						<div class="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+							<p class="text-sm text-blue-800">
+								<strong>Proceso simple:</strong> Dado que no recopilamos información personal sensible,
+								el ejercicio de estos derechos es directo y rápido.
+							</p>
+						</div>
+					</section>
 
-          <!-- Contacto -->
-          <section>
-            <h2 class="text-2xl font-semibold text-foreground mb-4">12. Contacto</h2>
-            <p class="text-muted-foreground leading-relaxed">
-              Si tiene preguntas sobre esta política de privacidad o desea ejercer sus derechos, puede contactarnos a través de:
-            </p>
-            <ul class="list-disc list-inside text-muted-foreground ml-4 space-y-2 mt-4">
-              <li>GitHub: <a href="https://github.com/open-source-uc" class="text-blue-600 hover:text-blue-800 underline">@open-source-uc</a></li>
-              <li>Instagram: <a href="https://www.instagram.com/opensource_euc/" class="text-blue-600 hover:text-blue-800 underline">@opensource_euc</a></li>
-              <li>LinkedIn: <a href="https://www.linkedin.com/company/open-source-euc" class="text-blue-600 hover:text-blue-800 underline">Open Source eUC</a></li>
-            </ul>
-          </section>
-        </div>
-      </div>
+					<!-- Servicios de terceros -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">9. Servicios de Terceros</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							La Plataforma puede contener enlaces a sitios web de terceros o utilizar servicios de
+							terceros para análisis. Esta política de privacidad no se aplica a estos servicios
+							externos. Le recomendamos revisar las políticas de privacidad de estos terceros.
+						</p>
+					</section>
 
-      <!-- Back to home -->
-      <div class="mt-12 pt-8 border-t border-border">
-        <a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-          ← Volver al inicio
-        </a>
-      </div>
-    </div>
-  </div>
+					<!-- Menores de edad -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">10. Menores de Edad</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							La Plataforma está dirigida a estudiantes universitarios y no recopilamos
+							intencionalmente información personal de menores de 18 años. Si descubrimos que hemos
+							recopilado información de un menor, la eliminaremos de inmediato.
+						</p>
+					</section>
+
+					<!-- Cambios en la política -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">
+							11. Cambios en esta Política
+						</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Podemos actualizar esta política de privacidad periódicamente. Los cambios
+							significativos serán notificados através de la Plataforma o por otros medios
+							apropiados. La fecha de la última actualización se indica al inicio de esta política.
+						</p>
+					</section>
+
+					<!-- Contacto -->
+					<section>
+						<h2 class="text-foreground mb-4 text-2xl font-semibold">12. Contacto</h2>
+						<p class="text-muted-foreground leading-relaxed">
+							Si tiene preguntas sobre esta política de privacidad o desea ejercer sus derechos,
+							puede contactarnos a través de:
+						</p>
+						<ul class="text-muted-foreground mt-4 ml-4 list-inside list-disc space-y-2">
+							<li>
+								GitHub: <a
+									href="https://github.com/open-source-uc"
+									class="text-blue-600 underline hover:text-blue-800">@open-source-uc</a>
+							</li>
+							<li>
+								Instagram: <a
+									href="https://www.instagram.com/opensource_euc/"
+									class="text-blue-600 underline hover:text-blue-800">@opensource_euc</a>
+							</li>
+							<li>
+								LinkedIn: <a
+									href="https://www.linkedin.com/company/open-source-euc"
+									class="text-blue-600 underline hover:text-blue-800">Open Source eUC</a>
+							</li>
+						</ul>
+					</section>
+				</div>
+			</div>
+
+			<!-- Back to home -->
+			<div class="border-border mt-12 border-t pt-8">
+				<a
+					href="/"
+					class="inline-flex items-center text-blue-600 transition-colors hover:text-blue-800"
+				>
+					← Volver al inicio
+				</a>
+			</div>
+		</div>
+	</div>
 </Layout>

@@ -1,49 +1,42 @@
 ---
-import BlogCard from "@/components/features/blog/BlogCard.tsx";
-import Layout from "@/layouts/Layout.astro";
-import type { Blogs } from "@/types";
+import BlogCard from '@/components/features/blog/BlogCard.tsx'
+import Layout from '@/layouts/Layout.astro'
+import type { Blogs } from '@/types'
 
-const blogsResponse = await fetch(new URL("/api/blogs", Astro.url.origin));
-const blogsData: Blogs[] = await blogsResponse.json();
+const blogsResponse = await fetch(new URL('/api/blogs', Astro.url.origin))
+const blogsData: Blogs[] = await blogsResponse.json()
 ---
 
 <Layout>
-  <main class="grid md:grid-cols-2 lg:grid-cols-3">
-    <div
-      class="w-full h-[60vh] lg:h-[70vh] flex flex-col justify-center lg:col-start-1 lg:col-end-4 md:col-start-1 md:col-end-3"
-    >
-      <h1 class="text-3xl md:text-5xl text-center font-bold">
-        Descubre blogs creados por la comunidad
-      </h1>
-    </div>
-    {
-      blogsData.map((blog) => {
-        const {
-          title,
-          user_name,
-          organization_name,
-          period_time,
-          readtime,
-          tags,
-        } = blog;
-        let newTags = tags.split(",").map((tag) => tag.trim());
-        return (
-          <div class="p-2 w-full">
-            <BlogCard
-              title={title}
-              type="blogs"
-              authorName={user_name}
-              organizationName={organization_name}
-              description=""
-              readtime={readtime}
-              tags={newTags || []}
-              period_time={blog.period_time}
-              user_role={blog.user_role}
-              created_at={blog.created_at}
-            />
-          </div>
-        );
-      })
-    }
-  </main>
+	<main class="grid md:grid-cols-2 lg:grid-cols-3">
+		<div
+			class="flex h-[60vh] w-full flex-col justify-center md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4 lg:h-[70vh]"
+		>
+			<h1 class="text-center text-3xl font-bold md:text-5xl">
+				Descubre blogs creados por la comunidad
+			</h1>
+		</div>
+		{
+			blogsData.map((blog) => {
+				const { title, user_name, organization_name, period_time, readtime, tags } = blog
+				let newTags = tags.split(',').map((tag) => tag.trim())
+				return (
+					<div class="w-full p-2">
+						<BlogCard
+							title={title}
+							type="blogs"
+							authorName={user_name}
+							organizationName={organization_name}
+							description=""
+							readtime={readtime}
+							tags={newTags || []}
+							period_time={blog.period_time}
+							user_role={blog.user_role}
+							created_at={blog.created_at}
+						/>
+					</div>
+				)
+			})
+		}
+	</main>
 </Layout>

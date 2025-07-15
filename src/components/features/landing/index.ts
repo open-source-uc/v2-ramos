@@ -1,2 +1,2 @@
 // Landing page components
-export { LandingSearch } from './LandingSearch';
+export { LandingSearch } from './LandingSearch'

@@ -1,318 +1,279 @@
 ---
-import { getToken } from "@/lib/auth";
-import { getUserDataByToken } from "@/lib/server/auth";
-import { OsucPermissions } from "@/types/permissions";
-import { actions } from "astro:actions";
-import EditorMDX from "@/components/EditorMDX.tsx";
-import Layout from "@/layouts/Layout.astro";
-import Combox from "@/components/common/Combox.astro";
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { OsucPermissions } from '@/types/permissions'
+import { actions } from 'astro:actions'
+import EditorMDX from '@/components/EditorMDX.tsx'
+import Layout from '@/layouts/Layout.astro'
+import Combox from '@/components/common/Combox.astro'
 
 // Authentication check
-const token = getToken(Astro.cookies);
+const token = getToken(Astro.cookies)
 if (!token) {
-  return Astro.redirect("/");
+	return Astro.redirect('/')
 }
 
-const user = await getUserDataByToken(token);
+const user = await getUserDataByToken(token)
 if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
-  return Astro.redirect("/");
+	return Astro.redirect('/')
 }
 
-let message = "";
-let messageType = "";
+let message = ''
+let messageType = ''
 
 // Verificar si hay un resultado de la acción
-const result = Astro.getActionResult(actions.createRecommendation);
+const result = Astro.getActionResult(actions.createRecommendation)
 
 if (result && !result.error) {
-  message = result.data?.message || "Recomendación creada exitosamente.";
-  messageType = "success";
+	message = result.data?.message || 'Recomendación creada exitosamente.'
+	messageType = 'success'
 } else if (result?.error) {
-  message = result.error.message || "Error al crear la recomendación.";
-  messageType = "error";
+	message = result.error.message || 'Error al crear la recomendación.'
+	messageType = 'error'
 }
 ---
 
 <Layout title="Crear Recomendación">
-  <main
-    class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"
-  >
-    {
-      message && (
-        <section
-          class={`border rounded-md p-4 sm:p-6 mb-6 ${
-            messageType === "success"
-              ? "border-green-200 bg-green-50"
-              : "border-red-200 bg-red-50"
-          }`}
-          role="alert"
-          aria-live="polite"
-        >
-          <div class="flex items-center gap-2">
-            <span
-              class={`flex-shrink-0 ${
-                messageType === "success" ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {messageType === "success" ? "✅" : "❌"}
-            </span>
-            <p
-              class={`text-xs sm:text-sm font-medium ${
-                messageType === "success" ? "text-green-800" : "text-red-800"
-              }`}
-            >
-              {message}
-            </p>
-          </div>
-        </section>
-      )
-    }
-    <!-- Header Section -->
-    <header class="mb-8 sm:mb-12">
-      <section
-        class="border border-border rounded-md p-4 sm:p-6 lg:p-8 min-w-0"
-        aria-labelledby="page-title"
-      >
-        <div class="text-center">
-          <h1
-            id="page-title"
-            class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground mb-2 break-words"
-          >
-            Crear una nueva recomendación
-          </h1>
-          <p class="text-sm sm:text-base lg:text-lg text-muted-foreground">
-            Comparte tus experiencias y conocimientos con la comunidad
-            estudiantil
-          </p>
-        </div>
-      </section>
-    </header>
+	<main class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+		{
+			message && (
+				<section
+					class={`mb-6 rounded-md border p-4 sm:p-6 ${
+						messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+					}`}
+					role="alert"
+					aria-live="polite"
+				>
+					<div class="flex items-center gap-2">
+						<span
+							class={`flex-shrink-0 ${
+								messageType === 'success' ? 'text-green-600' : 'text-red-600'
+							}`}
+						>
+							{messageType === 'success' ? '✅' : '❌'}
+						</span>
+						<p
+							class={`text-xs font-medium sm:text-sm ${
+								messageType === 'success' ? 'text-green-800' : 'text-red-800'
+							}`}
+						>
+							{message}
+						</p>
+					</div>
+				</section>
+			)
+		}
+		<!-- Header Section -->
+		<header class="mb-8 sm:mb-12">
+			<section
+				class="border-border min-w-0 rounded-md border p-4 sm:p-6 lg:p-8"
+				aria-labelledby="page-title"
+			>
+				<div class="text-center">
+					<h1
+						id="page-title"
+						class="text-foreground mb-2 text-2xl font-bold break-words sm:text-3xl lg:text-4xl xl:text-5xl"
+					>
+						Crear una nueva recomendación
+					</h1>
+					<p class="text-muted-foreground text-sm sm:text-base lg:text-lg">
+						Comparte tus experiencias y conocimientos con la comunidad estudiantil
+					</p>
+				</div>
+			</section>
+		</header>
 
-    <!-- Consejos y Componentes en fila -->
-    <div
-      class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 min-w-0"
-    >
-      <!-- Consejos para escribir -->
-      <section
-        class="border border-border rounded-md p-4 sm:p-6 min-w-0"
-        aria-labelledby="tips-title"
-      >
-        <h3
-          id="tips-title"
-          class="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4"
-        >
-          💡 Consejos para escribir
-        </h3>
-        <ul
-          class="text-xs sm:text-sm text-muted-foreground space-y-2"
-          role="list"
-        >
-          <li class="flex items-start gap-2">
-            <span class="text-green-500 mt-1 flex-shrink-0">•</span>
-            <span class="min-w-0">Usa un título descriptivo y atractivo</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-green-500 mt-1 flex-shrink-0">•</span>
-            <span class="min-w-0"
-              >Estructura tu contenido con encabezados y párrafos cortos</span
-            >
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-green-500 mt-1 flex-shrink-0">•</span>
-            <span class="min-w-0"
-              >Incluye ejemplos y experiencias personales</span
-            >
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-green-500 mt-1 flex-shrink-0">•</span>
-            <span class="min-w-0"
-              >Revisa la ortografía y gramática antes de publicar</span
-            >
-          </li>
-        </ul>
-      </section>
+		<!-- Consejos y Componentes en fila -->
+		<div class="mb-8 grid min-w-0 grid-cols-1 gap-4 sm:mb-12 sm:gap-6 lg:grid-cols-2 lg:gap-8">
+			<!-- Consejos para escribir -->
+			<section
+				class="border-border min-w-0 rounded-md border p-4 sm:p-6"
+				aria-labelledby="tips-title"
+			>
+				<h3 id="tips-title" class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg">
+					💡 Consejos para escribir
+				</h3>
+				<ul class="text-muted-foreground space-y-2 text-xs sm:text-sm" role="list">
+					<li class="flex items-start gap-2">
+						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+						<span class="min-w-0">Usa un título descriptivo y atractivo</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+						<span class="min-w-0">Estructura tu contenido con encabezados y párrafos cortos</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+						<span class="min-w-0">Incluye ejemplos y experiencias personales</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+						<span class="min-w-0">Revisa la ortografía y gramática antes de publicar</span>
+					</li>
+				</ul>
+			</section>
 
-      <!-- Información sobre componentes -->
-      <section
-        class="border border-border rounded-md p-4 sm:p-6 min-w-0"
-        aria-labelledby="components-title"
-      >
-        <h3
-          id="components-title"
-          class="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4"
-        >
-          🧩 Componentes disponibles
-        </h3>
-        <div class="space-y-2 sm:space-y-3">
-          <div class="p-2 sm:p-3 bg-muted/50 rounded-lg min-w-0">
-            <h4 class="font-medium text-xs sm:text-sm text-foreground mb-1">
-              Pills
-            </h4>
-            <p class="text-xs text-muted-foreground">
-              Etiquetas coloridas para destacar información importante
-            </p>
-          </div>
-          <div class="p-2 sm:p-3 bg-muted/50 rounded-lg min-w-0">
-            <h4 class="font-medium text-xs sm:text-sm text-foreground mb-1">
-              Tablas
-            </h4>
-            <p class="text-xs text-muted-foreground">
-              Organiza datos de manera clara y estructurada
-            </p>
-          </div>
-          <div class="p-2 sm:p-3 bg-muted/50 rounded-lg min-w-0">
-            <h4 class="font-medium text-xs sm:text-sm text-foreground mb-1">
-              Imágenes
-            </h4>
-            <p class="text-xs text-muted-foreground">
-              Añade imágenes para complementar tu contenido
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+			<!-- Información sobre componentes -->
+			<section
+				class="border-border min-w-0 rounded-md border p-4 sm:p-6"
+				aria-labelledby="components-title"
+			>
+				<h3
+					id="components-title"
+					class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg"
+				>
+					🧩 Componentes disponibles
+				</h3>
+				<div class="space-y-2 sm:space-y-3">
+					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Pills</h4>
+						<p class="text-muted-foreground text-xs">
+							Etiquetas coloridas para destacar información importante
+						</p>
+					</div>
+					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Tablas</h4>
+						<p class="text-muted-foreground text-xs">
+							Organiza datos de manera clara y estructurada
+						</p>
+					</div>
+					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Imágenes</h4>
+						<p class="text-muted-foreground text-xs">
+							Añade imágenes para complementar tu contenido
+						</p>
+					</div>
+				</div>
+			</section>
+		</div>
 
-    <!-- Formulario Principal -->
-    <section aria-labelledby="form-title">
-      <article class="border border-border rounded-md min-w-0">
-        <div class="p-4 sm:p-6 lg:p-8">
-          <h2
-            id="form-title"
-            class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6"
-          >
-            Información de la recomendación
-          </h2>
+		<!-- Formulario Principal -->
+		<section aria-labelledby="form-title">
+			<article class="border-border min-w-0 rounded-md border">
+				<div class="p-4 sm:p-6 lg:p-8">
+					<h2 id="form-title" class="mb-4 text-lg font-semibold sm:mb-6 sm:text-xl">
+						Información de la recomendación
+					</h2>
 
-          <form
-            class="space-y-4 sm:space-y-6 min-w-0"
-            method="POST"
-            action={actions.createRecommendation}
-          >
-            <!-- Información básica de la recomendación -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Título de la recomendación <span class="text-red-500">*</span>
-                </label>
-                <input
-                  name="title"
-                  placeholder="Ingrese el título de la recomendación"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                  required
-                />
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Organización <span class="text-red-500">*</span>
-                </label>
-                <select
-                  name="organization_id"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                  required
-                >
-                  <option value="" disabled selected
-                    >Seleccione una organización</option
-                  >
-                  {
-                    user.organizations.map((org) => (
-                      <option value={org.id}>{org.name}</option>
-                    ))
-                  }
-                </select>
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Período <span class="text-red-500">*</span>
-                </label>
-                <input
-                  name="period_time"
-                  placeholder="Ej: 2024-1, 2024-2"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200"
-                  required
-                />
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Tiempo de lectura <span class="text-red-500">*</span>
-                </label>
-                <div class="relative min-w-0">
-                  <input
-                    name="readtime"
-                    type="number"
-                    min="1"
-                    max="60"
-                    placeholder="5"
-                    class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 pr-12 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    required
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
-                  />
-                  <span
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm"
-                  >
-                    min
-                  </span>
-                </div>
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block">
-                  Código del curso <span class="text-red-500">*</span>
-                </label>
-                <Combox
-                  name="code"
-                  required
-                  placeholder="Selecciona el curso..."
-                  searchPlaceholder="Buscar por código o nombre..."
-                  emptyMessage="No se encontraron cursos."
-                  options={Object.entries(
-                    await import(
-                      "/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json"
-                    )
-                  ).map(([sigle, data]) => ({
-                    value: sigle,
-                    label: `${sigle} - ${data.name}`,
-                  }))}
-                />
-              </div>
-              <div class="space-y-2 min-w-0">
-                <label class="text-sm font-medium text-foreground block"
-                  >Clasificación <span class="text-red-500">*</span></label
-                >
-                <input
-                  type="number"
-                  min="1"
-                  max="5"
-                  name="qualification"
-                  placeholder="Ingrese la clasificación del curso (1-5)"
-                  class="w-full min-w-0 px-3 sm:px-4 py-2 sm:py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  required
-                />
-              </div>
-            </div>
-            <!-- Separador -->
-            <div class="border-t border-border pt-4 sm:pt-6">
-              <div class="space-y-2 mb-4">
-                <label class="text-sm font-medium text-foreground block">
-                  Contenido de la recomendación <span class="text-red-500"
-                    >*</span
-                  >
-                </label>
-                <p class="text-xs sm:text-sm text-muted-foreground">
-                  Utiliza el editor para crear contenido enriquecido con
-                  formato, imágenes y componentes especiales.
-                </p>
-              </div>
-            </div>
+					<form
+						class="min-w-0 space-y-4 sm:space-y-6"
+						method="POST"
+						action={actions.createRecommendation}
+					>
+						<!-- Información básica de la recomendación -->
+						<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Título de la recomendación <span class="text-red-500">*</span>
+								</label>
+								<input
+									name="title"
+									placeholder="Ingrese el título de la recomendación"
+									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+									required
+								/>
+							</div>
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Organización <span class="text-red-500">*</span>
+								</label>
+								<select
+									name="organization_id"
+									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+									required
+								>
+									<option value="" disabled selected>Seleccione una organización</option>
+									{user.organizations.map((org) => <option value={org.id}>{org.name}</option>)}
+								</select>
+							</div>
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Período <span class="text-red-500">*</span>
+								</label>
+								<input
+									name="period_time"
+									placeholder="Ej: 2024-1, 2024-2"
+									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+									required
+								/>
+							</div>
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Tiempo de lectura <span class="text-red-500">*</span>
+								</label>
+								<div class="relative min-w-0">
+									<input
+										name="readtime"
+										type="number"
+										min="1"
+										max="60"
+										placeholder="5"
+										class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 pr-12 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+										required
+										oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
+									/>
+									<span
+										class="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transform text-sm"
+									>
+										min
+									</span>
+								</div>
+							</div>
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Código del curso <span class="text-red-500">*</span>
+								</label>
+								<Combox
+									name="code"
+									required
+									placeholder="Selecciona el curso..."
+									searchPlaceholder="Buscar por código o nombre..."
+									emptyMessage="No se encontraron cursos."
+									options={Object.entries(
+										await import(
+											'/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json'
+										)
+									).map(([sigle, data]) => ({
+										value: sigle,
+										label: `${sigle} - ${data.name}`,
+									}))}
+								/>
+							</div>
+							<div class="min-w-0 space-y-2">
+								<label class="text-foreground block text-sm font-medium"
+									>Clasificación <span class="text-red-500">*</span></label
+								>
+								<input
+									type="number"
+									min="1"
+									max="5"
+									name="qualification"
+									placeholder="Ingrese la clasificación del curso (1-5)"
+									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+									required
+								/>
+							</div>
+						</div>
+						<!-- Separador -->
+						<div class="border-border border-t pt-4 sm:pt-6">
+							<div class="mb-4 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Contenido de la recomendación <span class="text-red-500">*</span>
+								</label>
+								<p class="text-muted-foreground text-xs sm:text-sm">
+									Utiliza el editor para crear contenido enriquecido con formato, imágenes y
+									componentes especiales.
+								</p>
+							</div>
+						</div>
 
-            <!-- Editor MDX -->
-            <div class="min-w-0">
-              <EditorMDX
-                submitText="Publicar Recomendación"
-                client:only="react"
-              />
-            </div>
-          </form>
-        </div>
-      </article>
-    </section>
-  </main>
+						<!-- Editor MDX -->
+						<div class="min-w-0">
+							<EditorMDX submitText="Publicar Recomendación" client:only="react" />
+						</div>
+					</form>
+				</div>
+			</article>
+		</section>
+	</main>
 </Layout>
