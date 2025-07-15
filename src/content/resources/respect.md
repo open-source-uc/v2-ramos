@@ -3,13 +3,13 @@ title: Cómo hacemos de BuscaRamos un espacio de respeto
 readtime: 5
 description: Lorem markdownum venit vestigia, et mentis Harpyia solvunt nobilium cumulum verba, vocem locus precesque externos lympha. Etiam est iube e Argolicis sonis, non Olympus herbas, concubitusque.
 author:
-  name: "Ignacio Palma"
-  title: "BuscaRamos Project Manager"
-  picture: "https://avatars.githubusercontent.com/u/81819758?v=4"
-  link: "https://www.linkedin.com/in/ignaciopalma-ai/"
+  name: 'Ignacio Palma'
+  title: 'BuscaRamos Project Manager'
+  picture: 'https://avatars.githubusercontent.com/u/81819758?v=4'
+  link: 'https://www.linkedin.com/in/ignaciopalma-ai/'
 ---
 
-En Open Source eUC, sabemos que no es fácil construir proyectos comunitarios - especialmente de manera online, en el que el respeto mutuo no está dado por hecho - siendo estos grandes desafíos en los que se debe manejar tanto el aspecto técnico como social. 
+En Open Source eUC, sabemos que no es fácil construir proyectos comunitarios - especialmente de manera online, en el que el respeto mutuo no está dado por hecho - siendo estos grandes desafíos en los que se debe manejar tanto el aspecto técnico como social.
 
 BuscaRamos, nuestro proyecto co-creado para nuestra comunidad universitaria, busca ser un espacio de encuentro basado en el respeto mutuo, tanto con los equipos docentes como con otros estudiantes. En este blog, les comentaremos cómo tratamos estos desafíos desde una perspectiva técnica como social.
 

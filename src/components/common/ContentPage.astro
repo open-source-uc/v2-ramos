@@ -1,192 +1,183 @@
 ---
-import { Pill } from "../ui/pill";
+import { Pill } from '../ui/pill'
 
 interface Props {
-  title: string;
-  description: string;
-  author?:
-    | string
-    | {
-        name: string;
-        title?: string;
-        picture?: string;
-        link?: string;
-      };
-  readtime?: number;
-  contentType: "resource" | "blog";
-  tags?: string[];
-  primaryPillIcon?: any;
-  secondaryPillIcon?: any;
-  navigationSection?: {
-    title: string;
-    description: string;
-    buttonText: string;
-    buttonHref: string;
-  };
+	title: string
+	description: string
+	author?:
+		| string
+		| {
+				name: string
+				title?: string
+				picture?: string
+				link?: string
+		  }
+	readtime?: number
+	contentType: 'resource' | 'blog'
+	tags?: string[]
+	primaryPillIcon?: any
+	secondaryPillIcon?: any
+	navigationSection?: {
+		title: string
+		description: string
+		buttonText: string
+		buttonHref: string
+	}
 }
 
 const {
-  title,
-  description,
-  author,
-  readtime,
-  contentType,
-  primaryPillIcon,
-  secondaryPillIcon,
-  navigationSection,
-} = Astro.props;
+	title,
+	description,
+	author,
+	readtime,
+	contentType,
+	primaryPillIcon,
+	secondaryPillIcon,
+	navigationSection,
+} = Astro.props
 
 // Author can be a string or an object with name, title, picture, and link
 const authorData =
-  typeof author === "string"
-    ? { name: author, title: null, picture: null, link: null }
-    : author;
+	typeof author === 'string' ? { name: author, title: null, picture: null, link: null } : author
 
 // Default labels based on content type
-const contentTypeLabel = contentType === "resource" ? "Recurso" : "Artículo";
+const contentTypeLabel = contentType === 'resource' ? 'Recurso' : 'Artículo'
 
 // Default navigation section
 const defaultNavigationSection =
-  contentType === "resource"
-    ? {
-        title: "¿Te resultó útil este recurso?",
-        description:
-          "Explora más recursos y guías en nuestra sección de ayuda.",
-        buttonText: "Ver Todos los Recursos",
-        buttonHref: "/resources",
-      }
-    : {
-        title: "¿Te gustó este artículo?",
-        description: "Descubre más artículos y contenido en nuestro blog.",
-        buttonText: "Ver Todos los Artículos",
-        buttonHref: "/blog",
-      };
+	contentType === 'resource'
+		? {
+				title: '¿Te resultó útil este recurso?',
+				description: 'Explora más recursos y guías en nuestra sección de ayuda.',
+				buttonText: 'Ver Todos los Recursos',
+				buttonHref: '/resources',
+			}
+		: {
+				title: '¿Te gustó este artículo?',
+				description: 'Descubre más artículos y contenido en nuestro blog.',
+				buttonText: 'Ver Todos los Artículos',
+				buttonHref: '/blog',
+			}
 
-const finalNavigationSection = navigationSection || defaultNavigationSection;
+const finalNavigationSection = navigationSection || defaultNavigationSection
 ---
 
-<div class="flex flex-col gap-4 max-w-4xl mx-auto px-4 sm:px-6 py-8 w-full">
-  <!-- Header Section -->
-  <a
-    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-colors"
-    href={`/${contentType}s`}
-  >
-    ← Ver más {contentTypeLabel}s
-  </a>
-  <section class="border border-border rounded-md px-4 sm:px-6 py-6 sm:py-8">
-    <div>
-      <h1 class="text-2xl sm:text-3xl font-bold pb-4 break-words">{title}</h1>
-      <p class="text-sm opacity-60 max-w-full sm:max-w-[80%] break-words">
-        {description}
-      </p>
-      {
-        authorData && (
-          <div class="flex items-center gap-3 mt-4 overflow-hidden">
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-              {authorData.picture ? (
-                <a
-                  href={authorData.link || "#"}
-                  target={authorData.link ? "_blank" : undefined}
-                  rel={authorData.link ? "noopener noreferrer" : undefined}
-                  class="block"
-                >
-                  <img
-                    src={authorData.picture}
-                    alt={`Foto de ${authorData.name}`}
-                    class="w-10 h-10 rounded-full object-cover border-2 border-border hover:border-blue transition-colors"
-                  />
-                </a>
-              ) : (
-                <div class="w-10 h-10 rounded-full bg-muted border-2 border-border flex items-center justify-center">
-                  <span class="text-sm font-medium text-muted-foreground">
-                    {authorData.name?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="flex flex-col min-w-0">
-                <div class="text-sm text-muted-foreground truncate">
-                  Por{" "}
-                  {authorData.link ? (
-                    <a
-                      href={authorData.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="font-medium text-foreground hover:text-blue transition-colors"
-                    >
-                      {authorData.name}
-                    </a>
-                  ) : (
-                    <span class="font-medium text-foreground">
-                      {authorData.name}
-                    </span>
-                  )}
-                </div>{" "}
-                {authorData.title && (
-                  <div class="text-xs text-muted-foreground truncate">
-                    {authorData.title}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )
-      }
-    </div>
-    <div class="flex items-center flex-wrap gap-2 mt-6 sm:mt-8">
-      <Pill variant="blue" size="sm" icon={primaryPillIcon} className="">
-        {contentTypeLabel}
-      </Pill>
-      {
-        readtime && (
-          <Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
-            {readtime} Minutos de lectura
-          </Pill>
-        )
-      }
-      {
-        Astro.props.tags &&
-          Astro.props.tags.length > 0 &&
-          Astro.props.tags.map((tag) => (
-            <Pill variant="ghost_red" size="sm" className="">
-              {tag}
-            </Pill>
-          ))
-      }
-    </div>
-  </section>
-  <!-- Content Section -->
-  <article class="border border-border rounded-md overflow-hidden min-w-0">
-    <div class="px-4 sm:px-6 py-6 sm:py-8">
-      <div
-        class="max-w-none text-foreground leading-relaxed content-markdown overflow-hidden break-words"
-      >
-        <slot />
-      </div>
-    </div>
-  </article>
-  <!-- Navigation Section -->
-  <section class="mt-6">
-    <div class="border border-border rounded-md p-4 sm:p-6">
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-      >
-        <div class="min-w-0 flex-1">
-          <h3 class="text-lg font-semibold text-foreground mb-2 break-words">
-            {finalNavigationSection.title}
-          </h3>
-          <p class="text-sm text-muted-foreground break-words">
-            {finalNavigationSection.description}
-          </p>
-        </div>
-        <div class="flex gap-3 flex-shrink-0">
-          <a
-            href={finalNavigationSection.buttonHref}
-            class="inline-flex items-center px-4 py-2 border border-border bg-background hover:bg-muted transition-colors rounded-md text-sm font-medium text-foreground whitespace-nowrap"
-          >
-            {finalNavigationSection.buttonText}
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-8 sm:px-6">
+	<!-- Header Section -->
+	<a
+		class="inline-flex items-center gap-2 text-blue-600 transition-colors hover:text-blue-800 hover:underline"
+		href={`/${contentType}s`}
+	>
+		← Ver más {contentTypeLabel}s
+	</a>
+	<section class="border-border rounded-md border px-4 py-6 sm:px-6 sm:py-8">
+		<div>
+			<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
+			<p class="max-w-full text-sm break-words opacity-60 sm:max-w-[80%]">
+				{description}
+			</p>
+			{
+				authorData && (
+					<div class="mt-4 flex items-center gap-3 overflow-hidden">
+						<div class="flex min-w-0 flex-1 items-center gap-3">
+							{authorData.picture ? (
+								<a
+									href={authorData.link || '#'}
+									target={authorData.link ? '_blank' : undefined}
+									rel={authorData.link ? 'noopener noreferrer' : undefined}
+									class="block"
+								>
+									<img
+										src={authorData.picture}
+										alt={`Foto de ${authorData.name}`}
+										class="border-border hover:border-blue h-10 w-10 rounded-full border-2 object-cover transition-colors"
+									/>
+								</a>
+							) : (
+								<div class="bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border-2">
+									<span class="text-muted-foreground text-sm font-medium">
+										{authorData.name?.charAt(0).toUpperCase()}
+									</span>
+								</div>
+							)}
+							<div class="flex min-w-0 flex-col">
+								<div class="text-muted-foreground truncate text-sm">
+									Por{' '}
+									{authorData.link ? (
+										<a
+											href={authorData.link}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="text-foreground hover:text-blue font-medium transition-colors"
+										>
+											{authorData.name}
+										</a>
+									) : (
+										<span class="text-foreground font-medium">{authorData.name}</span>
+									)}
+								</div>{' '}
+								{authorData.title && (
+									<div class="text-muted-foreground truncate text-xs">{authorData.title}</div>
+								)}
+							</div>
+						</div>
+					</div>
+				)
+			}
+		</div>
+		<div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-8">
+			<Pill variant="blue" size="sm" icon={primaryPillIcon} className="">
+				{contentTypeLabel}
+			</Pill>
+			{
+				readtime && (
+					<Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
+						{readtime} Minutos de lectura
+					</Pill>
+				)
+			}
+			{
+				Astro.props.tags &&
+					Astro.props.tags.length > 0 &&
+					Astro.props.tags.map((tag) => (
+						<Pill variant="ghost_red" size="sm" className="">
+							{tag}
+						</Pill>
+					))
+			}
+		</div>
+	</section>
+	<!-- Content Section -->
+	<article class="border-border min-w-0 overflow-hidden rounded-md border">
+		<div class="px-4 py-6 sm:px-6 sm:py-8">
+			<div
+				class="text-foreground content-markdown max-w-none overflow-hidden leading-relaxed break-words"
+			>
+				<slot />
+			</div>
+		</div>
+	</article>
+	<!-- Navigation Section -->
+	<section class="mt-6">
+		<div class="border-border rounded-md border p-4 sm:p-6">
+			<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<div class="min-w-0 flex-1">
+					<h3 class="text-foreground mb-2 text-lg font-semibold break-words">
+						{finalNavigationSection.title}
+					</h3>
+					<p class="text-muted-foreground text-sm break-words">
+						{finalNavigationSection.description}
+					</p>
+				</div>
+				<div class="flex flex-shrink-0 gap-3">
+					<a
+						href={finalNavigationSection.buttonHref}
+						class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+					>
+						{finalNavigationSection.buttonText}
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>

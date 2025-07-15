@@ -39,6 +39,7 @@ USER_TOKEN="tu_token_de_usuario_aqui"
 ```
 
 **Notas:**
+
 - `API_SECRET`: Usa un valor único y seguro.
 - `USER_TOKEN`: Simula un usuario autenticado en el entorno de desarrollo. Asegúrate de no exponerlo.
 
@@ -70,12 +71,12 @@ La aplicación estará disponible en `http://localhost:4321`.
 
 Todos los comandos se ejecutan desde la raíz del proyecto:
 
-| Comando                   | Acción                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Instala las dependencias.                            |
-| `npm run dev`             | Inicia el servidor de desarrollo en `localhost:4321`.      |
-| `npm run build`           | Compila el sitio para producción en la carpeta `./dist/`.          |
-| `npm run preview`         | Previsualiza tu compilación de producción localmente.     |
+| Comando           | Acción                                                    |
+| :---------------- | :-------------------------------------------------------- |
+| `npm install`     | Instala las dependencias.                                 |
+| `npm run dev`     | Inicia el servidor de desarrollo en `localhost:4321`.     |
+| `npm run build`   | Compila el sitio para producción en la carpeta `./dist/`. |
+| `npm run preview` | Previsualiza tu compilación de producción localmente.     |
 
 ## 👀 ¿Quieres saber más?
 

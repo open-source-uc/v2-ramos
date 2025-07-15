@@ -1,10 +1,11 @@
-import type { CourseReview, CourseSummary, PrerequisiteGroup } from "@/types";
-import { parsePrerequisites } from "@/lib/courseReq";
-import fs from "fs";
-import path from "path";
+import type { CourseReview, CourseSummary, PrerequisiteGroup } from '@/types'
+import { parsePrerequisites } from '@/lib/courseReq'
+import fs from 'fs'
+import path from 'path'
 
 export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
-  const result = await locals.runtime.env.DB.prepare(`
+	const result = await locals.runtime.env.DB.prepare(
+		`
     SELECT 
       id,
       sigle,
@@ -19,20 +20,29 @@ export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
       avg_weekly_hours,
       sort_index
     FROM course_summary WHERE sigle = ?
-  `).bind(sigle).all<CourseSummary>()
+  `
+	)
+		.bind(sigle)
+		.all<CourseSummary>()
 
-  return result.results[0] ?? null;
-};
+	return result.results[0] ?? null
+}
 
-export const getCourseReviews = async (locals: App.Locals, sigle: string, limit: number = 20, sortBy: 'recent' | 'positivity' = 'recent') => {
-  let orderClause = 'ORDER BY updated_at DESC';
-  
-  if (sortBy === 'positivity') {
-    // Sort by positivity: superlikes (2) first, then likes (1), then dislikes (0)
-    orderClause = 'ORDER BY like_dislike DESC, updated_at DESC';
-  }
-  
-  const result = await locals.runtime.env.DB.prepare(`
+export const getCourseReviews = async (
+	locals: App.Locals,
+	sigle: string,
+	limit: number = 20,
+	sortBy: 'recent' | 'positivity' = 'recent'
+) => {
+	let orderClause = 'ORDER BY updated_at DESC'
+
+	if (sortBy === 'positivity') {
+		// Sort by positivity: superlikes (2) first, then likes (1), then dislikes (0)
+		orderClause = 'ORDER BY like_dislike DESC, updated_at DESC'
+	}
+
+	const result = await locals.runtime.env.DB.prepare(
+		`
     SELECT 
       id,
       user_id,
@@ -50,13 +60,21 @@ export const getCourseReviews = async (locals: App.Locals, sigle: string, limit:
     WHERE course_sigle = ? AND status != 3
     ${orderClause}
     LIMIT ?
-  `).bind(sigle, limit).all<CourseReview>()
+  `
+	)
+		.bind(sigle, limit)
+		.all<CourseReview>()
 
-  return result.results;
-};
+	return result.results
+}
 
-export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle: string, userId: string) => {
-  const result = await locals.runtime.env.DB.prepare(`
+export const getCourseReviewByUserIdAndSigle = async (
+	locals: App.Locals,
+	sigle: string,
+	userId: string
+) => {
+	const result = await locals.runtime.env.DB.prepare(
+		`
     SELECT 
       id,
       user_id,
@@ -72,22 +90,27 @@ export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle:
       updated_at
     FROM course_reviews 
     WHERE course_sigle = ? AND user_id = ?
-  `).bind(sigle, userId).first<CourseReview>()
+  `
+	)
+		.bind(sigle, userId)
+		.first<CourseReview>()
 
-  return result ?? {
-    id: null,
-    user_id: userId,
-    course_sigle: sigle,
-    like_dislike: null,
-    workload_vote: null,
-    attendance_type: null,
-    weekly_hours: null,
-    year_taken: null,
-    semester_taken: null,
-    comment_path: null,
-    created_at: null,
-    updated_at: null
-  };
+	return (
+		result ?? {
+			id: null,
+			user_id: userId,
+			course_sigle: sigle,
+			like_dislike: null,
+			workload_vote: null,
+			attendance_type: null,
+			weekly_hours: null,
+			year_taken: null,
+			semester_taken: null,
+			comment_path: null,
+			created_at: null,
+			updated_at: null,
+		}
+	)
 }
 
 /**
@@ -96,24 +119,24 @@ export const getCourseReviewByUserIdAndSigle = async (locals: App.Locals, sigle:
  * @returns Mapa de siglas a nombres de cursos
  */
 export const getCourseNames = async (sigles: string[]): Promise<Map<string, string>> => {
-  if (sigles.length === 0) {
-    return new Map();
-  }
+	if (sigles.length === 0) {
+		return new Map()
+	}
 
-  const { getCollection } = await import("astro:content");
-  const courses = await getCollection("coursesStatic");
-  
-  const courseNames = new Map<string, string>();
-  
-  for (const sigla of sigles) {
-    const course = courses.find(c => c.data.sigle === sigla);
-    if (course) {
-      courseNames.set(sigla, course.data.name);
-    }
-  }
+	const { getCollection } = await import('astro:content')
+	const courses = await getCollection('coursesStatic')
 
-  return courseNames;
-};
+	const courseNames = new Map<string, string>()
+
+	for (const sigla of sigles) {
+		const course = courses.find((c) => c.data.sigle === sigla)
+		if (course) {
+			courseNames.set(sigla, course.data.name)
+		}
+	}
+
+	return courseNames
+}
 
 /**
  * Obtiene información detallada de los cursos para prerrequisitos
@@ -121,21 +144,21 @@ export const getCourseNames = async (sigles: string[]): Promise<Map<string, stri
  * @returns Prerrequisitos parseados con nombres de cursos
  */
 export const getPrerequisitesWithNames = async (req: string) => {
-  const parsed = parsePrerequisites(req);
-  
-  if (!parsed.hasPrerequisites || !parsed.structure) {
-    return parsed;
-  }
+	const parsed = parsePrerequisites(req)
 
-  const sigles = extractSiglesFromStructure(parsed.structure);
-  const courseNames = await getCourseNames(sigles);
-  const structureWithNames = addNamesToStructure(parsed.structure, courseNames);
-  
-  return {
-    ...parsed,
-    structure: structureWithNames
-  };
-};
+	if (!parsed.hasPrerequisites || !parsed.structure) {
+		return parsed
+	}
+
+	const sigles = extractSiglesFromStructure(parsed.structure)
+	const courseNames = await getCourseNames(sigles)
+	const structureWithNames = addNamesToStructure(parsed.structure, courseNames)
+
+	return {
+		...parsed,
+		structure: structureWithNames,
+	}
+}
 
 /**
  * Obtiene las siglas de los cursos a partir de una estructura de prerrequisitos
@@ -143,35 +166,38 @@ export const getPrerequisitesWithNames = async (req: string) => {
  * @returns Array de siglas de cursos
  */
 function extractSiglesFromStructure(group: PrerequisiteGroup): string[] {
-  const sigles: string[] = [];
-  
-  if (group.courses) {
-    sigles.push(...group.courses.map((course) => course.sigle));
-  }
-  
-  if (group.groups) {
-    for (const subGroup of group.groups) {
-      sigles.push(...extractSiglesFromStructure(subGroup));
-    }
-  }
-  
-  return sigles;
+	const sigles: string[] = []
+
+	if (group.courses) {
+		sigles.push(...group.courses.map((course) => course.sigle))
+	}
+
+	if (group.groups) {
+		for (const subGroup of group.groups) {
+			sigles.push(...extractSiglesFromStructure(subGroup))
+		}
+	}
+
+	return sigles
 }
 
 /**
  * Recursivamente agrega los nombres de los cursos a una estructura de prerrequisitos
  */
-function addNamesToStructure(group: PrerequisiteGroup, courseNames: Map<string, string>): PrerequisiteGroup {
-  const updatedGroup: PrerequisiteGroup = {
-    ...group,
-    courses: group.courses?.map((course) => ({
-      ...course,
-      name: courseNames.get(course.sigle)
-    })),
-    groups: group.groups?.map((subGroup) => addNamesToStructure(subGroup, courseNames))
-  };
-  
-  return updatedGroup;
+function addNamesToStructure(
+	group: PrerequisiteGroup,
+	courseNames: Map<string, string>
+): PrerequisiteGroup {
+	const updatedGroup: PrerequisiteGroup = {
+		...group,
+		courses: group.courses?.map((course) => ({
+			...course,
+			name: courseNames.get(course.sigle),
+		})),
+		groups: group.groups?.map((subGroup) => addNamesToStructure(subGroup, courseNames)),
+	}
+
+	return updatedGroup
 }
 
 /**
@@ -180,37 +206,37 @@ function addNamesToStructure(group: PrerequisiteGroup, courseNames: Map<string, 
  * @returns Array de campus donde el curso tiene secciones disponibles
  */
 export const getActualCampusesForCourse = async (sigle: string): Promise<string[]> => {
-  try {
-    const ndjsonPath = path.join(process.cwd(), "migration", "ndjson", "2025-1.ndjson");
-    
-    if (!fs.existsSync(ndjsonPath)) {
-      return [];
-    }
+	try {
+		const ndjsonPath = path.join(process.cwd(), 'migration', 'ndjson', '2025-1.ndjson')
 
-    const data = fs.readFileSync(ndjsonPath, "utf-8");
-    const lines = data.trim().split("\n");
-    
-    for (const line of lines) {
-      if (line.trim()) {
-        const courseData = JSON.parse(line);
-        if (courseData.sigle === sigle && courseData.sections) {
-          const campuses = new Set<string>();
-          
-          // Extract campuses from all sections
-          Object.values(courseData.sections).forEach((section: any) => {
-            if (section.campus) {
-              campuses.add(section.campus);
-            }
-          });
-          
-          return Array.from(campuses);
-        }
-      }
-    }
-    
-    return [];
-  } catch (error) {
-    console.error("Error reading sections data:", error);
-    return [];
-  }
-};
+		if (!fs.existsSync(ndjsonPath)) {
+			return []
+		}
+
+		const data = fs.readFileSync(ndjsonPath, 'utf-8')
+		const lines = data.trim().split('\n')
+
+		for (const line of lines) {
+			if (line.trim()) {
+				const courseData = JSON.parse(line)
+				if (courseData.sigle === sigle && courseData.sections) {
+					const campuses = new Set<string>()
+
+					// Extract campuses from all sections
+					Object.values(courseData.sections).forEach((section: any) => {
+						if (section.campus) {
+							campuses.add(section.campus)
+						}
+					})
+
+					return Array.from(campuses)
+				}
+			}
+		}
+
+		return []
+	} catch (error) {
+		console.error('Error reading sections data:', error)
+		return []
+	}
+}

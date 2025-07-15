@@ -1,3 +1,3 @@
 // Catalog page components
-export { SearchableTableDisplay } from './SearchableTableDisplay';
-export { SearchableRecommendationsDisplay } from './SearchableRecommendationsDisplay';
+export { SearchableTableDisplay } from './SearchableTableDisplay'
+export { SearchableRecommendationsDisplay } from './SearchableRecommendationsDisplay'

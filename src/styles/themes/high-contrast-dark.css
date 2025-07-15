@@ -1,78 +1,78 @@
 .dark.high-contrast {
-  --background: oklch(0 0 0);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.1 0 0);
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.1 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: oklch(0.8 0.4 260);
-  --primary-foreground: oklch(0 0 0);
-  --muted: oklch(0.2 0 0);
-  --muted-foreground: oklch(1 0 0);
-  --accent: oklch(0.2 0 0);
-  --accent-foreground: oklch(1 0 0);
-  --border: oklch(1 0 0);
-  --input: oklch(1 0 0);
-  --ring: oklch(1 0 0);
-  --red: oklch(0.8 0.5 19);
-  --red-light: oklch(0.15 0.5 19 / 30%);
-  --green: oklch(0.8 0.4 139.2308);
-  --green-light: oklch(0.15 0.4 139.2308 / 30%);
-  --blue: oklch(0.8 0.4 260);
-  --blue-light: oklch(0.15 0.4 260 / 50%);
-  --purple: oklch(0.8 0.5 324.31);
-  --purple-light: oklch(0.15 0.5 324.31 / 30%);
-  --pink: oklch(0.8 0.5 349.85);
-  --pink-light: oklch(0.15 0.5 349.85 / 30%);
-  --orange: oklch(0.8 0.4 35.74);
-  --orange-light: oklch(0.15 0.4 35.74 / 30%);
+	--background: oklch(0 0 0);
+	--foreground: oklch(1 0 0);
+	--card: oklch(0.1 0 0);
+	--card-foreground: oklch(1 0 0);
+	--popover: oklch(0.1 0 0);
+	--popover-foreground: oklch(1 0 0);
+	--primary: oklch(0.8 0.4 260);
+	--primary-foreground: oklch(0 0 0);
+	--muted: oklch(0.2 0 0);
+	--muted-foreground: oklch(1 0 0);
+	--accent: oklch(0.2 0 0);
+	--accent-foreground: oklch(1 0 0);
+	--border: oklch(1 0 0);
+	--input: oklch(1 0 0);
+	--ring: oklch(1 0 0);
+	--red: oklch(0.8 0.5 19);
+	--red-light: oklch(0.15 0.5 19 / 30%);
+	--green: oklch(0.8 0.4 139.2308);
+	--green-light: oklch(0.15 0.4 139.2308 / 30%);
+	--blue: oklch(0.8 0.4 260);
+	--blue-light: oklch(0.15 0.4 260 / 50%);
+	--purple: oklch(0.8 0.5 324.31);
+	--purple-light: oklch(0.15 0.5 324.31 / 30%);
+	--pink: oklch(0.8 0.5 349.85);
+	--pink-light: oklch(0.15 0.5 349.85 / 30%);
+	--orange: oklch(0.8 0.4 35.74);
+	--orange-light: oklch(0.15 0.4 35.74 / 30%);
 }
 
 /* High contrast dark theme specific improvements */
 .dark.high-contrast * {
-  /* Ensure maximum contrast */
-  text-shadow: none !important;
-  box-shadow: none !important;
+	/* Ensure maximum contrast */
+	text-shadow: none !important;
+	box-shadow: none !important;
 }
 
 .dark.high-contrast a {
-  /* Make links more distinguishable */
-  font-weight: 600;
-  text-decoration: underline;
+	/* Make links more distinguishable */
+	font-weight: 600;
+	text-decoration: underline;
 }
 
 .dark.high-contrast button {
-  /* Ensure buttons have maximum contrast */
-  border: 1px solid var(--foreground) !important;
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
-  font-weight: 600;
+	/* Ensure buttons have maximum contrast */
+	border: 1px solid var(--foreground) !important;
+	background-color: var(--background) !important;
+	color: var(--foreground) !important;
+	font-weight: 600;
 }
 
 .dark.high-contrast button:hover {
-  background-color: var(--foreground) !important;
-  color: var(--background) !important;
+	background-color: var(--foreground) !important;
+	color: var(--background) !important;
 }
 
 .dark.high-contrast input,
 .dark.high-contrast textarea,
 .dark.high-contrast select {
-  /* Ensure form elements have maximum contrast */
-  border: 1px solid var(--foreground) !important;
-  background-color: var(--background) !important;
-  color: var(--foreground) !important;
+	/* Ensure form elements have maximum contrast */
+	border: 1px solid var(--foreground) !important;
+	background-color: var(--background) !important;
+	color: var(--foreground) !important;
 }
 
 .dark.high-contrast img {
-  /* Increase contrast for images in high contrast dark mode */
-  filter: contrast(1.5) brightness(1.2);
+	/* Increase contrast for images in high contrast dark mode */
+	filter: contrast(1.5) brightness(1.2);
 }
 
 /* Invert the logo colors in dark mode (black to white) */
-.dark img[src*="Placeholder.svg"] {
-  filter: invert(1) brightness(1);
+.dark img[src*='Placeholder.svg'] {
+	filter: invert(1) brightness(1);
 }
 
-.dark img[src*="OSUC.svg"] {
-  filter: invert(1) brightness(1);
+.dark img[src*='OSUC.svg'] {
+	filter: invert(1) brightness(1);
 }

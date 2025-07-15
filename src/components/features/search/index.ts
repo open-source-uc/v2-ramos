@@ -1,2 +1,2 @@
 // Search related components
-export { Search as SearchInput } from './SearchInput';
+export { Search as SearchInput } from './SearchInput'

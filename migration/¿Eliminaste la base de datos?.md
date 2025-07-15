@@ -1,5 +1,6 @@
 Hola persona del futuro en caso que hayas reiniciado la tabla de summary por un extraña razon como a mi me paso
 no te procupes, solo usa, solo seran 4M de writes D: (solo tendremos que pagar 5lukas), para la proxima primero prueba en local :D
+
 ```bash
 UPDATE course_summary
 SET
@@ -43,9 +44,9 @@ SET
     SELECT
       CASE
         WHEN COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END) = 0 THEN 0
-        ELSE (SUM(CASE like_dislike WHEN 1 THEN 1 WHEN 2 THEN 2 ELSE 0 END) * 100.0 / 
-              COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END)) * 
-              COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END) / 
+        ELSE (SUM(CASE like_dislike WHEN 1 THEN 1 WHEN 2 THEN 2 ELSE 0 END) * 100.0 /
+              COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END)) *
+              COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END) /
               (COUNT(CASE WHEN like_dislike IN (0,1,2) THEN 1 END) + 10)
       END
       + 3 * SUM(CASE workload_vote WHEN 0 THEN 1 ELSE 0 END)
