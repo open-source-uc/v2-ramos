@@ -1,3 +1,5 @@
+#!/bin/bash
+
 curl -s -X GET "https://buscaramos.osuc.dev/api/courses" \
   -H "Authorization: Bearer $API_SECRET" \
   -H "Accept: application/x-ndjson; charset=utf-8" \

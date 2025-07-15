@@ -26,7 +26,9 @@ export function useCoursesSections(): [Course[], boolean] {
 
             try {
                 setIsLoading(true);
-                const response = await fetch("https://public.osuc.dev/courses-sections.ndjson");
+                const response = await fetch("https://public.osuc.dev/courses-sections.ndjson?" + Date.now(), {
+                    cache: "no-store",
+                });
 
                 if (!response.ok) throw new Error("Network response was not ok");
                 if (!response.body) throw new Error("ReadableStream not supported");
@@ -49,7 +51,7 @@ export function useCoursesSections(): [Course[], boolean] {
                         if (line.trim()) {
                             const item = JSON.parse(line);
                             parsedCourses.push(item);
-                            
+
                             // Set loading to false as soon as the first data loads
                             if (!firstDataLoaded) {
                                 setIsLoading(false);
@@ -63,7 +65,7 @@ export function useCoursesSections(): [Course[], boolean] {
                 if (buffer.trim()) {
                     const item = JSON.parse(buffer);
                     parsedCourses.push(item);
-                    
+
                     // Set loading to false if this is the first (and only) item
                     if (!firstDataLoaded) {
                         setIsLoading(false);
