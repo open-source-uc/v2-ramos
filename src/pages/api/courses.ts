@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import type { CourseStaticInfo, CourseSummary } from "@/types";
+import type { CourseSummary } from "@/types";
 import { getEntry } from "astro:content";
 
 export const GET: APIRoute = async ({ request, locals }) => {
@@ -53,7 +53,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
                 course.is_english = staticInfo?.is_english ?? [];
                 course.school = staticInfo?.school ?? "";
                 course.area = staticInfo?.area ?? "";
-                course.category = staticInfo?.category ?? "";
+                course.categories = staticInfo?.categories ?? [];
                 course.last_semester = staticInfo?.last_semester ?? "";
 
                 const line = JSON.stringify(course) + "\n";

@@ -15,11 +15,11 @@ export interface CourseSummary {
     credits?: number; // Added for convenience
     school?: string; // Added for convenience
     area?: string; // Added for convenience
-    category?: string; // Added for convenience.
     req?: string;
     conn?: string;
     restr?: string;
     equiv?: string;
+    categories?: Array<string>; // Added for convenience.
     format?: Array<string>;
     campus?: Array<string>;
     is_removable?: Array<boolean>;
@@ -43,27 +43,6 @@ export interface CourseReview {
     status: number; // 0: pending, 1: approved, 2: reported, 3: hidden
     created_at: string;
     updated_at: string;
-}
-
-export interface CourseStaticInfo {
-    sigle: string;
-    name: string;
-    credits: number;
-    schedules?: Schedule[];
-    req: string;
-    conn: string;
-    restr: string;
-    equiv: string;
-    format: Array<string>;
-    campus: Array<string>;
-    is_removable: Array<boolean>;
-    is_special: Array<boolean>;
-    is_english: Array<boolean>;
-    description: string;
-    school: string;
-    area: string;
-    category: string;
-    last_semester: string; // Format: YYYY-S
 }
 
 export interface RecommendationData {
