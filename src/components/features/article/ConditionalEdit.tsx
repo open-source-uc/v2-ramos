@@ -1,31 +1,57 @@
-import { createSlug } from '@/lib/utils'
 
-import React, { useEffect, useState } from 'react'
+import { getUserDataByToken } from '@/lib/server/auth';
+import { createSlug } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 interface Props {
+	blogTitle: string,
 	blogUserId: number
-	blogTitle: string
 }
 
-const ConditionalEdit: React.FC<Props> = (props) => {
-	const [userId, setUserId] = useState<string | null>(null)
+export default function ConditionalEdit({ blogTitle, blogUserId }: Props) {
+  const [userData, setUserData] = useState<any>(null);
+  const [cookie, setCookie] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const fetchUserData = async () => {
-			const res = await fetch('/api/user')
-			if (res.ok) {
-				const user = await res.json()
-				setUserId(String(user.id))
-			}
+  useEffect(() => {
+	const fetchUser = async () => {
+	  const cookiesString = document.cookie;
+	  const cookieValue = cookiesString
+		.split(';')
+		.filter(cookie => cookie.trim().startsWith('osucookie='))
+		.map(cookie => cookie.split('=')[1])[0];
+
+	  setCookie(cookieValue);
+
+	  if (cookieValue) {
+		try {
+		  const data = await getUserDataByToken(cookieValue);
+		  setUserData(data);
+		} catch {
+		  setUserData(null);
 		}
-		fetchUserData()
-	}, [])
+	  }
+	  setLoading(false);
+	};
+	fetchUser();
+  }, []);
 
-	const blogUserId = String(props.blogUserId)
-	const blogTitle = createSlug(props.blogTitle)
-	const showButton = userId && blogUserId === userId
+  if (loading) {
+	return null; // o un loader
+  }
 
-	return showButton ? <a href={`./${blogTitle}/edit`}>Edit Blog</a> : null
+  if (!cookie) {
+	return null; // o un mensaje de error
+  }
+
+  if (!userData) {
+	return <>{cookie}</>; // o un mensaje de error
+  }
+
+  // Renderiza el botón de editar solo si el usuario es el autor
+  if (userData.id === blogUserId) {
+	return <a href={`./${createSlug(blogTitle)}/edit`}>Editar blog: {blogTitle}</a>;
+  }
+
+  return null;
 }
-
-export default ConditionalEdit
