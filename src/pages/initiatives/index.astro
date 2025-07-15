@@ -1,59 +1,56 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
-import InitiativeCard from "@/components/common/InitiativeCard.tsx";
+import { getCollection } from 'astro:content'
+import Layout from '@/layouts/Layout.astro'
+import InitiativeCard from '@/components/common/InitiativeCard.tsx'
 
-export const prerender = true;
+export const prerender = true
 
-const initiatives = await getCollection("initiatives");
+const initiatives = await getCollection('initiatives')
 
 // Sort initiatives by name
 const sortedInitiatives = initiatives.sort((a, b) =>
-  a.data.name.localeCompare(b.data.name, "es", { sensitivity: "base" })
-);
+	a.data.name.localeCompare(b.data.name, 'es', { sensitivity: 'base' })
+)
 ---
 
 <Layout>
-  <main class="max-w-7xl mx-auto px-4 py-8">
-    <!-- Header Section -->
-    <header class="mb-12 text-center">
-      <h1 class="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-        Iniciativas Estudiantiles
-      </h1>
-      <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
-        Descubre las iniciativas estudiantiles que están transformando la
-        experiencia universitaria. Proyectos creados por y para estudiantes.
-      </p>
-    </header>
-    <!-- Initiatives Grid -->
-    <section aria-label="Lista de iniciativas estudiantiles">
-      {
-        sortedInitiatives.length > 0 ? (
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {sortedInitiatives.map((initiative) => (
-              <InitiativeCard
-                name={initiative.data.name}
-                title={initiative.data.title}
-                faculty={initiative.data.faculty}
-                picture={initiative.data.picture}
-                description={undefined}
-              />
-            ))}
-          </div>
-        ) : (
-          <div class="text-center py-16" role="status" aria-live="polite">
-            <div class="border border-dashed border-border rounded-lg p-12">
-              <h2 class="text-xl font-semibold text-foreground mb-2">
-                No hay iniciativas disponibles
-              </h2>
-              <p class="text-muted-foreground">
-                Estamos trabajando para agregar más iniciativas estudiantiles
-                pronto.
-              </p>
-            </div>
-          </div>
-        )
-      }
-    </section>
-  </main>
+	<main class="mx-auto max-w-7xl px-4 py-8">
+		<!-- Header Section -->
+		<header class="mb-12 text-center">
+			<h1 class="text-foreground mb-4 text-4xl font-bold lg:text-5xl">Iniciativas Estudiantiles</h1>
+			<p class="text-muted-foreground mx-auto max-w-3xl text-lg">
+				Descubre las iniciativas estudiantiles que están transformando la experiencia universitaria.
+				Proyectos creados por y para estudiantes.
+			</p>
+		</header>
+		<!-- Initiatives Grid -->
+		<section aria-label="Lista de iniciativas estudiantiles">
+			{
+				sortedInitiatives.length > 0 ? (
+					<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+						{sortedInitiatives.map((initiative) => (
+							<InitiativeCard
+								name={initiative.data.name}
+								title={initiative.data.title}
+								faculty={initiative.data.faculty}
+								picture={initiative.data.picture}
+								description={undefined}
+							/>
+						))}
+					</div>
+				) : (
+					<div class="py-16 text-center" role="status" aria-live="polite">
+						<div class="border-border rounded-lg border border-dashed p-12">
+							<h2 class="text-foreground mb-2 text-xl font-semibold">
+								No hay iniciativas disponibles
+							</h2>
+							<p class="text-muted-foreground">
+								Estamos trabajando para agregar más iniciativas estudiantiles pronto.
+							</p>
+						</div>
+					</div>
+				)
+			}
+		</section>
+	</main>
 </Layout>

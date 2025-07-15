@@ -1,47 +1,47 @@
 ---
-import { getCollection } from "astro:content";
-import ContentPage from "@/components/common/ContentPage.astro";
-import { EditIcon, ClockIcon } from "../../../components/icons/icons";
-import Layout from "@/layouts/Layout.astro";
-import { createSlug } from "@/lib/utils";
+import { getCollection } from 'astro:content'
+import ContentPage from '@/components/common/ContentPage.astro'
+import { EditIcon, ClockIcon } from '../../../components/icons/icons'
+import Layout from '@/layouts/Layout.astro'
+import { createSlug } from '@/lib/utils'
 
-export const prerender = true;
+export const prerender = true
 
 export async function getStaticPaths() {
-  const blogs = await getCollection("blogs");
+	const blogs = await getCollection('blogs')
 
-  return blogs.map((blog) => ({
-    params: {
-      author: createSlug(blog.data.author?.name || "unknown"),
-      title: createSlug(blog.data.title || blog.slug),
-    },
-    props: { blog },
-  }));
+	return blogs.map((blog) => ({
+		params: {
+			author: createSlug(blog.data.author?.name || 'unknown'),
+			title: createSlug(blog.data.title || blog.slug),
+		},
+		props: { blog },
+	}))
 }
 
-const { blog } = Astro.props;
-const { data } = blog;
-const { title, author, readtime, description, tags } = data;
-const { Content } = await blog.render();
+const { blog } = Astro.props
+const { data } = blog
+const { title, author, readtime, description, tags } = data
+const { Content } = await blog.render()
 ---
 
 <Layout>
-  <ContentPage
-    title={title}
-    description={description}
-    author={author}
-    readtime={readtime}
-    contentType="blog"
-    tags={tags}
-    primaryPillIcon={EditIcon}
-    secondaryPillIcon={ClockIcon}
-    navigationSection={{
-      title: "¿Te gustó este blog?",
-      description: "Descubre más contenido interesante en nuestro blog.",
-      buttonText: "Ver Más Artículos",
-      buttonHref: "/blogs",
-    }}
-  >
-    <Content />
-  </ContentPage>
+	<ContentPage
+		title={title}
+		description={description}
+		author={author}
+		readtime={readtime}
+		contentType="blog"
+		tags={tags}
+		primaryPillIcon={EditIcon}
+		secondaryPillIcon={ClockIcon}
+		navigationSection={{
+			title: '¿Te gustó este blog?',
+			description: 'Descubre más contenido interesante en nuestro blog.',
+			buttonText: 'Ver Más Artículos',
+			buttonHref: '/blogs',
+		}}
+	>
+		<Content />
+	</ContentPage>
 </Layout>

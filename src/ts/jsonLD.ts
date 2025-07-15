@@ -1,25 +1,25 @@
-import siteData from "../data/siteData.json";
-import { createSlug } from "../lib/utils";
+import siteData from '../data/siteData.json'
+import { createSlug } from '../lib/utils'
 
 interface PostData {
-  title: string;
-  description: string;
-  image: {
-    src: string;
-  };
-  author: string;
-  date: string;
+	title: string
+	description: string
+	image: {
+		src: string
+	}
+	author: string
+	date: string
 }
 
 interface JsonLDGeneratorParams {
-  type: string;
-  post?: PostData;
-  url: string;
+	type: string
+	post?: PostData
+	url: string
 }
 
 export default function jsonLDGenerator({ type, post, url }: JsonLDGeneratorParams): string {
-  if (type === 'post' && post) {
-    return `<script type="application/ld+json">
+	if (type === 'post' && post) {
+		return `<script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -37,14 +37,14 @@ export default function jsonLDGenerator({ type, post, url }: JsonLDGeneratorPara
         },
         "datePublished": "${post.date}"
       }
-    </script>`;
-  }
-  return `<script type="application/ld+json">
+    </script>`
+	}
+	return `<script type="application/ld+json">
       {
       "@context": "https://schema.org/",
       "@type": "WebSite",
       "name": "${siteData.title}",
       "url": "${import.meta.env.SITE}"
       }
-    </script>`;
+    </script>`
 }

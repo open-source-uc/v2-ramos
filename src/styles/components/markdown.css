@@ -1,107 +1,108 @@
 /* Markdown content styles */
 .content-markdown {
-  @apply break-words overflow-hidden;
-  word-wrap: break-word;
-  hyphens: auto;
+	@apply overflow-hidden break-words;
+	word-wrap: break-word;
+	hyphens: auto;
 }
 
 .content-markdown h1 {
-  @apply text-xl sm:text-2xl font-bold mb-4 text-foreground break-words;
+	@apply text-foreground mb-4 text-xl font-bold break-words sm:text-2xl;
 }
 
 .content-markdown h2 {
-  @apply text-lg sm:text-xl font-semibold mb-3 mt-6 text-foreground break-words;
+	@apply text-foreground mt-6 mb-3 text-lg font-semibold break-words sm:text-xl;
 }
 
 .content-markdown h3 {
-  @apply text-base sm:text-lg font-medium mb-2 mt-4 text-foreground break-words;
+	@apply text-foreground mt-4 mb-2 text-base font-medium break-words sm:text-lg;
 }
 
 .content-markdown h4 {
-  @apply text-sm sm:text-base font-medium mb-2 mt-3 text-foreground break-words;
+	@apply text-foreground mt-3 mb-2 text-sm font-medium break-words sm:text-base;
 }
 
 .content-markdown p {
-  @apply mb-4 leading-relaxed text-foreground break-words;
+	@apply text-foreground mb-4 leading-relaxed break-words;
 }
 
-.content-markdown ul, .content-markdown ol {
-  @apply mb-4 pl-4 sm:pl-6 text-foreground;
+.content-markdown ul,
+.content-markdown ol {
+	@apply text-foreground mb-4 pl-4 sm:pl-6;
 }
 
 .content-markdown ul {
-  @apply list-disc;
+	@apply list-disc;
 }
 
 .content-markdown ol {
-  @apply list-decimal;
+	@apply list-decimal;
 }
 
 .content-markdown li {
-  @apply mb-1 break-words;
+	@apply mb-1 break-words;
 }
 
 .content-markdown li::marker {
-  @apply text-foreground;
+	@apply text-foreground;
 }
 
 .content-markdown a {
-  @apply text-blue hover:underline break-words;
-  word-break: break-all;
+	@apply text-blue break-words hover:underline;
+	word-break: break-all;
 }
 
 .content-markdown blockquote {
-  @apply border-l-4 border-blue pl-4 italic text-muted-foreground mb-4 break-words;
+	@apply border-blue text-muted-foreground mb-4 border-l-4 pl-4 break-words italic;
 }
 
 .content-markdown code {
-  @apply bg-muted px-1 py-0.5 rounded text-xs sm:text-sm break-all;
-  word-break: break-all;
+	@apply bg-muted rounded px-1 py-0.5 text-xs break-all sm:text-sm;
+	word-break: break-all;
 }
 
 .content-markdown pre {
-  @apply bg-muted p-2 sm:p-4 rounded mb-4 overflow-x-auto text-xs sm:text-sm;
-  max-width: 100%;
+	@apply bg-muted mb-4 overflow-x-auto rounded p-2 text-xs sm:p-4 sm:text-sm;
+	max-width: 100%;
 }
 
 .content-markdown pre code {
-  @apply bg-transparent p-0;
-  word-break: normal;
+	@apply bg-transparent p-0;
+	word-break: normal;
 }
 
 .content-markdown table {
-  @apply w-full mb-4 border-collapse;
-  font-size: 0.875rem;
+	@apply mb-4 w-full border-collapse;
+	font-size: 0.875rem;
 }
 
 .content-markdown th,
 .content-markdown td {
-  @apply border border-border px-2 sm:px-4 py-2 text-left break-words;
+	@apply border-border border px-2 py-2 text-left break-words sm:px-4;
 }
 
 .content-markdown th {
-  @apply bg-muted font-medium;
+	@apply bg-muted font-medium;
 }
 
 .content-markdown img {
-  @apply max-w-full h-auto mb-4 rounded;
+	@apply mb-4 h-auto max-w-full rounded;
 }
 
 .content-markdown strong {
-  @apply font-semibold;
+	@apply font-semibold;
 }
 
 .content-markdown em {
-  @apply italic;
+	@apply italic;
 }
 
 /* Responsive table wrapper */
 .content-markdown table {
-  @apply block overflow-x-auto whitespace-nowrap;
+	@apply block overflow-x-auto whitespace-nowrap;
 }
 
 @media (min-width: 640px) {
-  .content-markdown table {
-    @apply table whitespace-normal;
-  }
+	.content-markdown table {
+		@apply table whitespace-normal;
+	}
 }

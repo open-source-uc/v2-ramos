@@ -4,33 +4,32 @@ about: Sugiere una idea para el proyecto
 title: '[FEAT]: '
 labels: enhancement
 assignees: ''
-
 ---
 
 ## Historia de Usuario
 
-Como *[tipo de usuario]* en el sitio web, quiero *[acción que desea realizar]*, para así *[beneficio o propósito]*.
+Como _[tipo de usuario]_ en el sitio web, quiero _[acción que desea realizar]_, para así _[beneficio o propósito]_.
 
-**Objetivo final del usuario:** *[Qué quiere lograr el usuario en términos personales o académicos]*
+**Objetivo final del usuario:** _[Qué quiere lograr el usuario en términos personales o académicos]_
 
-**Objetivo final del negocio:** *[Cómo esta funcionalidad beneficia a la plataforma]*
+**Objetivo final del negocio:** _[Cómo esta funcionalidad beneficia a la plataforma]_
 
 ## 📝 Criterios de Aceptación
 
-- [ ] *[Comportamiento esperado del sistema o funcionalidad clave 1]*
-- [ ] *[Comportamiento esperado del sistema o funcionalidad clave 2]*
-- [ ] *[Validaciones o reglas específicas que deben cumplirse]*
-- [ ] *[Acciones que puede realizar el usuario con la funcionalidad]*
-- [ ] *[Formatos o integraciones esperadas]*
-- [ ] *[Condiciones límite o excepciones que deben considerarse]*
+- [ ] _[Comportamiento esperado del sistema o funcionalidad clave 1]_
+- [ ] _[Comportamiento esperado del sistema o funcionalidad clave 2]_
+- [ ] _[Validaciones o reglas específicas que deben cumplirse]_
+- [ ] _[Acciones que puede realizar el usuario con la funcionalidad]_
+- [ ] _[Formatos o integraciones esperadas]_
+- [ ] _[Condiciones límite o excepciones que deben considerarse]_
 
 ## 📂 Comentarios Adicionales
 
-- *[Consideraciones técnicas, de diseño o experiencia de usuario importantes]*
-- *[Sugerencias para mejorar la funcionalidad en el futuro]*
-- *[Restricciones del sistema o dependencias con otros módulos]*
-- *[Ideas opcionales para enriquecer la experiencia del usuario]*
+- _[Consideraciones técnicas, de diseño o experiencia de usuario importantes]_
+- _[Sugerencias para mejorar la funcionalidad en el futuro]_
+- _[Restricciones del sistema o dependencias con otros módulos]_
+- _[Ideas opcionales para enriquecer la experiencia del usuario]_
 
 ---
 
-> ✅ *Usar este template como guía para redactar historias claras, orientadas a mejorar la experiencia del estudiante y alinear el desarrollo con objetivos del producto.*
+> ✅ _Usar este template como guía para redactar historias claras, orientadas a mejorar la experiencia del estudiante y alinear el desarrollo con objetivos del producto._

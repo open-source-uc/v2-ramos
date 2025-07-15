@@ -21,33 +21,39 @@ src/styles/
 ## Desglose de Componentes
 
 ### `global.css`
+
 - Punto de entrada principal que importa todos los otros archivos CSS
 - Importa dependencias externas (Tailwind, fuentes, etc.)
 - Solo debe contener importaciones, no estilos reales
 
 ### `variables.css`
+
 - Propiedades personalizadas CSS y tokens de diseño
 - Definiciones de colores para tema claro (`:root`)
 - Valores de radio y breakpoints
 - Variables base del tema utilizadas en toda la aplicación
 
 ### `base.css`
+
 - Reset CSS y estilos de elementos base
 - Mejoras de accesibilidad (estilos de foco, soporte para movimiento reducido)
 - Reglas de tipografía y layout por defecto
 - Utilidades para lectores de pantalla
 
 ### `themes/dark.css`
+
 - Sobreescrituras de colores del tema oscuro
 - Filtros de imagen específicos para modo oscuro
 - Optimizaciones para legibilidad en modo oscuro
 
 ### `themes/high-contrast.css`
+
 - Tema de alto contraste para modo claro
 - Bordes mejorados y ratios de contraste
 - Combinaciones de colores compatibles con WCAG
 
 ### `themes/high-contrast-dark.css`
+
 - Tema de alto contraste específico para modo oscuro
 - Se activa automáticamente cuando `.dark` y `.high-contrast` están presentes
 - Máximo contraste con fondo negro y texto blanco
@@ -65,12 +71,14 @@ El sistema de temas funciona de la siguiente manera:
 Los usuarios pueden combinar libremente modo oscuro y alto contraste, y el sistema aplicará automáticamente la combinación correcta.
 
 ### `components/markdown.css`
+
 - Estilos específicamente para contenido markdown renderizado
 - Jerarquía tipográfica para elementos markdown
 - Manejo responsivo de tablas
 - Estilos para bloques de código
 
 ### `utilities.css`
+
 - Clases utilitarias como line-clamp
 - Clases helper que pueden reutilizarse entre componentes
 
@@ -85,15 +93,19 @@ Los usuarios pueden combinar libremente modo oscuro y alto contraste, y el siste
 ## Agregar Nuevos Estilos
 
 ### Para nuevos temas:
+
 Crea un nuevo archivo en `themes/` e impórtalo en `global.css`
 
 ### Para nuevos componentes:
+
 Crea un nuevo archivo en `components/` e impórtalo en `global.css`
 
 ### Para utilidades:
+
 Agrégalas a `utilities.css`
 
 ### Para variables:
+
 Agrégalas a `variables.css`
 
 ## Consejos de Desarrollo

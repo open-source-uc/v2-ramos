@@ -1,18 +1,18 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
-import { SearchableRecommendationsDisplay } from "../../components/features/catalog/SearchableRecommendationsDisplay";
+import Layout from '../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { SearchableRecommendationsDisplay } from '../../components/features/catalog/SearchableRecommendationsDisplay'
 
-const recommendations = await getCollection("recommendations");
-const searchParam = Astro.url.searchParams.get("search") || "";
+const recommendations = await getCollection('recommendations')
+const searchParam = Astro.url.searchParams.get('search') || ''
 ---
 
 <Layout>
-  <main class="container mx-auto py-4">
-    <SearchableRecommendationsDisplay
-      recommendations={recommendations}
-      initialSearchValue={searchParam}
-      client:load
-    />
-  </main>
+	<main class="container mx-auto py-4">
+		<SearchableRecommendationsDisplay
+			recommendations={recommendations}
+			initialSearchValue={searchParam}
+			client:load
+		/>
+	</main>
 </Layout>

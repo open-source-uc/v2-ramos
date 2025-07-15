@@ -1,79 +1,61 @@
 ---
-import { actions, isInputError } from "astro:actions";
-import Layout from "@/layouts/Layout.astro";
+import { actions, isInputError } from 'astro:actions'
+import Layout from '@/layouts/Layout.astro'
 
-const { sigle, reviewId } = Astro.params;
+const { sigle, reviewId } = Astro.params
 
 if (!sigle || !reviewId) {
-    throw new Error("Sigle and reviewId are required parameters.");
+	throw new Error('Sigle and reviewId are required parameters.')
 }
 
-const result = Astro.getActionResult(actions.deleteCourseReview);
-const inputErrors = isInputError(result?.error) ? result.error.fields : {};
-const successMessage = result?.data?.message;
+const result = Astro.getActionResult(actions.deleteCourseReview)
+const inputErrors = isInputError(result?.error) ? result.error.fields : {}
+const successMessage = result?.data?.message
 ---
 
 <Layout>
-    <div class="max-w-lg mx-auto mt-16 bg-white shadow-lg rounded-lg p-8">
-        <h1 class="text-xl font-semibold text-gray-800 mb-4">
-            Eliminar Reseña
-        </h1>
-        <p class="text-gray-700 mb-6">
-            Esta acción es <span class="font-semibold text-red-600"
-                >irreversible</span
-            >. ¿Estás seguro de que deseas eliminar tu reseña del curso <strong
-                >{sigle}</strong
-            >?
-        </p>
+	<div class="mx-auto mt-16 max-w-lg rounded-lg bg-white p-8 shadow-lg">
+		<h1 class="mb-4 text-xl font-semibold text-gray-800">Eliminar Reseña</h1>
+		<p class="mb-6 text-gray-700">
+			Esta acción es <span class="font-semibold text-red-600">irreversible</span>. ¿Estás seguro de
+			que deseas eliminar tu reseña del curso <strong>{sigle}</strong>?
+		</p>
 
-        {/* Mensaje de éxito */}
-        {
-            successMessage && (
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-                    <p class="font-medium">{successMessage}</p>
-                </div>
-            )
-        }
+		{/* Mensaje de éxito */}
+		{
+			successMessage && (
+				<div class="mb-4 rounded-md border border-green-400 bg-green-100 p-4 text-green-700">
+					<p class="font-medium">{successMessage}</p>
+				</div>
+			)
+		}
 
-        {/* Mensaje de error general */}
-        {
-            !isInputError(result?.error) && result?.error?.message && (
-                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                    <p class="font-medium">{result.error.message}</p>
-                </div>
-            )
-        }
+		{/* Mensaje de error general */}
+		{
+			!isInputError(result?.error) && result?.error?.message && (
+				<div class="mb-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700">
+					<p class="font-medium">{result.error.message}</p>
+				</div>
+			)
+		}
 
-        <form
-            action={actions.deleteCourseReview}
-            method="POST"
-            class="space-y-4"
-        >
-            <input type="hidden" name="review_id" value={parseInt(reviewId)} />
+		<form action={actions.deleteCourseReview} method="POST" class="space-y-4">
+			<input type="hidden" name="review_id" value={parseInt(reviewId)} />
 
-            {/* Error del campo review_id */}
-            {
-                inputErrors.review_id && (
-                    <p class="text-sm text-red-600 mt-1">
-                        {inputErrors.review_id}
-                    </p>
-                )
-            }
+			{/* Error del campo review_id */}
+			{inputErrors.review_id && <p class="mt-1 text-sm text-red-600">{inputErrors.review_id}</p>}
 
-            <div class="flex justify-between items-center pt-4 border-t">
-                <a
-                    href={`/${sigle}/`}
-                    class="text-gray-600 hover:text-gray-800 transition font-medium"
-                >
-                    ← Regresar al curso
-                </a>
-                <button
-                    type="submit"
-                    class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
-                >
-                    Eliminar Reseña
-                </button>
-            </div>
-        </form>
-    </div>
+			<div class="flex items-center justify-between border-t pt-4">
+				<a href={`/${sigle}/`} class="font-medium text-gray-600 transition hover:text-gray-800">
+					← Regresar al curso
+				</a>
+				<button
+					type="submit"
+					class="rounded-md bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
+				>
+					Eliminar Reseña
+				</button>
+			</div>
+		</form>
+	</div>
 </Layout>
