@@ -20,9 +20,9 @@ import type { ScheduleMatrix, CourseSections } from "@/types";
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { SearchIcon, SelectionIcon, LockClosedIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon, ShuffleIcon} from "@/components/icons/icons";
+import { SearchIcon, SelectionIcon, LockClosedIcon, ColorIcon, LockOpenIcon, CalendarIcon, CloseIcon, CheckIcon, ShuffleIcon} from "@/components/icons/icons";
 import { cn } from "@/lib/utils";
-import { getClassTypeLong } from "./ScheduleLegend";
+import { getClassTypeLong, getClassTypeColor } from "./ScheduleLegend";
 import { Search } from "@/components/features/search/SearchInput";
 import { useFuseSearch } from "@/components/hooks/useFuseSearch";
 import {
@@ -166,13 +166,15 @@ function ScheduleGrid({
   selectedCourses,
   courseSectionsData,
   courseOptions,
-  onApplySuggestions
+  onApplySuggestions,
+  colorMode
 }: { 
   matrix: ScheduleMatrix;
   selectedCourses: string[];
   courseSectionsData: CourseSections;
   courseOptions: CourseOption[];
   onApplySuggestions: (newCourses: string[]) => void;
+  colorMode: 'course' | 'class-type';
 }) {
   const conflicts = detectScheduleConflicts(matrix);
   const hasConflicts = conflicts.length > 0;
@@ -216,7 +218,9 @@ function ScheduleGrid({
                   >
                     {classes.map((classInfo, index) => {
                       const courseIndex = selectedCourses.findIndex(c => c === `${classInfo.courseId}-${classInfo.section}`);
-                      const colorVariant = COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length];
+                      const colorVariant = colorMode === 'class-type' 
+                        ? getClassTypeColor(classInfo.type)
+                        : COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length];
                       
                       return (
                         <div
@@ -279,6 +283,7 @@ function ScheduleGrid({
 // Main component
 export default function ScheduleCreator() {
   const [locked, setLocked] = useState(false);
+  const [colorMode, setColorMode] = useState<'course' | 'class-type'>('course');
   const [selectedCourses, setSelectedCourses] = useState<string[]>(() => getSavedCourses());
   const [isShuffling, setIsShuffling] = useState(false);
   const hookResult = useCoursesSections();
@@ -383,6 +388,20 @@ export default function ScheduleCreator() {
   };
 
   const getCourseColor = (courseId: string) => {
+    if (colorMode === 'class-type') {
+      // Get the class type from the first schedule block of this course section
+      const [sigle, section] = courseId.split('-');
+      const courseSection = courseSectionsData[sigle]?.[section];
+      if (courseSection?.schedule) {
+        const firstScheduleKey = Object.keys(courseSection.schedule)[0];
+        if (firstScheduleKey) {
+          const [type] = courseSection.schedule[firstScheduleKey];
+          return getClassTypeColor(type);
+        }
+      }
+      return "schedule_blue";
+    }
+    
     const index = selectedCourses.indexOf(courseId);
     return index >= 0 ? COLOR_VARIANTS[index % COLOR_VARIANTS.length] : "schedule_blue";
   };
@@ -450,6 +469,15 @@ export default function ScheduleCreator() {
                       "h-5 w-5 text-muted-foreground transition-transform",
                       isShuffling && "animate-spin"
                     )} />
+                  </Button>
+                  <Button
+                    onClick={() => setColorMode(colorMode === 'course' ? 'class-type' : 'course')}
+                    aria-label={colorMode === 'course' ? "Change to class type colors" : "Change to course colors"}
+                    variant="ghost_border"
+                    size="icon"
+                    title={colorMode === 'course' ? "Cambiar a colores por tipo de clase" : "Cambiar a colores por curso"}
+                  >
+                    <ColorIcon className="h-5 w-5 text-muted-foreground" />
                   </Button>
                   <Button
                     onClick={() => setLocked(!locked)}
@@ -529,6 +557,7 @@ export default function ScheduleCreator() {
                   courseSectionsData={courseSectionsData}
                   courseOptions={courseOptions}
                   onApplySuggestions={handleApplySuggestions}
+                  colorMode={colorMode}
                 />
               ) : (
                 <div className="text-center py-12">
