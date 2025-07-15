@@ -477,7 +477,7 @@ export function SearchableTableDisplay({ initialSearchValue = '' }: SearchableTa
 
 										{/* Semester Filter */}
 										<div className="space-y-2">
-											<label className="text-foreground text-sm font-medium">Último Semestre</label>
+											<label className="text-foreground text-sm font-medium">Último Semestre Impartido</label>
 											<Combobox
 												options={semesterOptions}
 												value={selectedSemester}
