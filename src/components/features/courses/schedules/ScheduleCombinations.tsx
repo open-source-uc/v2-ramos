@@ -8,7 +8,7 @@ import {
 import { Pill } from "@/components/ui/pill";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import type { ScheduleMatrix, CourseSections } from "@/types";
+import type { CourseSections } from "@/types";
 import { 
   createScheduleMatrix, 
   TIME_SLOTS, 
@@ -16,7 +16,6 @@ import {
   detectScheduleConflicts,
   getAvailableSections 
 } from "@/lib/scheduleMatrix";
-import { saveCourses } from "@/lib/scheduleStorage";
 import { getClassTypeColor, getClassTypeShort } from "./ScheduleLegend";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +36,7 @@ interface CombinationInfo {
 function generateAllCombinations(
   selectedCourses: string[],
   courseSections: CourseSections,
-  maxCombinations: number = 20
+  maxToReturn: number = 12
 ): CombinationInfo[] {
   if (selectedCourses.length === 0) return [];
 
@@ -49,7 +48,7 @@ function generateAllCombinations(
     courseOptionsMap[courseId] = availableSections;
   });
 
-  // Generate all combinations
+  // Generate ALL combinations first (no early termination)
   const combinations: string[][] = [];
   
   function generateRecursive(currentCombination: string[], courseIndex: number) {
@@ -58,13 +57,10 @@ function generateAllCombinations(
       return;
     }
 
-    if (combinations.length >= maxCombinations) return;
-
     const [courseId] = selectedCourses[courseIndex].split('-');
     const availableSections = courseOptionsMap[courseId] || [];
 
     for (const section of availableSections) {
-      if (combinations.length >= maxCombinations) break;
       currentCombination[courseIndex] = `${courseId}-${section}`;
       generateRecursive(currentCombination, courseIndex + 1);
     }
@@ -72,7 +68,7 @@ function generateAllCombinations(
 
   generateRecursive(new Array(selectedCourses.length), 0);
 
-  // Calculate conflicts for each combination and sort
+  // Calculate conflicts for each combination
   const combinationsWithInfo: CombinationInfo[] = combinations.map((combination, index) => {
     const matrix = createScheduleMatrix(courseSections, combination);
     const conflicts = detectScheduleConflicts(matrix);
@@ -84,13 +80,15 @@ function generateAllCombinations(
     };
   });
 
-  // Sort by conflicts (best first), then by course order
-  return combinationsWithInfo.sort((a, b) => {
-    if (a.conflicts !== b.conflicts) {
-      return a.conflicts - b.conflicts;
-    }
-    return a.courses.join('').localeCompare(b.courses.join(''));
-  });
+  // Sort by conflicts (best first), then by course order, and take only the best ones
+  return combinationsWithInfo
+    .sort((a, b) => {
+      if (a.conflicts !== b.conflicts) {
+        return a.conflicts - b.conflicts;
+      }
+      return a.courses.join('').localeCompare(b.courses.join(''));
+    })
+    .slice(0, maxToReturn);
 }
 
 function CombinationGrid({ 
@@ -107,7 +105,6 @@ function CombinationGrid({
   index: number;
 }) {
   const matrix = createScheduleMatrix(courseSections, combination.courses);
-  const conflicts = detectScheduleConflicts(matrix);
   
   // Check if there are Saturday classes
   const hasSaturdayClasses = TIME_SLOTS.some((_, timeIndex) =>
