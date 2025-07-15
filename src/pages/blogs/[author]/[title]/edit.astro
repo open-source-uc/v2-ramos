@@ -1,0 +1,42 @@
+---
+import { getToken } from '@/lib/auth'
+import Layout from '@/layouts/Layout.astro'
+import config from '@/lib/const'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { createSlug } from '@/lib/utils'
+import type { Blogs, Organization } from '@/types'
+import { OsucPermissions } from '@/types/permissions'
+
+export async function getStaticPaths() {
+	const response = await fetch(new URL('/api/blogs', config.BASEURL))
+	const blogs: Blogs[] = await response.json()
+	return blogs.map((blog) => ({
+		params: {
+			author: createSlug(blog.organization_name),
+			title: createSlug(blog.title),
+		},
+		props: { blog },
+	}))
+}
+
+const { blog } = Astro.props
+const token = getToken(Astro.cookies)
+const userData = await getUserDataByToken(token)
+const blogUrl = `/blogs/${createSlug(blog.organization_name)}/${createSlug(blog.title)}`
+console.log('userData', userData, 'blog', blog)
+if (!userData) {
+	return Astro.redirect(blogUrl)
+}
+
+if (
+	String(userData.id) !== String(blog.user_id) ||
+	!userData.permissions.includes(OsucPermissions.userCanCreateBlogs)
+) {
+	return Astro.redirect(blogUrl)
+}
+
+const organizationRes = await fetch(`${config.AUTHURL}/api/organization/${blog.organization_id}`)
+const organizationData = (await organizationRes.json()) as Organization
+---
+
+<Layout> eto funciona </Layout>

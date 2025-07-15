@@ -5,14 +5,14 @@ import Layout from '@/layouts/Layout.astro'
 import { createSlug } from '@/lib/utils'
 import type { Blogs, Organization } from '@/types'
 import { MarkdownReviewView } from '@/components'
-import { getUserDataByToken } from '@/lib/server/auth'
+import ConditionalEdit from '@/components/features/article/ConditionalEdit.tsx'
+import config from '@/lib/const'
 import { getToken } from '@/lib/auth'
-import { OsucPermissions } from '@/types/permissions'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-	const response = await fetch('http://localhost:4321/api/blogs')
+	const response = await fetch(new URL('/api/blogs', config.BASEURL))
 	const blogs: Blogs[] = await response.json()
 	return blogs.map((blog) => ({
 		params: {
@@ -24,15 +24,6 @@ export async function getStaticPaths() {
 }
 
 const { blog } = Astro.props
-const token = getToken(Astro.cookies)
-const userData = await getUserDataByToken(token)
-let showButton = false
-if (token) {
-	showButton =
-		Number(userData?.id) === blog.user_id ||
-		(Array.isArray(userData?.permissions) &&
-			userData.permissions.includes(OsucPermissions.userIsRoot))
-}
 const organizationRes = await fetch(
 	`http://localhost:4322/api/organization/${blog.organization_id}`
 )
@@ -40,6 +31,7 @@ const organizationData = (await organizationRes.json()) as Organization
 ---
 
 <Layout>
+	<ConditionalEdit blogTitle={blog.title} blogUserId={blog.user_id} client:only="react" />
 	<ContentPage
 		contentData={blog}
 		organizationData={organizationData}
@@ -52,7 +44,6 @@ const organizationData = (await organizationRes.json()) as Organization
 			buttonText: 'Ver Más Blogs',
 			buttonHref: '/blogs',
 		}}
-		showEditButton={showButton}
 	>
 		<MarkdownReviewView path={blog.content_path} client:load />
 	</ContentPage>

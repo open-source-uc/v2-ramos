@@ -14,9 +14,7 @@ interface Props {
 		buttonText: string
 		buttonHref: string
 	}
-	showEditButton?: boolean
 }
-let { showEditButton } = Astro.props
 const {
 	contentData,
 	organizationData,
@@ -72,7 +70,6 @@ const defaultNavigationSection = isResource
 			}
 
 const finalNavigationSection = navigationSection || defaultNavigationSection
-showEditButton = false
 ---
 
 <div class="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-8 sm:px-6">
@@ -89,17 +86,6 @@ showEditButton = false
 			<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">
 				{contentData.title}
 			</h1>
-			{
-				showEditButton && (
-					<a
-						href="#"
-						class="inline-flex items-center gap-2 rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-						aria-label="Editar reseña"
-					>
-						✏️ Editar
-					</a>
-				)
-			}
 		</div>
 		<div class="mt-2 flex items-center gap-3 overflow-hidden">
 			<a

@@ -820,6 +820,134 @@ export const server = {
 		},
 	}),
 
+	updateBlog: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive(),
+			title: z.string().min(1).max(255),
+			tags: z.array(z.string()).optional(),
+			readtime: z.number().int().positive(),
+			content: z.string().min(1),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para actualizar un blog',
+				})
+			}
+
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar blogs',
+				})
+			}
+
+			try {
+				// Verificar que el blog existe y que el usuario es el dueño
+				const existingBlog = await locals.runtime.env.DB.prepare(
+					'SELECT id, user_id, title, content_path FROM blogs WHERE id = ?'
+				)
+					.bind(state.id)
+					.first()
+
+				if (!existingBlog) {
+					throw new ActionError({
+						code: 'NOT_FOUND',
+						message: 'Blog no encontrado',
+					})
+				}
+
+				if (existingBlog.user_id !== userId) {
+					throw new ActionError({
+						code: 'FORBIDDEN',
+						message: 'No tienes permisos para actualizar este blog',
+					})
+				}
+
+				// Verificar si existe otro blog con el mismo título (excluyendo el actual)
+				const duplicateBlog = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM blogs WHERE title = ? AND user_id = ? AND id != ?'
+				)
+					.bind(state.title, userId, state.id)
+					.first()
+
+				if (duplicateBlog) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya tienes otro blog con este título',
+					})
+				}
+
+				// Generar nuevo path para el archivo
+				const newFilePath = generateBlogPath(state.id)
+
+				// Subir el nuevo contenido a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, newFilePath)
+				if (!uploadSuccess) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido actualizado del blog',
+					})
+				}
+
+				// Actualizar el blog en la base de datos
+				const updateResult = await locals.runtime.env.DB.prepare(
+					`UPDATE blogs SET 
+					title = ?, 
+					readtime = ?, 
+					tags = ?, 
+					content_path = ?,
+					updated_at = CURRENT_TIMESTAMP
+				WHERE id = ?`
+				)
+					.bind(state.title, state.readtime, (state.tags ?? []).join(','), newFilePath, state.id)
+					.run()
+
+				if (!updateResult.success) {
+					// Si falla la actualización de la DB, limpiar el nuevo archivo de R2
+					await locals.runtime.env.R2.delete(newFilePath)
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar el blog en la base de datos',
+					})
+				}
+
+				// Eliminar el archivo anterior de R2 si existe y es diferente al nuevo
+				if (existingBlog.content_path && existingBlog.content_path !== newFilePath) {
+					try {
+						await locals.runtime.env.R2.delete(existingBlog.content_path as string)
+					} catch (error) {
+						// Log del error pero no fallar la operación
+						console.warn('Warning: Could not delete old file from R2:', error)
+					}
+				}
+
+				return {
+					message: 'Blog actualizado exitosamente',
+					code: 200,
+					blogId: state.id,
+					filePath: newFilePath,
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+				console.error('Error updating blog:', error)
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al actualizar el blog',
+				})
+			}
+		},
+	}),
+
 	createRecommendation: defineAction({
 		accept: 'form',
 		input: recommendationSchema,

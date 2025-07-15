@@ -4,6 +4,7 @@ import { ClockIcon, EditIcon } from '@/components/icons/icons'
 import { MarkdownReviewView } from '@/components/reviews/MarkdownReviewView'
 import Layout from '@/layouts/Layout.astro'
 import { getToken } from '@/lib/auth'
+import config from '@/lib/const'
 import { getUserDataByToken } from '@/lib/server/auth'
 import { createSlug } from '@/lib/utils'
 import type { Organization, Recommendations } from '@/types'
@@ -12,7 +13,7 @@ import { OsucPermissions } from '@/types/permissions'
 export const prerender = true
 
 export async function getStaticPaths() {
-	const response = await fetch('http://localhost:4321/api/recommendations')
+	const response = await fetch(new URL('/api/recommendations', config.BASEURL))
 	const recommendations: Recommendations[] = await response.json()
 	return recommendations.map((recommendation) => ({
 		params: {
