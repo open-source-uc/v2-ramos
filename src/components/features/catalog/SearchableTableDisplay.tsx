@@ -20,6 +20,7 @@ interface SearchableTableDisplayProps {
 export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTableDisplayProps) {
   const [searchValue, setSearchValue] = useState(initialSearchValue)
   const [selectedArea, setSelectedArea] = useState<string>("all")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedSchool, setSelectedSchool] = useState<string>("all")
   const [selectedCampus, setSelectedCampus] = useState<string>("all")
   const [selectedFormat, setSelectedFormat] = useState<string>("all")
@@ -96,6 +97,14 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     return Array.from(new Set(areas)).sort();
   }, [courses]);
 
+  // Get unique categories from the data
+  const uniqueCategories = useMemo(() => {
+    const categories = courses
+      .map((course) => course.category)
+      .filter((category) => category && category.trim() !== ""); // Filter out null/undefined and empty strings
+    return Array.from(new Set(categories)).sort();
+  }, [courses]);
+
   // Get unique campuses from the data
   const uniqueCampuses = useMemo(() => {
     const campuses = courses
@@ -155,6 +164,19 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     
     return options;
   }, [uniqueAreas]);
+
+  // Convert unique categories to combobox options
+  const categoryOptions = useMemo((): ComboboxOption[] => {
+    const options: ComboboxOption[] = [
+      { value: "all", label: "Todas las categorías" }
+    ];
+    
+    uniqueCategories.forEach((category) => {
+      options.push({ value: category, label: category });
+    });
+    
+    return options;
+  }, [uniqueCategories]);
 
   // Convert unique schools to combobox options
   const schoolOptions = useMemo((): ComboboxOption[] => {
@@ -218,6 +240,10 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
       filtered = filtered.filter((course) => course.area === selectedArea);
     }
 
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((course) => course.category === selectedCategory);
+    }
+
     if (selectedCampus !== "all") {
       filtered = filtered.filter((course) => {
         const campusArray = course.campus || [];
@@ -259,7 +285,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     }
 
     return filtered;
-  }, [courses, selectedArea, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
+  }, [courses, selectedArea, selectedCategory, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
 
   // Add debounced search effect
   useEffect(() => {
@@ -279,6 +305,10 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
 
   const handleAreaChange = (value: string) => {
     setSelectedArea(value);
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
   };
 
   const handleCampusChange = (value: string) => {
@@ -309,6 +339,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (selectedArea !== "all") count++;
+    if (selectedCategory !== "all") count++;
     if (selectedCampus !== "all") count++;
     if (selectedSchool !== "all") count++;
     if (selectedFormat !== "all") count++;
@@ -316,7 +347,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
     if (showRetirableOnly) count++;
     if (showEnglishOnly) count++;
     return count;
-  }, [selectedArea, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
+  }, [selectedArea, selectedCategory, selectedCampus, selectedSchool, selectedFormat, selectedSemester, showRetirableOnly, showEnglishOnly]);
 
   return (
     <div className="container mx-auto py-4">
@@ -391,6 +422,25 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                 <div className="p-6 space-y-6">
                   {/* Filter Grid */}
                   <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+                    {/* Semester Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Último Semestre</label>
+                      <Combobox
+                        options={semesterOptions}
+                        value={selectedSemester}
+                        onValueChange={handleSemesterChange}
+                        placeholder="Seleccionar semestre"
+                        searchPlaceholder="Buscar semestre..."
+                        emptyMessage="No se encontraron semestres."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedSemester !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Último Semestre"
+                      />
+                    </div>
+                    
                     {/* Campus Filter */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Campus</label>
@@ -429,6 +479,25 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                       />
                     </div>
 
+                    {/* Category Filter */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Categoría</label>
+                      <Combobox
+                        options={categoryOptions}
+                        value={selectedCategory}
+                        onValueChange={handleCategoryChange}
+                        placeholder="Seleccionar categoría"
+                        searchPlaceholder="Buscar categoría..."
+                        emptyMessage="No se encontraron categorías."
+                        className="w-full"
+                        buttonClassName={cn(
+                          selectedCategory !== "all" &&
+                          "bg-primary-foreground text-primary border border-primary"
+                        )}
+                        aria-label="Filtrar por Categoría"
+                      />
+                    </div>
+
                     {/* School Filter */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Unidad Académica</label>
@@ -464,25 +533,6 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                           "bg-primary-foreground text-primary border border-primary"
                         )}
                         aria-label="Filtrar por Formato"
-                      />
-                    </div>
-
-                    {/* Semester Filter */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-foreground">Último Semestre</label>
-                      <Combobox
-                        options={semesterOptions}
-                        value={selectedSemester}
-                        onValueChange={handleSemesterChange}
-                        placeholder="Seleccionar semestre"
-                        searchPlaceholder="Buscar semestre..."
-                        emptyMessage="No se encontraron semestres."
-                        className="w-full"
-                        buttonClassName={cn(
-                          selectedSemester !== "all" &&
-                          "bg-primary-foreground text-primary border border-primary"
-                        )}
-                        aria-label="Filtrar por Último Semestre"
                       />
                     </div>
                   </div>
@@ -531,6 +581,7 @@ export function SearchableTableDisplay({ initialSearchValue = "" }: SearchableTa
                         icon={CloseIcon}
                         onClick={() => {
                           setSelectedArea("all");
+                          setSelectedCategory("all");
                           setSelectedCampus("all");
                           setSelectedSchool("all");
                           setSelectedFormat("all");
