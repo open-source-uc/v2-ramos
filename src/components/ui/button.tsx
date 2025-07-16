@@ -11,7 +11,7 @@ const buttonVariants = cva(
 			variant: {
 				default:
 					'bg-primary text-background border border-border hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground',
-				destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+				destructive: 'bg-destructive text-destructive-foreground hover:bg-red-800',
 				outline: 'border border-border bg-accent hover:bg-muted hover:text-muted-foreground',
 				secondary: 'bg-muted text-muted-foreground hover:bg-muted/80',
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
@@ -162,11 +162,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 					role="button"
 					tabIndex={isDisabled ? -1 : 0}
 					aria-disabled={isDisabled}
-					onClick={
-						isDisabled
-							? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
-							: (onClick as any)
-					}
+					// ...existing code...
 					{...(restProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
 				>
 					{content}
@@ -179,6 +175,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 				{...commonProps}
 				disabled={isDisabled}
 				aria-disabled={isDisabled}
+				// ...existing code...
 				{...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
 			>
 				{content}

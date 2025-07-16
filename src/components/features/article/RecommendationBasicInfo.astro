@@ -1,21 +1,21 @@
 ---
-import Combox from '@/components/common/Combox.astro';
+import Combox from '@/components/common/Combox.astro'
 
 interface Props {
-	title?: string;
-	user: any;
-	organization_id?: string;
-	organization_name?: string;
-	period_time?: string;
-	qualification?: number;
-	code?: string;
-	readtime?: number;
-	message?: string;
-	messageType?: 'success' | 'error';
+	title?: string
+	user: any
+	organization_id?: string
+	organization_name?: string
+	period_time?: string
+	qualification?: number
+	code?: string
+	readtime?: number
+	message?: string
+	messageType?: 'success' | 'error'
 }
 
 const {
-	title='',
+	title = '',
 	user,
 	organization_id,
 	organization_name,
@@ -25,135 +25,143 @@ const {
 	code,
 	message = '',
 	messageType = 'success',
-} = Astro.props as Props;
+} = Astro.props as Props
 ---
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-							<div class="min-w-0 space-y-2">
-								<label class="text-foreground block text-sm font-medium">
-									Título de la recomendación <span class="text-red-500">*</span>
-								</label>
-								<input
-									name="title"
-									value={`${title}`}
-									placeholder="Ingrese el título de la recomendación"
-									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
-									required
-								/>
-							</div>
-<div class="min-w-0 space-y-2">
-	<label class="text-foreground block text-sm font-medium">
-		Organización <span class="text-red-500">*</span>
-	</label>
-	{organization_id && organization_name ? (
-	  <input
-		name="organization_id"
-		value={organization_name}
-		readonly
-		disabled
-		class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 hover:cursor-not-allowed"
-		required
-	  />
-	) : (
-	  <select
-		name="organization_id"
-		class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
-		required
-	  >
-		<option value="" disabled selected>Seleccione una organización</option>
-		{user.organizations.map((org) => <option value={org.id}>{org.name}</option>)}
-	  </select>
-	)}
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Título de la recomendación <span class="text-red-500">*</span>
+		</label>
+		<input
+			name="title"
+			value={`${title}`}
+			placeholder="Ingrese el título de la recomendación"
+			class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+			required
+		/>
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Organización <span class="text-red-500">*</span>
+		</label>
+		{
+			organization_id && organization_name ? (
+				<input
+					name="organization_id"
+					value={organization_name}
+					readonly
+					disabled
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				/>
+			) : (
+				<select
+					name="organization_id"
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				>
+					<option value="" disabled selected>
+						Seleccione una organización
+					</option>
+					{user.organizations.map((org) => (
+						<option value={org.id}>{org.name}</option>
+					))}
+				</select>
+			)
+		}
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Período <span class="text-red-500">*</span>
+		</label>
+		{
+			period_time ? (
+				<input
+					name="period_time"
+					value={period_time}
+					readonly
+					disabled
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				/>
+			) : (
+				<input
+					name="period_time"
+					placeholder="Ej: 2024-1, 2024-2"
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				/>
+			)
+		}
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Tiempo de lectura <span class="text-red-500">*</span>
+		</label>
+		<div class="relative min-w-0">
+			<input
+				name="readtime"
+				value={`${readtime || ''}`}
+				type="number"
+				min="1"
+				max="60"
+				placeholder="5"
+				class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 pr-12 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+				required
+				oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
+			/>
+			<span
+				class="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transform text-sm"
+			>
+				min
+			</span>
+		</div>
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Código del curso <span class="text-red-500">*</span>
+		</label>
+		{
+			code ? (
+				<input
+					name="code"
+					value={code}
+					readonly
+					disabled
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				/>
+			) : (
+				<Combox
+					name="code"
+					required
+					placeholder="Selecciona el curso..."
+					searchPlaceholder="Buscar por código o nombre..."
+					emptyMessage="No se encontraron cursos."
+					options={Object.entries(
+						await import('/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json')
+					).map(([sigle, data]) => ({
+						value: sigle,
+						label: `${sigle} - ${data.name}`,
+					}))}
+				/>
+			)
+		}
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium"
+			>Clasificación <span class="text-red-500">*</span></label
+		>
+		<input
+			type="number"
+			min="1"
+			max="5"
+			value={`${qualification || ''}`}
+			name="qualification"
+			placeholder="Ingrese la clasificación del curso (1-5)"
+			class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+			required
+		/>
+	</div>
 </div>
-<div class="min-w-0 space-y-2">
-	<label class="text-foreground block text-sm font-medium">
-		Período <span class="text-red-500">*</span>
-	</label>
-	{period_time ? (
-	  <input
-		name="period_time"
-		value={period_time}
-		readonly
-		disabled
-		class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 hover:cursor-not-allowed"
-		required
-	  />
-	) : (
-	  <input
-		name="period_time"
-		placeholder="Ej: 2024-1, 2024-2"
-		class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
-		required
-	  />
-	)}
-</div>
-							<div class="min-w-0 space-y-2">
-								<label class="text-foreground block text-sm font-medium">
-									Tiempo de lectura <span class="text-red-500">*</span>
-								</label>
-								<div class="relative min-w-0">
-									<input
-										name="readtime"
-										value={`${readtime || ''}`}
-										type="number"
-										min="1"
-										max="60"
-										placeholder="5"
-										class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 pr-12 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-										required
-										oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
-									/>
-									<span
-										class="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transform text-sm"
-									>
-										min
-									</span>
-								</div>
-							</div>
-							<div class="min-w-0 space-y-2">
-								<label class="text-foreground block text-sm font-medium">
-									Código del curso <span class="text-red-500">*</span>
-								</label>
-{code ? (
-  <input
-	name="code"
-	value={code}
-	readonly
-	disabled
-	class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 hover:cursor-not-allowed"
-	required
-  />
-) : (
-  <Combox
-	name="code"
-	required
-	placeholder="Selecciona el curso..."
-	searchPlaceholder="Buscar por código o nombre..."
-	emptyMessage="No se encontraron cursos."
-	options={Object.entries(
-	  await import(
-		'/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json'
-	  )
-	).map(([sigle, data]) => ({
-	  value: sigle,
-	  label: `${sigle} - ${data.name}`,
-	}))}
-  />
-)}
-							</div>
-							<div class="min-w-0 space-y-2">
-								<label class="text-foreground block text-sm font-medium"
-									>Clasificación <span class="text-red-500">*</span></label
-								>
-								<input
-									type="number"
-									min="1"
-									max="5"
-									value={`${qualification || ''}`}
-									name="qualification"
-									placeholder="Ingrese la clasificación del curso (1-5)"
-									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-									required
-								/>
-							</div>
-						</div>

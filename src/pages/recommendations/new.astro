@@ -66,7 +66,10 @@ if (result && !result.error) {
 			)
 		}
 		<!-- Header Section -->
-		 <ContentHeader headerTitle='Crear una nueva recomendación' headerSubtitle='Comparte tus experiencias y conocimientos con la comunidad estudiantil' />
+		<ContentHeader
+			headerTitle="Crear una nueva recomendación"
+			headerSubtitle="Comparte tus experiencias y conocimientos con la comunidad estudiantil"
+		/>
 
 		<!-- Formulario Principal -->
 		<section aria-labelledby="form-title">
@@ -82,7 +85,7 @@ if (result && !result.error) {
 						action={actions.createRecommendation}
 					>
 						<!-- Información básica de la recomendación -->
-						<RecommendationBasicInfo user={user}/>
+						<RecommendationBasicInfo user={user} />
 						<!-- Separador -->
 						<div class="border-border border-t pt-4 sm:pt-6">
 							<div class="mb-4 space-y-2">

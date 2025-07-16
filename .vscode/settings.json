@@ -13,8 +13,8 @@
 	"[astro]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": false,
-        "editor.detectIndentation": false,
-        "editor.defaultFormatter": "astro-build.astro-vscode"
+		"editor.detectIndentation": false,
+		"editor.defaultFormatter": "astro-build.astro-vscode"
 	},
 	"[typescript]": {
 		"editor.tabSize": 2,

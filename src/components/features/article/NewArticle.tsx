@@ -1,14 +1,15 @@
 import { getUserDataByToken } from '@/lib/server/auth'
 import { createSlug } from '@/lib/utils'
+import { OsucPermissions } from '@/types/permissions'
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
-	articleId: number
-	articleUserId: number
 	contentType: 'blog' | 'recommendation' | 'resource'
+	className?: string
 }
 
-export default function ConditionalEdit({ articleId, articleUserId, contentType }: Props) {
+export default function ConditionalEdit({ contentType, className }: Props) {
 	const [userData, setUserData] = useState<any>(null)
 	const [cookie, setCookie] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
@@ -44,17 +45,26 @@ export default function ConditionalEdit({ articleId, articleUserId, contentType 
 	}
 
 	if (!userData) {
-		return <>{cookie}</> // o un mensaje de error
+		return null
 	}
 
-	if (userData.id === articleUserId) {
+	if (userData.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
 		const spanishContentType =
 			contentType === 'blog'
 				? 'blog'
 				: contentType === 'recommendation'
 					? 'recomendación'
 					: 'recurso'
-		return <a href={`/${contentType}s/edit/${articleId}`}>Editar {spanishContentType}</a>
+		const handleClick = () => {
+			window.location.href = `/${contentType}s/new`
+		}
+		return (
+			<div className={className}>
+				<Button onClick={handleClick} variant="default" size="default" type="button">
+					Crear {spanishContentType}
+				</Button>
+			</div>
+		)
 	}
 
 	return null

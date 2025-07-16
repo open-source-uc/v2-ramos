@@ -85,7 +85,7 @@ const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
 
 					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.createBlog}>
 						<!-- Información básica del blog -->
-						<BlogBasicInfo user={user} blogTags={tagsData}/>
+						<BlogBasicInfo user={user} blogTags={tagsData} />
 
 						<!-- Separador -->
 						<div class="border-border border-t pt-4 sm:pt-6">

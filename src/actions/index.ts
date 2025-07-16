@@ -974,6 +974,83 @@ export const server = {
 		},
 	}),
 
+	deleteBlog: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive('ID de blog inválido'),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para borrar un blog',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar blogs',
+				})
+			}
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+			const blogInBD = await locals.runtime.env.DB.prepare(
+				'SELECT user_id, content_path FROM blogs WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number; content_path: string | null }>()
+			if (!blogInBD) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Blog no encontrado',
+				})
+			}
+			if (blogInBD.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar este blog',
+				})
+			}
+
+			// Eliminar el blog de la base de datos
+			const deleteResult = await locals.runtime.env.DB.prepare('DELETE FROM blogs WHERE id = ?')
+				.bind(state.id)
+				.run()
+
+			if (!deleteResult.success) {
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error al borrar el blog',
+				})
+			}
+
+			// Eliminar el archivo de R2 si existe
+			if (blogInBD.content_path) {
+				try {
+					await locals.runtime.env.R2.delete(blogInBD.content_path as string)
+				} catch (error) {
+					// Log del error pero no fallar la operación
+					console.warn('Warning: Could not delete blog file from R2:', error)
+				}
+			}
+
+			return {
+				message: 'Blog borrado exitosamente',
+				code: 200,
+				blogId: state.id,
+			}
+		},
+	}),
+
 	createRecommendation: defineAction({
 		accept: 'form',
 		input: recommendationSchema,
@@ -1224,7 +1301,7 @@ export const server = {
 				if (!uploadSuccess) {
 					throw new ActionError({
 						code: 'INTERNAL_SERVER_ERROR',
-						message: 'Error al subir el contenido actualizado de la recomendación',	
+						message: 'Error al subir el contenido actualizado de la recomendación',
 					})
 				}
 
@@ -1253,7 +1330,10 @@ export const server = {
 					})
 				}
 				// Eliminar el archivo anterior de R2 si existe y es diferente al nuevo
-				if (existingRecommendation.content_path && existingRecommendation.content_path !== newFilePath) {
+				if (
+					existingRecommendation.content_path &&
+					existingRecommendation.content_path !== newFilePath
+				) {
 					try {
 						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
 					} catch (error) {
@@ -1277,6 +1357,85 @@ export const server = {
 					code: 'INTERNAL_SERVER_ERROR',
 					message: 'Error interno del servidor al actualizar la recomendación',
 				})
+			}
+		},
+	}),
+
+	deleteRecommendation: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive('ID de la recomendación inválido'),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para borrar una recomendación',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar recomendaciones',
+				})
+			}
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+			const recommendationInBD = await locals.runtime.env.DB.prepare(
+				'SELECT user_id, content_path FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number; content_path: string | null }>()
+			if (!recommendationInBD) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Recomendación no encontrada',
+				})
+			}
+			if (recommendationInBD.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar esta recomendación',
+				})
+			}
+
+			// Eliminar la recomendación de la base de datos
+			const deleteResult = await locals.runtime.env.DB.prepare(
+				'DELETE FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.run()
+
+			if (!deleteResult.success) {
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error al borrar la recomendación',
+				})
+			}
+
+			// Eliminar el archivo de R2 si existe
+			if (recommendationInBD.content_path) {
+				try {
+					await locals.runtime.env.R2.delete(recommendationInBD.content_path as string)
+				} catch (error) {
+					// Log del error pero no fallar la operación
+					console.warn('Warning: Could not delete recommendation file from R2:', error)
+				}
+			}
+
+			return {
+				message: 'Recomendación borrada exitosamente',
+				code: 200,
+				blogId: state.id,
 			}
 		},
 	}),

@@ -24,7 +24,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
       FROM recommendations
 			WHERE id = ?
     `
-		).bind(new URL(request.url).searchParams.get('id') || '')
+		)
+			.bind(new URL(request.url).searchParams.get('id') || '')
 			.all<Recommendations>()
 
 		return new Response(JSON.stringify(result.results), {

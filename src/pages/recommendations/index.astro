@@ -4,8 +4,12 @@ import { getCollection } from 'astro:content'
 import { SearchableRecommendationsDisplay } from '../../components/features/catalog/SearchableRecommendationsDisplay'
 import type { Recommendations } from '@/types'
 import ContentCard from '@/components/features/blog/BlogCard'
+import New from './new.astro'
+import NewArticle from '@/components/features/article/NewArticle'
 
-const recommendationsRespone = await fetch(new URL('/api/articles/recommendations', Astro.url.origin))
+const recommendationsRespone = await fetch(
+	new URL('/api/articles/recommendations', Astro.url.origin)
+)
 const recommendations: Recommendations[] = await recommendationsRespone.json()
 ---
 
@@ -17,6 +21,9 @@ const recommendations: Recommendations[] = await recommendationsRespone.json()
 			<h1 class="text-center text-3xl font-bold md:text-5xl">
 				Descubre las recomendaciones creadas por la comunidad
 			</h1>
+		</div>
+		<div class="flex justify-end md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4">
+			<NewArticle contentType="recommendation" className="mt-10 mr-2" client:only="react" />
 		</div>
 		{
 			recommendations.map((rec) => (

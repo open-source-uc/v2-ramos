@@ -82,7 +82,12 @@ const finalNavigationSection = navigationSection || defaultNavigationSection
 		>
 			← Ver más {contentTypeLabel}
 		</a>
-		<ConditionalEdit articleId={contentData.id} articleUserId={contentData.user_id} contentType={contentType}  client:only="react" />
+		<ConditionalEdit
+			articleId={contentData.id}
+			articleUserId={contentData.user_id}
+			contentType={contentType}
+			client:only="react"
+		/>
 	</div>
 	<!-- Encabezado: título y metadatos -->
 	<header class="border-border mb-4 rounded-md border px-4 py-6 sm:px-6 sm:py-8">

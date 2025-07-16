@@ -22,7 +22,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
       FROM blogs
 			WHERE id = ?
     `
-		).bind(new URL(request.url).searchParams.get('id') || '')
+		)
+			.bind(new URL(request.url).searchParams.get('id') || '')
 			.all<Blogs>()
 
 		return new Response(JSON.stringify(result.results), {

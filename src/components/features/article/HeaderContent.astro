@@ -2,93 +2,85 @@
 import type { StringField } from 'node_modules/astro/dist/env/schema'
 
 interface Props {
-	headerTitle: string;
-	headerSubtitle: string;
+	headerTitle: string
+	headerSubtitle: string
 }
 
 const { headerTitle, headerSubtitle } = Astro.props as Props
 ---
 
-
 <header class="mb-8 sm:mb-12">
-			<section
-				class="border-border min-w-0 rounded-md border p-4 sm:p-6 lg:p-8"
-				aria-labelledby="page-title"
+	<section
+		class="border-border min-w-0 rounded-md border p-4 sm:p-6 lg:p-8"
+		aria-labelledby="page-title"
+	>
+		<div class="text-center">
+			<h1
+				id="page-title"
+				class="text-foreground mb-2 text-2xl font-bold break-words sm:text-3xl lg:text-4xl xl:text-5xl"
 			>
-				<div class="text-center">
-					<h1
-						id="page-title"
-						class="text-foreground mb-2 text-2xl font-bold break-words sm:text-3xl lg:text-4xl xl:text-5xl"
-					>
-						{headerTitle}	
-					</h1>
-					<p class="text-muted-foreground text-sm sm:text-base lg:text-lg">
-						{headerSubtitle}
-					</p>
-				</div>
-			</section>
-		</header>
-
-		<!-- Consejos y Componentes en fila -->
-		<div class="mb-8 grid min-w-0 grid-cols-1 gap-4 sm:mb-12 sm:gap-6 lg:grid-cols-2 lg:gap-8">
-			<!-- Consejos para escribir -->
-			<section
-				class="border-border min-w-0 rounded-md border p-4 sm:p-6"
-				aria-labelledby="tips-title"
-			>
-				<h3 id="tips-title" class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg">
-					💡 Consejos para escribir
-				</h3>
-				<ul class="text-muted-foreground space-y-2 text-xs sm:text-sm" role="list">
-					<li class="flex items-start gap-2">
-						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
-						<span class="min-w-0">Usa un título descriptivo y atractivo</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
-						<span class="min-w-0">Estructura tu contenido con encabezados y párrafos cortos</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
-						<span class="min-w-0">Incluye ejemplos y experiencias personales</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<span class="mt-1 flex-shrink-0 text-green-500">•</span>
-						<span class="min-w-0">Revisa la ortografía y gramática antes de publicar</span>
-					</li>
-				</ul>
-			</section>
-
-			<!-- Información sobre componentes -->
-			<section
-				class="border-border min-w-0 rounded-md border p-4 sm:p-6"
-				aria-labelledby="components-title"
-			>
-				<h3
-					id="components-title"
-					class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg"
-				>
-					🧩 Componentes disponibles
-				</h3>
-				<div class="space-y-2 sm:space-y-3">
-					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Pills</h4>
-						<p class="text-muted-foreground text-xs">
-							Etiquetas coloridas para destacar información importante
-						</p>
-					</div>
-					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Tablas</h4>
-						<p class="text-muted-foreground text-xs">
-							Organiza datos de manera clara y estructurada
-						</p>
-					</div>
-					<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-						<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Imágenes</h4>
-						<p class="text-muted-foreground text-xs">
-							Añade imágenes para complementar tu contenido
-						</p>
-					</div>
-				</div>
-			</section>
+				{headerTitle}
+			</h1>
+			<p class="text-muted-foreground text-sm sm:text-base lg:text-lg">
+				{headerSubtitle}
+			</p>
 		</div>
+	</section>
+</header>
+
+<!-- Consejos y Componentes en fila -->
+<div class="mb-8 grid min-w-0 grid-cols-1 gap-4 sm:mb-12 sm:gap-6 lg:grid-cols-2 lg:gap-8">
+	<!-- Consejos para escribir -->
+	<section class="border-border min-w-0 rounded-md border p-4 sm:p-6" aria-labelledby="tips-title">
+		<h3 id="tips-title" class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg">
+			💡 Consejos para escribir
+		</h3>
+		<ul class="text-muted-foreground space-y-2 text-xs sm:text-sm" role="list">
+			<li class="flex items-start gap-2">
+				<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+				<span class="min-w-0">Usa un título descriptivo y atractivo</span>
+			</li>
+			<li class="flex items-start gap-2">
+				<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+				<span class="min-w-0">Estructura tu contenido con encabezados y párrafos cortos</span>
+			</li>
+			<li class="flex items-start gap-2">
+				<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+				<span class="min-w-0">Incluye ejemplos y experiencias personales</span>
+			</li>
+			<li class="flex items-start gap-2">
+				<span class="mt-1 flex-shrink-0 text-green-500">•</span>
+				<span class="min-w-0">Revisa la ortografía y gramática antes de publicar</span>
+			</li>
+		</ul>
+	</section>
+
+	<!-- Información sobre componentes -->
+	<section
+		class="border-border min-w-0 rounded-md border p-4 sm:p-6"
+		aria-labelledby="components-title"
+	>
+		<h3
+			id="components-title"
+			class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg"
+		>
+			🧩 Componentes disponibles
+		</h3>
+		<div class="space-y-2 sm:space-y-3">
+			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Pills</h4>
+				<p class="text-muted-foreground text-xs">
+					Etiquetas coloridas para destacar información importante
+				</p>
+			</div>
+			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Tablas</h4>
+				<p class="text-muted-foreground text-xs">Organiza datos de manera clara y estructurada</p>
+			</div>
+			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
+				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Imágenes</h4>
+				<p class="text-muted-foreground text-xs">Añade imágenes para complementar tu contenido</p>
+			</div>
+		</div>
+	</section>
+</div>

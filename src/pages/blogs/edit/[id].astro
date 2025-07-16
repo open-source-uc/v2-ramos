@@ -10,6 +10,7 @@ import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
 import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
 import EditorMDX from '@/components/EditorMDX'
+import { Button } from '@/components/ui'
 
 export const prerender = false
 
@@ -19,25 +20,25 @@ const blogId = Astro.params.id
 const token = getToken(Astro.cookies)
 const user = await getUserDataByToken(token)
 if (!user) {
-  Astro.redirect('/')
+	return Astro.redirect('/')
 }
 
 const blogResponse = await fetch(`${config.BASEURL}/api/articles/blogById?id=${blogId}`)
 const blogJson = (await blogResponse.json()) as unknown as Blogs[]
 const blogData: Blogs = blogJson[0]
 if (!blogData) {
-  throw new Error('No se encontró el blog solicitado.')
+	return Astro.redirect('/blogs')
 }
 
 if (
-  (user && (String(user.id) !== String(blogData.user_id))) ||
-  !user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
+	(user && String(user.id) !== String(blogData.user_id)) ||
+	!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
 ) {
-  Astro.redirect(`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`)
+	return Astro.redirect(`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`)
 }
 let tags: string[] = []
 if (blogData.tags) {
-  tags = blogData.tags.split(',')
+	tags = blogData.tags.split(',')
 }
 let message = ''
 let messageType = ''
@@ -46,54 +47,119 @@ let messageType = ''
 const result = Astro.getActionResult(actions.updateBlog)
 
 if (result && !result.error) {
-  message = result.data?.message || 'Blog actualizado exitosamente';
-  messageType = 'success';
-}
-else if (result?.error) {
-  message = result.error.message || 'Error al actualizar el blog';
-  messageType = 'error';
+	message = result.data?.message || 'Blog actualizado exitosamente'
+	messageType = 'success'
+} else if (result?.error) {
+	message = result.error.message || 'Error al actualizar el blog'
+	messageType = 'error'
 }
 
 const tagsResponse = await fetch(new URL('/api/articles/blogs-tags', Astro.url.origin))
 const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
-const mdxContent = await fetch(`${config.BASEURL}/api/articles/article?path=${blogData.content_path}`)
-	.then(res => res.text())
-	.catch(() => '');
+const mdxContent = await fetch(
+	`${config.BASEURL}/api/articles/article?path=${blogData.content_path}`
+)
+	.then((res) => res.text())
+	.catch(() => '')
 ---
 
+<Layout title={`Edita: ${blogData.title}`}>
+	<main class="relative mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+		<!-- Estado del formulario -->
+		{
+			message && (
+				<section
+					class={`mb-6 rounded-md border p-4 sm:p-6 ${
+						messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+					}`}
+					role="alert"
+					aria-live="polite"
+				>
+					<div class="flex items-center gap-2">
+						<span
+							class={`flex-shrink-0 ${
+								messageType === 'success' ? 'text-green-600' : 'text-red-600'
+							}`}
+						>
+							{messageType === 'success' ? '✅' : '❌'}
+						</span>
+						<p
+							class={`text-xs font-medium sm:text-sm ${
+								messageType === 'success' ? 'text-green-800' : 'text-red-800'
+							}`}
+						>
+							{message}
+						</p>
+					</div>
+				</section>
+			)
+		}
+		<div class="mb-6 flex justify-between">
+			<a
+				href={`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`}
+				class="ver:underline text-blue-500">{`<-`} Volver al blog</a
+			>
+			<button
+				onclick="document.getElementById('delete-modal').classList.remove('hidden');document.getElementById('delete-modal').classList.add('flex')"
+				class="rounded bg-red-700 px-4 py-2 font-semibold text-white shadow transition-colors hover:bg-red-800"
+				>ELIMINAR BLOG</button
+			>
 
-<Layout title={`Edita: ${blogData.title}`}> 
-	<main class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-	<!-- Estado del formulario -->
-	{message && (
-		<section
-			class={`mb-6 rounded-md border p-4 sm:p-6 ${
-				messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-			}`}
-			role="alert"
-			aria-live="polite"
-		>
-			<div class="flex items-center gap-2">
-				<span
-					class={`flex-shrink-0 ${
-						messageType === 'success' ? 'text-green-600' : 'text-red-600'
-					}`}
+			<!-- POP UP PARA ELIMINAR -->
+			<div
+				id="delete-modal"
+				class="tablet:max-w-[420px] desktop:max-w-[700px] bg-background border-border desktop:flex-row tablet:rounded-2xl desktop:rounded-2xl fixed top-0 right-0 bottom-0 left-0 z-[100] m-auto hidden max-h-[92vh] w-[92vw] max-w-[400px] flex-col rounded-2xl border shadow-xl"
+				style="inset:0"
+			>
+				<div
+					class="tablet:top-4 tablet:right-6 desktop:top-4 desktop:right-6 absolute top-2 right-2 z-10"
 				>
-					{messageType === 'success' ? '✅' : '❌'}
-				</span>
-				<p
-					class={`text-xs font-medium sm:text-sm ${
-						messageType === 'success' ? 'text-green-800' : 'text-red-800'
-					}`}
+					<button
+						onclick="document.getElementById('delete-modal').classList.add('hidden');document.getElementById('delete-modal').classList.remove('flex')"
+						class="text-foreground/80 hover:text-foreground hover:bg-foreground/10 focus-visible:ring-foreground rounded-full p-2 text-xl transition-colors focus:outline-none focus-visible:ring-2"
+						aria-label="Cerrar modal"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="2"
+							stroke="currentColor"
+							class="h-6 w-6"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+						</svg>
+					</button>
+				</div>
+				<div
+					class="tablet:p-6 desktop:gap-8 desktop:flex-col desktop:items-center desktop:justify-center flex flex-1 flex-col items-center justify-center gap-5 p-4"
 				>
-					{message}
-				</p>
+					<h2
+						class="text-foreground tablet:text-2xl desktop:text-3xl w-full text-center text-lg font-bold"
+					>
+						¿Estás seguro de que deseas eliminar este blog?
+					</h2>
+					<form
+						method="post"
+						action={actions.deleteBlog}
+						class="desktop:gap-4 desktop:w-full desktop:justify-center desktop:items-center flex w-full flex-col items-center gap-2"
+					>
+						<input type="number" name="id" value={blogData.id} hidden />
+						<button
+							type="submit"
+							class="tablet:w-auto desktop:w-40 w-full rounded-md bg-red-600 px-4 py-2 font-semibold text-white shadow-md transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-300 active:bg-red-800"
+							>Eliminar</button
+						>
+						<button
+							type="button"
+							onclick="document.getElementById('delete-modal').classList.add('hidden');document.getElementById('delete-modal').classList.remove('flex')"
+							class="bg-muted hover:bg-muted/80 text-foreground tablet:w-auto desktop:w-40 border-border w-full rounded-md border px-4 py-2 transition-colors"
+							>Cancelar</button
+						>
+					</form>
+				</div>
 			</div>
-		</section>
-	)}
-	<div class="mb-6">
-		<a href={`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`} class="text-blue-500 ver:underline"><- Volver al blog</a>
-	</div>
+		</div>
 		<!-- Header Section -->
 		<ContentHeader
 			headerTitle="Edita tu blog"
@@ -110,7 +176,15 @@ const mdxContent = await fetch(`${config.BASEURL}/api/articles/article?path=${bl
 
 					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.updateBlog}>
 						<!-- Información básica del blog -->
-						<BlogBasicInfo user={user} blogTags={tagsData} title={blogData.title} organization_name={blogData.organization_name} period_time={blogData.period_time} readtime={String(blogData.readtime)} tags={tags}/>
+						<BlogBasicInfo
+							user={user}
+							blogTags={tagsData}
+							title={blogData.title}
+							organization_name={blogData.organization_name}
+							period_time={blogData.period_time}
+							readtime={String(blogData.readtime)}
+							tags={tags}
+						/>
 						<input type="number" value={blogData.id} name="id" hidden />
 						<!-- Separador -->
 						<div class="border-border border-t pt-4 sm:pt-6">
@@ -127,7 +201,11 @@ const mdxContent = await fetch(`${config.BASEURL}/api/articles/article?path=${bl
 
 						<!-- Editor MDX -->
 						<div class="min-w-0">
-							<EditorMDX initialContent={mdxContent} submitText="Actualizar Blog" client:only="react" />
+							<EditorMDX
+								initialContent={mdxContent}
+								submitText="Actualizar Blog"
+								client:only="react"
+							/>
 						</div>
 					</form>
 				</div>
