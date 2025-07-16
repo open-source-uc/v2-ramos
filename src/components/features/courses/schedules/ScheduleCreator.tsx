@@ -142,7 +142,7 @@ function CourseSearch({
 										No se encontraron cursos
 									</CommandEmpty>
 									<CommandGroup>
-										{filteredOptions.slice(0, 10).map((option) => (
+										{filteredOptions.slice(0, 25).map((option) => (
 											<CommandItem
 												key={option.id}
 												value={option.id}
