@@ -6,29 +6,27 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "v2-ramos",
 	"compatibility_date": "2025-06-04",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"limits": {
-		"cpu_ms": 10
+		"cpu_ms": 10,
 	},
 	"pages_build_output_dir": "./dist",
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "v2-ramos",
-			"database_id": "f97d5385-033e-4ade-aaf7-bb5736b4027c"
-		}
+			"database_id": "f97d5385-033e-4ade-aaf7-bb5736b4027c",
+		},
 	],
 	"r2_buckets": [
 		{
 			"binding": "R2",
-			"bucket_name": "v2-ramos"
-		}
-	]
+			"bucket_name": "v2-ramos",
+		},
+	],
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

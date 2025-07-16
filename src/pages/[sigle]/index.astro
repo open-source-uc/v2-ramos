@@ -397,10 +397,12 @@ const successMessage = Astro.url.searchParams.get('success');
 
                                     {/* Comentario */}
                                     {review.comment_path && (
-                                        <MarkdownReviewView
-                                            path={review.comment_path}
-                                            client:load
-                                        />
+                                        <div class="content-markdown">
+                                            <MarkdownReviewView
+                                                path={review.comment_path}
+                                                client:load
+                                            />
+                                        </div>
                                     )}
 
                                     {/* Tags informativos */}

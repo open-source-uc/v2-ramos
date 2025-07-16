@@ -1,47 +1,47 @@
 [
-  {
-    "id": "rocka",
-    "nombre": "Vicente Muñoz",
-    "rol": "Lead Backend Developer",
-    "carrera": "Licenciatura en Ingeniería en Ciencia de Datos",
-    "linkedin": "https://www.linkedin.com/in/vicente-mu%C3%B1oz-022295267/",
-    "github": "https://github.com/Utmite",
-    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQGG7i_XEMXiaA/profile-displayphoto-shrink_400_400/B4EZaUeWnxHMAg-/0/1746247708112?e=1756339200&v=beta&t=uPQQqoE79jTFoyGWFtAhMZaHnENqVicdYIhiYIhovrQ"
-  },
-  {
-    "id": "ignacio",
-    "nombre": "Ignacio Palma",
-    "rol": "Project Manager & Lead Frontend Developer",
-    "carrera": "Licenciatura en Ingeniería en Ciencia de Datos",
-    "linkedin": "https://linkedin.com/in/ignaciopalma-ai",
-    "github": "https://github.com/ignaciopalma",
-    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQHeRfnJ2dc41g/profile-displayphoto-scale_400_400/B4EZe3sx5RHYAg-/0/1751133659447?e=1756339200&v=beta&t=-p4-EWqxFe-amJeokXS_VQOAcI1y6FqI2kTKIrMF7cg"
-  },
-  {
-    "id": "pablo",
-    "nombre": "Pablo Cruzat",
-    "rol": "Fullstack Developer",
-    "carrera": "Licenciatura en Ingeniería en Ciencia de la Computacion",
-    "linkedin": "https://www.linkedin.com/in/pablocruzval/",
-    "github": "https://github.com/pablocruzval",
-    "imagen": "https://media.licdn.com/dms/image/v2/D4E03AQEL9BRG6U39QQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1720127372543?e=1756339200&v=beta&t=FsN6iuQWdoEaCKdwMFtd4iudtTsZMYuriXV54DpCzRY"
-  },
-  {
-    "id": "vicente",
-    "nombre": "Vicente Cuitiño",
-    "rol": "Frontend Developer",
-    "carrera": "Licenciatura en Ingenieria en Ciencia de la Computacion",
-    "linkedin": "https://linkedin.com/in/vicentecuitiño",
-    "github": "https://github.com/MangoFrapuccino",
-    "imagen": "/images/placeholder.jpg"
-  },
-  {
-    "id": "gustavo",
-    "nombre": "Gustavo Rademacher",
-    "rol": "Security Specialist",
-    "carrera": "Licenciatura en Ingenieria en Ciencia de la Computacion",
-    "linkedin": "https://www.linkedin.com/in/gustavo-rademacher-a91609365/",
-    "github": "https://github.com/grademach",
-    "imagen": "/images/placeholder.jpg"
-  }
+	{
+		"id": "rocka",
+		"nombre": "Vicente Muñoz",
+		"rol": "Lead Backend Developer",
+		"carrera": "Licenciatura en Ingeniería en Ciencia de Datos",
+		"linkedin": "https://www.linkedin.com/in/vicente-mu%C3%B1oz-022295267/",
+		"github": "https://github.com/Utmite",
+		"imagen": "https://media.licdn.com/dms/image/v2/D4E03AQGG7i_XEMXiaA/profile-displayphoto-shrink_400_400/B4EZaUeWnxHMAg-/0/1746247708112?e=1756339200&v=beta&t=uPQQqoE79jTFoyGWFtAhMZaHnENqVicdYIhiYIhovrQ"
+	},
+	{
+		"id": "ignacio",
+		"nombre": "Ignacio Palma",
+		"rol": "Project Manager & Lead Frontend Developer",
+		"carrera": "Licenciatura en Ingeniería en Ciencia de Datos",
+		"linkedin": "https://linkedin.com/in/ignaciopalma-ai",
+		"github": "https://github.com/ignaciopalma",
+		"imagen": "https://media.licdn.com/dms/image/v2/D4E03AQHeRfnJ2dc41g/profile-displayphoto-scale_400_400/B4EZe3sx5RHYAg-/0/1751133659447?e=1756339200&v=beta&t=-p4-EWqxFe-amJeokXS_VQOAcI1y6FqI2kTKIrMF7cg"
+	},
+	{
+		"id": "pablo",
+		"nombre": "Pablo Cruzat",
+		"rol": "Fullstack Developer",
+		"carrera": "Licenciatura en Ingeniería en Ciencia de la Computacion",
+		"linkedin": "https://www.linkedin.com/in/pablocruzval/",
+		"github": "https://github.com/pablocruzval",
+		"imagen": "https://media.licdn.com/dms/image/v2/D4E03AQEL9BRG6U39QQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1720127372543?e=1756339200&v=beta&t=FsN6iuQWdoEaCKdwMFtd4iudtTsZMYuriXV54DpCzRY"
+	},
+	{
+		"id": "vicente",
+		"nombre": "Vicente Cuitiño",
+		"rol": "Frontend Developer",
+		"carrera": "Licenciatura en Ingenieria en Ciencia de la Computacion",
+		"linkedin": "https://linkedin.com/in/vicentecuitiño",
+		"github": "https://github.com/MangoFrapuccino",
+		"imagen": "/images/placeholder.jpg"
+	},
+	{
+		"id": "gustavo",
+		"nombre": "Gustavo Rademacher",
+		"rol": "Security Specialist",
+		"carrera": "Licenciatura en Ingenieria en Ciencia de la Computacion",
+		"linkedin": "https://www.linkedin.com/in/gustavo-rademacher-a91609365/",
+		"github": "https://github.com/grademach",
+		"imagen": "/images/placeholder.jpg"
+	}
 ]

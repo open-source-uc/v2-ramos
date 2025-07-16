@@ -1,3 +1,3 @@
 // Icon components
-export * from './icons';
-export * from './sentiment';
+export * from './icons'
+export * from './sentiment'

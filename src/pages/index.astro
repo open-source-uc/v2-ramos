@@ -1,8 +1,8 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { LandingSearch } from "@/components/features/landing/LandingSearch";
-import { Pill } from "@/components/ui/pill";
-import { Button } from "@/components/ui/button";
+import Layout from '../layouts/Layout.astro'
+import { LandingSearch } from '@/components/features/landing/LandingSearch'
+import { Pill } from '@/components/ui/pill'
+import { Button } from '@/components/ui/button'
 import {
 	ThumbUpIcon,
 	HumanityIcon,
@@ -13,7 +13,7 @@ import {
 	ResourcesIcon,
 	EditIcon,
 	SearchIcon,
-} from "@/components/icons/icons";
+} from '@/components/icons/icons'
 ---
 
 <Layout>
@@ -23,203 +23,174 @@ import {
 	</section>
 
 	<!-- Why Choose Us Section -->
-	<section class="max-w-6xl mx-auto px-4 py-16 tablet:py-20">
-		<div class="text-center mb-12">
-			<h2
-				class="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-foreground mb-4"
-			>
+	<section class="tablet:py-20 mx-auto max-w-6xl px-4 py-16">
+		<div class="mb-12 text-center">
+			<h2 class="tablet:text-3xl desktop:text-4xl text-foreground mb-4 text-2xl font-bold">
 				De estudiantes para estudiantes
 			</h2>
-			<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-				La plataforma de estudiantes para estudiantes UC que te ayuda a
-				tomar decisiones informadas sobre tus ramos.
+			<p class="text-muted-foreground mx-auto max-w-2xl text-lg">
+				La plataforma de estudiantes para estudiantes UC que te ayuda a tomar decisiones informadas
+				sobre tus ramos.
 			</p>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 			<!-- Feature 1 -->
 			<div
-				class="border border-border rounded-md p-6 bg-card hover:shadow-lg transition-shadow duration-300"
+				class="border-border bg-card rounded-md border p-6 transition-shadow duration-300 hover:shadow-lg"
 			>
-				<div class="flex items-center gap-3 mb-4">
-					<div
-						class="p-3 bg-green-light text-green border border-green/20 rounded-lg"
-					>
+				<div class="mb-4 flex items-center gap-3">
+					<div class="bg-green-light text-green border-green/20 rounded-lg border p-3">
 						<ThumbUpIcon className="h-6 w-6 fill-current" />
 					</div>
 					<h3 class="text-xl font-semibold">Reseñas Reales</h3>
 				</div>
 				<p class="text-muted-foreground">
-					Opiniones auténticas de estudiantes que ya cursaron los
-					ramos. Conoce la verdadera experiencia antes de inscribirte.
+					Opiniones auténticas de estudiantes que ya cursaron los ramos. Conoce la verdadera
+					experiencia antes de inscribirte.
 				</p>
 			</div>
 
 			<!-- Feature 2 -->
 			<div
-				class="border border-border rounded-md p-6 bg-card hover:shadow-lg transition-shadow duration-300"
+				class="border-border bg-card rounded-md border p-6 transition-shadow duration-300 hover:shadow-lg"
 			>
-				<div class="flex items-center gap-3 mb-4">
-					<div
-						class="p-3 bg-blue-light text-blue border border-blue/20 rounded-lg"
-					>
+				<div class="mb-4 flex items-center gap-3">
+					<div class="bg-blue-light text-blue border-blue/20 rounded-lg border p-3">
 						<WorkloadIcon className="h-6 w-6 fill-current" />
 					</div>
-					<h3 class="text-xl font-semibold">
-						Estadísticas Detalladas
-					</h3>
+					<h3 class="text-xl font-semibold">Estadísticas Detalladas</h3>
 				</div>
 				<p class="text-muted-foreground">
-					Carga Académica, asistencia requerida y más datos. Toda la
-					información que necesitas en un solo lugar.
+					Carga Académica, asistencia requerida y más datos. Toda la información que necesitas en un
+					solo lugar.
 				</p>
 			</div>
 
 			<!-- Feature 3 -->
 			<div
-				class="border border-border rounded-md p-6 bg-card hover:shadow-lg transition-shadow duration-300"
+				class="border-border bg-card rounded-md border p-6 transition-shadow duration-300 hover:shadow-lg"
 			>
-				<div class="flex items-center gap-3 mb-4">
-					<div
-						class="p-3 bg-purple-light text-purple border border-purple/20 rounded-lg"
-					>
+				<div class="mb-4 flex items-center gap-3">
+					<div class="bg-purple-light text-purple border-purple/20 rounded-lg border p-3">
 						<ResourcesIcon className="h-6 w-6 fill-current" />
 					</div>
 					<h3 class="text-xl font-semibold">Recursos Académicos</h3>
 				</div>
 				<p class="text-muted-foreground">
-					Accede a materiales de estudio, recomendaciones y recursos
-					compartidos por la comunidad estudiantil.
+					Accede a materiales de estudio, recomendaciones y recursos compartidos por la comunidad
+					estudiantil.
 				</p>
 			</div>
 		</div>
 	</section>
 
 	<!-- How It Works Section -->
-	<section class="max-w-6xl mx-auto px-4 py-16 tablet:py-20">
-		<div class="text-center mb-12">
-			<h2
-				class="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-foreground mb-4"
-			>
+	<section class="tablet:py-20 mx-auto max-w-6xl px-4 py-16">
+		<div class="mb-12 text-center">
+			<h2 class="tablet:text-3xl desktop:text-4xl text-foreground mb-4 text-2xl font-bold">
 				Así de fácil es empezar
 			</h2>
-			<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-				En solo 3 pasos tendrás acceso a toda la información que
-				necesitas
+			<p class="text-muted-foreground mx-auto max-w-2xl text-lg">
+				En solo 3 pasos tendrás acceso a toda la información que necesitas
 			</p>
 		</div>
 
 		<!-- Progress Bar -->
-		<div class="flex items-center justify-center mb-12 max-w-2xl mx-auto">
-			<div class="flex items-center w-full">
+		<div class="mx-auto mb-12 flex max-w-2xl items-center justify-center">
+			<div class="flex w-full items-center">
 				<div
-					class="flex items-center justify-center w-8 h-8 border border-border bg-muted text-muted-foreground rounded-full text-sm font-bold"
+					class="border-border bg-muted text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold"
 				>
 					1
 				</div>
-				<div class="flex-1 h-1 bg-border mx-2"></div>
+				<div class="bg-border mx-2 h-1 flex-1"></div>
 				<div
-					class="flex items-center justify-center w-8 h-8 border border-border bg-muted text-muted-foreground rounded-full text-sm font-bold"
+					class="border-border bg-muted text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold"
 				>
 					2
 				</div>
-				<div class="flex-1 h-1 bg-border mx-2"></div>
+				<div class="bg-border mx-2 h-1 flex-1"></div>
 				<div
-					class="flex items-center justify-center w-8 h-8 border border-border bg-muted text-muted-foreground rounded-full text-sm font-bold"
+					class="border-border bg-muted text-muted-foreground flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold"
 				>
 					3
 				</div>
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			<!-- Step 1 -->
 			<div
-				class="border border-border rounded-md p-6 hover:border-green/30 transition-all duration-300 group"
+				class="border-border hover:border-green/30 group rounded-md border p-6 transition-all duration-300"
 			>
-				<div class="flex items-center gap-3 mb-4">
+				<div class="mb-4 flex items-center gap-3">
 					<div
-						class="p-2 bg-green-light text-green border border-green/20 rounded-lg group-hover:scale-110 transition-transform duration-300"
+						class="bg-green-light text-green border-green/20 rounded-lg border p-2 transition-transform duration-300 group-hover:scale-110"
 					>
 						<SearchIcon className="h-5 w-5 fill-current" />
 					</div>
 					<div>
-						<h3 class="text-sm font-medium text-muted-foreground">
-							Primer paso
-						</h3>
+						<h3 class="text-muted-foreground text-sm font-medium">Primer paso</h3>
 						<p class="text-lg font-semibold">Busca tu curso</p>
 					</div>
 				</div>
-				<div class="text-sm text-muted-foreground mb-4">
-					Utiliza nuestro buscador inteligente para encontrar el curso
-					que te interesa. Busca por nombre o sigla.
+				<div class="text-muted-foreground mb-4 text-sm">
+					Utiliza nuestro buscador inteligente para encontrar el curso que te interesa. Busca por
+					nombre o sigla.
 				</div>
-				<div
-					class="flex items-center gap-2 text-xs text-green font-medium"
-				>
-					<div class="w-2 h-2 bg-green rounded-full"></div>
+				<div class="text-green flex items-center gap-2 text-xs font-medium">
+					<div class="bg-green h-2 w-2 rounded-full"></div>
 					Búsqueda instantánea
 				</div>
 			</div>
 
 			<!-- Step 2 -->
 			<div
-				class="border border-border rounded-md p-6 hover:border-blue/30 transition-all duration-300 group"
+				class="border-border hover:border-blue/30 group rounded-md border p-6 transition-all duration-300"
 			>
-				<div class="flex items-center gap-3 mb-4">
+				<div class="mb-4 flex items-center gap-3">
 					<div
-						class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg group-hover:scale-110 transition-transform duration-300"
+						class="bg-blue-light text-blue border-blue/20 rounded-lg border p-2 transition-transform duration-300 group-hover:scale-110"
 					>
 						<ThumbUpIcon className="h-5 w-5 fill-current" />
 					</div>
 					<div>
-						<h3 class="text-sm font-medium text-muted-foreground">
-							Segundo paso
-						</h3>
-						<p class="text-lg font-semibold">
-							Revisa la información
-						</p>
+						<h3 class="text-muted-foreground text-sm font-medium">Segundo paso</h3>
+						<p class="text-lg font-semibold">Revisa la información</p>
 					</div>
 				</div>
-				<div class="text-sm text-muted-foreground mb-4">
-					Explora reseñas auténticas y estadísticas detalladas. Toma
-					decisiones informadas con datos reales.
+				<div class="text-muted-foreground mb-4 text-sm">
+					Explora reseñas auténticas y estadísticas detalladas. Toma decisiones informadas con datos
+					reales.
 				</div>
-				<div
-					class="flex items-center gap-2 text-xs text-blue font-medium"
-				>
-					<div class="w-2 h-2 bg-blue rounded-full"></div>
+				<div class="text-blue flex items-center gap-2 text-xs font-medium">
+					<div class="bg-blue h-2 w-2 rounded-full"></div>
 					Datos co-creados
 				</div>
 			</div>
 
 			<!-- Step 3 -->
 			<div
-				class="border border-border rounded-md p-6 hover:border-purple/30 transition-all duration-300 group"
+				class="border-border hover:border-purple/30 group rounded-md border p-6 transition-all duration-300"
 			>
-				<div class="flex items-center gap-3 mb-4">
+				<div class="mb-4 flex items-center gap-3">
 					<div
-						class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg group-hover:scale-110 transition-transform duration-300"
+						class="bg-purple-light text-purple border-purple/20 rounded-lg border p-2 transition-transform duration-300 group-hover:scale-110"
 					>
 						<EditIcon className="h-5 w-5 fill-current" />
 					</div>
 					<div>
-						<h3 class="text-sm font-medium text-muted-foreground">
-							Tercer paso
-						</h3>
-						<p class="text-lg font-semibold">
-							Comparte tu experiencia
-						</p>
+						<h3 class="text-muted-foreground text-sm font-medium">Tercer paso</h3>
+						<p class="text-lg font-semibold">Comparte tu experiencia</p>
 					</div>
 				</div>
-				<div class="text-sm text-muted-foreground mb-4">
-					Después de cursar tu ramo, ayuda a otros estudiantes
-					compartiendo tu experiencia y tips en una reseña.
+				<div class="text-muted-foreground mb-4 text-sm">
+					Después de cursar tu ramo, ayuda a otros estudiantes compartiendo tu experiencia y tips en
+					una reseña.
 				</div>
-				<div
-					class="flex items-center gap-2 text-xs text-purple font-medium"
-				>
-					<div class="w-2 h-2 bg-purple rounded-full"></div>
+				<div class="text-purple flex items-center gap-2 text-xs font-medium">
+					<div class="bg-purple h-2 w-2 rounded-full"></div>
 					Contribuye a la comunidad
 				</div>
 			</div>
@@ -227,39 +198,29 @@ import {
 	</section>
 
 	<!-- Categories Preview Section -->
-	<section class="py-16 tablet:py-20">
-		<div class="max-w-6xl mx-auto px-4">
-			<div class="text-center mb-12">
-				<h2
-					class="text-2xl tablet:text-3xl desktop:text-4xl font-bold text-foreground mb-4"
-				>
+	<section class="tablet:py-20 py-16">
+		<div class="mx-auto max-w-6xl px-4">
+			<div class="mb-12 text-center">
+				<h2 class="tablet:text-3xl desktop:text-4xl text-foreground mb-4 text-2xl font-bold">
 					Explora por categorías
 				</h2>
-				<p class="text-lg text-muted-foreground">
+				<p class="text-muted-foreground text-lg">
 					Encuentra cursos organizados por área de estudio
 				</p>
 			</div>
 
-			<div class="flex flex-wrap justify-center gap-3 tablet:gap-4 mb-8">
-				<Pill variant="blue" size="lg" icon={ResearchIcon}>
-					Ciencias
-				</Pill>
+			<div class="tablet:gap-4 mb-8 flex flex-wrap justify-center gap-3">
+				<Pill variant="blue" size="lg" icon={ResearchIcon}> Ciencias </Pill>
 				<Pill variant="pink" size="lg" icon={ArtIcon}> Artes </Pill>
-				<Pill variant="green" size="lg" icon={HumanityIcon}>
-					Humanidades
-				</Pill>
-				<Pill variant="purple" size="lg" icon={MedicineIcon}>
-					Medicina
-				</Pill>
-				<Pill variant="orange" size="lg" icon={WorkloadIcon}>
-					Economía y Administración
-				</Pill>
+				<Pill variant="green" size="lg" icon={HumanityIcon}> Humanidades </Pill>
+				<Pill variant="purple" size="lg" icon={MedicineIcon}> Medicina </Pill>
+				<Pill variant="orange" size="lg" icon={WorkloadIcon}> Economía y Administración </Pill>
 			</div>
 
 			<div class="text-center">
 				<a
 					href="/catalog"
-					class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-md bg-background/80 backdrop-blur-sm h-11 px-8 py-2"
+					class="ring-offset-background focus-visible:ring-ring border-border hover:border-primary/50 bg-background/80 inline-flex h-11 items-center justify-center rounded-md border-2 px-8 py-2 text-sm font-medium whitespace-nowrap backdrop-blur-sm transition-all duration-300 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
 				>
 					Ver todas las categorías
 				</a>

@@ -1,546 +1,447 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import Layout from '@/layouts/Layout.astro'
+import { getCourseReviewByUserIdAndSigle, getCourseBySigle } from '@/lib/server/courses'
+import { actions, isInputError } from 'astro:actions'
+import { getUserDataByToken } from '@/lib/server/auth'
+import RedirectLogin from '@/components/reviews/RedirectLogin'
+import { ReviewFormToast } from '@/components/reviews/ReviewFormToast'
+import { getEntry } from 'astro:content'
 import {
-    getCourseReviewByUserIdAndSigle,
-    getCourseBySigle,
-} from "@/lib/server/courses";
-import { actions, isInputError } from "astro:actions";
-import { getUserDataByToken } from "@/lib/server/auth";
-import RedirectLogin from "@/components/reviews/RedirectLogin";
-import { ReviewFormToast } from "@/components/reviews/ReviewFormToast";
-import { getEntry } from "astro:content";
-import { getMaxAllowedYear, getAllowedSemestersForYear, parseSemester, CURRENT_SEMESTER } from "@/lib/currentSemester";
+	getMaxAllowedYear,
+	getAllowedSemestersForYear,
+	parseSemester,
+	CURRENT_SEMESTER,
+} from '@/lib/currentSemester'
 import {
-    CalendarIcon,
-    WorkloadIcon,
-    AttendanceIcon,
-    ClockIcon,
-    EditIcon,
-    PlusIcon,
-    HourglassIcon,
-    HappyIcon,
-    ThumbDownIcon,
-    ThumbUpIcon,
-    StarIcon,
-} from "@/components/icons/icons";
-import { Pill } from "@/components/ui/pill";
-import { Button } from "@/components/ui/button";
-import { ButtonInput } from "@/components/ui/button-input";
-import { NumericInput } from "@/components/ui/numeric-input";
-import { SelectInput } from "@/components/ui/select-input";
+	CalendarIcon,
+	WorkloadIcon,
+	AttendanceIcon,
+	ClockIcon,
+	EditIcon,
+	PlusIcon,
+	HourglassIcon,
+	HappyIcon,
+	ThumbDownIcon,
+	ThumbUpIcon,
+	StarIcon,
+} from '@/components/icons/icons'
+import { Pill } from '@/components/ui/pill'
+import { Button } from '@/components/ui/button'
+import { ButtonInput } from '@/components/ui/button-input'
+import { NumericInput } from '@/components/ui/numeric-input'
+import { SelectInput } from '@/components/ui/select-input'
 
-const result = Astro.getActionResult(actions.createCourseReview);
+const result = Astro.getActionResult(actions.createCourseReview)
 
 // Handle redirect on success
 if (result && result.data?.redirect) {
-    const successMessage = result.data.message;
-    return Astro.redirect(`${result.data.redirect}?success=${encodeURIComponent(successMessage)}`);
+	const successMessage = result.data.message
+	return Astro.redirect(`${result.data.redirect}?success=${encodeURIComponent(successMessage)}`)
 }
 
-const { sigle } = Astro.params;
+const { sigle } = Astro.params
 
 if (!sigle) {
-    return Astro.redirect("/404");
+	return Astro.redirect('/404')
 }
 
 // Get course data for header section
-const courseData = await getEntry("coursesStatic", sigle);
+const courseData = await getEntry('coursesStatic', sigle)
 if (!courseData) {
-    return Astro.redirect("/404");
+	return Astro.redirect('/404')
 }
-const course = courseData.data;
+const course = courseData.data
 
 // Get additional course data for pills
-const c = await getCourseBySigle(Astro.locals, sigle);
+const c = await getCourseBySigle(Astro.locals, sigle)
 
 // Import ID to name mapping for schools and areas
-import { getToken } from "@/lib/auth";
+import { getToken } from '@/lib/auth'
 
-const token = getToken(Astro.cookies);
-const user = await getUserDataByToken(token);
+const token = getToken(Astro.cookies)
+const user = await getUserDataByToken(token)
 
-const userIsNull = !user;
+const userIsNull = !user
 
-const defaultData = await getCourseReviewByUserIdAndSigle(
-    Astro.locals,
-    sigle,
-    user?.id ?? "-1",
-);
-let text = "";
+const defaultData = await getCourseReviewByUserIdAndSigle(Astro.locals, sigle, user?.id ?? '-1')
+let text = ''
 
 if (defaultData.comment_path) {
-    const res = await Astro.locals.runtime.env.R2.get(defaultData.comment_path);
-    if (res) {
-        text = await res.text();
-    }
+	const res = await Astro.locals.runtime.env.R2.get(defaultData.comment_path)
+	if (res) {
+		text = await res.text()
+	}
 }
 
-const inputErrors = isInputError(result?.error) ? result.error.fields : {};
-const currentYear = getMaxAllowedYear();
-const isEditMode = defaultData && defaultData.id !== null;
+const inputErrors = isInputError(result?.error) ? result.error.fields : {}
+const currentYear = getMaxAllowedYear()
+const isEditMode = defaultData && defaultData.id !== null
 
 // Calculate allowed semesters for current year
-const currentSemesterInfo = parseSemester(CURRENT_SEMESTER);
-const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear);
+const currentSemesterInfo = parseSemester(CURRENT_SEMESTER)
+const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear)
 ---
 
 <Layout>
-    <div class="mx-auto px-4 py-8">
-        <!-- Information Section -->
-        <div class="border border-border rounded-md p-6">
-            <h3
-                class="font-medium text-foreground mb-3 flex items-center gap-2"
-            >
-                <div
-                    class="p-2 bg-blue-light text-blue font-medium border border-blue/20 rounded-lg"
-                >
-                    <EditIcon className="h-4 w-4 fill-current" />
-                </div>
-                Consejos para una buena reseña
-            </h3>
-            <div
-                class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground"
-            >
-                <ul class="space-y-2">
-                    <li class="flex items-start gap-2">
-                        <div
-                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
-                        >
-                        </div>
-                        <span>Sé respetuoso con el equipo docente</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <div
-                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
-                        >
-                        </div>
-                        <span
-                            >Incluye información útil para futuros estudiantes
-                            del curso</span
-                        >
-                    </li>
-                </ul>
-                <ul class="space-y-2">
-                    <li class="flex items-start gap-2">
-                        <div
-                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
-                        >
-                        </div>
-                        <span>Sé constructivo en tu reseña</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <div
-                            class="w-1 h-1 bg-muted-foreground rounded-full mt-2 flex-shrink-0"
-                        >
-                        </div>
-                        <span
-                            >Considera incluir ejemplos concretos de tu
-                            experiencia</span
-                        >
-                    </li>
-                </ul>
-            </div>
-        </div>
+	<div class="mx-auto px-4 py-8">
+		<!-- Information Section -->
+		<div class="border-border rounded-md border p-6">
+			<h3 class="text-foreground mb-3 flex items-center gap-2 font-medium">
+				<div class="bg-blue-light text-blue border-blue/20 rounded-lg border p-2 font-medium">
+					<EditIcon className="h-4 w-4 fill-current" />
+				</div>
+				Consejos para una buena reseña
+			</h3>
+			<div class="text-muted-foreground grid grid-cols-1 gap-2 text-sm md:grid-cols-2">
+				<ul class="space-y-2">
+					<li class="flex items-start gap-2">
+						<div class="bg-muted-foreground mt-2 h-1 w-1 flex-shrink-0 rounded-full"></div>
+						<span>Sé respetuoso con el equipo docente</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<div class="bg-muted-foreground mt-2 h-1 w-1 flex-shrink-0 rounded-full"></div>
+						<span>Incluye información útil para futuros estudiantes del curso</span>
+					</li>
+				</ul>
+				<ul class="space-y-2">
+					<li class="flex items-start gap-2">
+						<div class="bg-muted-foreground mt-2 h-1 w-1 flex-shrink-0 rounded-full"></div>
+						<span>Sé constructivo en tu reseña</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<div class="bg-muted-foreground mt-2 h-1 w-1 flex-shrink-0 rounded-full"></div>
+						<span>Considera incluir ejemplos concretos de tu experiencia</span>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-        <!-- Review Form Header -->
-        <section class="border border-border rounded-md overflow-hidden mt-8">
-            <div class="border-b border-border px-6 py-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-2xl font-semibold text-foreground">
-                            {
-                                isEditMode
-                                    ? "Editar tu Reseña"
-                                    : "Crear Reseña de Curso"
-                            }
-                        </h2>
-                        <p class="text-sm text-muted-foreground mt-1">
-                            Comparte tu experiencia con otros estudiantes
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="hidden md:flex items-center gap-2 text-sm px-3 py-2 rounded-lg border border-border"
-                        >
-                            <span class="font-medium text-muted-foreground">
-                                {isEditMode ? "Modo Edición" : "Nueva Reseña"}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+		<!-- Review Form Header -->
+		<section class="border-border mt-8 overflow-hidden rounded-md border">
+			<div class="border-border border-b px-6 py-6">
+				<div class="flex items-center justify-between">
+					<div>
+						<h2 class="text-foreground text-2xl font-semibold">
+							{isEditMode ? 'Editar tu Reseña' : 'Crear Reseña de Curso'}
+						</h2>
+						<p class="text-muted-foreground mt-1 text-sm">
+							Comparte tu experiencia con otros estudiantes
+						</p>
+					</div>
+					<div class="flex items-center gap-4">
+						<div
+							class="border-border hidden items-center gap-2 rounded-lg border px-3 py-2 text-sm md:flex"
+						>
+							<span class="text-muted-foreground font-medium">
+								{isEditMode ? 'Modo Edición' : 'Nueva Reseña'}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
 
+			<!-- Review Form -->
+			<div class="p-6">
+				<form method="POST" action={actions.createCourseReview} class="space-y-8">
+					<!-- Hidden course sigle -->
+					<input type="hidden" name="course_sigle" value={sigle} />
 
-            <!-- Review Form -->
-            <div class="p-6">
-                <form
-                    method="POST"
-                    action={actions.createCourseReview}
-                    class="space-y-8"
-                >
-                    <!-- Hidden course sigle -->
-                    <input type="hidden" name="course_sigle" value={sigle} />
+					<!-- Rating Section -->
+					<div class="border-border rounded-md border p-6">
+						<h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
+							<div class="bg-green-light text-green border-green/20 rounded-lg border p-2">
+								<HappyIcon className="h-5 w-5 fill-current" />
+							</div>
+							Valoración General
+						</h3>
+						<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+							<ButtonInput
+								variant="red"
+								icon={ThumbDownIcon}
+								title="No lo recomiendo"
+								subtitle="El curso no cumplió expectativas"
+								inputProps={{
+									type: 'radio',
+									name: 'like_dislike',
+									value: '0',
+									checked: defaultData.like_dislike === 0,
+									required: true,
+								}}
+							/>
 
-                    <!-- Rating Section -->
-                    <div class="border border-border rounded-md p-6">
-                        <h3
-                            class="text-lg font-semibold mb-4 flex items-center gap-2"
-                        >
-                            <div
-                                class="p-2 bg-green-light text-green border border-green/20 rounded-lg"
-                            >
-                                <HappyIcon className="h-5 w-5 fill-current" />
-                            </div>
-                            Valoración General
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <ButtonInput
-                                variant="red"
-                                icon={ThumbDownIcon}
-                                title="No lo recomiendo"
-                                subtitle="El curso no cumplió expectativas"
-                                inputProps={{
-                                    type: "radio",
-                                    name: "like_dislike",
-                                    value: "0",
-                                    checked: defaultData.like_dislike === 0,
-                                    required: true,
-                                }}
-                            />
+							<ButtonInput
+								variant="blue"
+								icon={ThumbUpIcon}
+								title="Lo recomiendo"
+								subtitle="El curso cumplió mis expectativas"
+								inputProps={{
+									type: 'radio',
+									name: 'like_dislike',
+									value: '1',
+									checked: defaultData.like_dislike === 1,
+									required: true,
+								}}
+							/>
 
-                            <ButtonInput
-                                variant="blue"
-                                icon={ThumbUpIcon}
-                                title="Lo recomiendo"
-                                subtitle="El curso cumplió mis expectativas"
-                                inputProps={{
-                                    type: "radio",
-                                    name: "like_dislike",
-                                    value: "1",
-                                    checked: defaultData.like_dislike === 1,
-                                    required: true,
-                                }}
-                            />
+							<ButtonInput
+								variant="green"
+								icon={StarIcon}
+								title="Lo super recomiendo"
+								subtitle="El curso excedió mis expectativas"
+								inputProps={{
+									type: 'radio',
+									name: 'like_dislike',
+									value: '2',
+									checked: defaultData.like_dislike === 2,
+									required: true,
+								}}
+							/>
+						</div>
+						{
+							inputErrors.like_dislike && (
+								<p class="text-destructive mt-3 text-sm">{inputErrors.like_dislike}</p>
+							)
+						}
+					</div>
 
-                            <ButtonInput
-                                variant="green"
-                                icon={StarIcon}
-                                title="Lo super recomiendo"
-                                subtitle="El curso excedió mis expectativas"
-                                inputProps={{
-                                    type: "radio",
-                                    name: "like_dislike",
-                                    value: "2",
-                                    checked: defaultData.like_dislike === 2,
-                                    required: true,
-                                }}
-                            />
-                        </div>
-                        {
-                            inputErrors.like_dislike && (
-                                <p class="text-destructive text-sm mt-3">
-                                    {inputErrors.like_dislike}
-                                </p>
-                            )
-                        }
-                    </div>
+					<!-- Course Details Grid -->
+					<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+						<!-- Workload Section -->
+						<div class="border-border rounded-md border p-6">
+							<h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
+								<div class="bg-blue-light text-blue border-blue/20 rounded-lg border p-2">
+									<WorkloadIcon className="h-5 w-5 fill-current" />
+								</div>
+								Nivel de Dificultad
+							</h3>
+							<div class="space-y-3">
+								<ButtonInput
+									variant="green"
+									size="sm"
+									icon={HourglassIcon}
+									title="Baja"
+									subtitle="Se lleva con tranquilidad"
+									inputProps={{
+										type: 'radio',
+										name: 'workload_vote',
+										value: '0',
+										checked: defaultData.workload_vote === 0,
+										required: true,
+									}}
+								/>
 
-                    <!-- Course Details Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Workload Section -->
-                        <div class="border border-border rounded-md p-6">
-                            <h3
-                                class="text-lg font-semibold mb-4 flex items-center gap-2"
-                            >
-                                <div
-                                    class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
-                                >
-                                    <WorkloadIcon
-                                        className="h-5 w-5 fill-current"
-                                    />
-                                </div>
-                                Nivel de Dificultad
-                            </h3>
-                            <div class="space-y-3">
-                                <ButtonInput
-                                    variant="green"
-                                    size="sm"
-                                    icon={HourglassIcon}
-                                    title="Baja"
-                                    subtitle="Se lleva con tranquilidad"
-                                    inputProps={{
-                                        type: "radio",
-                                        name: "workload_vote",
-                                        value: "0",
-                                        checked:
-                                            defaultData.workload_vote === 0,
-                                        required: true,
-                                    }}
-                                />
+								<ButtonInput
+									variant="orange"
+									size="sm"
+									icon={HourglassIcon}
+									title="Normal"
+									subtitle="Exige algo de compromiso"
+									inputProps={{
+										type: 'radio',
+										name: 'workload_vote',
+										value: '1',
+										checked: defaultData.workload_vote === 1,
+										required: true,
+									}}
+								/>
 
-                                <ButtonInput
-                                    variant="orange"
-                                    size="sm"
-                                    icon={HourglassIcon}
-                                    title="Normal"
-                                    subtitle="Exige algo de compromiso"
-                                    inputProps={{
-                                        type: "radio",
-                                        name: "workload_vote",
-                                        value: "1",
-                                        checked:
-                                            defaultData.workload_vote === 1,
-                                        required: true,
-                                    }}
-                                />
+								<ButtonInput
+									variant="red"
+									size="sm"
+									icon={HourglassIcon}
+									title="Alta"
+									subtitle="Puede sentirse intenso o pesado"
+									inputProps={{
+										type: 'radio',
+										name: 'workload_vote',
+										value: '2',
+										checked: defaultData.workload_vote === 2,
+										required: true,
+									}}
+								/>
+							</div>
+							{
+								inputErrors.workload_vote && (
+									<p class="text-destructive mt-3 text-sm">{inputErrors.workload_vote}</p>
+								)
+							}
+						</div>
 
-                                <ButtonInput
-                                    variant="red"
-                                    size="sm"
-                                    icon={HourglassIcon}
-                                    title="Alta"
-                                    subtitle="Puede sentirse intenso o pesado"
-                                    inputProps={{
-                                        type: "radio",
-                                        name: "workload_vote",
-                                        value: "2",
-                                        checked:
-                                            defaultData.workload_vote === 2,
-                                        required: true,
-                                    }}
-                                />
-                            </div>
-                            {
-                                inputErrors.workload_vote && (
-                                    <p class="text-destructive text-sm mt-3">
-                                        {inputErrors.workload_vote}
-                                    </p>
-                                )
-                            }
-                        </div>
+						<!-- Attendance Section -->
+						<div class="border-border rounded-md border p-6">
+							<h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
+								<div class="bg-purple-light text-purple border-purple/20 rounded-lg border p-2">
+									<AttendanceIcon className="h-5 w-5 fill-current" />
+								</div>
+								Tipo de Asistencia
+							</h3>
+							<div class="space-y-3">
+								<ButtonInput
+									variant="red"
+									size="sm"
+									icon={AttendanceIcon}
+									title="Obligatoria"
+									subtitle="Asistencia requerida"
+									inputProps={{
+										type: 'radio',
+										name: 'attendance_type',
+										value: '0',
+										checked: defaultData.attendance_type === 0,
+										required: true,
+									}}
+								/>
 
-                        <!-- Attendance Section -->
-                        <div class="border border-border rounded-md p-6">
-                            <h3
-                                class="text-lg font-semibold mb-4 flex items-center gap-2"
-                            >
-                                <div
-                                    class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
-                                >
-                                    <AttendanceIcon
-                                        className="h-5 w-5 fill-current"
-                                    />
-                                </div>
-                                Tipo de Asistencia
-                            </h3>
-                            <div class="space-y-3">
-                                <ButtonInput
-                                    variant="red"
-                                    size="sm"
-                                    icon={AttendanceIcon}
-                                    title="Obligatoria"
-                                    subtitle="Asistencia requerida"
-                                    inputProps={{
-                                        type: "radio",
-                                        name: "attendance_type",
-                                        value: "0",
-                                        checked:
-                                            defaultData.attendance_type === 0,
-                                        required: true,
-                                    }}
-                                />
+								<ButtonInput
+									variant="green"
+									size="sm"
+									icon={AttendanceIcon}
+									title="Opcional"
+									subtitle="Puedes faltar sin problemas"
+									inputProps={{
+										type: 'radio',
+										name: 'attendance_type',
+										value: '1',
+										checked: defaultData.attendance_type === 1,
+										required: true,
+									}}
+								/>
+							</div>
+							{
+								inputErrors.attendance_type && (
+									<p class="text-destructive mt-3 text-sm">{inputErrors.attendance_type}</p>
+								)
+							}
+						</div>
+					</div>
 
-                                <ButtonInput
-                                    variant="green"
-                                    size="sm"
-                                    icon={AttendanceIcon}
-                                    title="Opcional"
-                                    subtitle="Puedes faltar sin problemas"
-                                    inputProps={{
-                                        type: "radio",
-                                        name: "attendance_type",
-                                        value: "1",
-                                        checked:
-                                            defaultData.attendance_type === 1,
-                                        required: true,
-                                    }}
-                                />
-                            </div>
-                            {
-                                inputErrors.attendance_type && (
-                                    <p class="text-destructive text-sm mt-3">
-                                        {inputErrors.attendance_type}
-                                    </p>
-                                )
-                            }
-                        </div>
-                    </div>
+					<!-- Numeric Fields Grid -->
+					<div class="border-border rounded-md border p-6">
+						<h3 class="mb-6 flex items-center gap-2 text-lg font-semibold">
+							<div class="bg-green-light text-green border-green/20 rounded-lg border p-2">
+								<CalendarIcon className="h-5 w-5 fill-current" />
+							</div>
+							Detalles del Curso
+						</h3>
+						<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+							<!-- Weekly Hours -->
+							<NumericInput
+								icon={ClockIcon}
+								label="Horas Semanales"
+								description="Tiempo dedicado semanalmente al curso"
+								placeholder="8"
+								name="weekly_hours"
+								required={true}
+								min={0}
+								max={168}
+								value={defaultData.weekly_hours || ''}
+								error={inputErrors.weekly_hours}
+							/>
 
-                    <!-- Numeric Fields Grid -->
-                    <div class="border border-border rounded-md p-6">
-                        <h3
-                            class="text-lg font-semibold mb-6 flex items-center gap-2"
-                        >
-                            <div
-                                class="p-2 bg-green-light text-green border border-green/20 rounded-lg"
-                            >
-                                <CalendarIcon
-                                    className="h-5 w-5 fill-current"
-                                />
-                            </div>
-                            Detalles del Curso
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <!-- Weekly Hours -->
-                            <NumericInput
-                                icon={ClockIcon}
-                                label="Horas Semanales"
-                                description="Tiempo dedicado semanalmente al curso"
-                                placeholder="8"
-                                name="weekly_hours"
-                                required={true}
-                                min={0}
-                                max={168}
-                                value={defaultData.weekly_hours || ""}
-                                error={inputErrors.weekly_hours}
-                            />
+							<!-- Year -->
+							<NumericInput
+								icon={CalendarIcon}
+								label="Año Cursado"
+								description="Año en que cursaste la materia"
+								placeholder={currentYear.toString()}
+								name="year_taken"
+								required={true}
+								min={2000}
+								max={currentYear}
+								value={defaultData.year_taken || ''}
+								error={inputErrors.year_taken}
+							/>
 
-                            <!-- Year -->
-                            <NumericInput
-                                icon={CalendarIcon}
-                                label="Año Cursado"
-                                description="Año en que cursaste la materia"
-                                placeholder={currentYear.toString()}
-                                name="year_taken"
-                                required={true}
-                                min={2000}
-                                max={currentYear}
-                                value={defaultData.year_taken || ""}
-                                error={inputErrors.year_taken}
-                            />
+							<!-- Semester -->
+							<SelectInput
+								icon={CalendarIcon}
+								label="Semestre"
+								description={`Período académico cursado (máximo ${CURRENT_SEMESTER})`}
+								error={inputErrors.semester_taken}
+								selectProps={{
+									id: 'semester_taken',
+									name: 'semester_taken',
+									required: true,
+								}}
+								transition:persist
+							>
+								<option value="">Seleccionar semestre</option>
+								<option value="1" selected={defaultData.semester_taken === 1}>1° Semestre</option>
+								<option value="2" selected={defaultData.semester_taken === 2}>2° Semestre</option>
+								<option value="3" selected={defaultData.semester_taken === 3}
+									>TAV (Temporada Académica de Verano)</option
+								>
+							</SelectInput>
+						</div>
+					</div>
 
-                            <!-- Semester -->
-                            <SelectInput
-                                icon={CalendarIcon}
-                                label="Semestre"
-                                description={`Período académico cursado (máximo ${CURRENT_SEMESTER})`}
-                                error={inputErrors.semester_taken}
-                                selectProps={{
-                                    id: "semester_taken",
-                                    name: "semester_taken",
-                                    required: true,
-                                }}
-                                transition:persist
-                            >
-                                <option value="">Seleccionar semestre</option>
-                                <option
-                                    value="1"
-                                    selected={defaultData.semester_taken === 1}
-                                    >1° Semestre</option
-                                >
-                                <option
-                                    value="2"
-                                    selected={defaultData.semester_taken === 2}
-                                    >2° Semestre</option
-                                >
-                                <option
-                                    value="3"
-                                    selected={defaultData.semester_taken === 3}
-                                    >TAV (Temporada Académica de Verano)</option
-                                >
-                            </SelectInput>
-                        </div>
-                    </div>
+					<!-- Comment Section -->
+					<div class="border-border rounded-md border p-6">
+						<h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
+							<div class="bg-purple-light text-purple border-purple/20 rounded-lg border p-2">
+								<EditIcon className="h-5 w-5 fill-current" />
+							</div>
+							Comentario (Opcional)
+						</h3>
+						<p class="text-muted-foreground mb-4 text-sm">
+							¿Cómo fue tu vivencia en el curso? Comenta sobre los tipos de evaluaciones, tu opinión
+							sobre el profesor (de forma respetuosa y con criterio), las estrategias de estudio que
+							te resultaron útiles, qué fue lo más desafiante del ramo y qué fue lo que más
+							disfrutaste.
+						</p>
+						<!-- NO SACAR field-sizing-content GENERA QUE LA GENTE HAGA RESEÑAS CORTAR QUE DAN POCA INFORMACION, PERDIMO CERCA DE 50 RESEÑAS QUE PUDIERON HABER SIDO RELEVANTES Y NO COMENTARIOS DE BUENO PORQUE SI O MALO PORQUE SI -->
+						<textarea
+							id="comment"
+							name="comment"
+							rows="6"
+							maxlength="10000"
+							placeholder="Escribe tu comentario aquí... Puedes incluir información sobre la metodología, evaluaciones, consejos para el curso, etc."
+							class="border-border focus:border-primary focus:ring-primary/20 focus:ring-opacity-50 resize-vertical field-sizing-content min-h-20 w-full resize-none rounded-md border px-3 py-2 text-sm shadow-sm transition-colors focus:ring"
+							transition:persist>{text || ''}</textarea
+						>
+						<div class="mt-2 flex justify-between">
+							<div>
+								{
+									inputErrors.comment && (
+										<p class="text-destructive text-sm">{inputErrors.comment}</p>
+									)
+								}
+							</div>
+							<p class="text-muted-foreground text-xs">Máximo 10,000 caracteres</p>
+						</div>
+					</div>
 
-                    <!-- Comment Section -->
-                    <div class="border border-border rounded-md p-6">
-                        <h3
-                            class="text-lg font-semibold mb-4 flex items-center gap-2"
-                        >
-                            <div
-                                class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
-                            >
-                                <EditIcon className="h-5 w-5 fill-current" />
-                            </div>
-                            Comentario (Opcional)
-                        </h3>
-                        <p class="text-sm text-muted-foreground mb-4">
-                            ¿Cómo fue tu vivencia en el curso? Comenta sobre los
-                            tipos de evaluaciones, tu opinión sobre el profesor
-                            (de forma respetuosa y con criterio), las
-                            estrategias de estudio que te resultaron útiles, qué
-                            fue lo más desafiante del ramo y qué fue lo que más
-                            disfrutaste.
-                        </p>
-                        <!-- NO SACAR field-sizing-content GENERA QUE LA GENTE HAGA RESEÑAS CORTAR QUE DAN POCA INFORMACION, PERDIMO CERCA DE 50 RESEÑAS QUE PUDIERON HABER SIDO RELEVANTES Y NO COMENTARIOS DE BUENO PORQUE SI O MALO PORQUE SI -->
-                        <textarea
-                            id="comment"
-                            name="comment"
-                            rows="6"
-                            maxlength="10000"
-                            placeholder="Escribe tu comentario aquí... Puedes incluir información sobre la metodología, evaluaciones, consejos para el curso, etc."
-                            class="field-sizing-content w-full rounded-md border border-border px-3 py-2 shadow-sm focus:border-primary focus:ring focus:ring-primary/20 focus:ring-opacity-50 resize-vertical text-sm resize-none min-h-20 transition-colors"
-                            transition:persist>{text || ""}</textarea
-                        >
-                        <div class="flex justify-between mt-2">
-                            <div>
-                                {
-                                    inputErrors.comment && (
-                                        <p class="text-destructive text-sm">
-                                            {inputErrors.comment}
-                                        </p>
-                                    )
-                                }
-                            </div>
-                            <p class="text-xs text-muted-foreground">
-                                Máximo 10,000 caracteres
-                            </p>
-                        </div>
-                    </div>
+					<!-- Action Buttons -->
+					<div class="border-border flex items-center justify-between border-t pt-6">
+						<Button
+							variant="ghost"
+							href={`/${sigle}/`}
+							className="text-muted-foreground hover:text-foreground"
+						>
+							← Volver al curso
+						</Button>
 
+						<div class="flex items-center gap-3">
+							<Button type="submit" variant="default" icon={isEditMode ? EditIcon : PlusIcon}>
+								{isEditMode ? 'Actualizar Reseña' : 'Guardar Reseña'}
+							</Button>
 
-                    <!-- Action Buttons -->
-                    <div
-                        class="flex justify-between items-center pt-6 border-t border-border"
-                    >
-                        <Button
-                            variant="ghost"
-                            href={`/${sigle}/`}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            ← Volver al curso
-                        </Button>
-
-                        <div class="flex items-center gap-3">
-                            <Button
-                                type="submit"
-                                variant="default"
-                                icon={isEditMode ? EditIcon : PlusIcon}
-                            >
-                                {
-                                    isEditMode
-                                        ? "Actualizar Reseña"
-                                        : "Guardar Reseña"
-                                }
-                            </Button>
-
-                            {
-                                defaultData.id && (
-                                    <Button
-                                        variant="destructive"
-                                        href={`/${sigle}/delete/${defaultData.id}`}
-                                        size="sm"
-                                    >
-                                        Borrar Reseña
-                                    </Button>
-                                )
-                            }
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </div>
-    <ReviewFormToast result={result} client:load />
-    <RedirectLogin userIsNull={userIsNull} client:only="react" />
+							{
+								defaultData.id && (
+									<Button
+										variant="destructive"
+										href={`/${sigle}/delete/${defaultData.id}`}
+										size="sm"
+									>
+										Borrar Reseña
+									</Button>
+								)
+							}
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+	<ReviewFormToast result={result} client:load />
+	<RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>

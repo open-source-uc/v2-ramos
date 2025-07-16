@@ -1,10 +1,9 @@
 ---
 name: 🐞 Reportar Bug
 about: Crea un reporte para ayudarnos a mejorar
-title: "[BUG] Título claro y conciso"
+title: '[BUG] Título claro y conciso'
 labels: bug
 assignees: ''
-
 ---
 
 ## 🧩 Descripción del Bug

@@ -1,101 +1,98 @@
 ---
-import { Pill } from "@/components/ui/pill";
+import { Pill } from '@/components/ui/pill'
 
 export interface Props {
-  title: string;
-  code: string;
-  initiative: string;
-  period: string;
-  faculty: string;
-  qualification: number;
-  tags: string[];
-  children?: any;
+	title: string
+	code: string
+	initiative: string
+	period: string
+	faculty: string
+	qualification: number
+	tags: string[]
+	children?: any
 }
 
-const { title, code, initiative, period, faculty, qualification, tags } =
-  Astro.props;
+const { title, code, initiative, period, faculty, qualification, tags } = Astro.props
 ---
 
-<article class="border border-border rounded-lg p-6 w-full max-w-4xl mx-auto">
-  <div class="space-y-6">
-    <header
-      class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4"
-    >
-      <div class="flex flex-col items-start gap-4">
-        <h1
-          class="font-semibold text-2xl md:text-3xl leading-tight flex-1"
-          style={`view-transition-name: recommendation-title-${code}-${initiative.replace(/\s/g, "")}`}
-        >
-          {title}
-        </h1>
-        <Pill size="md"> Iniciativa estudiantil reconocida </Pill>
-      </div>
-      <span
-        class="text-lg font-semibold font-mono"
-        aria-label={`Código del curso: ${code}`}
-        style={`view-transition-name: code-${code}-${initiative.replace(/\s/g, "")}`}
-      >
-        {code}
-      </span>
-    </header>
-    <div
-      class="font-medium text-lg"
-      style={`view-transition-name: initiative-${code}-${initiative.replace(/\s/g, "")}`}
-    >
-      {initiative}
-    </div>
-    <div class="flex items-center gap-2 text-base">
-      <span
-        aria-label="Facultad"
-        style={`view-transition-name: faculty-${code}-${initiative.replace(/\s/g, "")}`}
-        >{faculty}</span
-      >
-      <span aria-hidden="true">•</span>
-      <span
-        aria-label="Período"
-        style={`view-transition-name: period-${code}-${initiative.replace(/\s/g, "")}`}
-        >{period}</span
-      >
-    </div>
-  </div>
-  <div class="flex items-center gap-2">
-    <span
-      class="text-base text-muted-foreground"
-      style={`view-transition-name: qualification-label-${code}-${initiative.replace(/\s/g, "")}`}
-    >
-      Calificación:
-    </span>
-    <div
-      class="font-semibold text-xl"
-      aria-label={`Calificación: ${qualification} de 7`}
-      style={`view-transition-name: qualification-${code}-${initiative.replace(/\s/g, "")}`}
-    >
-      <span class="text-2xl">{qualification}</span>
-      <span class="text-lg text-muted-foreground">/7</span>
-    </div>
-  </div>
-  <footer
-    class="flex flex-wrap gap-2"
-    aria-label="Etiquetas"
-    role="list"
-    style={`view-transition-name: tags-${code}-${initiative.replace(/\s/g, "")}`}
-  >
-    {
-      tags.map((tag: string) => (
-        <span
-          class="inline-block bg-secondary text-secondary-foreground text-sm px-3 py-1 rounded-full"
-          role="listitem"
-        >
-          {tag}
-        </span>
-      ))
-    }
-  </footer>
+<article class="border-border mx-auto w-full max-w-4xl rounded-lg border p-6">
+	<div class="space-y-6">
+		<header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+			<div class="flex flex-col items-start gap-4">
+				<h1
+					class="flex-1 text-2xl leading-tight font-semibold md:text-3xl"
+					style={`view-transition-name: recommendation-title-${code}-${initiative.replace(/\s/g, '')}`}
+				>
+					{title}
+				</h1>
+				<Pill size="md"> Iniciativa estudiantil reconocida </Pill>
+			</div>
+			<span
+				class="font-mono text-lg font-semibold"
+				aria-label={`Código del curso: ${code}`}
+				style={`view-transition-name: code-${code}-${initiative.replace(/\s/g, '')}`}
+			>
+				{code}
+			</span>
+		</header>
+		<div
+			class="text-lg font-medium"
+			style={`view-transition-name: initiative-${code}-${initiative.replace(/\s/g, '')}`}
+		>
+			{initiative}
+		</div>
+		<div class="flex items-center gap-2 text-base">
+			<span
+				aria-label="Facultad"
+				style={`view-transition-name: faculty-${code}-${initiative.replace(/\s/g, '')}`}
+				>{faculty}</span
+			>
+			<span aria-hidden="true">•</span>
+			<span
+				aria-label="Período"
+				style={`view-transition-name: period-${code}-${initiative.replace(/\s/g, '')}`}
+				>{period}</span
+			>
+		</div>
+	</div>
+	<div class="flex items-center gap-2">
+		<span
+			class="text-muted-foreground text-base"
+			style={`view-transition-name: qualification-label-${code}-${initiative.replace(/\s/g, '')}`}
+		>
+			Calificación:
+		</span>
+		<div
+			class="text-xl font-semibold"
+			aria-label={`Calificación: ${qualification} de 7`}
+			style={`view-transition-name: qualification-${code}-${initiative.replace(/\s/g, '')}`}
+		>
+			<span class="text-2xl">{qualification}</span>
+			<span class="text-muted-foreground text-lg">/7</span>
+		</div>
+	</div>
+	<footer
+		class="flex flex-wrap gap-2"
+		aria-label="Etiquetas"
+		role="list"
+		style={`view-transition-name: tags-${code}-${initiative.replace(/\s/g, '')}`}
+	>
+		{
+			tags.map((tag: string) => (
+				<span
+					class="bg-secondary text-secondary-foreground inline-block rounded-full px-3 py-1 text-sm"
+					role="listitem"
+				>
+					{tag}
+				</span>
+			))
+		}
+	</footer>
 
-  <div class="border-t border-border pt-6">
-    <h2 class="text-xl font-bold mb-4">Recomendación:</h2>
-    <div class="content-markdown">
-      <slot />
-    </div>
-  </div>
+	<div class="border-border border-t pt-6">
+		<h2 class="mb-4 text-xl font-bold">Recomendación:</h2>
+		<div class="content-markdown">
+			<slot />
+		</div>
+	</div>
 </article>

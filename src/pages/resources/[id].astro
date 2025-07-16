@@ -1,35 +1,35 @@
 ---
-import { getCollection } from "astro:content";
-import ContentPage from "@/components/common/ContentPage.astro";
-import { ResourcesIcon, ClockIcon } from "../../components/icons/icons";
-import Layout from "@/layouts/Layout.astro";
-export const prerender = true;
+import { getCollection } from 'astro:content'
+import ContentPage from '@/components/common/ContentPage.astro'
+import { ResourcesIcon, ClockIcon } from '../../components/icons/icons'
+import Layout from '@/layouts/Layout.astro'
+export const prerender = true
 
 export async function getStaticPaths() {
-  const resources = await getCollection("resources");
+	const resources = await getCollection('resources')
 
-  return resources.map((resource) => ({
-    params: { id: resource.slug },
-    props: { resource },
-  }));
+	return resources.map((resource) => ({
+		params: { id: resource.slug },
+		props: { resource },
+	}))
 }
 
-const { resource } = Astro.props;
-const { data, body } = resource;
-const { title, author, readtime, description } = data;
-const { Content } = await resource.render();
+const { resource } = Astro.props
+const { data, body } = resource
+const { title, author, readtime, description } = data
+const { Content } = await resource.render()
 ---
 
 <Layout>
-  <ContentPage
-    title={title}
-    description={description}
-    author={author}
-    readtime={readtime}
-    contentType="resource"
-    primaryPillIcon={ResourcesIcon}
-    secondaryPillIcon={ClockIcon}
-  >
-    <Content />
-  </ContentPage>
+	<ContentPage
+		title={title}
+		description={description}
+		author={author}
+		readtime={readtime}
+		contentType="resource"
+		primaryPillIcon={ResourcesIcon}
+		secondaryPillIcon={ClockIcon}
+	>
+		<Content />
+	</ContentPage>
 </Layout>

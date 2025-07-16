@@ -1,14 +1,13 @@
 /* Import external dependencies */
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 @import '@fontsource-variable/instrument-sans';
 
 /* Import our CSS components */
-@import "./variables.css";
-@import "./base.css";
-@import "./themes/dark.css";
-@import "./themes/high-contrast.css";
-@import "./themes/high-contrast-dark.css";
-@import "./components/markdown.css";
-@import "./utilities.css";
-
+@import './variables.css';
+@import './base.css';
+@import './themes/dark.css';
+@import './themes/high-contrast.css';
+@import './themes/high-contrast-dark.css';
+@import './components/markdown.css';
+@import './utilities.css';

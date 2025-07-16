@@ -1,12 +1,11 @@
-import type { AstroCookies } from "astro";
-
+import type { AstroCookies } from 'astro'
 
 export function getToken(cookies: AstroCookies) {
-    let token = cookies.get("osucookie")?.value || "";
+	let token = cookies.get('osucookie')?.value || ''
 
-    if (!import.meta.env.PROD) {
-        token = token || import.meta.env.USER_TOKEN || "";
-    }
+	if (!import.meta.env.PROD) {
+		token = token || import.meta.env.USER_TOKEN || ''
+	}
 
-    return token;
+	return token
 }
