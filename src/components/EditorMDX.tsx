@@ -220,7 +220,7 @@ También puedes combinar **texto en negrita** con <Pill variant="pink" size="md"
 			</div>
 
 			{/* MDX Editor */}
-			<div className="border-border relative rounded-lg border">
+			<div className="border-border relative rounded-lg border p-1">
 				<MDXEditor
 					ref={ref}
 					markdown={initialContent || defaultInitialMarkdown}

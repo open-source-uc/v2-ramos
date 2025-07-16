@@ -34,7 +34,7 @@ if (result && !result.error) {
 	messageType = 'error'
 }
 
-const tagsResponse = await fetch(new URL('/api/blogs-tags', Astro.url.origin))
+const tagsResponse = await fetch(new URL('/api/articles/blogs-tags', Astro.url.origin))
 const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
 ---
 

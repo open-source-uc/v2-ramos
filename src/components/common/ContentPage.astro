@@ -1,6 +1,7 @@
 ---
 import type { Blogs, Recommendations, Organization } from '@/types'
 import { Pill } from '../ui/pill'
+import ConditionalEdit from '../features/article/ConditionalEdit'
 
 interface Props {
 	contentData: Blogs | Recommendations
@@ -29,7 +30,7 @@ const isBlog = contentType === 'blog'
 const isResource = contentType === 'resource'
 
 // Etiquetas y campos según tipo
-const contentTypeLabel = isResource ? 'Recurso' : isBlog ? 'Blog' : 'Recomendación'
+const contentTypeLabel = isResource ? 'Recursos' : isBlog ? 'Blogs' : 'Recomendaciónes'
 
 const tags =
 	isBlog || isResource
@@ -74,12 +75,15 @@ const finalNavigationSection = navigationSection || defaultNavigationSection
 
 <div class="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-8 sm:px-6">
 	<!-- Header Section -->
-	<a
-		class="inline-flex items-center gap-2 text-blue-600 transition-colors hover:text-blue-800 hover:underline"
-		href={isRecommendation ? '/recommendations' : `/${contentType}s`}
-	>
-		← Ver más {contentTypeLabel}s
-	</a>
+	<div class="mb-3 flex items-center justify-between">
+		<a
+			class="inline-flex items-center gap-2 text-blue-500 transition-colors hover:text-blue-800 hover:underline"
+			href={isRecommendation ? '/recommendations' : `/${contentType}s`}
+		>
+			← Ver más {contentTypeLabel}
+		</a>
+		<ConditionalEdit articleId={contentData.id} articleUserId={contentData.user_id} contentType={contentType}  client:only="react" />
+	</div>
 	<!-- Encabezado: título y metadatos -->
 	<header class="border-border mb-4 rounded-md border px-4 py-6 sm:px-6 sm:py-8">
 		<div class="flex items-center justify-between gap-4">

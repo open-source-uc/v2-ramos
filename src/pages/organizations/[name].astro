@@ -27,7 +27,7 @@ const { Content } = await organization.render()
 let blogs: any[] = []
 try {
 	// La API actual no filtra por organización, así que filtramos en el cliente
-	const res = await fetch(new URL(`/api/blogs`, config.BASEURL))
+	const res = await fetch(new URL(`/api/articles/blogs`, config.BASEURL))
 	if (res.ok) {
 		const allBlogs = (await res.json()) as any[]
 		blogs = allBlogs.filter((blog) => blog.organization_name === name)

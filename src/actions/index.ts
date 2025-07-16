@@ -1126,4 +1126,158 @@ export const server = {
 			}
 		},
 	}),
+
+	updateRecommendation: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive(),
+			title: z.string().min(1).max(200),
+			readtime: z.number().int().positive(),
+			qualification: z.number().int().min(1).max(5),
+			content: z.string().min(1),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para actualizar una recomendación',
+				})
+			}
+
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar recomendaciones',
+				})
+			}
+
+			// Verificar que la recomendación existe y pertenece al usuario
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de recomendación inválido',
+				})
+			}
+
+			const recommendationCreatorId = await locals.runtime.env.DB.prepare(
+				'SELECT user_id FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number }>()
+			if (!recommendationCreatorId) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Recomendación no encontrada',
+				})
+			}
+			if (recommendationCreatorId.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar esta recomendación',
+				})
+			}
+
+			try {
+				// Verificar que la recomendación existe y que el usuario es el dueño
+				const existingRecommendation = await locals.runtime.env.DB.prepare(
+					'SELECT id, user_id, title, content_path FROM recommendations WHERE id = ?'
+				)
+					.bind(state.id)
+					.first()
+
+				if (!existingRecommendation) {
+					throw new ActionError({
+						code: 'NOT_FOUND',
+						message: 'Recomendación no encontrada',
+					})
+				}
+
+				if (existingRecommendation.user_id !== userId) {
+					throw new ActionError({
+						code: 'FORBIDDEN',
+						message: 'No tienes permisos para actualizar esta recomendación',
+					})
+				}
+
+				// Verificar si existe otra recomendación con el mismo título (excluyendo la actual)
+				const duplicateRecommendation = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM recommendations WHERE title = ? AND user_id = ? AND id != ?'
+				)
+					.bind(state.title, userId, state.id)
+					.first()
+
+				if (duplicateRecommendation) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya existe una recomendación con el mismo título',
+					})
+				}
+
+				const newFilePath = generateRecommendationPath(state.id)
+				// Subir el nuevo contenido a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, newFilePath)
+				if (!uploadSuccess) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido actualizado de la recomendación',	
+					})
+				}
+
+				const result = await locals.runtime.env.DB.prepare(
+					`
+					UPDATE recommendations SET
+						title = ?,
+						readtime = ?,
+						qualification = ?,
+						content_path = ?
+					WHERE id = ?
+				`
+				)
+					.bind(state.title, state.readtime, state.qualification, newFilePath, state.id)
+					.run()
+
+				if (!result.success) {
+					try {
+						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
+					} catch (error) {
+						console.warn('No se pudo eliminar el archivo anterior:', error)
+					}
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar la recomendación',
+					})
+				}
+				// Eliminar el archivo anterior de R2 si existe y es diferente al nuevo
+				if (existingRecommendation.content_path && existingRecommendation.content_path !== newFilePath) {
+					try {
+						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
+					} catch (error) {
+						// Log del error pero no fallar la operación
+						console.warn('No se pudo eliminar el archivo anterior:', error)
+					}
+				}
+
+				return {
+					message: 'Recomendación actualizada exitosamente',
+					code: 200,
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+
+				console.error('Error updating recommendation:', error)
+
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al actualizar la recomendación',
+				})
+			}
+		},
+	}),
 }

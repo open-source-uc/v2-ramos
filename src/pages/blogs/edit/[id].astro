@@ -11,42 +11,33 @@ import { actions } from 'astro:actions'
 import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
 import EditorMDX from '@/components/EditorMDX'
 
-export const prerender = true
+export const prerender = false
 
-export async function getStaticPaths() {
-	const response = await fetch(new URL('/api/blogs', config.BASEURL))
-	const blogs: Blogs[] = await response.json()
-	return blogs.map((blog) => ({
-		params: {
-			author: createSlug(blog.organization_name),
-			title: createSlug(blog.title),
-		},
-		props: { blog },
-	}))
-}
+// Obtener parámetros de la URL
+const blogId = Astro.params.id
 
-const { blog } = Astro.props
 const token = getToken(Astro.cookies)
 const user = await getUserDataByToken(token)
 if (!user) {
-	Astro.redirect('/')
+  Astro.redirect('/')
+}
+
+const blogResponse = await fetch(`${config.BASEURL}/api/articles/blogById?id=${blogId}`)
+const blogJson = (await blogResponse.json()) as unknown as Blogs[]
+const blogData: Blogs = blogJson[0]
+if (!blogData) {
+  throw new Error('No se encontró el blog solicitado.')
 }
 
 if (
-	(user && (String(user.id) !== String(blog.user_id))) ||
-	!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
+  (user && (String(user.id) !== String(blogData.user_id))) ||
+  !user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
 ) {
-	Astro.redirect(`/blogs/${createSlug(blog.organization_name)}/${createSlug(blog.title)}`)
+  Astro.redirect(`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`)
 }
-
-const blogResponse = await fetch(`${config.BASEURL}/api/blogById?id=${blog.id}`)
-const blogJson = await blogResponse.json()
-const blogData = blogJson[0] as Blogs
-console.log(blogData)
 let tags: string[] = []
 if (blogData.tags) {
-	tags = blogData.tags.split(',')
-	console.log(tags)
+  tags = blogData.tags.split(',')
 }
 let message = ''
 let messageType = ''
@@ -55,49 +46,54 @@ let messageType = ''
 const result = Astro.getActionResult(actions.updateBlog)
 
 if (result && !result.error) {
-	message = result.data?.message || 'Blog actualizado exitosamente'
-	messageType = 'success'
-} else if (result?.error) {
-	message = result.error.message || 'Error al actualizar el blog'
-	messageType = 'error'
+  message = result.data?.message || 'Blog actualizado exitosamente';
+  messageType = 'success';
+}
+else if (result?.error) {
+  message = result.error.message || 'Error al actualizar el blog';
+  messageType = 'error';
 }
 
-const tagsResponse = await fetch(new URL('/api/blogs-tags', Astro.url.origin))
+const tagsResponse = await fetch(new URL('/api/articles/blogs-tags', Astro.url.origin))
 const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
+const mdxContent = await fetch(`${config.BASEURL}/api/articles/article?path=${blogData.content_path}`)
+	.then(res => res.text())
+	.catch(() => '');
 ---
 
 
-<Layout title=`Edita: ${blogData.title}`>
+<Layout title={`Edita: ${blogData.title}`}> 
 	<main class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-		<!-- Estado del formulario -->
-		{
-			message && (
-				<section
-					class={`mb-6 rounded-md border p-4 sm:p-6 ${
-						messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+	<!-- Estado del formulario -->
+	{message && (
+		<section
+			class={`mb-6 rounded-md border p-4 sm:p-6 ${
+				messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+			}`}
+			role="alert"
+			aria-live="polite"
+		>
+			<div class="flex items-center gap-2">
+				<span
+					class={`flex-shrink-0 ${
+						messageType === 'success' ? 'text-green-600' : 'text-red-600'
 					}`}
-					role="alert"
-					aria-live="polite"
 				>
-					<div class="flex items-center gap-2">
-						<span
-							class={`flex-shrink-0 ${
-								messageType === 'success' ? 'text-green-600' : 'text-red-600'
-							}`}
-						>
-							{messageType === 'success' ? '✅' : '❌'}
-						</span>
-						<p
-							class={`text-xs font-medium sm:text-sm ${
-								messageType === 'success' ? 'text-green-800' : 'text-red-800'
-							}`}
-						>
-							{message}
-						</p>
-					</div>
-				</section>
-			)
-		}
+					{messageType === 'success' ? '✅' : '❌'}
+				</span>
+				<p
+					class={`text-xs font-medium sm:text-sm ${
+						messageType === 'success' ? 'text-green-800' : 'text-red-800'
+					}`}
+				>
+					{message}
+				</p>
+			</div>
+		</section>
+	)}
+	<div class="mb-6">
+		<a href={`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`} class="text-blue-500 ver:underline"><- Volver al blog</a>
+	</div>
 		<!-- Header Section -->
 		<ContentHeader
 			headerTitle="Edita tu blog"
@@ -112,10 +108,10 @@ const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
 						Información del blog
 					</h2>
 
-					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.createBlog}>
+					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.updateBlog}>
 						<!-- Información básica del blog -->
 						<BlogBasicInfo user={user} blogTags={tagsData} title={blogData.title} organization_name={blogData.organization_name} period_time={blogData.period_time} readtime={String(blogData.readtime)} tags={tags}/>
-
+						<input type="number" value={blogData.id} name="id" hidden />
 						<!-- Separador -->
 						<div class="border-border border-t pt-4 sm:pt-6">
 							<div class="mb-4 space-y-2">
@@ -131,7 +127,7 @@ const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
 
 						<!-- Editor MDX -->
 						<div class="min-w-0">
-							<EditorMDX submitText="Publicar Blog" client:only="react" />
+							<EditorMDX initialContent={mdxContent} submitText="Actualizar Blog" client:only="react" />
 						</div>
 					</form>
 				</div>

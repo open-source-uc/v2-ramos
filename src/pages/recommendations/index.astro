@@ -5,7 +5,7 @@ import { SearchableRecommendationsDisplay } from '../../components/features/cata
 import type { Recommendations } from '@/types'
 import ContentCard from '@/components/features/blog/BlogCard'
 
-const recommendationsRespone = await fetch(new URL('/api/recommendations', Astro.url.origin))
+const recommendationsRespone = await fetch(new URL('/api/articles/recommendations', Astro.url.origin))
 const recommendations: Recommendations[] = await recommendationsRespone.json()
 ---
 

@@ -11,7 +11,7 @@ import config from '@/lib/const'
 export const prerender = true
 
 export async function getStaticPaths() {
-	const response = await fetch(new URL('/api/blogs', config.BASEURL))
+	const response = await fetch(new URL('/api/articles/blogs', config.BASEURL))
 	const blogs: Blogs[] = await response.json()
 	return blogs.map((blog) => ({
 		params: {
@@ -28,7 +28,6 @@ const organizationData = (await organizationRes.json()) as Organization
 ---
 
 <Layout>
-	<ConditionalEdit blogTitle={blog.title} blogUserId={blog.user_id} client:only="react" />
 	<ContentPage
 		contentData={blog}
 		organizationData={organizationData}

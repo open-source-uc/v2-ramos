@@ -3,7 +3,7 @@ import BlogCard from '@/components/features/blog/BlogCard.tsx'
 import Layout from '@/layouts/Layout.astro'
 import type { Blogs } from '@/types'
 
-const blogsResponse = await fetch(new URL('/api/blogs', Astro.url.origin))
+const blogsResponse = await fetch(new URL('/api/articles/blogs', Astro.url.origin))
 const blogsData: Blogs[] = await blogsResponse.json()
 ---
 
@@ -19,7 +19,10 @@ const blogsData: Blogs[] = await blogsResponse.json()
 		{
 			blogsData.map((blog) => {
 				const { title, user_name, organization_name, period_time, readtime, tags } = blog
-				let newTags = tags.split(',').map((tag) => tag.trim())
+				let newTags = null;
+				if (tags) {
+					newTags = tags.split(',').map((tag) => tag.trim())
+				}
 				return (
 					<div class="w-full p-2">
 						<BlogCard

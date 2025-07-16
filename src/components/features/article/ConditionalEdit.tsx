@@ -4,11 +4,12 @@ import { createSlug } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 interface Props {
-	blogTitle: string,
-	blogUserId: number
+	articleId: number,
+	articleUserId: number,
+	contentType: 'blog' | 'recommendation' | 'resource';
 }
 
-export default function ConditionalEdit({ blogTitle, blogUserId }: Props) {
+export default function ConditionalEdit({ articleId, articleUserId, contentType}: Props) {
   const [userData, setUserData] = useState<any>(null);
   const [cookie, setCookie] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,6 @@ export default function ConditionalEdit({ blogTitle, blogUserId }: Props) {
 		.map(cookie => cookie.split('=')[1])[0];
 
 	  setCookie(cookieValue);
-
 	  if (cookieValue) {
 		try {
 		  const data = await getUserDataByToken(cookieValue);
@@ -48,10 +48,10 @@ export default function ConditionalEdit({ blogTitle, blogUserId }: Props) {
 	return <>{cookie}</>; // o un mensaje de error
   }
 
-  // Renderiza el botón de editar solo si el usuario es el autor
-  if (userData.id === blogUserId) {
-	return <a href={`./${createSlug(blogTitle)}/edit`}>Editar blog: {blogTitle}</a>;
-  }
+	if (userData.id === articleUserId) {
+		const spanishContentType = contentType === 'blog' ? 'blog' : contentType === 'recommendation' ? 'recomendación' : 'recurso';
+		return <a href={`/${contentType}s/edit/${articleId}`}>Editar {spanishContentType}</a>;
+	}
 
   return null;
 }

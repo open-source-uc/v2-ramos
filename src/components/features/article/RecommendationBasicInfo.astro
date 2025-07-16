@@ -7,7 +7,9 @@ interface Props {
 	organization_id?: string;
 	organization_name?: string;
 	period_time?: string;
+	qualification?: number;
 	code?: string;
+	readtime?: number;
 	message?: string;
 	messageType?: 'success' | 'error';
 }
@@ -18,6 +20,8 @@ const {
 	organization_id,
 	organization_name,
 	period_time,
+	qualification,
+	readtime,
 	code,
 	message = '',
 	messageType = 'success',
@@ -90,6 +94,7 @@ const {
 								<div class="relative min-w-0">
 									<input
 										name="readtime"
+										value={`${readtime || ''}`}
 										type="number"
 										min="1"
 										max="60"
@@ -144,6 +149,7 @@ const {
 									type="number"
 									min="1"
 									max="5"
+									value={`${qualification || ''}`}
 									name="qualification"
 									placeholder="Ingrese la clasificación del curso (1-5)"
 									class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"

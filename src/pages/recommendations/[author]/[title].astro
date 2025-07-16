@@ -13,7 +13,7 @@ import { OsucPermissions } from '@/types/permissions'
 export const prerender = true
 
 export async function getStaticPaths() {
-	const response = await fetch(new URL('/api/recommendations', config.BASEURL))
+	const response = await fetch(new URL('/api/articles/recommendations', config.BASEURL))
 	const recommendations: Recommendations[] = await response.json()
 	return recommendations.map((recommendation) => ({
 		params: {
@@ -54,7 +54,6 @@ if (token) {
 			buttonText: 'Ver Más Recomendaciones',
 			buttonHref: '/recommendations',
 		}}
-		showEditButton={showButton}
 	>
 		<MarkdownReviewView path={recommendation.content_path} client:load />
 	</ContentPage>
