@@ -849,6 +849,32 @@ export const server = {
 				})
 			}
 
+			// Verificar que el blog existe y pertenece al usuario
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+
+			const blogCreatorId = await locals.runtime.env.DB.prepare(
+				'SELECT user_id FROM blogs WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number }>()
+			if (!blogCreatorId) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Blog no encontrado',
+				})
+			}
+			if (blogCreatorId.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar este blog',
+				})
+			}
+
 			try {
 				// Verificar que el blog existe y que el usuario es el dueño
 				const existingBlog = await locals.runtime.env.DB.prepare(
