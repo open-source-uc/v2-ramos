@@ -1,6 +1,6 @@
 const config = {
-	BASEURL: 'http://localhost:4321',
-	AUTHURL: 'http://localhost:4322',
+	BASEURL: 'http://buscaramos.osuc.dev',
+	AUTHURL: 'https://auth.osuc.dev',
 }
 
 export default config
