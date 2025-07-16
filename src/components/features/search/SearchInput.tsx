@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { SearchIcon, LoadingIcon } from '@/components/icons/icons'
 
 interface SearchProps {
 	onSearch: (searchTerm: string) => void
@@ -10,6 +11,8 @@ interface SearchProps {
 	className?: string
 	initialValue?: string
 	normalizeText?: boolean // Option to enable/disable text normalization
+	isSearching?: boolean // New prop to indicate loading state
+	useFuzzySearch?: boolean // Option to use Fuse.js for normalization
 }
 
 // Function to normalize text for searching (handle special characters)
@@ -26,14 +29,22 @@ export function Search({
 	className = '',
 	initialValue = '',
 	normalizeText = true, // Default to true for better search experience
+	isSearching = false, // Default to false
+	useFuzzySearch = false, // Default to false to maintain backward compatibility
 }: SearchProps) {
 	const [searchTerm, setSearchTerm] = useState(initialValue)
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value)
-		// Pass both original and normalized text to the parent component
-		const searchValue = normalizeText ? normalizeSearchText(value) : value
-		onSearch(searchValue)
+
+		// If using fuzzy search, pass the original value (Fuse.js handles normalization)
+		// Otherwise, use the existing normalization logic
+		if (useFuzzySearch) {
+			onSearch(value)
+		} else {
+			const searchValue = normalizeText ? normalizeSearchText(value) : value
+			onSearch(searchValue)
+		}
 	}
 
 	const clearSearch = () => {
@@ -44,12 +55,19 @@ export function Search({
 	return (
 		<div className={`flex items-center gap-2 ${className}`}>
 			<div className="relative flex-1">
+				<div className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 transform">
+					{isSearching ? (
+						<LoadingIcon className="fill-border h-4 w-4 animate-spin" />
+					) : (
+						<SearchIcon className="fill-border h-4 w-4" />
+					)}
+				</div>
 				<Input
-					variant="search"
 					type="text"
 					placeholder={placeholder}
 					value={searchTerm}
 					onChange={(e) => handleSearch(e.target.value)}
+					className="pl-10"
 				/>
 				{searchTerm && (
 					<Button

@@ -13,7 +13,7 @@ export async function getPendingReviews(locals: App.Locals, token: string) {
 	const DB = locals.runtime.env.DB
 
 	const result = await DB.prepare(
-		'SELECT id, user_id, course_sigle, like_dislike, workload_vote, attendance_type, weekly_hours, year_taken, semester_taken, comment_path, status, created_at, updated_at FROM course_reviews WHERE status = 0 ORDER BY updated_at DESC'
+		'SELECT id, user_id, course_sigle, like_dislike, workload_vote, attendance_type, weekly_hours, year_taken, semester_taken, comment_path, status, created_at, updated_at FROM course_reviews WHERE status = 0 ORDER BY updated_at DESC LIMIT 50'
 	).all<CourseReview>()
 
 	const reviews = result.results

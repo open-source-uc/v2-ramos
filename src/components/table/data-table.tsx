@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { columns, type Course } from './columns'
+import Fuse from 'fuse.js'
 
 import {
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
 	getPaginationRowModel,
-	getFilteredRowModel,
 	getSortedRowModel,
 	type SortingState,
 } from '@tanstack/react-table'
@@ -22,21 +22,14 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 
-import { LocationIcon, AreaIcon, OpenInFullIcon } from '@/components/icons/icons'
+import TableCourseCampuses from './TableCourseCampuses'
+
+import { AreaIcon, OpenInFullIcon } from '@/components/icons/icons'
 
 import { Button } from '@/components/ui/button'
 import { Pill } from '@/components/ui/pill'
 import { Sentiment } from '@/components/icons/sentiment'
 import { calculateSentiment, calculatePositivePercentage } from '@/lib/courseStats'
-
-// Utility function to normalize text by removing accents and converting to lowercase
-const normalizeText = (text: string): string => {
-	return text
-		.toLowerCase()
-		.normalize('NFD') // Decompose accented characters
-		.replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-		.replace(/[^\w\s]/g, '') // Remove special characters except word characters and spaces
-}
 
 interface DataTableProps {
 	data: Course[]
@@ -47,30 +40,41 @@ export function DataTable({ data, externalSearchValue = '' }: DataTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [globalFilter, setGlobalFilter] = useState(externalSearchValue)
 
+	// Create Fuse instance with configuration for fuzzy searching
+	const fuse = useMemo(() => {
+		return new Fuse(data, {
+			keys: ['name', 'sigle'],
+			threshold: 0.3,
+			ignoreLocation: true,
+			includeScore: true,
+			minMatchCharLength: 2,
+		})
+	}, [data])
+
+	// Filter data using Fuse.js before passing to table
+	const filteredData = useMemo(() => {
+		if (!globalFilter || globalFilter.trim() === '') {
+			return data
+		}
+
+		const searchResults = fuse.search(globalFilter)
+		return searchResults.map((result) => result.item)
+	}, [data, globalFilter, fuse])
+
 	// Update internal filter when external search value changes
 	useEffect(() => {
 		setGlobalFilter(externalSearchValue)
 	}, [externalSearchValue])
 
 	const table = useReactTable({
-		data,
+		data: filteredData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		onSortingChange: setSorting,
 		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		globalFilterFn: (row, columnId, value) => {
-			const name = row.getValue('name') as string
-			const sigle = row.getValue('sigle') as string
-			const searchValue = normalizeText(value)
-
-			return normalizeText(name).includes(searchValue) || normalizeText(sigle).includes(searchValue)
-		},
-		onGlobalFilterChange: setGlobalFilter,
 		state: {
 			sorting,
-			globalFilter,
 		},
 	})
 
@@ -203,44 +207,38 @@ export function DataTable({ data, externalSearchValue = '' }: DataTableProps) {
 									{course.name}
 								</h3>
 
-								{/* Campus */}
-								<div className="mb-3 flex flex-wrap items-center gap-2">
-									{course.campus &&
-									course.campus.filter((campus) => campus && campus.trim() !== '').length > 0 ? (
-										course.campus
-											.filter((campus) => campus && campus.trim() !== '')
-											.map((campusItem, index) => (
-												<Pill key={index} variant="blue" size="sm" icon={LocationIcon}>
-													{campusItem}
-												</Pill>
-											))
-									) : (
-										<Pill variant="red" size="sm" icon={LocationIcon}>
-											No campus
-										</Pill>
-									)}
-								</div>
-
-								{course.area && (
-									<div className="mb-3 flex items-center gap-2">
-										<Pill variant="pink" size="sm" icon={AreaIcon}>
-											{course.area}
-										</Pill>
-									</div>
-								)}
-								{/* Reseñas con componente Sentiment */}
-								<div className="mb-2 flex items-center justify-between">
-									{totalReviews === 0 ? (
-										<Sentiment sentiment="question" size="xs" />
-									) : (
-										<Sentiment
-											sentiment={sentimentType}
-											size="xs"
-											percentage={positivePercentage}
-											reviewCount={totalReviews}
-											ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
+								<div className="flex flex-col gap-2">
+									{/* Campus */}
+									<div className="flex items-center">
+										<TableCourseCampuses
+											variant="with-icon"
+											campus={course.campus || []}
+											lastSemester={course.last_semester}
 										/>
+									</div>
+
+									{/* Área de Formación General */}
+									{course.area && (
+										<div className="flex items-center">
+											<Pill variant="pink" size="sm" icon={AreaIcon}>
+												{course.area}
+											</Pill>
+										</div>
 									)}
+									{/* Reseñas con componente Sentiment */}
+									<div className="flex items-center justify-between">
+										{totalReviews === 0 ? (
+											<Sentiment sentiment="question" size="xs" />
+										) : (
+											<Sentiment
+												sentiment={sentimentType}
+												size="xs"
+												percentage={positivePercentage}
+												reviewCount={totalReviews}
+												ariaLabel={`${positivePercentage}% de reseñas positivas de ${totalReviews} total`}
+											/>
+										)}
+									</div>
 								</div>
 								<div className="text-muted-foreground mt-4 flex flex-row-reverse items-center gap-1 text-xs">
 									<OpenInFullIcon className="inline-block h-4 w-4" /> Presiona para ver detalles

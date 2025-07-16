@@ -49,6 +49,8 @@ import PrerequisitesSection from "@/components/features/courses/PrerequisitesSec
 import SectionsCollapsible from "@/components/features/courses/SectionsCollapsible";
 import CourseCampuses from "@/components/features/courses/CourseCampuses";
 
+import { CURRENT_SEMESTER } from "@/lib/currentSemester"
+
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
     return Astro.redirect("/404");
@@ -292,7 +294,7 @@ const successMessage = Astro.url.searchParams.get('success');
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                     <Button
                         variant="outline"
-                        href={`https://buscacursos.uc.cl/?cxml_semestre=2025-1&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`}
+                        href={`https://buscacursos.uc.cl/?cxml_semestre=${CURRENT_SEMESTER}&cxml_sigla=${course.sigle}&cxml_nrc=&cxml_nombre=&cxml_categoria=TODOS&cxml_area_fg=TODOS&cxml_formato_cur=TODOS&cxml_profesor=&cxml_campus=TODOS&cxml_unidad_academica=TODOS&cxml_horario_tipo_busqueda=si_tenga&cxml_horario_tipo_busqueda_actividad=TODOS&cxml_periodo=TODOS&cxml_escuela=TODOS&cxml_nivel=TODOS#resultados`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full"
@@ -395,10 +397,12 @@ const successMessage = Astro.url.searchParams.get('success');
 
                                     {/* Comentario */}
                                     {review.comment_path && (
-                                        <MarkdownReviewView
-                                            path={review.comment_path}
-                                            client:load
-                                        />
+                                        <div class="content-markdown">
+                                            <MarkdownReviewView
+                                                path={review.comment_path}
+                                                client:load
+                                            />
+                                        </div>
                                     )}
 
                                     {/* Tags informativos */}

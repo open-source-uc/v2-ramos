@@ -75,3 +75,10 @@ export function getSentimentLabel(sentiment: string): string {
 	}
 	return labels[sentiment as keyof typeof labels] || 'Sin datos'
 }
+
+export function calculateReviewPositivity(like_dislike: number): number {
+	// like_dislike: 0 = dislike, 1 = like, 2 = superlike
+	if (like_dislike === 2) return 100 // superlike = 100%
+	if (like_dislike === 1) return 75 // like = 75%
+	return 0 // dislike = 0%
+}

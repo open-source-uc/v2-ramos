@@ -1,12 +1,18 @@
 import { Pill } from '@/components/ui/pill'
 import { getCampusPrefix, isCurrentSemester } from '@/lib/currentSemester'
+import { LocationIcon } from '@/components/icons/icons'
 
 interface TableCourseCampusesProps {
 	campus: string[]
 	lastSemester: string
+	variant?: 'default' | 'with-icon'
 }
 
-export default function TableCourseCampuses({ campus, lastSemester }: TableCourseCampusesProps) {
+export default function TableCourseCampuses({
+	campus,
+	lastSemester,
+	variant = 'default',
+}: TableCourseCampusesProps) {
 	// Filter out empty strings and null/undefined values
 	const validCampus = campus?.filter((campusItem) => campusItem && campusItem.trim() !== '') || []
 
@@ -22,7 +28,10 @@ export default function TableCourseCampuses({ campus, lastSemester }: TableCours
 		<Pill variant={pillVariant}>
 			<div className="flex flex-col">
 				<span className="text-xs font-medium opacity-80">{prefixText}</span>
-				<span>{campusText}</span>
+				<div className="flex items-center gap-1">
+					{variant === 'with-icon' && <LocationIcon className="h-3 w-3" />}
+					<span>{campusText}</span>
+				</div>
 			</div>
 		</Pill>
 	)

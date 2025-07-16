@@ -5,6 +5,8 @@ import {
 	PlusIcon,
 	BuildingIcon,
 	LinkIcon,
+	CategoryIcon,
+	AttendanceIcon,
 } from '@/components/icons/icons'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Pill } from '@/components/ui/pill'
@@ -47,6 +49,8 @@ function ScheduleGrid({
 	// Get section data for NRC and campus from NDJSON data
 	const nrc = sectionData?.nrc || 'Sin NRC'
 	const campus = sectionData?.campus || 'Sin campus'
+	const category = sectionData?.category || ''
+	const format = sectionData?.format || 'Sin formato'
 
 	useEffect(() => {
 		setIsInSchedule(isCourseInSchedule(courseId))
@@ -170,6 +174,14 @@ function ScheduleGrid({
 					</Pill>
 					<Pill variant="green" icon={LinkIcon} size="sm">
 						NRC {nrc}
+					</Pill>
+					{category && (
+						<Pill variant="purple" icon={CategoryIcon} size="sm">
+							{category}
+						</Pill>
+					)}
+					<Pill variant="orange" icon={AttendanceIcon} size="sm">
+						{format}
 					</Pill>
 				</div>
 			</div>

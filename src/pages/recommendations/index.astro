@@ -1,10 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getCollection } from 'astro:content'
-import { SearchableRecommendationsDisplay } from '../../components/features/catalog/SearchableRecommendationsDisplay'
 import type { Recommendations } from '@/types'
 import ContentCard from '@/components/features/blog/BlogCard'
-import New from './new.astro'
 import NewArticle from '@/components/features/article/NewArticle'
 
 const recommendationsRespone = await fetch(

@@ -4,6 +4,7 @@ import * as React from 'react'
 import { MenuIcon, CloseIcon } from '../icons/icons'
 import HighContrastToggle from '../common/HighContrastToggle'
 import DarkThemeToggle from '../common/DarkThemeToggle'
+import CommandSearchTrigger from '../features/command/CommandSearchTrigger'
 
 const components: { title: string; href: string; description: string }[] = [
 	{
@@ -42,17 +43,21 @@ export default function MobileHeader() {
 					/>
 				</a>
 
-				<button
-					onClick={toggleMenu}
-					className="hover:bg-muted hover:text-muted-foreground rounded-md p-2 transition-colors"
-					aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
-				>
-					{isOpen ? (
-						<CloseIcon className="fill-foreground h-6 w-6" />
-					) : (
-						<MenuIcon className="fill-foreground h-6 w-6" />
-					)}
-				</button>
+				<div className="flex items-center gap-2">
+					<CommandSearchTrigger />
+
+					<button
+						onClick={toggleMenu}
+						className="hover:bg-muted hover:text-muted-foreground rounded-md p-2 transition-colors"
+						aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+					>
+						{isOpen ? (
+							<CloseIcon className="fill-foreground h-6 w-6" />
+						) : (
+							<MenuIcon className="fill-foreground h-6 w-6" />
+						)}
+					</button>
+				</div>
 			</header>
 
 			{/* Mobile menu overlay */}

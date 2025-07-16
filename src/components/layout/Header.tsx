@@ -17,6 +17,7 @@ import {
 	navigationMenuTriggerStyle,
 } from '../ui/navigation-menu'
 import HighContrastToggle from '../common/HighContrastToggle'
+import CommandSearchTrigger from '../features/command/CommandSearchTrigger'
 
 const components: { title: string; href: string; description: string }[] = [
 	{
@@ -42,7 +43,7 @@ export default function Header() {
 				<a href="/">
 					<img
 						src="/logos/Placeholder.svg"
-						alt="Open Source eUC Logo"
+						alt="Logo de BuscaRamos"
 						width={200}
 						height={200}
 						className="fill-foreground h-20 w-auto"
@@ -116,7 +117,9 @@ export default function Header() {
 								</NavigationMenuItem>
 							</NavigationMenuList>
 						</NavigationMenu>
-						<div className="flex items-center text-nowrap">
+
+						<div className="flex items-center gap-2 text-nowrap">
+							<CommandSearchTrigger />
 							<ButtonNavbar
 								text="CUENTA OSUC"
 								url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`}

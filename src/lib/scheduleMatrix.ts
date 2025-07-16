@@ -273,3 +273,243 @@ export function generatePlaceholderSections(courseId: string): CourseSections {
 
 	return sections
 }
+
+/**
+ * Interface para representar una sugerencia de cambio de sección
+ */
+export interface SectionSuggestion {
+	courseId: string
+	currentSection: string
+	suggestedSection: string
+	courseName?: string
+}
+
+/**
+ * Interface para el resultado del análisis de resolución de conflictos
+ */
+export interface ConflictResolutionResult {
+	canResolve: boolean
+	suggestions: SectionSuggestion[]
+	remainingConflicts: ScheduleBlock[][]
+	message: string
+}
+
+/**
+ * Encuentra las posibles secciones alternativas para un curso específico
+ * @param courseId - ID del curso
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @returns Array de secciones disponibles para el curso
+ */
+export function getAvailableSections(courseId: string, courseSections: CourseSections): string[] {
+	const courseData = courseSections[courseId]
+	if (!courseData) return []
+
+	return Object.keys(courseData)
+}
+
+/**
+ * Verifica si una combinación de cursos tiene conflictos
+ * @param selectedCourses - Array de cursos seleccionados en formato "COURSE_ID-SECTION"
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @returns true si hay conflictos, false si no
+ */
+export function hasScheduleConflicts(
+	selectedCourses: string[],
+	courseSections: CourseSections
+): boolean {
+	const matrix = createScheduleMatrix(courseSections, selectedCourses)
+	const conflicts = detectScheduleConflicts(matrix)
+	return conflicts.length > 0
+}
+
+/**
+ * Encuentra sugerencias para resolver conflictos de horario
+ * @param selectedCourses - Array de cursos seleccionados
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @param courseOptions - Opciones de cursos con nombres para mostrar
+ * @returns Resultado del análisis de resolución de conflictos
+ */
+export function findConflictResolution(
+	selectedCourses: string[],
+	courseSections: CourseSections,
+	courseOptions: Array<{ id: string; sigle: string; nombre: string; seccion: string }> = []
+): ConflictResolutionResult {
+	// Crear matriz actual y detectar conflictos
+	const currentMatrix = createScheduleMatrix(courseSections, selectedCourses)
+	const currentConflicts = detectScheduleConflicts(currentMatrix)
+
+	if (currentConflicts.length === 0) {
+		return {
+			canResolve: true,
+			suggestions: [],
+			remainingConflicts: [],
+			message: 'No hay conflictos en el horario actual.',
+		}
+	}
+
+	// Extraer cursos únicos que tienen conflictos
+	const conflictingCourses = new Set<string>()
+	currentConflicts.forEach((conflict) => {
+		conflict.forEach((block) => {
+			conflictingCourses.add(`${block.courseId}-${block.section}`)
+		})
+	})
+
+	const suggestions: SectionSuggestion[] = []
+
+	// Para cada curso en conflicto, intentar encontrar una sección alternativa
+	for (const conflictingCourse of conflictingCourses) {
+		const [courseId, currentSection] = conflictingCourse.split('-')
+		const availableSections = getAvailableSections(courseId, courseSections)
+
+		// Probar cada sección alternativa
+		for (const alternativeSection of availableSections) {
+			if (alternativeSection === currentSection) continue
+
+			// Crear una nueva lista con la sección alternativa
+			const testCourses = selectedCourses.map((course) =>
+				course === conflictingCourse ? `${courseId}-${alternativeSection}` : course
+			)
+
+			// Verificar si esta combinación resuelve los conflictos
+			if (!hasScheduleConflicts(testCourses, courseSections)) {
+				// Encontrar el nombre del curso
+				const courseInfo = courseOptions.find(
+					(opt) => opt.id === `${courseId}-${alternativeSection}`
+				)
+				const courseName = courseInfo?.nombre || courseId
+
+				suggestions.push({
+					courseId,
+					currentSection,
+					suggestedSection: alternativeSection,
+					courseName,
+				})
+				break // Solo necesitamos una sugerencia por curso
+			}
+		}
+	}
+
+	// Si encontramos sugerencias, verificar si resuelven todos los conflictos
+	if (suggestions.length > 0) {
+		// Aplicar todas las sugerencias y verificar
+		let testCourses = [...selectedCourses]
+		suggestions.forEach((suggestion) => {
+			const oldCourse = `${suggestion.courseId}-${suggestion.currentSection}`
+			const newCourse = `${suggestion.courseId}-${suggestion.suggestedSection}`
+			testCourses = testCourses.map((course) => (course === oldCourse ? newCourse : course))
+		})
+
+		const testMatrix = createScheduleMatrix(courseSections, testCourses)
+		const remainingConflicts = detectScheduleConflicts(testMatrix)
+
+		if (remainingConflicts.length === 0) {
+			return {
+				canResolve: true,
+				suggestions,
+				remainingConflicts: [],
+				message: `Se encontraron ${suggestions.length} cambio(s) de sección que resuelven todos los conflictos.`,
+			}
+		} else {
+			return {
+				canResolve: false,
+				suggestions,
+				remainingConflicts,
+				message: `Se encontraron ${suggestions.length} cambio(s) de sección, pero aún quedan ${remainingConflicts.length} conflicto(s).`,
+			}
+		}
+	}
+
+	// No se encontraron soluciones
+	return {
+		canResolve: false,
+		suggestions: [],
+		remainingConflicts: currentConflicts,
+		message:
+			'No se pudieron encontrar secciones alternativas que resuelvan los conflictos. Es posible que necesites eliminar algunos cursos.',
+	}
+}
+
+/**
+ * Aplica las sugerencias de cambio de sección a una lista de cursos seleccionados
+ * @param selectedCourses - Array de cursos seleccionados actual
+ * @param suggestions - Sugerencias de cambio de sección
+ * @returns Nueva lista de cursos con las sugerencias aplicadas
+ */
+export function applySectionSuggestions(
+	selectedCourses: string[],
+	suggestions: SectionSuggestion[]
+): string[] {
+	let updatedCourses = [...selectedCourses]
+
+	suggestions.forEach((suggestion) => {
+		const oldCourse = `${suggestion.courseId}-${suggestion.currentSection}`
+		const newCourse = `${suggestion.courseId}-${suggestion.suggestedSection}`
+		updatedCourses = updatedCourses.map((course) => (course === oldCourse ? newCourse : course))
+	})
+
+	return updatedCourses
+}
+
+/**
+ * Genera una combinación aleatoria de secciones para los cursos seleccionados
+ * @param selectedCourses - Array de cursos seleccionados actual
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @returns Nueva lista de cursos con secciones aleatorias
+ */
+export function shuffleSections(
+	selectedCourses: string[],
+	courseSections: CourseSections
+): string[] {
+	return selectedCourses.map((courseSelection) => {
+		const [courseId] = courseSelection.split('-')
+		const availableSections = getAvailableSections(courseId, courseSections)
+
+		if (availableSections.length <= 1) {
+			// Si solo hay una sección disponible, mantener la actual
+			return courseSelection
+		}
+
+		// Seleccionar una sección completamente aleatoria (incluyendo la actual)
+		const randomSection = availableSections[Math.floor(Math.random() * availableSections.length)]
+		return `${courseId}-${randomSection}`
+	})
+}
+
+/**
+ * Genera múltiples combinaciones aleatorias y retorna la mejor (con menos conflictos)
+ * @param selectedCourses - Array de cursos seleccionados actual
+ * @param courseSections - Datos de todas las secciones disponibles
+ * @param attempts - Número de intentos aleatorios (default: 10)
+ * @returns La mejor combinación encontrada
+ */
+export function shuffleSectionsOptimal(
+	selectedCourses: string[],
+	courseSections: CourseSections,
+	attempts: number = 10
+): string[] {
+	let bestCombination = selectedCourses
+	let bestConflictCount = Infinity
+
+	// Evaluar la combinación actual
+	const currentMatrix = createScheduleMatrix(courseSections, selectedCourses)
+	const currentConflicts = detectScheduleConflicts(currentMatrix)
+	bestConflictCount = currentConflicts.length
+
+	// Generar múltiples combinaciones aleatorias
+	for (let i = 0; i < attempts; i++) {
+		const shuffledCourses = shuffleSections(selectedCourses, courseSections)
+		const matrix = createScheduleMatrix(courseSections, shuffledCourses)
+		const conflicts = detectScheduleConflicts(matrix)
+
+		if (conflicts.length < bestConflictCount) {
+			bestCombination = shuffledCourses
+			bestConflictCount = conflicts.length
+
+			// Si encontramos una combinación sin conflictos, usar esa
+			if (conflicts.length === 0) break
+		}
+	}
+
+	return bestCombination
+}

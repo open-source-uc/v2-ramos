@@ -2,7 +2,7 @@
  * Semestre actual
  * Se debe actualizar al inicio de cada semestre
  */
-export const CURRENT_SEMESTER = '2025-1'
+export const CURRENT_SEMESTER = '2025-2'
 
 /**
  * Chequea si el semestre dado es el semestre actual

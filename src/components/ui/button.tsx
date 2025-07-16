@@ -11,9 +11,12 @@ const buttonVariants = cva(
 			variant: {
 				default:
 					'bg-primary text-background border border-border hover:bg-primary-foreground hover:text-primary hover:border-primary-foreground',
-				destructive: 'bg-destructive text-destructive-foreground hover:bg-red-800',
+				destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
 				outline: 'border border-border bg-accent hover:bg-muted hover:text-muted-foreground',
 				secondary: 'bg-muted text-muted-foreground hover:bg-muted/80',
+				orange: 'bg-orange text-background hover:bg-orange/90 border-orange/20',
+				green: 'bg-green text-background hover:bg-green/90 border-green/20',
+				red: 'bg-red text-background hover:bg-red/90 border-red/20',
 				ghost: 'hover:bg-accent hover:text-accent-foreground',
 				ghost_border: 'border border-border hover:bg-accent hover:text-accent-foreground',
 				link: 'text-primary underline-offset-4 hover:underline',
@@ -162,7 +165,11 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 					role="button"
 					tabIndex={isDisabled ? -1 : 0}
 					aria-disabled={isDisabled}
-					// ...existing code...
+					onClick={
+						isDisabled
+							? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
+							: (onClick as any)
+					}
 					{...(restProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
 				>
 					{content}
@@ -175,7 +182,6 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 				{...commonProps}
 				disabled={isDisabled}
 				aria-disabled={isDisabled}
-				// ...existing code...
 				{...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
 			>
 				{content}
