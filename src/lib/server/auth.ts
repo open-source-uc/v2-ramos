@@ -2,6 +2,7 @@ import type { AstroCookies } from 'astro'
 import config from '../const'
 
 export async function getUserDataByToken(token: string): Promise<{
+	id: string
 	message: string
 	permissions: string[]
 	organizations: {
@@ -10,7 +11,6 @@ export async function getUserDataByToken(token: string): Promise<{
 		user_name: string
 		role: string
 	}[]
-	id: string
 } | null> {
 	const response = await fetch(`${config.AUTHURL}/api`, {
 		method: 'POST',
