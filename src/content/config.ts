@@ -20,21 +20,6 @@ const resources = defineCollection({
 	schema: resourcesSchema,
 })
 
-const organizations = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		name: z.string(),
-		picture: z.string().optional(),
-		faculty: z.string(),
-		rrss: z.object({
-			instagram: z.string().optional(),
-			github: z.string().optional(),
-			linkedin: z.string().optional(),
-			twitter: z.string().optional(),
-		}),
-	}),
-})
-
 const coursesStatic = defineCollection({
 	loader: file('src/../migration/json/cursos-simplificado.json', {
 		parser: (content) => {
@@ -58,9 +43,9 @@ const coursesStatic = defineCollection({
 		equiv: z.string(),
 		school: z.string(),
 		area: z.string(),
-		category: z.string(),
 		format: z.array(z.string()),
 		campus: z.array(z.string()),
+		categories: z.array(z.string()),
 		is_removable: z.array(z.boolean()),
 		is_special: z.array(z.boolean()),
 		is_english: z.array(z.boolean()),
@@ -105,7 +90,6 @@ const agradecimientos = defineCollection({
 
 export const collections = {
 	resources,
-	organizations,
 	coursesStatic,
 	contribuidores,
 	agradecimientos,
