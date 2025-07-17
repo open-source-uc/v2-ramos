@@ -1,83 +1,72 @@
-# 📚 Proyecto BuscaRamos
+# BuscaRamos
 
-Este es un proyecto de estudiantes de la Pontificia Universidad Católica de Chile (UC) que busca revolucionar la forma en la que interactúa la comunidad estudiantil al momento de inscribir cursos.
+BuscaRamos es una plataforma creada por y para estudiantes de la Pontificia Universidad Católica de Chile (UC), diseñada para revolucionar la forma en que la comunidad universitaria explora, compara e inscribe cursos.
 
-## 🚀 Pasos para empezar
+El objetivo principal es empoderar a los estudiantes con información real, transparente y útil sobre los ramos, permitiendo tomar decisiones informadas y colaborativas.
 
-Para levantar el proyecto en tu máquina local, sigue estos pasos:
+---
 
-### 1. Instalar Dependencias
+## 🚀 Instalación Rápida
 
-Primero, instala todas las dependencias del proyecto.
+1. **Instala dependencias:**
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   # o pnpm install
+   ```
 
-### 2. Configurar Variables de Entorno
+2. **Configura variables de entorno:**
+   - Copia `.env.local.example` a `.env.local` y edítalo según tu entorno.
+3. **Ejecuta migraciones:**
 
-Crea un archivo `.env.local` en la raíz del proyecto. Este archivo es **crucial** para que la aplicación funcione correctamente.
+   ```bash
+   cd migration
+   bash setup-DANGER.sh
+   bash setup-articles.sh
+   cd ..
+   ```
 
-Puedes usar el archivo de ejemplo `.env.local.example` incluido en el repositorio. Para ello, ejecuta:
+4. **Inicia el servidor de desarrollo:**
 
-```bash
-cp .env.local.example .env.local
-```
+   ```bash
+   npm run dev
+   # o pnpm dev
+   ```
 
-Luego, edita el archivo `.env.local` y reemplaza los valores de ejemplo por los que correspondan según tu entorno.
+   La app estará disponible en [http://localhost:4321](http://localhost:4321).
 
-```env
-# Indica el entorno a usar. Puede ser 'development' o 'production'
-MODE_ENV="development"
+---
 
-# El secret de la API. Puedes usar un generador de contraseñas seguras para crear este valor.
-API_SECRET="tu_secreto_aqui"
-
-# ¡IMPORTANTE! Este token es SOLO para desarrollo.
-# Puedes obtener un token en el panel de Auth Osuc (https://auth.osuc.dev/home/sessions).
-USER_TOKEN="tu_token_de_usuario_aqui"
-```
-
-**Notas:**
-
-- `API_SECRET`: Usa un valor único y seguro.
-- `USER_TOKEN`: Simula un usuario autenticado en el entorno de desarrollo. Asegúrate de no exponerlo.
-
-### 3. Ejecutar las Migraciones
-
-El siguiente paso es poblar tu base de datos local. El script `setup.sh` se encargará de todo.
-
-Desde la raíz del proyecto, ejecuta:
-
-```bash
-cd migration
-bash setup.sh
-cd ..
-```
-
-Cuando el script te pregunte, selecciona la opción **1) Local**.
-
-### 4. Iniciar el Servidor de Desarrollo
-
-¡Ya casi estás! Ahora, inicia el servidor de desarrollo de Astro.
-
-```bash
-npm run dev
-```
-
-La aplicación estará disponible en `http://localhost:4321`.
-
-## 🧞 Comandos Disponibles
-
-Todos los comandos se ejecutan desde la raíz del proyecto:
+## 🧞 Comandos Básicos
 
 | Comando           | Acción                                                    |
 | :---------------- | :-------------------------------------------------------- |
 | `npm install`     | Instala las dependencias.                                 |
 | `npm run dev`     | Inicia el servidor de desarrollo en `localhost:4321`.     |
 | `npm run build`   | Compila el sitio para producción en la carpeta `./dist/`. |
-| `npm run preview` | Previsualiza tu compilación de producción localmente.     |
+| `npm run preview` | Previsualiza la build de producción localmente.           |
 
-## 👀 ¿Quieres saber más?
+---
 
-Revisa la [documentación de Astro](https://docs.astro.build).
+## 📖 Documentación Completa
+
+La documentación detallada (guías, preguntas frecuentes, contribución, funcionamiento de reviews, etc.) está disponible tanto en la carpeta [`/src/content/docs/`](./src/content/docs/) como en [Documentación Online](https://buscaramos.osuc.dev/resources/documentation).
+
+- [Preguntas Frecuentes (FAQ)](./src/content/docs/faq.mdx)
+- [Guía de Instalación](./src/content/docs/instalaccion.mdx)
+- [Cómo Contribuir](./src/content/docs/contribuir.mdx)
+- [Funcionamiento Detallado de las Reviews](./src/content/docs/reviews.mdx)
+
+Para dudas específicas, revisa la documentación interna o abre un issue.
+
+---
+
+## 🤝 Contribuciones
+
+¡Toda la comunidad puede aportar! Lee la [guía de contribución](./src/content/docs/contribuir.mdx) antes de enviar tu PR.
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo licencia MIT.

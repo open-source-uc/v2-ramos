@@ -5,6 +5,7 @@ import { Pill } from '@/components/ui/pill'
 import remarkGfm from 'remark-gfm'
 
 import rehypeRaw from 'rehype-raw'
+import remarkBreaks from 'remark-breaks'
 
 export function MarkdownReviewView({ path }: { path: string }) {
 	const [text, setText] = useState('Cargando...')
@@ -36,7 +37,7 @@ export function MarkdownReviewView({ path }: { path: string }) {
 		<article className="prose max-w-none">
 			<ReactMarkdown
 				rehypePlugins={[rehypeRaw]}
-				remarkPlugins={[remarkGfm]}
+				remarkPlugins={[remarkGfm, remarkBreaks]}
 				components={{
 					pill: ({ node, children }) => {
 						const props = node?.properties ?? {}
