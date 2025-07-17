@@ -109,7 +109,7 @@ const successMessage = Astro.url.searchParams.get('success');
     <SuccessToast successMessage={successMessage || undefined} client:load />
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- Información Fundamental del Curso -->
-        <section class="border border-border rounded-md px-6 py-8">
+        <section class="border border-border rounded-md bg-accent px-6 py-8">
             <p class="text-sm">{course.sigle}</p>
 
             <div class="pt-2 flex items-center justify-between">
@@ -124,7 +124,7 @@ const successMessage = Astro.url.searchParams.get('success');
                 </Pill>
             </div>
             <div>
-                <p class="text-sm opacity-60 max-w-[75%]">{course.description}</p>
+                <p class="text-sm text-accent-foreground max-w-[75%]">{course.description}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
                 <CourseCampuses campus={course.campus} lastSemester={course.last_semester} client:load />
@@ -180,7 +180,7 @@ const successMessage = Astro.url.searchParams.get('success');
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8"
         >
             <!-- Sentimiento General -->
-            <div class="border border-border rounded-md p-6">
+            <div class="border border-border bg-accent rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <Sentiment sentiment={sentiment} size="default" />
                     <div>
@@ -203,7 +203,7 @@ const successMessage = Astro.url.searchParams.get('success');
             </div>
 
             <!-- Nivel de Dificultad -->
-            <div class="border border-border rounded-md p-6">
+            <div class="border border-border bg-accent rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div
                         class="p-2 bg-blue-light text-blue border border-blue/20 rounded-lg"
@@ -223,7 +223,7 @@ const successMessage = Astro.url.searchParams.get('success');
             </div>
 
             <!-- Asistencia -->
-            <div class="border border-border rounded-md p-6">
+            <div class="border border-border bg-accent rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div
                         class="p-2 bg-purple-light text-purple border border-purple/20 rounded-lg"
@@ -250,7 +250,7 @@ const successMessage = Astro.url.searchParams.get('success');
             </div>
 
             <!-- Total de Reseñas -->
-            <div class="border border-border rounded-md p-6">
+            <div class="border border-border bg-accent rounded-md p-6">
                 <div class="flex items-center gap-3 mb-3">
                     <div
                         class="p-2 bg-green-light text-green border border-green/20 rounded-lg"
@@ -289,7 +289,7 @@ const successMessage = Astro.url.searchParams.get('success');
 
         <!-- Links de Interés -->
         <section class="mt-8">
-            <div class="border border-border rounded-md p-6">
+            <div class="bg-accent border border-border rounded-md p-6">
                 <h2 class="text-2xl font-semibold mb-6">Links de Interés</h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                     <Button
@@ -321,7 +321,7 @@ const successMessage = Astro.url.searchParams.get('success');
 
         <!-- Sección de Reseñas -->
         <section class="mt-8">
-            <div class="border border-border rounded-md overflow-hidden">
+            <div class="bg-accent border border-border rounded-md overflow-hidden">
                 <div class="border-b border-border px-6 py-6">
                     <div class="flex items-center justify-between">
                         <div>

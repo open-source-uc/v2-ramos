@@ -15,14 +15,14 @@ export default function PrerequisitesSection({ prerequisites, className = '' }: 
 	if (!prerequisites.hasPrerequisites || !prerequisites.structure) {
 		return (
 			<section className={`prerequisites-section w-full ${className}`}>
-				<div className="border-border w-full overflow-hidden rounded-md border p-6">
+				<div className="border-border bg-accent w-full overflow-hidden rounded-md border p-6">
 					<div className="text-muted-foreground flex items-center gap-3">
-						<div className="bg-muted text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
+						<div className="bg-muted text-muted-foreground border-muted-foreground/20 flex-shrink-0 rounded-lg border p-2">
 							<DocsIcon className="h-5 w-5 fill-current" />
 						</div>
 						<div className="min-w-0 flex-1">
 							<h2 className="text-lg font-semibold">Prerrequisitos</h2>
-							<p className="text-sm">Este curso no tiene prerrequisitos</p>
+							<p className="text-sm">Este curso no posee prerrequisitos</p>
 						</div>
 					</div>
 				</div>
@@ -34,7 +34,7 @@ export default function PrerequisitesSection({ prerequisites, className = '' }: 
 		<section className={`prerequisites-section w-full ${className}`}>
 			<div className="border-border w-full overflow-hidden rounded-md border">
 				<Collapsible>
-					<CollapsibleTrigger className="bg-background hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
+					<CollapsibleTrigger className="bg-accent hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
 						<div className="flex min-w-0 flex-1 items-center gap-3">
 							<div className="bg-pink-light text-pink border-purple/20 flex-shrink-0 rounded-lg border p-2">
 								<DocsIcon className="h-5 w-5 fill-current" />
@@ -52,7 +52,7 @@ export default function PrerequisitesSection({ prerequisites, className = '' }: 
 						</div>
 					</CollapsibleTrigger>
 
-					<CollapsibleContent className="border-border bg-muted/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1 w-full overflow-hidden border-t px-6 py-4">
+					<CollapsibleContent className="border-border bg-accent data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1 w-full overflow-hidden border-t px-6 py-4">
 						<div className="w-full overflow-hidden">
 							<PrerequisitesDisplay prerequisites={prerequisites.structure} />
 						</div>
