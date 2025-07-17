@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
       SELECT 
         id,
         user_id,
-        user_name,
+        display_name,
         user_role,
         organization_id,
         organization_name,

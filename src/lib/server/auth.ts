@@ -8,7 +8,7 @@ export async function getUserDataByToken(token: string): Promise<{
 	organizations: {
 		id: number
 		name: string
-		user_name: string
+		display_name: string
 		role: string
 	}[]
 } | null> {

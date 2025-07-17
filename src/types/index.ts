@@ -59,7 +59,7 @@ export interface Organization {
 export interface UserOrganization {
 	id: number
 	organization_id: number
-	user_name: string // Name of the user
+	display_name: string // Name of the user
 	user_id: number
 	user_role: string // Role in the organization (e.g., admin, member)
 }
@@ -67,7 +67,7 @@ export interface UserOrganization {
 export interface Blogs {
 	id: number
 	user_id: number
-	user_name: string
+	display_name: string
 	user_role: string
 	organization_id: number
 	organization_name: string
@@ -83,7 +83,7 @@ export interface Blogs {
 export interface Recommendations {
 	id: number
 	user_id: number
-	user_name: string
+	display_name: string
 	organization_id: number
 	organization_name: string // Name of the organization
 	faculty: string

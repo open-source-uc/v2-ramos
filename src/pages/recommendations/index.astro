@@ -28,7 +28,7 @@ const recommendations: Recommendations[] = await recommendationsRespone.json()
 					<ContentCard
 						title={rec.title}
 						type="recommendations"
-						authorName={rec.user_name}
+						authorName={rec.display_name}
 						organizationName={rec.organization_name}
 						description=""
 						readtime={rec.readtime}

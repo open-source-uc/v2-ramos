@@ -2,7 +2,7 @@
 CREATE TABLE blogs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  user_name TEXT NOT NULL,
+  display_name TEXT NOT NULL,
   user_role TEXT NOT NULL,
   organization_id INTEGER NOT NULL,
   organization_name TEXT NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE blogs (
 CREATE TABLE recommendations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-  user_name TEXT NOT NULL,
+  display_name TEXT NOT NULL,
   user_role TEXT NOT NULL,
   organization_id INTEGER NOT NULL,
   organization_name TEXT NOT NULL,

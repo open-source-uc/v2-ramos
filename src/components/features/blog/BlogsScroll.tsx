@@ -12,7 +12,7 @@ export default function BlogsScroll({ blogs }: { blogs: Blogs[] }) {
 				<div className="flex justify-center py-3" key={blog.id}>
 					<BlogCard
 						title={blog.title}
-						authorName={blog.user_name || 'Desconocido'}
+						authorName={blog.display_name || 'Desconocido'}
 						type="blogs"
 						organizationName={blog.organization_name}
 						description={blog.tags}
