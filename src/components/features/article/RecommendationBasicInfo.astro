@@ -122,32 +122,29 @@ const {
 		<label class="text-foreground block text-sm font-medium">
 			Código del curso <span class="text-red-500">*</span>
 		</label>
-		{
-			code ? (
-				<input
-					name="code"
-					value={code}
-					readonly
-					disabled
-					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
-					required
-				/>
-			) : (
-				<Combox
-					name="code"
-					required
-					placeholder="Selecciona el curso..."
-					searchPlaceholder="Buscar por código o nombre..."
-					emptyMessage="No se encontraron cursos."
-					options={Object.entries(
-						await import('/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json')
-					).map(([sigle, data]) => ({
-						value: sigle,
-						label: `${sigle} - ${data.name}`,
-					}))}
-				/>
-			)
-		}
+		<input
+			name="code"
+			value={code}
+			readonly={code}
+			disabled
+			class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+			required
+		/>
+		<!-- // Hay que ver otra forma de hacerlo xd
+				// <Combox
+				// 	name="code"
+				// 	required
+				// 	placeholder="Selecciona el curso..."
+				// 	searchPlaceholder="Buscar por código o nombre..."
+				// 	emptyMessage="No se encontraron cursos."
+				// 	options={Object.entries(
+				// 		await import('/home/nyx/Workspace/v2-ramos/migration/json/cursos-simplificado.json')
+				// 	).map(([sigle, data]) => ({
+				// 		value: sigle,
+				// 		label: `${sigle} - ${data.name}`,
+				// 	}))}
+				// /> -->
+		<input type="text" />
 	</div>
 	<div class="min-w-0 space-y-2">
 		<label class="text-foreground block text-sm font-medium"
