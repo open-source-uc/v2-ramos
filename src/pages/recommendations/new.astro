@@ -7,6 +7,7 @@ import EditorMDX from '@/components/EditorMDX.tsx'
 import Layout from '@/layouts/Layout.astro'
 import ContentHeader from '@/components/features/article/HeaderContent.astro'
 import RecommendationBasicInfo from '@/components/features/article/RecommendationBasicInfo.astro'
+import { createSlug } from '@/lib/utils'
 
 // Authentication check
 const token = getToken(Astro.cookies)
@@ -30,8 +31,7 @@ if (result && !result.error) {
 		`/recommendations/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.recommendationTitle)}`
 	)
 } else if (result?.error) {
-	message = result.error.message || 'Error al crear la recomendación.'
-	messageType = 'error'
+	return Astro.redirect('/recommendations')
 }
 ---
 

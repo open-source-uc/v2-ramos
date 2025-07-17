@@ -878,7 +878,7 @@ export const server = {
 			try {
 				// Verificar que el blog existe y que el usuario es el dueño
 				const existingBlog = await locals.runtime.env.DB.prepare(
-					'SELECT id, user_id, title, content_path FROM blogs WHERE id = ?'
+					'SELECT id, user_id, title, content_path, organization_name FROM blogs WHERE id = ?'
 				)
 					.bind(state.id)
 					.first()
@@ -958,8 +958,8 @@ export const server = {
 				return {
 					message: 'Blog actualizado exitosamente',
 					code: 200,
-					blogId: state.id,
-					filePath: newFilePath,
+					organizationName: existingBlog.organization_name,
+					blogTitle: state.title,
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {
@@ -1264,7 +1264,7 @@ export const server = {
 			try {
 				// Verificar que la recomendación existe y que el usuario es el dueño
 				const existingRecommendation = await locals.runtime.env.DB.prepare(
-					'SELECT id, user_id, title, content_path FROM recommendations WHERE id = ?'
+					'SELECT id, user_id, title, organization_name, content_path FROM recommendations WHERE id = ?'
 				)
 					.bind(state.id)
 					.first()
@@ -1325,6 +1325,13 @@ export const server = {
 						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
 					} catch (error) {
 						console.warn('No se pudo eliminar el archivo anterior:', error)
+						return {
+							message:
+								'Recomendación actualizada exitosamente, pero no se pudo eliminar el archivo anterior',
+							code: 500,
+							organizationName: existingRecommendation.organization_name,
+							recommendationTitle: state.title,
+						}
 					}
 					throw new ActionError({
 						code: 'INTERNAL_SERVER_ERROR',
@@ -1341,12 +1348,21 @@ export const server = {
 					} catch (error) {
 						// Log del error pero no fallar la operación
 						console.warn('No se pudo eliminar el archivo anterior:', error)
+						return {
+							message:
+								'Recomendación actualizada exitosamente, pero no se pudo eliminar el archivo anterior',
+							code: 500,
+							organizationName: existingRecommendation.organization_name,
+							recommendationTitle: state.title,
+						}
 					}
 				}
 
 				return {
 					message: 'Recomendación actualizada exitosamente',
 					code: 200,
+					organizationName: existingRecommendation.organization_name,
+					recommendationTitle: state.title,
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {

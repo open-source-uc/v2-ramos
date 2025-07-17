@@ -125,9 +125,9 @@ const {
 		<input
 			name="code"
 			value={code}
-			readonly={code}
-			disabled
-			class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+			readonly={!!code}
+			disabled={!!code}
+			class={`border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3${code ? ' hover:cursor-not-allowed' : ''}`}
 			required
 		/>
 		<!-- // Hay que ver otra forma de hacerlo xd

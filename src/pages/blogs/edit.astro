@@ -26,6 +26,15 @@ let messageType = ''
 let tagsData = { blogTags: [] }
 let mdxContent = ''
 
+// Verificar si hay un resultado de la acción
+const result = Astro.getActionResult(actions.updateBlog)
+if (result && !result.error) {
+	return Astro.redirect(
+		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
+	)
+} else if (result?.error) {
+	return Astro.redirect('/blogs')
+}
 try {
 	const url = new URL(Astro.request.url)
 	blogId = url.searchParams.get('id')
@@ -57,16 +66,6 @@ try {
 
 	if (blogData.tags) {
 		tags = blogData.tags.split(',')
-	}
-
-	// Verificar si hay un resultado de la acción
-	const result = Astro.getActionResult(actions.updateBlog)
-	if (result && !result.error) {
-		message = result.data?.message || 'Blog actualizado exitosamente'
-		messageType = 'success'
-	} else if (result?.error) {
-		message = result.error.message || 'Error al actualizar el blog'
-		messageType = 'error'
 	}
 
 	const tagsData = blogsTags

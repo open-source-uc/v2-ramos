@@ -32,8 +32,7 @@ if (result && !result.error) {
 		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
 	)
 } else if (result?.error) {
-	message = result.error.message || 'Error al crear el blog'
-	messageType = 'error'
+	return Astro.redirect('/blogs')
 }
 
 const tagsData = blogsTags

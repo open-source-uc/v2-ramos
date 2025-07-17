@@ -22,6 +22,15 @@ let message = ''
 let messageType = ''
 let mdxContent = ''
 
+const result = Astro.getActionResult(actions.updateRecommendation)
+if (result && !result.error) {
+	return Astro.redirect(
+		`/recommendations/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.recommendationTitle)}`
+	)
+} else if (result?.error) {
+	return Astro.redirect('/recommendations')
+}
+
 try {
 	const url = new URL(Astro.request.url)
 	recommendationId = url.searchParams.get('id')
@@ -49,19 +58,11 @@ try {
 		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
 	) {
 		return Astro.redirect(
-			`/recommendations/${createSlug(recommendationData.organization_name)}/${createSlug(recommendationData.title)}`
+			`/recommendations/view?author=${createSlug(recommendationData.organization_name)}&title=${createSlug(recommendationData.title)}`
 		)
 	}
 
 	// Verificar si hay un resultado de la acción
-	const result = Astro.getActionResult(actions.updateRecommendation)
-	if (result && !result.error) {
-		message = result.data?.message || 'Recomendación actualizado exitosamente'
-		messageType = 'success'
-	} else if (result?.error) {
-		message = result.error.message || 'Error al actualizar el recomendación'
-		messageType = 'error'
-	}
 
 	mdxContent = await fetch(
 		`${config.BASEURL}/api/articles/article?path=${recommendationData.content_path}`
