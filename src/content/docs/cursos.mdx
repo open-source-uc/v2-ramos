@@ -43,7 +43,12 @@ VALUES ('INF1234', 0, 0, 0, ...)
 ON CONFLICT (sigle) DO NOTHING;
 ```
 
-Además, existe un archivo NDJSON público (`courses-score.ndjson`) que se utiliza para alimentar el catálogo de manera eficiente y escalable.
+Además, existe un archivo NDJSON público (`courses-score.ndjson`) que se utiliza para alimentar el catálogo de manera eficiente y escalable. Este archivo es generado por un endpoint que:
+
+- Lee los cursos y sus estadísticas agregadas desde la base de datos (`course_summary`).
+- Enriquece cada curso con información estática (nombre, créditos, requisitos, formato, campus, etc.) desde un archivo JSON (`cursos-simplificado.json`).
+- Cada línea del NDJSON es un curso completo y enriquecido, listo para ser mostrado y filtrado en el catálogo.
+- **No incluye reviews individuales ni comentarios extensos**, solo los datos agregados y la información estática necesaria para la navegación y búsqueda.
 
 ---
 
