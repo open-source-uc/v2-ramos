@@ -1,5 +1,5 @@
 const config = {
-	BASEURL: 'http://buscaramos.osuc.dev',
+	BASEURL: '',
 	AUTHURL: 'https://auth.osuc.dev',
 }
 

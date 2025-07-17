@@ -43,8 +43,8 @@ export default function ContentCard({
 	// Para recommendations, la ruta es /recommendations/[organizacion]/[titulo]
 	const Url =
 		type === 'recommendations'
-			? `/recommendations/${createSlug(organizationName)}/${createSlug(title)}`
-			: `/${type}/${createSlug(organizationName)}/${createSlug(title)}`
+			? `/recommendations/view?author=${createSlug(organizationName)}&title=${createSlug(title)}`
+			: `/${type}/view?author=${createSlug(organizationName)}&title=${createSlug(title)}`
 
 	return (
 		<a href={Url}>

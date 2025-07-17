@@ -11,56 +11,75 @@ import { actions } from 'astro:actions'
 import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
 import EditorMDX from '@/components/EditorMDX'
 import { Button } from '@/components/ui'
+import { blogsTags } from '@/data/blogs'
 
 export const prerender = false
 
-// Obtener parámetros de la URL
-const blogId = Astro.params.id
+// Obtener parámetros de la query string (?id=...)
+let blogId = null
+let blogData: Blogs | null = null
+let user = null
+let token = null
+let tags: string[] = []
+let message = ''
+let messageType = ''
+let tagsData = { blogTags: [] }
+let mdxContent = ''
 
-const token = getToken(Astro.cookies)
-const user = await getUserDataByToken(token)
-if (!user) {
-	return Astro.redirect('/')
-}
+try {
+	const url = new URL(Astro.request.url)
+	blogId = url.searchParams.get('id')
+	if (!blogId) {
+		return Astro.redirect('/blogs')
+	}
 
-const blogResponse = await fetch(`${config.BASEURL}/api/articles/blogById?id=${blogId}`)
-const blogJson = (await blogResponse.json()) as unknown as Blogs[]
-const blogData: Blogs = blogJson[0]
-if (!blogData) {
+	token = getToken(Astro.cookies)
+	user = await getUserDataByToken(token)
+	if (!user) {
+		return Astro.redirect('/')
+	}
+
+	const blogResponse = await fetch(new URL(`/api/articles/blogById?id=${blogId}`, Astro.site))
+	const blogJson = (await blogResponse.json()) as unknown as Blogs[]
+	blogData = blogJson[0]
+	if (!blogData) {
+		return Astro.redirect('/blogs')
+	}
+
+	if (
+		(user && String(user.id) !== String(blogData.user_id)) ||
+		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
+	) {
+		return Astro.redirect(
+			`/blogs/view?author=${createSlug(blogData.organization_name)}&title=${createSlug(blogData.title)}`
+		)
+	}
+
+	if (blogData.tags) {
+		tags = blogData.tags.split(',')
+	}
+
+	// Verificar si hay un resultado de la acción
+	const result = Astro.getActionResult(actions.updateBlog)
+	if (result && !result.error) {
+		message = result.data?.message || 'Blog actualizado exitosamente'
+		messageType = 'success'
+	} else if (result?.error) {
+		message = result.error.message || 'Error al actualizar el blog'
+		messageType = 'error'
+	}
+
+	const tagsData = blogsTags
+	mdxContent = await fetch(
+		new URL(`/api/articles/article?path=${blogData.content_path}`, Astro.site)
+	)
+		.then((res) => res.text())
+		.catch(() => '')
+} catch (e) {
 	return Astro.redirect('/blogs')
 }
 
-if (
-	(user && String(user.id) !== String(blogData.user_id)) ||
-	!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
-) {
-	return Astro.redirect(`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`)
-}
-let tags: string[] = []
-if (blogData.tags) {
-	tags = blogData.tags.split(',')
-}
-let message = ''
-let messageType = ''
-
-// Verificar si hay un resultado de la acción
-const result = Astro.getActionResult(actions.updateBlog)
-
-if (result && !result.error) {
-	message = result.data?.message || 'Blog actualizado exitosamente'
-	messageType = 'success'
-} else if (result?.error) {
-	message = result.error.message || 'Error al actualizar el blog'
-	messageType = 'error'
-}
-
-const tagsResponse = await fetch(new URL('/api/articles/blogs-tags', Astro.url.origin))
-const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
-const mdxContent = await fetch(
-	`${config.BASEURL}/api/articles/article?path=${blogData.content_path}`
-)
-	.then((res) => res.text())
-	.catch(() => '')
+// Código duplicado eliminado: la lógica y variables ya están declaradas y asignadas arriba en el bloque try/catch.
 ---
 
 <Layout title={`Edita: ${blogData.title}`}>
@@ -96,7 +115,7 @@ const mdxContent = await fetch(
 		}
 		<div class="mb-6 flex justify-between">
 			<a
-				href={`/blogs/${createSlug(blogData.organization_name)}/${createSlug(blogData.title)}`}
+				href={`/blogs?author=${createSlug(blogData.organization_name)}&title=${createSlug(blogData.title)}`}
 				class="ver:underline text-blue-500">{`<-`} Volver al blog</a
 			>
 			<button

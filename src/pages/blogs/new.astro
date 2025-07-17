@@ -5,9 +5,10 @@ import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
 import EditorMDX from '@/components/EditorMDX.tsx'
 import Layout from '@/layouts/Layout.astro'
-import TagSelector from '@/components/ui/TagSelector.astro'
 import ContentHeader from '@/components/features/article/HeaderContent.astro'
 import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
+import { blogsTags } from '@/data/blogs'
+import { createSlug } from '@/lib/utils'
 
 // Authentication check
 const token = getToken(Astro.cookies)
@@ -27,15 +28,15 @@ let messageType = ''
 const result = Astro.getActionResult(actions.createBlog)
 
 if (result && !result.error) {
-	message = result.data?.message || 'Blog actualizado exitosamente'
-	messageType = 'success'
+	return Astro.redirect(
+		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
+	)
 } else if (result?.error) {
-	message = result.error.message || 'Error al actualizar el blog'
+	message = result.error.message || 'Error al crear el blog'
 	messageType = 'error'
 }
 
-const tagsResponse = await fetch(new URL('/api/articles/blogs-tags', Astro.url.origin))
-const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
+const tagsData = blogsTags
 ---
 
 <Layout title="Crear Blog">
@@ -52,9 +53,7 @@ const tagsData = (await tagsResponse.json()) as { blogTags: string[] }
 				>
 					<div class="flex items-center gap-2">
 						<span
-							class={`flex-shrink-0 ${
-								messageType === 'success' ? 'text-green-600' : 'text-red-600'
-							}`}
+							class={`flex-shrink-0 ${messageType === 'success' ? 'text-green-600' : 'text-red-600'}`}
 						>
 							{messageType === 'success' ? '✅' : '❌'}
 						</span>

@@ -5,7 +5,6 @@ import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
 import EditorMDX from '@/components/EditorMDX.tsx'
 import Layout from '@/layouts/Layout.astro'
-import Combox from '@/components/common/Combox.astro'
 import ContentHeader from '@/components/features/article/HeaderContent.astro'
 import RecommendationBasicInfo from '@/components/features/article/RecommendationBasicInfo.astro'
 
@@ -27,8 +26,9 @@ let messageType = ''
 const result = Astro.getActionResult(actions.createRecommendation)
 
 if (result && !result.error) {
-	message = result.data?.message || 'Recomendación creada exitosamente.'
-	messageType = 'success'
+	return Astro.redirect(
+		`/recommendations/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.recommendationTitle)}`
+	)
 } else if (result?.error) {
 	message = result.error.message || 'Error al crear la recomendación.'
 	messageType = 'error'

@@ -10,7 +10,7 @@ const recommendationsRespone = await fetch(
 const recommendations: Recommendations[] = await recommendationsRespone.json()
 ---
 
-<Layout>
+<Layout title="Recomendaciones">
 	<main class="grid md:grid-cols-2 lg:grid-cols-3">
 		<div
 			class="flex h-[60vh] w-full flex-col justify-center md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4 lg:h-[70vh]"

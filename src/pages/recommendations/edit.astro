@@ -8,58 +8,69 @@ import { createSlug } from '@/lib/utils'
 import type { Recommendations } from '@/types'
 import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
-import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
 import EditorMDX from '@/components/EditorMDX'
 import RecommendationBasicInfo from '@/components/features/article/RecommendationBasicInfo.astro'
-import { record } from 'astro:schema'
 
 export const prerender = false
 
-// Obtener parámetros de la URL
-const recommendationId = Astro.params.id
-
-const token = getToken(Astro.cookies)
-const user = await getUserDataByToken(token)
-if (!user) {
-	return Astro.redirect('/')
-}
-
-const recommendationResponse = await fetch(
-	`${config.BASEURL}/api/articles/recommendationById?id=${recommendationId}`
-)
-const recommendationJson = (await recommendationResponse.json()) as unknown as Recommendations[]
-const recommendationData: Recommendations = recommendationJson[0]
-if (!recommendationData) {
-	return Astro.redirect('/recommendations')
-}
-
-if (
-	(user && String(user.id) !== String(recommendationData.user_id)) ||
-	!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
-) {
-	return Astro.redirect(
-		`/recommendations/${createSlug(recommendationData.organization_name)}/${createSlug(recommendationData.title)}`
-	)
-}
+// Obtener parámetros de la query string (?id=...)
+let recommendationId = null
+let recommendationData: Recommendations | null = null
+let user = null
+let token = null
 let message = ''
 let messageType = ''
+let mdxContent = ''
 
-// Verificar si hay un resultado de la acción
-const result = Astro.getActionResult(actions.updateRecommendation)
+try {
+	const url = new URL(Astro.request.url)
+	recommendationId = url.searchParams.get('id')
+	if (!recommendationId) {
+		return Astro.redirect('/recommendations')
+	}
 
-if (result && !result.error) {
-	message = result.data?.message || 'Recomendación actualizado exitosamente'
-	messageType = 'success'
-} else if (result?.error) {
-	message = result.error.message || 'Error al actualizar el recomendación'
-	messageType = 'error'
+	token = getToken(Astro.cookies)
+	user = await getUserDataByToken(token)
+	if (!user) {
+		return Astro.redirect('/')
+	}
+
+	const recommendationResponse = await fetch(
+		new URL(`/api/articles/recommendationById?id=${recommendationId}`, Astro.site)
+	)
+	const recommendationJson = (await recommendationResponse.json()) as unknown as Recommendations[]
+	recommendationData = recommendationJson[0]
+	if (!recommendationData) {
+		return Astro.redirect('/recommendations')
+	}
+
+	if (
+		(user && String(user.id) !== String(recommendationData.user_id)) ||
+		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
+	) {
+		return Astro.redirect(
+			`/recommendations/${createSlug(recommendationData.organization_name)}/${createSlug(recommendationData.title)}`
+		)
+	}
+
+	// Verificar si hay un resultado de la acción
+	const result = Astro.getActionResult(actions.updateRecommendation)
+	if (result && !result.error) {
+		message = result.data?.message || 'Recomendación actualizado exitosamente'
+		messageType = 'success'
+	} else if (result?.error) {
+		message = result.error.message || 'Error al actualizar el recomendación'
+		messageType = 'error'
+	}
+
+	mdxContent = await fetch(
+		`${config.BASEURL}/api/articles/article?path=${recommendationData.content_path}`
+	)
+		.then((res) => res.text())
+		.catch(() => '')
+} catch (e) {
+	return Astro.redirect('/recommendations')
 }
-
-const mdxContent = await fetch(
-	`${config.BASEURL}/api/articles/article?path=${recommendationData.content_path}`
-)
-	.then((res) => res.text())
-	.catch(() => '')
 ---
 
 <Layout title={`Edita: ${recommendationData.title}`}>

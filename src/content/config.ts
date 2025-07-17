@@ -71,7 +71,20 @@ const contribuidores = defineCollection({
 		imagen: z.string(),
 	}),
 })
-
+const organizations = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		name: z.string(),
+		picture: z.string().optional(),
+		faculty: z.string(),
+		rrss: z.object({
+			instagram: z.string().optional(),
+			github: z.string().optional(),
+			linkedin: z.string().optional(),
+			twitter: z.string().optional(),
+		}),
+	}),
+})
 const agradecimientos = defineCollection({
 	loader: file('src/content/agradecimientos/data.json', {
 		parser: (content) => {
@@ -93,4 +106,5 @@ export const collections = {
 	coursesStatic,
 	contribuidores,
 	agradecimientos,
+	organizations,
 }

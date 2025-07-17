@@ -54,7 +54,7 @@ export default function ConditionalEdit({ articleId, articleUserId, contentType 
 				: contentType === 'recommendation'
 					? 'recomendación'
 					: 'recurso'
-		return <a href={`/${contentType}s/edit/${articleId}`}>Editar {spanishContentType}</a>
+		return <a href={`/${contentType}s/edit?id=${articleId}`}>Editar {spanishContentType}</a>
 	}
 
 	return null

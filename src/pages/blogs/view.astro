@@ -1,0 +1,63 @@
+---
+import ContentPage from '@/components/common/ContentPage.astro'
+import { EditIcon, ClockIcon } from '@/components/icons/icons'
+import Layout from '@/layouts/Layout.astro'
+import { createSlug } from '@/lib/utils'
+import type { Blogs, Organization } from '@/types'
+import { MarkdownReviewView } from '@/components'
+import config from '@/lib/const'
+
+let blog: Blogs | null = null
+let organizationData: Organization | null = null
+
+try {
+	const url = new URL(Astro.request.url)
+	const author = url.searchParams.get('author')
+	const title = url.searchParams.get('title')
+
+	if (!author || !title) {
+		return Astro.redirect('/404')
+	}
+
+	const response = await fetch(new URL('/api/articles/blogs', Astro.site))
+	const blogs: Blogs[] = await response.json()
+	blog =
+		blogs.find(
+			(b) => createSlug(b.organization_name) === author && createSlug(b.title) === title
+		) || null
+
+	if (!blog) {
+		return Astro.redirect('/404')
+	}
+
+	const organizationRes = await fetch(
+		new URL(`/api/organization/${blog.organization_id}`, config.AUTHURL)
+	)
+	organizationData = (await organizationRes.json()) as Organization
+} catch (e) {
+	return Astro.redirect('/404')
+}
+---
+
+<Layout>
+	{
+		blog && organizationData ? (
+			<ContentPage
+				contentData={blog}
+				organizationData={organizationData}
+				contentType="blog"
+				primaryPillIcon={EditIcon}
+				secondaryPillIcon={ClockIcon}
+				navigationSection={{
+					title: '¿Te gustó este blog?',
+					description:
+						'Descubre más contenido interesante en los blogs que tenemos para ofrecerte.',
+					buttonText: 'Ver Más Blogs',
+					buttonHref: '/blogs',
+				}}
+			>
+				<MarkdownReviewView path={blog.content_path} client:load />
+			</ContentPage>
+		) : null
+	}
+</Layout>

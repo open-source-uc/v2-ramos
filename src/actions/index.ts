@@ -7,9 +7,7 @@ import { getUserDataByToken } from '@/lib/server/auth'
 import { getToken } from '@/lib/auth'
 import type { CourseReview, Organization, UserOrganization } from '@/types'
 import { isFutureSemester } from '@/lib/currentSemester'
-import type { get } from 'http'
-
-const organizationApi = 'http://localhost:4322/api/organization'
+import config from '@/lib/const'
 
 const courseReviewSchema = z.object({
 	course_sigle: z
@@ -697,7 +695,9 @@ export const server = {
 				})
 			}
 
-			const organizationResult = await fetch(`${organizationApi}/${state.organization_id}`)
+			const organizationResult = await fetch(
+				new URL(`api/organization/${state.organization_id}`, config.AUTHURL)
+			)
 			if (!organizationResult.ok) {
 				throw new ActionError({
 					code: 'NOT_FOUND',
@@ -803,8 +803,8 @@ export const server = {
 				return {
 					message: 'Blog creado exitosamente',
 					code: 201,
-					blogId: blogId,
-					filePath: filePath,
+					organizationName: organizationData.organization_name,
+					blogTitle: state.title,
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {
@@ -1073,7 +1073,9 @@ export const server = {
 				})
 			}
 
-			const organizationResult = await fetch(`${organizationApi}/${state.organization_id}`)
+			const organizationResult = await fetch(
+				new URL(`api/organization/${state.organization_id}`, config.AUTHURL)
+			)
 			if (!organizationResult.ok) {
 				throw new ActionError({
 					code: 'NOT_FOUND',
@@ -1186,8 +1188,8 @@ export const server = {
 				return {
 					message: 'Recomendación creada exitosamente',
 					code: 201,
-					recommendationId: recommendationId,
-					filePath: filePath,
+					organizationName: organizationData.organization_name,
+					recommendationTitle: state.title,
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {

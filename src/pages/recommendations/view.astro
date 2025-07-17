@@ -1,0 +1,80 @@
+---
+import { ContentPage } from '@/components/common'
+import { ClockIcon, EditIcon } from '@/components/icons/icons'
+import { MarkdownReviewView } from '@/components/reviews/MarkdownReviewView'
+import Layout from '@/layouts/Layout.astro'
+
+import { getToken } from '@/lib/auth'
+import config from '@/lib/const'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { createSlug } from '@/lib/utils'
+import type { Organization, Recommendations } from '@/types'
+import { OsucPermissions } from '@/types/permissions'
+
+let recommendation: Recommendations | null = null
+let organizationData: Organization | null = null
+let showButton = false
+let userData = null
+let token = null
+
+try {
+	const url = new URL(Astro.request.url)
+	const author = url.searchParams.get('author')
+	const title = url.searchParams.get('title')
+
+	if (!author || !title) {
+		return Astro.redirect('/404')
+	}
+
+	// Fetch all recommendations (or ideally, a filtered API by slug if available)
+	const response = await fetch(new URL('/api/articles/recommendations', Astro.site))
+	const recommendations: Recommendations[] = await response.json()
+	recommendation =
+		recommendations.find(
+			(r) => createSlug(r.organization_name) === author && createSlug(r.title) === title
+		) || null
+
+	if (!recommendation) {
+		return Astro.redirect('/404')
+	}
+
+	const organizationRes = await fetch(
+		`${config.AUTHURL}/api/organization/${recommendation.organization_id}`
+	)
+	organizationData = (await organizationRes.json()) as Organization
+
+	token = getToken(Astro.cookies)
+	userData = await getUserDataByToken(token)
+	if (token) {
+		showButton =
+			Number(userData?.id) === recommendation.user_id ||
+			(Array.isArray(userData?.permissions) &&
+				userData.permissions.includes(OsucPermissions.userIsRoot))
+	}
+} catch (e) {
+	return Astro.redirect('/404')
+}
+---
+
+<Layout>
+	{
+		recommendation && organizationData ? (
+			<ContentPage
+				contentData={recommendation}
+				organizationData={organizationData}
+				contentType="recommendation"
+				primaryPillIcon={EditIcon}
+				secondaryPillIcon={ClockIcon}
+				navigationSection={{
+					title: '¿Te gustó esta recomendación?',
+					description:
+						'Descubre más contenido interesante en las recomendaciones que tenemos para ofrecerte.',
+					buttonText: 'Ver Más Recomendaciones',
+					buttonHref: '/recommendations',
+				}}
+			>
+				<MarkdownReviewView path={recommendation.content_path} client:load />
+			</ContentPage>
+		) : null
+	}
+</Layout>
