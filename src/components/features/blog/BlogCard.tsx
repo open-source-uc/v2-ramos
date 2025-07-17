@@ -48,7 +48,7 @@ export default function ContentCard({
 
 	return (
 		<a href={Url}>
-			<article className="border-border focus:ring-ring bg-background flex h-full w-full cursor-pointer flex-col gap-4 rounded-lg border p-6 no-underline transition-shadow hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:outline-none">
+			<article className="border-border bg-background flex h-full w-full cursor-pointer flex-col gap-4 rounded-lg border p-6 no-underline transition-shadow hover:shadow-md">
 				<header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
 					<div className="flex-1">
 						<h2 className="mb-1 text-2xl font-bold break-words">{title}</h2>

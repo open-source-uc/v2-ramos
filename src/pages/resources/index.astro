@@ -1,30 +1,44 @@
 ---
 import { MarkdownTextView } from '@/components/common/MarkdownTextView'
-import ResourcePage from '@/components/common/ResourcePage.astro'
 import Layout from '@/layouts/Layout.astro'
+import ResourceCard from '@/components/common/ResourceCard.tsx'
 import { getCollection } from 'astro:content'
-import { read } from 'fs'
 
 const resources = await getCollection('resources')
 ---
 
 <Layout>
-	<a href="/resources/documentation">Docs</a>
-	{
-		resources.map((resource) => {
-			const { title, description, readtime, author } = resource.data
-			return (
-				<ResourcePage
-					title={title}
-					description={description}
-					readtime={readtime}
-					author={author}
-					type="resource"
-				>
-					{' '}
-					<MarkdownTextView text={resource.body} />
-				</ResourcePage>
-			)
-		})
-	}
+	<div class="mb-8 flex h-[60vh] w-full flex-col items-center justify-center">
+		<h1 class="text-3xl font-bold">Recursos</h1>
+		<p class="text-muted-foreground mt-2 text-lg">
+			Encuentra aquí una colección de recursos útiles para utilizar BuscaRamos.
+		</p>
+	</div>
+	<div class="grid w-full grid-cols-1 gap-4 p-6 sm:grid-cols-2 lg:grid-cols-3">
+		<ResourceCard
+			title="Documentacion oficial de BuscaRamos"
+			description="En este sitio encontrarás toda la documentación oficial de BuscaRamos, incluyendo guías de uso, tutoriales y más."
+			readtime={20}
+			authorName="Open Source UC"
+			authorTitle="Creadores y desarrolladores de BuscaRamos"
+			authorPicture="https://ubicate.osuc.dev/logo-osuc.svg"
+			resourceURL="/resources/documentation"
+		/>
+		{
+			resources.map((resource) => {
+				const { title, description, readtime, author } = resource.data
+				return (
+					<ResourceCard
+						title={title}
+						description={description}
+						readtime={readtime}
+						authorTitle={author?.title}
+						authorName={author?.name}
+						authorPicture={author?.picture}
+						resourceURL={`/resources/${resource.slug}`}
+					/>
+				)
+			})
+		}
+	</div>
 </Layout>
