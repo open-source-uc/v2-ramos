@@ -1,0 +1,118 @@
+---
+title: Funcionamiento Detallado de las Reviews
+order: 5
+readtime: 8
+description: 'Explicación didáctica y completa sobre cómo funcionan las reviews en BuscaRamos: ciclo de vida, almacenamiento, moderación y visualización.'
+---
+
+# ¿Cómo funcionan las reviews en BuscaRamos?
+
+Esta sección explica en profundidad el ciclo de vida de una review: desde que un usuario la crea, cómo se almacena, cómo se modera y cómo se muestra en la plataforma. Todo con ejemplos y enfoque en la transparencia y la experiencia de la comunidad.
+
+---
+
+## 1. ¿Qué es una review y qué datos contiene?
+
+Una review es la opinión de una persona sobre un curso. Cada review incluye:
+
+- Curso (sigla)
+- Valoración general (like, dislike, superlike)
+- Percepción de carga (baja, media, alta)
+- Tipo de asistencia (obligatoria u opcional)
+- Horas semanales estimadas
+- Año y semestre en que se tomó el curso
+- Comentario largo (opcional, hasta 10.000 caracteres)
+- Estado (pendiente, aprobada, reportada, oculta)
+- Usuario que la escribió (no se muestra públicamente)
+
+---
+
+## 2. ¿Cómo se crea y almacena una review?
+
+1. El usuario accede a la página de review de un curso (`/[sigle]/review`).
+2. Completa el formulario y envía su opinión.
+3. Una **AstroAction** valida los datos, verifica permisos y guarda la review:
+   - Los metadatos (valoración, carga, etc.) se almacenan en la tabla `course_reviews` de D1.
+   - El comentario largo (si existe) se guarda como archivo markdown en R2 (object storage), y la ruta queda en el campo `comment_path`.
+4. Si el usuario ya tenía una review para ese curso, se actualiza en vez de crear una nueva.
+
+**Ejemplo de estructura en SQL:**
+
+```sql
+CREATE TABLE course_reviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  course_sigle TEXT,
+  like_dislike INTEGER,
+  workload_vote INTEGER,
+  attendance_type INTEGER,
+  weekly_hours INTEGER,
+  year_taken INTEGER,
+  semester_taken INTEGER,
+  comment_path TEXT,
+  status INTEGER DEFAULT 0, -- 0: pendiente, 1: aprobada, 2: reportada, 3: oculta
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## 3. Moderación y estados de una review
+
+Las reviews pueden tener los siguientes estados:
+
+- **Pendiente:** recién creada, aún no moderada.
+- **Aprobada:** revisada por el equipo, pero en la práctica ambas se muestran igual.
+- **Reportada:** marcada por la comunidad para revisión.
+- **Oculta:** retirada por moderación (no visible para la comunidad).
+
+> **Nota:** En BuscaRamos, tanto las reviews pendientes como las aprobadas se muestran públicamente. La moderación es principalmente reactiva: solo las reviews reportadas u ocultas dejan de mostrarse.
+
+Solo usuarios con permisos especiales pueden aprobar, ocultar o eliminar reviews. La comunidad puede reportar reviews inapropiadas.
+
+---
+
+## 4. ¿Cómo se visualizan las reviews?
+
+- Todas las reviews (excepto las ocultas) se muestran en la página del curso y en el catálogo.
+- El comentario largo se recupera desde R2 usando la ruta almacenada y se renderiza como markdown.
+- El componente principal para mostrar reviews es:
+  - `MarkdownReviewView` (React)
+- Las estadísticas agregadas de las reviews (likes, carga, etc.) se usan para calcular los promedios y ordenar los cursos en el catálogo.
+
+---
+
+## 5. Ciclo de vida de una review (diagrama)
+
+```mermaid
+graph TD
+    U[Usuario] -->|Envía formulario| AA[AstroAction]
+    AA -->|Valida y guarda metadatos| DB[(D1: course_reviews)]
+    AA -->|Guarda comentario largo| R2[(R2 Storage)]
+    Admin[Admin] -->|Modera| DB
+    DB -->|Actualiza estadísticas| CS[(D1: course_summary)]
+    P[Catálogo] <--|Muestra reviews y promedios| DB
+    P <--|Muestra comentario largo| R2
+```
+
+---
+
+## 6. Preguntas frecuentes
+
+**¿Puedo editar o borrar mi review?**  
+Sí, puedes editar o eliminar tu review desde la misma página del curso si estás autenticado.
+
+**¿Qué pasa si reporto una review?**  
+La review queda marcada para revisión y solo el equipo de moderación puede decidir si se oculta o aprueba.
+
+**¿Las reviews son anónimas?**  
+Sí. El sistema solo almacena el pseudónimo que el usuario elige (y este puede ser cualquier apodo, no necesariamente identificable). Mientras no pongas un pseudónimo reconocible, nadie sabrá quién escribió la review.
+
+Además, no guardamos correos electrónicos ni nombres reales. Según nuestros términos y condiciones del auth:
+
+> **Datos que recopilamos:**
+> No almacenamos directamente las direcciones de correo electrónico de los usuarios. En su lugar, utilizamos un hash para proteger tu privacidad.
+
+---
+
+Esta arquitectura permite que las reviews sean una herramienta confiable, transparente y útil para toda la comunidad estudiantil.

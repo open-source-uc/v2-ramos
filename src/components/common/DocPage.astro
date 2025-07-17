@@ -35,14 +35,6 @@ const { docData, amountOfDocs } = Astro.props
 					</Pill>
 				)
 			}
-			{
-				docData.tags &&
-					docData.tags.map((tag: string) => (
-						<Pill variant="ghost_red" size="sm" className="">
-							{tag}
-						</Pill>
-					))
-			}
 		</div>
 		{
 			docData.description && (
@@ -70,6 +62,10 @@ const { docData, amountOfDocs } = Astro.props
 				>
 					{'<-'} Anterior
 				</a>
+			) : docData.order === -1 ? (
+				<a class="text-blue-500 hover:underline" href={`/resources/documentation/${amountOfDocs}`}>
+					{'<-'} Anterior
+				</a>
 			) : (
 				<a class="text-gray-500 hover:cursor-not-allowed">{'<-'} Anterior</a>
 			)
@@ -83,7 +79,9 @@ const { docData, amountOfDocs } = Astro.props
 					Siguiente {`->`}
 				</a>
 			) : (
-				<a class="text-gray-500 hover:cursor-not-allowed">{'Siguiente ->'}</a>
+				<a class="text-blue-500 hover:underline" href="/resources/documentation/faq">
+					FAQ
+				</a>
 			)
 		}
 	</div>
