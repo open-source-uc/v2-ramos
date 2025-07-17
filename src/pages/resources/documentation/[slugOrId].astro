@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '@/layouts/Layout.astro'
+import { MarkdownTextView } from '@/components/common/MarkdownTextView'
+import DocPage from '@/components/common/DocPage.astro'
+
+export async function getStaticPaths() {
+	const docs = await getCollection('docs')
+	return docs
+		.map((doc) => ({
+			params: { slugOrId: doc.slug },
+		}))
+		.concat(
+			docs.map((doc) => ({
+				params: { slugOrId: doc.id?.toString?.() ?? '' },
+			}))
+		)
+}
+
+const { slugOrId } = Astro.params
+const docs = await getCollection('docs')
+const entry = docs.find((doc) => doc.slug === slugOrId || doc.data.order?.toString?.() === slugOrId)
+
+if (!entry) {
+	return Astro.redirect('/resources/documentation') // Redirect if not found
+}
+const docData = {
+	title: entry.data.title,
+	readtime: entry.data.readtime,
+	description: entry.data.description,
+	order: entry.data.order ?? 0, // Ensure order is defined
+}
+---
+
+<Layout>
+	<DocPage amountOfDocs={docs.length} docData={docData}>
+		<MarkdownTextView text={entry.body} />
+	</DocPage>
+</Layout>

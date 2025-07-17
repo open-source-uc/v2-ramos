@@ -20,6 +20,17 @@ const resources = defineCollection({
 	schema: resourcesSchema,
 })
 
+const docsSchema = z.object({
+	title: z.string(),
+	order: z.number(),
+	readtime: z.number(),
+	description: z.string(),
+})
+
+const docs = defineCollection({
+	schema: docsSchema,
+})
+
 const coursesStatic = defineCollection({
 	loader: file('src/../migration/json/cursos-simplificado.json', {
 		parser: (content) => {
@@ -102,7 +113,7 @@ const agradecimientos = defineCollection({
 })
 
 export const collections = {
-	resources,
+	docs,
 	coursesStatic,
 	contribuidores,
 	agradecimientos,

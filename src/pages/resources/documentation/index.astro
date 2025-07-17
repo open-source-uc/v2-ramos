@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+
+const docs = await getCollection('docs')
+docs.sort((a, b) => a.data.order - b.data.order)
+---
+
+<Layout>
+	<div class="flex flex-col items-center p-10">
+		<article class="flex max-w-4xl flex-col items-start">
+			<h1 class="text-3xl font-bold">Documentación de BuscaRamos</h1>
+			<ol class="mt-4 space-y-2">
+				{
+					docs.map((doc) => (
+						<li>
+							<a href={`/resources/documentation/${doc.slug}`} class="hover:underline">
+								{doc.data.order}. {doc.data.title}
+							</a>
+						</li>
+					))
+				}
+			</ol>
+		</article>
+	</div>
+</Layout>
