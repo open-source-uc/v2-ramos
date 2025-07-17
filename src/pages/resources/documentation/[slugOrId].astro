@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content'
 import Layout from '@/layouts/Layout.astro'
 import { MarkdownTextView } from '@/components/common/MarkdownTextView'
-import DocPage from '@/components/common/DocPage.astro'
+import ResourcePage from '@/components/common/ResourcePage.astro'
 
 export async function getStaticPaths() {
 	const docs = await getCollection('docs')
@@ -33,7 +33,14 @@ const docData = {
 ---
 
 <Layout>
-	<DocPage amountOfDocs={docs.length - 1} docData={docData}>
+	<ResourcePage
+		amountOfDocs={docs.length - 1}
+		title={docData.title}
+		readtime={docData.readtime}
+		description={docData.description}
+		order={docData.order}
+		type="documentation"
+	>
 		<MarkdownTextView text={entry.body} />
-	</DocPage>
+	</ResourcePage>
 </Layout>

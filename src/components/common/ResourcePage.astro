@@ -1,0 +1,250 @@
+---
+import { Pill } from '@/components/ui/pill'
+
+interface Props {
+	amountOfDocs?: number
+	type: 'documentation' | 'resource'
+	title: string
+	readtime: number
+	description: string
+	order?: number
+	author?:
+		| {
+				name: string
+				title?: string
+				picture?: string
+				link?: string
+		  }
+		| string
+	tags?: string[]
+	navigationSection?: {
+		title: string
+		description: string
+		buttonText: string
+		buttonHref: string
+	}
+}
+const {
+	title,
+	readtime,
+	description,
+	order = -1,
+	author,
+	type,
+	amountOfDocs = -1,
+	tags = [],
+	navigationSection,
+} = Astro.props
+---
+
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-8 sm:px-6">
+	{
+		type === 'resource' ? (
+			<>
+				<a
+					class="inline-flex items-center gap-2 text-blue-600 transition-colors hover:text-blue-800 hover:underline"
+					href="/resources"
+				>
+					← Ver más Recursos
+				</a>
+				<section class="border-border rounded-md border px-4 py-6 sm:px-6 sm:py-8">
+					<div>
+						<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
+						<p class="max-w-full text-sm break-words opacity-60 sm:max-w-[80%]">{description}</p>
+						{author && (
+							<div class="mt-4 flex items-center gap-3 overflow-hidden">
+								<div class="flex min-w-0 flex-1 items-center gap-3">
+									{typeof author === 'object' && author.picture ? (
+										<a
+											href={author.link || '#'}
+											target={author.link ? '_blank' : undefined}
+											rel={author.link ? 'noopener noreferrer' : undefined}
+											class="block"
+										>
+											<img
+												src={author.picture}
+												alt={`Foto de ${author.name}`}
+												class="border-border hover:border-blue h-10 w-10 rounded-full border-2 object-cover transition-colors"
+											/>
+										</a>
+									) : (
+										<div class="bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border-2">
+											<span class="text-muted-foreground text-sm font-medium">
+												{typeof author === 'object'
+													? author.name?.charAt(0).toUpperCase()
+													: author?.charAt(0).toUpperCase()}
+											</span>
+										</div>
+									)}
+									<div class="flex min-w-0 flex-col">
+										<div class="text-muted-foreground truncate text-sm">
+											Por{' '}
+											{typeof author === 'object' && author.link ? (
+												<a
+													href={author.link}
+													target="_blank"
+													rel="noopener noreferrer"
+													class="text-foreground hover:text-blue font-medium transition-colors"
+												>
+													{author.name}
+												</a>
+											) : (
+												<span class="text-foreground font-medium">
+													{typeof author === 'object' ? author.name : author}
+												</span>
+											)}
+										</div>
+										{typeof author === 'object' && author.title && (
+											<div class="text-muted-foreground truncate text-xs">{author.title}</div>
+										)}
+									</div>
+								</div>
+							</div>
+						)}
+					</div>
+					<div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-8">
+						<Pill variant="blue" size="sm" className="">
+							Recurso
+						</Pill>
+						{readtime && (
+							<Pill variant="green" size="sm" className="">
+								{readtime} Minutos de lectura
+							</Pill>
+						)}
+						{tags &&
+							tags.length > 0 &&
+							tags.map((tag) => (
+								<Pill variant="ghost_red" size="sm" className="">
+									{tag}
+								</Pill>
+							))}
+					</div>
+				</section>
+			</>
+		) : (
+			<>
+				<div class="w-full">
+					<a href="/resources/documentation" class="text-blue-500 hover:underline">
+						{`<-`} Volver al índice
+					</a>
+				</div>
+				<header class="border-border mb-4 rounded-md border px-4 py-6 sm:px-6 sm:py-8">
+					<div class="flex items-center justify-between gap-4">
+						<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
+					</div>
+					<div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-8">
+						<Pill variant="blue" size="sm" className="">
+							{' '}
+							Documentación{' '}
+						</Pill>
+						{readtime && (
+							<Pill variant="green" size="sm" className="">
+								{readtime} Minutos de lectura
+							</Pill>
+						)}
+					</div>
+					{description && <p class="text-muted-foreground mt-4 text-base">{description}</p>}
+				</header>
+			</>
+		)
+	}
+	<!-- Main Content Section -->
+	<article class="border-border min-w-0 overflow-hidden rounded-md border">
+		<div class="px-4 py-6 sm:px-6 sm:py-8">
+			<div
+				class="text-foreground content-markdown max-w-none overflow-hidden leading-relaxed break-words"
+			>
+				<slot />
+			</div>
+		</div>
+	</article>
+	<!-- Navigation Section -->
+	{
+		type === 'resource' ? (
+			<section class="mt-6">
+				<div class="border-border rounded-md border p-4 sm:p-6">
+					<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+						<div class="min-w-0 flex-1">
+							<h3 class="text-foreground mb-2 text-lg font-semibold break-words">
+								{navigationSection?.title || '¿Te resultó útil este recurso?'}
+							</h3>
+							<p class="text-muted-foreground text-sm break-words">
+								{navigationSection?.description ||
+									'Explora más recursos y guías en nuestra sección de ayuda.'}
+							</p>
+						</div>
+						<div class="flex flex-shrink-0 gap-3">
+							<a
+								href={navigationSection?.buttonHref || '/resources'}
+								class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+							>
+								{navigationSection?.buttonText || 'Ver Todos los Recursos'}
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		) : (
+			<section class="mt-6">
+				<div class="border-border rounded-md border p-4 sm:p-6">
+					<div class="flex flex-col gap-4">
+						<div class="mb-4 flex flex-col items-center text-center">
+							<h3 class="text-foreground mb-2 text-lg font-semibold break-words">
+								¿Te resultó útil esta documentación?
+							</h3>
+							<p class="text-muted-foreground text-sm break-words">
+								Explora más guías y recursos en nuestra sección de ayuda.
+							</p>
+						</div>
+						<div class="flex justify-center gap-2">
+							{order > 1 ? (
+								<a
+									href={`/resources/documentation/${order - 1}`}
+									class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+								>
+									{'<-'} Anterior
+								</a>
+							) : order === -1 ? (
+								<a
+									class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+									href={`/resources/documentation/${amountOfDocs}`}
+								>
+									{'<-'} Anterior
+								</a>
+							) : (
+								<span class="border-border bg-muted inline-flex cursor-not-allowed items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap text-gray-500">
+									{'<-'} Anterior
+								</span>
+							)}
+							<a
+								href="/resources/documentation"
+								class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+							>
+								Índice
+							</a>
+							{order === -1 ? (
+								<span class="border-border bg-muted inline-flex cursor-not-allowed items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap text-gray-500">
+									Siguiente {`->`}
+								</span>
+							) : order < amountOfDocs ? (
+								<a
+									href={`/resources/documentation/${order + 1}`}
+									class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+								>
+									Siguiente {`->`}
+								</a>
+							) : (
+								<a
+									class="border-border bg-background hover:bg-muted text-foreground inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+									href="/resources/documentation/faq"
+								>
+									FAQ
+								</a>
+							)}
+						</div>
+					</div>
+				</div>
+			</section>
+		)
+	}
+</div>

@@ -114,6 +114,7 @@ const agradecimientos = defineCollection({
 
 export const collections = {
 	docs,
+	resources,
 	coursesStatic,
 	contribuidores,
 	agradecimientos,

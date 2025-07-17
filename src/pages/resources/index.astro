@@ -1,10 +1,30 @@
 ---
+import { MarkdownTextView } from '@/components/common/MarkdownTextView'
+import ResourcePage from '@/components/common/ResourcePage.astro'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { read } from 'fs'
 
 const resources = await getCollection('resources')
 ---
 
 <Layout>
 	<a href="/resources/documentation">Docs</a>
+	{
+		resources.map((resource) => {
+			const { title, description, readtime, author } = resource.data
+			return (
+				<ResourcePage
+					title={title}
+					description={description}
+					readtime={readtime}
+					author={author}
+					type="resource"
+				>
+					{' '}
+					<MarkdownTextView text={resource.body} />
+				</ResourcePage>
+			)
+		})
+	}
 </Layout>
