@@ -293,9 +293,9 @@ export default function ScheduleCombinations({
 	if (!hasMultipleSections) {
 		return (
 			<section className={className}>
-				<div className="bg-primary border-border overflow-hidden rounded-md border p-6">
+				<div className="bg-accent border-border overflow-hidden rounded-md border p-6">
 					<div className="text-muted-foreground flex items-center gap-3">
-						<div className="text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
+						<div className="bg-muted text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
 							<CalendarIcon className="h-5 w-5 fill-current" />
 						</div>
 						<div className="min-w-0 flex-1">
