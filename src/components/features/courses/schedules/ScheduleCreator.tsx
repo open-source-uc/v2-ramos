@@ -217,62 +217,73 @@ function ScheduleGrid({
 
 					{/* Time slots */}
 					{TIME_SLOTS.map((time, timeIndex) => (
-						<div
-							key={time}
-							className="border-border hover:bg-muted/25 grid grid-cols-7 border-b transition-colors"
-						>
-							{/* Time label */}
-							<div className="text-muted-foreground bg-muted/25 p-3 text-sm font-medium">
-								{time}
-							</div>
+						<div key={time}>
+							<div className="border-border hover:bg-muted/25 grid grid-cols-7 border-b transition-colors">
+								{/* Time label */}
+								<div className="text-muted-foreground bg-muted/25 p-3 text-sm font-medium">
+									{time}
+								</div>
 
-							{/* Day columns */}
-							{DAYS.map((day, dayIndex) => {
-								const classes = matrix[timeIndex][dayIndex]
-								const hasConflict = classes.length > 1
+								{/* Day columns */}
+								{DAYS.map((day, dayIndex) => {
+									const classes = matrix[timeIndex][dayIndex]
+									const hasConflict = classes.length > 1
 
-								return (
-									<div
-										key={`${day}-${timeIndex}`}
-										className={cn(
-											'tablet:min-h-[70px] flex min-h-[60px] flex-col items-center justify-center gap-1 p-2',
-											hasConflict && 'bg-red-light border-red/20'
-										)}
-									>
-										{classes.map((classInfo, index) => {
-											const courseIndex = selectedCourses.findIndex(
-												(c) => c === `${classInfo.courseId}-${classInfo.section}`
-											)
-											const colorVariant =
-												colorMode === 'class-type'
-													? getClassTypeColor(classInfo.type)
-													: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
+									return (
+										<div
+											key={`${day}-${timeIndex}`}
+											className={cn(
+												'tablet:min-h-[70px] flex min-h-[60px] flex-col items-center justify-center gap-1 p-2',
+												hasConflict && 'bg-red-light border-red/20'
+											)}
+										>
+											{classes.map((classInfo, index) => {
+												const courseIndex = selectedCourses.findIndex(
+													(c) => c === `${classInfo.courseId}-${classInfo.section}`
+												)
+												const colorVariant =
+													colorMode === 'class-type'
+														? getClassTypeColor(classInfo.type)
+														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
 
-											return (
-												<div
-													key={`${classInfo.courseId}-${classInfo.section}-${index}`}
-													className="w-full"
-												>
-													<Pill
-														variant={colorVariant}
-														size="xs"
-														className="tablet:text-xs w-full min-w-0 justify-center px-1.5 py-0.5 text-[10px]"
+												return (
+													<div
+														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
+														className="w-full"
 													>
-														<div className="text-center">
-															<div className="font-medium">
-																{classInfo.courseId}-{classInfo.section}
+														<Pill
+															variant={colorVariant}
+															size="xs"
+															className="tablet:text-xs w-full min-w-0 justify-center px-1.5 py-0.5 text-[10px]"
+														>
+															<div className="text-center">
+																<div className="font-medium">
+																	{classInfo.courseId}-{classInfo.section}
+																</div>
+																<div className="tablet:text-[10px] text-[9px] opacity-80">
+																	{getClassTypeLong(classInfo.type)}
+																</div>
 															</div>
-															<div className="tablet:text-[10px] text-[9px] opacity-80">
-																{getClassTypeLong(classInfo.type)}
-															</div>
-														</div>
-													</Pill>
-												</div>
-											)
-										})}
+														</Pill>
+													</div>
+												)
+											})}
+										</div>
+									)
+								})}
+							</div>
+							
+							{/* Lunch break stripe between 12:20 and 14:50 */}
+							{time === '12:20' && (
+								<div className="border-border border-b grid grid-cols-7">
+									<div className="bg-orange-light py-6 px-4 text-left text-sm font-medium">
+										13:30 - 14:50 <br />
+										Horario de Almuerzo
 									</div>
-								)
-							})}
+									<div className="bg-orange-light/70 col-span-6 flex items-center justify-center p-2 text-center text-sm font-semibold">
+									</div>
+								</div>
+							)}
 						</div>
 					))}
 				</div>
