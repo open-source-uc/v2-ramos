@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # Claude
 CLAUDE.md
+
+# Backup files
+.backup-*
