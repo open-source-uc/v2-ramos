@@ -46,7 +46,7 @@ export default function Header() {
 						alt="Logo de BuscaRamos"
 						width={200}
 						height={200}
-						className="fill-foreground h-20 w-auto"
+						className="fill-foreground h-20 w-auto rounded-lg"
 					/>
 				</a>
 

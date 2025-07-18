@@ -115,7 +115,7 @@ function CombinationGrid({
 	}
 
 	return (
-		<div className="border-border tablet:p-4 rounded-lg border p-3">
+		<div className="bg-background border-border tablet:p-4 rounded-lg border p-3">
 			<div className="tablet:mb-3 mb-2 flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<h4 className="tablet:text-base text-sm font-medium">Opción {index + 1}</h4>
@@ -293,9 +293,9 @@ export default function ScheduleCombinations({
 	if (!hasMultipleSections) {
 		return (
 			<section className={className}>
-				<div className="border-border overflow-hidden rounded-md border p-6">
+				<div className="bg-primary border-border overflow-hidden rounded-md border p-6">
 					<div className="text-muted-foreground flex items-center gap-3">
-						<div className="bg-muted text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
+						<div className="text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
 							<CalendarIcon className="h-5 w-5 fill-current" />
 						</div>
 						<div className="min-w-0 flex-1">
@@ -312,7 +312,7 @@ export default function ScheduleCombinations({
 		<section className={className}>
 			<div className="border-border overflow-hidden rounded-md border">
 				<Collapsible>
-					<CollapsibleTrigger className="bg-background hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
+					<CollapsibleTrigger className="bg-accent hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
 						<div className="flex min-w-0 flex-1 items-center gap-3">
 							<div className="bg-purple-light text-purple border-purple/20 flex-shrink-0 rounded-lg border p-2">
 								<CalendarIcon className="h-5 w-5 fill-current" />
@@ -335,7 +335,7 @@ export default function ScheduleCombinations({
 						</div>
 					</CollapsibleTrigger>
 
-					<CollapsibleContent className="border-border bg-muted/20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1 w-full overflow-hidden border-t px-6 py-4">
+					<CollapsibleContent className="border-border bg-accent data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-up-1 data-[state=open]:slide-down-1 w-full overflow-hidden border-t px-6 py-4">
 						{isLoading ? (
 							<div className="py-8 text-center">
 								<div className="border-purple mx-auto mb-2 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"></div>

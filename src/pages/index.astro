@@ -212,18 +212,20 @@ import {
 			<div class="tablet:gap-4 mb-8 flex flex-wrap justify-center gap-3">
 				<Pill variant="blue" size="lg" icon={ResearchIcon}> Ciencias </Pill>
 				<Pill variant="pink" size="lg" icon={ArtIcon}> Artes </Pill>
+				<Pill variant="orange" size="lg" icon={WorkloadIcon}> Economía y Administración </Pill>
 				<Pill variant="green" size="lg" icon={HumanityIcon}> Humanidades </Pill>
 				<Pill variant="purple" size="lg" icon={MedicineIcon}> Medicina </Pill>
-				<Pill variant="orange" size="lg" icon={WorkloadIcon}> Economía y Administración </Pill>
 			</div>
 
 			<div class="text-center">
-				<a
+				<Button
 					href="/catalog"
-					class="ring-offset-background focus-visible:ring-ring border-border hover:border-primary/50 bg-background/80 inline-flex h-11 items-center justify-center rounded-md border-2 px-8 py-2 text-sm font-medium whitespace-nowrap backdrop-blur-sm transition-all duration-300 hover:shadow-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+					variant="outline"
+					size="lg"
+					aria-label="Ver todas las categorías de cursos"
 				>
 					Ver todas las categorías
-				</a>
+				</Button>
 			</div>
 		</div>
 	</section>
