@@ -374,7 +374,7 @@ export function SearchableTableDisplay({ initialSearchValue = '' }: SearchableTa
 
 					{/* Collapsible Filters */}
 					<Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
-						<div className="border-border mb-3 rounded-md border">
+						<div className="bg-accent border-border mb-3 rounded-md border">
 							<CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between px-4 py-2 transition-colors">
 								<div className="flex items-center gap-3">
 									<h3 className="text-md font-semibold">Filtros</h3>

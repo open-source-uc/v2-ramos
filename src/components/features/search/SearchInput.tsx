@@ -10,17 +10,8 @@ interface SearchProps {
 	placeholder?: string
 	className?: string
 	initialValue?: string
-	normalizeText?: boolean // Option to enable/disable text normalization
 	isSearching?: boolean // New prop to indicate loading state
 	useFuzzySearch?: boolean // Option to use Fuse.js for normalization
-}
-
-// Function to normalize text for searching (handle special characters)
-const normalizeSearchText = (text: string) => {
-	return text
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '') // Remove diacritics
 }
 
 export function Search({
@@ -28,7 +19,6 @@ export function Search({
 	placeholder = 'Buscar por nombre o sigla...',
 	className = '',
 	initialValue = '',
-	normalizeText = true, // Default to true for better search experience
 	isSearching = false, // Default to false
 	useFuzzySearch = false, // Default to false to maintain backward compatibility
 }: SearchProps) {
@@ -38,12 +28,8 @@ export function Search({
 		setSearchTerm(value)
 
 		// If using fuzzy search, pass the original value (Fuse.js handles normalization)
-		// Otherwise, use the existing normalization logic
 		if (useFuzzySearch) {
 			onSearch(value)
-		} else {
-			const searchValue = normalizeText ? normalizeSearchText(value) : value
-			onSearch(searchValue)
 		}
 	}
 
@@ -75,7 +61,7 @@ export function Search({
 						variant="ghost"
 						size="sm"
 						onClick={clearSearch}
-						className="hover:bg-muted absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 p-0"
+						className={`${searchTerm ? 'visible' : 'invisible'} hover:bg-muted absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 p-0`}
 					>
 						✕
 					</Button>
@@ -84,6 +70,3 @@ export function Search({
 		</div>
 	)
 }
-
-// Export the normalize function for external use when needed
-export { normalizeSearchText }

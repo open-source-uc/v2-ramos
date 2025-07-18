@@ -81,10 +81,7 @@ export function DataTable({ data, externalSearchValue = '' }: DataTableProps) {
 	return (
 		<>
 			<div className="tablet:block hidden pt-4">
-				<div className="flex items-center gap-4">
-					<div className="space-x-2"></div>
-				</div>
-				<div className="border-border rounded-md border">
+				<div className="bg-accent border-border rounded-md border">
 					<Table>
 						<TableHeader>
 							{table.getHeaderGroups().map((headerGroup) => (
