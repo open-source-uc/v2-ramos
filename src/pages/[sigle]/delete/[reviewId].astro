@@ -1,6 +1,8 @@
 ---
 import { actions, isInputError } from 'astro:actions'
 import Layout from '@/layouts/Layout.astro'
+import { Button } from '@/components/ui/button'
+import { CloseIcon, FlagIcon, CheckIcon } from '@/components/icons/icons'
 
 const { sigle, reviewId } = Astro.params
 
@@ -14,48 +16,103 @@ const successMessage = result?.data?.message
 ---
 
 <Layout>
-	<div class="mx-auto mt-16 max-w-lg rounded-lg bg-white p-8 shadow-lg">
-		<h1 class="mb-4 text-xl font-semibold text-gray-800">Eliminar Reseña</h1>
-		<p class="mb-6 text-gray-700">
-			Esta acción es <span class="font-semibold text-red-600">irreversible</span>. ¿Estás seguro de
-			que deseas eliminar tu reseña del curso <strong>{sigle}</strong>?
-		</p>
-
-		{/* Mensaje de éxito */}
-		{
-			successMessage && (
-				<div class="mb-4 rounded-md border border-green-400 bg-green-100 p-4 text-green-700">
-					<p class="font-medium">{successMessage}</p>
+	<div class="max-w-4xl mx-auto px-4 py-8">
+		<!-- Main Delete Confirmation Card -->
+		<section class="border border-border rounded-md bg-accent overflow-hidden">
+			<!-- Header -->
+			<div class="border-b border-border px-8 py-6">
+				<div class="flex items-center gap-3">
+					<div class="p-2 bg-red-light text-red border border-red/20 rounded-lg">
+						<CloseIcon className="h-6 w-6 fill-current" />
+					</div>
+					<div>
+						<h1 class="text-2xl font-semibold text-foreground">Eliminar Reseña</h1>
+						<p class="text-sm text-muted-foreground mt-1">
+							Confirma la eliminación de tu reseña del curso {sigle}
+						</p>
+					</div>
 				</div>
-			)
-		}
-
-		{/* Mensaje de error general */}
-		{
-			!isInputError(result?.error) && result?.error?.message && (
-				<div class="mb-4 rounded-md border border-red-400 bg-red-100 p-4 text-red-700">
-					<p class="font-medium">{result.error.message}</p>
-				</div>
-			)
-		}
-
-		<form action={actions.deleteCourseReview} method="POST" class="space-y-4">
-			<input type="hidden" name="review_id" value={parseInt(reviewId)} />
-
-			{/* Error del campo review_id */}
-			{inputErrors.review_id && <p class="mt-1 text-sm text-red-600">{inputErrors.review_id}</p>}
-
-			<div class="flex items-center justify-between border-t pt-4">
-				<a href={`/${sigle}/`} class="font-medium text-gray-600 transition hover:text-gray-800">
-					← Regresar al curso
-				</a>
-				<button
-					type="submit"
-					class="rounded-md bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
-				>
-					Eliminar Reseña
-				</button>
 			</div>
-		</form>
+
+			<!-- Content -->
+			<div class="p-8">
+				<!-- Warning Message -->
+				<div class="bg-red-light border border-red/20 rounded-md p-6 mb-6">
+					<div class="flex items-start gap-3">
+						<div class="p-1">
+							<FlagIcon className="h-5 w-5 fill-red" />
+						</div>
+						<div>
+							<h3 class="text-sm font-semibold text-red mb-2">Acción Irreversible</h3>
+							<p class="text-sm text-red">
+								Esta acción no se puede deshacer. Una vez eliminada, tu reseña y todos los comentarios asociados se perderán permanentemente.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Course Information -->
+				<div class="bg-background border border-border rounded-md p-4 mb-6">
+					<p class="text-sm text-muted-foreground mb-1">Eliminar reseña del curso:</p>
+					<p class="text-lg font-semibold text-foreground">{sigle}</p>
+				</div>
+
+				<!-- Success Message -->
+				{
+					successMessage && (
+						<div class="bg-green-light border border-green/20 rounded-md p-4 mb-6">
+							<div class="flex items-center gap-2">
+								<CheckIcon className="h-5 w-5 fill-green" />
+								<p class="text-sm font-medium text-green">{successMessage}</p>
+							</div>
+						</div>
+					)
+				}
+
+				<!-- Error Message -->
+				{
+					!isInputError(result?.error) && result?.error?.message && (
+						<div class="bg-red-light border border-red/20 rounded-md p-4 mb-6">
+							<div class="flex items-center gap-2">
+								<CloseIcon className="h-5 w-5 fill-red" />
+								<p class="text-sm font-medium text-red">{result.error.message}</p>
+							</div>
+						</div>
+					)
+				}
+
+				<!-- Form -->
+				<form action={actions.deleteCourseReview} method="POST">
+					<input type="hidden" name="review_id" value={parseInt(reviewId)} />
+
+					{/* Field Error */}
+					{inputErrors.review_id && (
+						<div class="mb-4">
+							<p class="text-sm text-red">{inputErrors.review_id}</p>
+						</div>
+					)}
+
+					<!-- Action Buttons -->
+					<div class="flex items-center justify-between gap-4 pt-6 border-t border-border">
+						<Button
+							variant="outline"
+							href={`/${sigle}/`}
+							className="flex-1 tablet:flex-none"
+						>
+							← Regresar al curso
+						</Button>
+						
+						<Button
+							type="submit"
+							variant="destructive"
+							icon={CloseIcon}
+							className="flex-1 tablet:flex-none"
+						>
+							Eliminar Reseña
+						</Button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</div>
 </Layout>
