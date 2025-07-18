@@ -14,8 +14,8 @@ import { OsucPermissions } from '@/types/permissions'
 let recommendation: Recommendations | null = null
 let organizationData: Organization | null = null
 let showButton = false
-let userData = null
 let token = null
+let userData = null
 
 try {
 	const url = new URL(Astro.request.url)
@@ -27,7 +27,7 @@ try {
 	}
 
 	// Fetch all recommendations (or ideally, a filtered API by slug if available)
-	const response = await fetch(new URL('/api/articles/recommendations', Astro.site))
+	const response = await fetch('/api/articles/recommendations')
 	const recommendations: Recommendations[] = await response.json()
 	recommendation =
 		recommendations.find(
@@ -60,6 +60,7 @@ try {
 	{
 		recommendation && organizationData ? (
 			<ContentPage
+				userData={userData}
 				contentData={recommendation}
 				organizationData={organizationData}
 				contentType="recommendation"

@@ -48,7 +48,7 @@ try {
 		return Astro.redirect('/')
 	}
 
-	const blogResponse = await fetch(new URL(`/api/articles/blogById?id=${blogId}`, Astro.site))
+	const blogResponse = await fetch(`/api/articles/blogById?id=${blogId}`)
 	const blogJson = (await blogResponse.json()) as unknown as Blogs[]
 	blogData = blogJson[0]
 	if (!blogData) {
@@ -69,9 +69,7 @@ try {
 	}
 
 	const tagsData = blogsTags
-	mdxContent = await fetch(
-		new URL(`/api/articles/article?path=${blogData.content_path}`, Astro.site)
-	)
+	mdxContent = await fetch(`/api/articles/article?path=${blogData.content_path}`)
 		.then((res) => res.text())
 		.catch(() => '')
 } catch (e) {

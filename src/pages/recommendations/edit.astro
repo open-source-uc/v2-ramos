@@ -34,6 +34,7 @@ if (result && !result.error) {
 try {
 	const url = new URL(Astro.request.url)
 	recommendationId = url.searchParams.get('id')
+
 	if (!recommendationId) {
 		return Astro.redirect('/recommendations')
 	}
@@ -45,7 +46,7 @@ try {
 	}
 
 	const recommendationResponse = await fetch(
-		new URL(`/api/articles/recommendationById?id=${recommendationId}`, Astro.site)
+		`/api/articles/recommendationById?id=${recommendationId}`
 	)
 	const recommendationJson = (await recommendationResponse.json()) as unknown as Recommendations[]
 	recommendationData = recommendationJson[0]

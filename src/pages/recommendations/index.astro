@@ -3,11 +3,15 @@ import Layout from '../../layouts/Layout.astro'
 import type { Recommendations } from '@/types'
 import ContentCard from '@/components/features/blog/BlogCard'
 import NewArticle from '@/components/features/article/NewArticle'
-
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+let userData = null
 const recommendationsRespone = await fetch(
 	new URL('/api/articles/recommendations', Astro.url.origin)
 )
 const recommendations: Recommendations[] = await recommendationsRespone.json()
+const token = getToken(Astro.cookies)
+userData = await getUserDataByToken(token)
 ---
 
 <Layout title="Recomendaciones">
@@ -20,7 +24,12 @@ const recommendations: Recommendations[] = await recommendationsRespone.json()
 			</h1>
 		</div>
 		<div class="flex justify-end md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4">
-			<NewArticle contentType="recommendation" className="mt-10 mr-2" client:only="react" />
+			<NewArticle
+				userData={userData}
+				contentType="recommendation"
+				className="mt-10 mr-2"
+				client:only="react"
+			/>
 		</div>
 		{
 			recommendations.map((rec) => (

@@ -6,9 +6,13 @@ import { createSlug } from '@/lib/utils'
 import type { Blogs, Organization } from '@/types'
 import { MarkdownReviewView } from '@/components'
 import config from '@/lib/const'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
 
 let blog: Blogs | null = null
 let organizationData: Organization | null = null
+let token = null
+let userData = null
 
 try {
 	const url = new URL(Astro.request.url)
@@ -19,7 +23,7 @@ try {
 		return Astro.redirect('/404')
 	}
 
-	const response = await fetch(new URL('/api/articles/blogs', Astro.site))
+	const response = await fetch('/api/articles/blogs')
 	const blogs: Blogs[] = await response.json()
 	blog =
 		blogs.find(
@@ -33,6 +37,8 @@ try {
 	const organizationRes = await fetch(
 		new URL(`/api/organization/${blog.organization_id}`, config.AUTHURL)
 	)
+	token = getToken(Astro.cookies)
+	userData = await getUserDataByToken(token)
 	organizationData = (await organizationRes.json()) as Organization
 } catch (e) {
 	return Astro.redirect('/404')
@@ -43,6 +49,7 @@ try {
 	{
 		blog && organizationData ? (
 			<ContentPage
+				userData={userData}
 				contentData={blog}
 				organizationData={organizationData}
 				contentType="blog"

@@ -1,7 +1,7 @@
 ---
 import type { Blogs, Recommendations, Organization } from '@/types'
 import { Pill } from '../ui/pill'
-import ConditionalEdit from '../features/article/ConditionalEdit'
+import ConditionalEdit from '@/components/features/article/ConditionalEdit.tsx'
 
 interface Props {
 	contentData: Blogs | Recommendations
@@ -9,6 +9,7 @@ interface Props {
 	contentType: 'resource' | 'blog' | 'recommendation'
 	primaryPillIcon?: any
 	secondaryPillIcon?: any
+	userData: any
 	navigationSection?: {
 		title: string
 		description: string
@@ -18,6 +19,7 @@ interface Props {
 }
 const {
 	contentData,
+	userData,
 	organizationData,
 	contentType,
 	primaryPillIcon,
@@ -83,6 +85,7 @@ const finalNavigationSection = navigationSection || defaultNavigationSection
 			← Ver más {contentTypeLabel}
 		</a>
 		<ConditionalEdit
+			userData={userData}
 			articleId={contentData.id}
 			articleUserId={contentData.user_id}
 			contentType={contentType}

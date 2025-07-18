@@ -12,11 +12,13 @@ import { createSlug } from '@/lib/utils'
 
 // Authentication check
 const token = getToken(Astro.cookies)
+console.log(token)
 if (!token) {
 	return Astro.redirect('/')
 }
 
 const user = await getUserDataByToken(token)
+console.log(user)
 if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
 	return Astro.redirect('/')
 }

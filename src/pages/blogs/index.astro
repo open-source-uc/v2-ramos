@@ -2,11 +2,17 @@
 import NewArticle from '@/components/features/article/NewArticle'
 import BlogCard from '@/components/features/blog/BlogCard.tsx'
 import Layout from '@/layouts/Layout.astro'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
 import type { Blogs } from '@/types'
 
-const blogsResponse = await fetch(new URL('/api/articles/blogs', Astro.site))
+let userData = null
+
+const blogsResponse = await fetch('/api/articles/blogs')
 console.log('blogsResponse', blogsResponse)
 const blogsData: Blogs[] = await blogsResponse.json()
+const token = getToken(Astro.cookies)
+userData = await getUserDataByToken(token)
 ---
 
 <Layout title="Blogs">
@@ -19,7 +25,12 @@ const blogsData: Blogs[] = await blogsResponse.json()
 			</h1>
 		</div>
 		<div class="flex justify-end md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4">
-			<NewArticle contentType="blog" className="mt-10 mr-2" client:only="react" />
+			<NewArticle
+				userData={userData}
+				contentType="blog"
+				className="mt-10 mr-2"
+				client:only="react"
+			/>
 		</div>
 		{
 			blogsData.map((blog) => {
