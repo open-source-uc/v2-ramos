@@ -246,7 +246,7 @@ export default function SectionsCollapsible({
 		return (
 			<section className={`${className}`}>
 				<div className="bg-accent border-border overflow-hidden rounded-md border p-6">
-					<div className="text-muted-foreground flex items-center gap-3">
+					<div className="flex items-center gap-3">
 						<div className="bg-muted text-muted-foreground border-border flex-shrink-0 rounded-lg border p-2">
 							<CalendarIcon className="h-5 w-5 fill-current" />
 						</div>
@@ -263,15 +263,15 @@ export default function SectionsCollapsible({
 	return (
 		<>
 			<section className={`${className}`}>
-				<div className="border-border overflow-hidden rounded-md border">
+				<div className="bg-accent border-border overflow-hidden rounded-md border">
 					<Collapsible>
-						<CollapsibleTrigger className="bg-accent hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
+						<CollapsibleTrigger className="hover:bg-muted/50 group focus:ring-primary flex w-full items-center justify-between px-6 py-4 text-left transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none">
 							<div className="flex min-w-0 flex-1 items-center gap-3">
 								<div className="bg-orange-light text-orange border-orange/20 flex-shrink-0 rounded-lg border p-2">
 									<CalendarIcon className="h-5 w-5 fill-current" />
 								</div>
 								<div className="min-w-0 flex-1">
-									<h2 className="text-foreground text-lg font-semibold">Secciones</h2>
+									<h2 className="text-lg font-semibold">Secciones</h2>
 									<p className="text-muted-foreground text-sm">
 										Conoce los horarios de las diferentes secciones del curso
 									</p>
