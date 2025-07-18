@@ -202,14 +202,14 @@ function ScheduleGrid({
 	const hasConflicts = conflicts.length > 0
 
 	return (
-		<div className="border-border overflow-hidden rounded-lg border">
+		<div className="bg-background border-border overflow-hidden rounded-lg border">
 			<div className="overflow-x-auto">
 				<div className="tablet:min-w-[800px] desktop:min-w-[900px] min-w-[700px]">
 					{/* Header */}
-					<div className="bg-muted/50 border-border grid grid-cols-7 border-b">
-						<div className="text-muted-foreground p-3 text-sm font-medium">Horario</div>
+					<div className="bg-accent border-border grid grid-cols-7 border-b">
+						<div className="text-accent-foreground p-3 text-sm font-medium">Horario</div>
 						{DAYS.map((day) => (
-							<div key={day} className="text-muted-foreground p-3 text-center text-sm font-medium">
+							<div key={day} className="text-accent-foreground p-3 text-center text-sm font-medium">
 								{day}
 							</div>
 						))}
@@ -456,7 +456,7 @@ export default function ScheduleCreator() {
 		<>
 			<div className="mx-auto max-w-7xl px-4 py-8">
 				{/* Course Search */}
-				<div className="mb-8">
+				<div className="bg-accent mb-8">
 					<div className="border-border rounded-lg border p-6">
 						<div className="mb-4 flex items-center gap-3">
 							<div className="bg-blue-light text-blue border-blue/20 rounded-lg border p-2">
@@ -481,7 +481,7 @@ export default function ScheduleCreator() {
 
 				{/* Selected Courses */}
 				{selectedCourses.length > 0 && (
-					<div className="mb-8">
+					<div className="bg-accent mb-8">
 						<div className="border-border rounded-lg border p-6">
 							<div className="mb-4 flex items-center justify-between gap-3">
 								<div className="flex items-center gap-3">
@@ -597,9 +597,9 @@ export default function ScheduleCreator() {
 				)}
 
 				{/* Schedule Grid */}
-				<div className="mb-8">
+				<div className="bg-accent mb-8">
 					<div className="border-border overflow-hidden rounded-lg border">
-						<div className="bg-muted/50 border-border border-b px-6 py-4">
+						<div className="border-border border-b px-6 py-4">
 							<div className="flex items-center gap-3">
 								<div className="bg-orange-light text-orange border-orange/20 rounded-lg border p-2">
 									<CalendarIcon className="h-5 w-5 fill-current" />

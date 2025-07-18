@@ -374,8 +374,8 @@ export function SearchableTableDisplay({ initialSearchValue = '' }: SearchableTa
 
 					{/* Collapsible Filters */}
 					<Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
-						<div className="border-border mb-3 rounded-md border">
-							<CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between px-4 py-2 transition-colors">
+						<div className="bg-accent rounded-md">
+							<CollapsibleTrigger className={`${filtersOpen ? 'rounded-t-md' : 'rounded-md'} flex w-full items-center border border-border justify-between px-4 py-2 transition-colors`}>
 								<div className="flex items-center gap-3">
 									<h3 className="text-md font-semibold">Filtros</h3>
 									{activeFiltersCount > 0 && (
@@ -391,7 +391,7 @@ export function SearchableTableDisplay({ initialSearchValue = '' }: SearchableTa
 								)}
 							</CollapsibleTrigger>
 
-							<CollapsibleContent className="border-border border-t">
+							<CollapsibleContent className="border-border border rounded-b-md">
 								<div className="space-y-6 p-6">
 									{/* Filter Grid */}
 									<div className="tablet:grid-cols-2 desktop:grid-cols-3 grid grid-cols-1 gap-4">
