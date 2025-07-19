@@ -105,7 +105,7 @@ const {review, showStatus, index} = Astro.props as {
     {/* Botones de acción */}
     <div class="flex flex-wrap items-center gap-2 max-w-full">
       <ShareReviewButton
-        path={`/{review.course_sigle}/${review.id}`}
+        path={`/${review.course_sigle}/${review.id}`}
         title={"Reseña de: " + review.course_sigle}
         targetElementId={`review-${index}`}
         client:load
