@@ -38,7 +38,6 @@ export function MarkdownReviewView({
 	if (error) {
 		return <blockquote>Error cargando contenido.</blockquote>
 	}
-
 	return (
 		<article className="prose max-w-none">
 			<ReactMarkdown
@@ -55,7 +54,15 @@ export function MarkdownReviewView({
 					},
 					img: ({ node }) => {
 						if (imgDisabled) return null
-						return node
+						const { src, alt, title } = node?.properties || {}
+						return (
+							<img
+								src={src as string}
+								alt={(alt as string) || ''}
+								title={title as string}
+								className="h-auto max-w-full rounded-md"
+							/>
+						)
 					},
 				}}
 			>
