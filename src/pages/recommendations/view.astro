@@ -5,13 +5,12 @@ import { MarkdownReviewView } from '@/components/reviews/MarkdownReviewView'
 import Layout from '@/layouts/Layout.astro'
 
 import { getToken } from '@/lib/auth'
-import config from '@/lib/const'
 import { getUserDataByToken } from '@/lib/server/auth'
-import { createSlug } from '@/lib/utils'
 import type { Organization, Recommendations } from '@/types'
-import { OsucPermissions } from '@/types/permissions'
+import { getRecommendationById } from '@/lib/server/articles'
+import config from '@/lib/const'
 
-let recommendation: Recommendations | null = null
+let recommendation: Recommendations | null | undefined = null
 let organizationData: Organization | null = null
 let showButton = false
 let token = null
@@ -19,38 +18,20 @@ let userData = null
 
 try {
 	const url = new URL(Astro.request.url)
-	const author = url.searchParams.get('author')
-	const title = url.searchParams.get('title')
+	const recommendationId = url.searchParams.get('id')
 
-	if (!author || !title) {
+	if (!recommendationId) {
 		return Astro.redirect('/404')
 	}
 
-	// Fetch all recommendations (or ideally, a filtered API by slug if available)
-	const response = await fetch('/api/articles/recommendations')
-	const recommendations: Recommendations[] = await response.json()
-	recommendation =
-		recommendations.find(
-			(r) => createSlug(r.organization_name) === author && createSlug(r.title) === title
-		) || null
-
-	if (!recommendation) {
-		return Astro.redirect('/404')
-	}
+	recommendation = await getRecommendationById(Astro.locals, recommendationId)
 
 	const organizationRes = await fetch(
-		`${config.AUTHURL}/api/organization/${recommendation.organization_id}`
+		new URL(`/api/organization/${recommendation?.organization_id}`, config.AUTHURL)
 	)
 	organizationData = (await organizationRes.json()) as Organization
-
 	token = getToken(Astro.cookies)
 	userData = await getUserDataByToken(token)
-	if (token) {
-		showButton =
-			Number(userData?.id) === recommendation.user_id ||
-			(Array.isArray(userData?.permissions) &&
-				userData.permissions.includes(OsucPermissions.userIsRoot))
-	}
 } catch (e) {
 	return Astro.redirect('/404')
 }

@@ -958,8 +958,7 @@ export const server = {
 				return {
 					message: 'Blog actualizado exitosamente',
 					code: 200,
-					organizationName: existingBlog.organization_name,
-					blogTitle: state.title,
+					articleId: String(state.id),
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {
@@ -1361,8 +1360,7 @@ export const server = {
 				return {
 					message: 'Recomendación actualizada exitosamente',
 					code: 200,
-					organizationName: existingRecommendation.organization_name,
-					recommendationTitle: state.title,
+					articleId: String(state.id),
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {

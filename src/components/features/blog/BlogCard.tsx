@@ -16,6 +16,7 @@ interface ContentCardProps {
 	qualification?: number
 	// Recommendations extra fields
 	organization_id?: number
+	articleId: number
 	user_role?: string
 	user_id?: number
 	created_at?: string
@@ -25,6 +26,7 @@ interface ContentCardProps {
 export default function ContentCard({
 	title,
 	authorName,
+	articleId,
 	type,
 	organizationName,
 	description,
@@ -43,8 +45,8 @@ export default function ContentCard({
 	// Para recommendations, la ruta es /recommendations/[organizacion]/[titulo]
 	const Url =
 		type === 'recommendations'
-			? `/recommendations/view?author=${createSlug(organizationName)}&title=${createSlug(title)}`
-			: `/${type}/view?author=${createSlug(organizationName)}&title=${createSlug(title)}`
+			? `/recommendations/view?id=${articleId}`
+			: `/${type}/view?id=${articleId}`
 
 	return (
 		<a href={Url}>

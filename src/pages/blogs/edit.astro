@@ -2,7 +2,6 @@
 import Layout from '@/layouts/Layout.astro'
 import ContentHeader from '@/components/features/article/HeaderContent.astro'
 import { getToken } from '@/lib/auth'
-import config from '@/lib/const'
 import { getUserDataByToken } from '@/lib/server/auth'
 import { createSlug } from '@/lib/utils'
 import type { Blogs, Organization } from '@/types'
@@ -10,8 +9,8 @@ import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
 import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
 import EditorMDX from '@/components/EditorMDX'
-import { Button } from '@/components/ui'
 import { blogsTags } from '@/data/blogs'
+import { getBlogById } from '@/lib/server/articles'
 
 export const prerender = false
 
@@ -29,9 +28,7 @@ let mdxContent = ''
 // Verificar si hay un resultado de la acción
 const result = Astro.getActionResult(actions.updateBlog)
 if (result && !result.error) {
-	return Astro.redirect(
-		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
-	)
+	return Astro.redirect(`/blogs/view?id=${result.data.articleId}`)
 } else if (result?.error) {
 	return Astro.redirect('/blogs')
 }
@@ -48,9 +45,8 @@ try {
 		return Astro.redirect('/')
 	}
 
-	const blogResponse = await fetch(`/api/articles/blogById?id=${blogId}`)
-	const blogJson = (await blogResponse.json()) as unknown as Blogs[]
-	blogData = blogJson[0]
+	const blogResult = await getBlogById(Astro.locals, blogId)
+	blogData = blogResult ?? null
 	if (!blogData) {
 		return Astro.redirect('/blogs')
 	}
@@ -59,9 +55,7 @@ try {
 		(user && String(user.id) !== String(blogData.user_id)) ||
 		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
 	) {
-		return Astro.redirect(
-			`/blogs/view?author=${createSlug(blogData.organization_name)}&title=${createSlug(blogData.title)}`
-		)
+		return Astro.redirect(`/blogs/view?id=${blogData.id}`)
 	}
 
 	if (blogData.tags) {

@@ -5,12 +5,18 @@ import Layout from '@/layouts/Layout.astro'
 import { getToken } from '@/lib/auth'
 import { getUserDataByToken } from '@/lib/server/auth'
 import type { Blogs } from '@/types'
+import { getBlogs } from '@/lib/server/articles'
 
 let userData = null
-
-const blogsResponse = await fetch('/api/articles/blogs')
-console.log('blogsResponse', blogsResponse)
-const blogsData: Blogs[] = await blogsResponse.json()
+let blogsData = null
+try {
+	blogsData = await getBlogs(Astro.locals)
+	if (!blogsData) {
+		return Astro.redirect('/blogs')
+	}
+} catch (error) {
+	return Astro.redirect('/blogs')
+}
 const token = getToken(Astro.cookies)
 userData = await getUserDataByToken(token)
 ---
@@ -33,8 +39,8 @@ userData = await getUserDataByToken(token)
 			/>
 		</div>
 		{
-			blogsData.map((blog) => {
-				const { title, display_name, organization_name, period_time, readtime, tags } = blog
+			blogsData?.map((blog) => {
+				const { title, display_name, organization_name, period_time, readtime, tags, id } = blog
 				let newTags = null
 				if (tags) {
 					newTags = tags.split(',').map((tag) => tag.trim())
@@ -42,6 +48,7 @@ userData = await getUserDataByToken(token)
 				return (
 					<div class="w-full p-2">
 						<BlogCard
+							articleId={id}
 							title={title}
 							type="blogs"
 							authorName={display_name}

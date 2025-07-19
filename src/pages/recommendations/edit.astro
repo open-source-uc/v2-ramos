@@ -10,6 +10,7 @@ import { OsucPermissions } from '@/types/permissions'
 import { actions } from 'astro:actions'
 import EditorMDX from '@/components/EditorMDX'
 import RecommendationBasicInfo from '@/components/features/article/RecommendationBasicInfo.astro'
+import { getRecommendationById } from '@/lib/server/articles'
 
 export const prerender = false
 
@@ -24,9 +25,7 @@ let mdxContent = ''
 
 const result = Astro.getActionResult(actions.updateRecommendation)
 if (result && !result.error) {
-	return Astro.redirect(
-		`/recommendations/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.recommendationTitle)}`
-	)
+	return Astro.redirect(`/recommendations/view?id=${result.data.articleId}`)
 } else if (result?.error) {
 	return Astro.redirect('/recommendations')
 }
@@ -45,11 +44,8 @@ try {
 		return Astro.redirect('/')
 	}
 
-	const recommendationResponse = await fetch(
-		`/api/articles/recommendationById?id=${recommendationId}`
-	)
-	const recommendationJson = (await recommendationResponse.json()) as unknown as Recommendations[]
-	recommendationData = recommendationJson[0]
+	const recommendationResult = await getRecommendationById(Astro.locals, recommendationId)
+	recommendationData = recommendationResult ?? null
 	if (!recommendationData) {
 		return Astro.redirect('/recommendations')
 	}
@@ -58,16 +54,11 @@ try {
 		(user && String(user.id) !== String(recommendationData.user_id)) ||
 		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
 	) {
-		return Astro.redirect(
-			`/recommendations/view?author=${createSlug(recommendationData.organization_name)}&title=${createSlug(recommendationData.title)}`
-		)
+		return Astro.redirect(`/recommendations/view?id=${recommendationData.id}`)
 	}
 
-	// Verificar si hay un resultado de la acción
-
-	mdxContent = await fetch(
-		`${config.BASEURL}/api/articles/article?path=${recommendationData.content_path}`
-	)
+	// Obtener el contenido MDX usando el path
+	mdxContent = await fetch(`/api/articles/article?path=${recommendationData.content_path}`)
 		.then((res) => res.text())
 		.catch(() => '')
 } catch (e) {

@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 // Function to create safe URL slugs that work across platforms
 export function createSlug(text: string): string {
+	if (!text) return ''
 	return text
 		.toLowerCase()
 		.replace(/[^\w\s-]/g, '') // Remove special characters except words, spaces, and hyphens

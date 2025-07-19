@@ -5,11 +5,11 @@ import ContentCard from '@/components/features/blog/BlogCard'
 import NewArticle from '@/components/features/article/NewArticle'
 import { getToken } from '@/lib/auth'
 import { getUserDataByToken } from '@/lib/server/auth'
+import { getRecommendations } from '@/lib/server/articles'
 let userData = null
-const recommendationsRespone = await fetch(
-	new URL('/api/articles/recommendations', Astro.url.origin)
-)
-const recommendations: Recommendations[] = await recommendationsRespone.json()
+let recommendationsData = null
+
+recommendationsData = await getRecommendations(Astro.locals)
 const token = getToken(Astro.cookies)
 userData = await getUserDataByToken(token)
 ---
@@ -32,9 +32,10 @@ userData = await getUserDataByToken(token)
 			/>
 		</div>
 		{
-			recommendations.map((rec) => (
+			recommendationsData?.map((rec) => (
 				<div class="w-full p-2">
 					<ContentCard
+						articleId={rec.id}
 						title={rec.title}
 						type="recommendations"
 						authorName={rec.display_name}

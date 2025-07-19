@@ -9,6 +9,8 @@ import config from '@/lib/const'
 import { getToken } from '@/lib/auth'
 import { getUserDataByToken } from '@/lib/server/auth'
 
+import { getBlogById } from '@/lib/server/articles'
+
 let blog: Blogs | null = null
 let organizationData: Organization | null = null
 let token = null
@@ -16,22 +18,15 @@ let userData = null
 
 try {
 	const url = new URL(Astro.request.url)
-	const author = url.searchParams.get('author')
-	const title = url.searchParams.get('title')
+	const articleId = url.searchParams.get('id')
 
-	if (!author || !title) {
-		return Astro.redirect('/404')
+	if (!articleId) {
+		return Astro.redirect('/recommendations')
 	}
 
-	const response = await fetch('/api/articles/blogs')
-	const blogs: Blogs[] = await response.json()
-	blog =
-		blogs.find(
-			(b) => createSlug(b.organization_name) === author && createSlug(b.title) === title
-		) || null
-
+	blog = (await getBlogById(Astro.locals, articleId)) ?? null
 	if (!blog) {
-		return Astro.redirect('/404')
+		return Astro.redirect('/recommendations')
 	}
 
 	const organizationRes = await fetch(
