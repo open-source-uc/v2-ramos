@@ -30,7 +30,7 @@ export function ShareReviewButton({
 		return await toPng(element, {
 			cacheBust: true,
 			backgroundColor: '#ffffff',
-			pixelRatio: 1,
+			pixelRatio: 5,
 		})
 	}
 
