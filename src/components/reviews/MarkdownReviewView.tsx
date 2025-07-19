@@ -7,7 +7,13 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import remarkBreaks from 'remark-breaks'
 
-export function MarkdownReviewView({ path }: { path: string }) {
+export function MarkdownReviewView({
+	path,
+	imgDisabled = true,
+}: {
+	path: string
+	imgDisabled: boolean
+}) {
 	const [text, setText] = useState('Cargando...')
 	const [error, setError] = useState(false)
 
@@ -47,7 +53,10 @@ export function MarkdownReviewView({ path }: { path: string }) {
 							</Pill>
 						)
 					},
-					img: (str) => null,
+					img: ({ node }) => {
+						if (imgDisabled) return null
+						return node
+					},
 				}}
 			>
 				{text}
