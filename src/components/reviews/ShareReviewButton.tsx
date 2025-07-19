@@ -6,7 +6,7 @@ import { DownloadIcon } from 'lucide-react'
 
 interface ShareReviewButtonProps {
 	targetElementId: string
-	url: string
+	path: string
 	title?: string
 	description?: string
 	className?: string
@@ -14,7 +14,7 @@ interface ShareReviewButtonProps {
 
 export function ShareReviewButton({
 	targetElementId,
-	url,
+	path,
 	title = '',
 	description = '',
 	className = '',
@@ -60,7 +60,7 @@ export function ShareReviewButton({
 			if (navigator.share) {
 				await navigator.share({
 					title,
-					url,
+					url: `${window.location.origin}/${path}`,
 				})
 			} else {
 				await navigator.clipboard.writeText(url)
