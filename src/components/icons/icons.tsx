@@ -585,7 +585,15 @@ export function TextureIcon({ className }: { className?: string }) {
 
 export function CheckIcon({ className }: { className?: string }) {
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" className={className}><path d="m422.46-303.69 277.85-277.85L654-627.85 422.46-396.31l-116-116L260.15-466l162.31 162.31ZM480.13-88q-81.31 0-152.89-30.86-71.57-30.86-124.52-83.76-52.95-52.9-83.83-124.42Q88-398.55 88-479.87q0-81.56 30.92-153.37 30.92-71.8 83.92-124.91 53-53.12 124.42-83.48Q398.67-872 479.87-872q81.55 0 153.35 30.34 71.79 30.34 124.92 83.42 53.13 53.08 83.49 124.84Q872-561.64 872-480.05q0 81.59-30.34 152.83-30.34 71.23-83.41 124.28-53.07 53.05-124.81 84Q561.7-88 480.13-88Z"/></svg>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			height="24px"
+			viewBox="0 -960 960 960"
+			width="24px"
+			className={className}
+		>
+			<path d="m422.46-303.69 277.85-277.85L654-627.85 422.46-396.31l-116-116L260.15-466l162.31 162.31ZM480.13-88q-81.31 0-152.89-30.86-71.57-30.86-124.52-83.76-52.95-52.9-83.83-124.42Q88-398.55 88-479.87q0-81.56 30.92-153.37 30.92-71.8 83.92-124.91 53-53.12 124.42-83.48Q398.67-872 479.87-872q81.55 0 153.35 30.34 71.79 30.34 124.92 83.42 53.13 53.08 83.49 124.84Q872-561.64 872-480.05q0 81.59-30.34 152.83-30.34 71.23-83.41 124.28-53.07 53.05-124.81 84Q561.7-88 480.13-88Z" />
+		</svg>
 	)
 }
 
@@ -773,24 +781,37 @@ export function ColorIcon({ className }: { className?: string }) {
 
 export function VoteArrow({
 	className,
-	direction = "up"
+	direction = 'up',
 }: {
-	className?: string;
-	direction?: "up" | "down";
+	className?: string
+	direction?: 'up' | 'down'
 }) {
 	return (
-		<svg 
+		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			height="24px"
-			viewBox="0 -960 960 960" 
-			width="24px" 
-			fill="#e3e3e3"
+			viewBox="0 -960 960 960"
+			width="24px"
 			className={className}
 			style={{
-				transform: direction === "down" ? "rotate(180deg)" : "none"
+				transform: direction === 'down' ? 'rotate(180deg)' : 'none',
 			}}
 		>
-			<path d="M200-200v-80h560v80H200Zm14-160 266-400 266 400H214Zm266-80Zm-118 0h236L480-616 362-440Z"/>
+			<path d="M200-200v-80h560v80H200Zm14-160 266-400 266 400H214Zm266-80Zm-118 0h236L480-616 362-440Z" />
+		</svg>
+	)
+}
+
+export function ShareIcon({ className }: { className?: string }) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			height="24px"
+			viewBox="0 -960 960 960"
+			width="24px"
+			className={className}
+		>
+			<path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" />
 		</svg>
 	)
 }

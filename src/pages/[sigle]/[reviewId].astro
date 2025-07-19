@@ -1,0 +1,23 @@
+---
+
+
+import Review from "@/components/reviews/Review.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getReviewById, getReviewContent } from "@/lib/server/reviews";
+
+const {reviewId} = Astro.params;
+if (!reviewId) {
+	return Astro.redirect("/404");
+}
+const review = await getReviewById(Astro.locals, reviewId);
+if (!review) {
+	return Astro.redirect("/404");
+}
+const text = await getReviewContent(Astro.locals, review.comment_path)
+---
+<Layout 
+title={`Reseña de ${review.course_sigle}`}
+description={text}
+>
+	<Review review={review} />
+</Layout>
