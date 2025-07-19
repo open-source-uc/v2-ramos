@@ -365,8 +365,8 @@ description={course.description || "Reseñas y estadísticas del curso"}
                 {reviews && reviews.length > 0 ? (
                     <div class="p-6">
                         <div class="space-y-6">
-                            {reviews.map((review) => (
-															<Review review={review}></Review>
+                            {reviews.map((review, index) => (
+															<Review review={review} index={index}></Review>
                             ))}
                         </div>
                     </div>

@@ -1,9 +1,9 @@
 ---
-
-
 import Review from "@/components/reviews/Review.astro";
-import Layout from "@/layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import VoidLayout from "@/layouts/VoidLayout.astro";
 import { getReviewById, getReviewContent } from "@/lib/server/reviews";
+import { ArrowLeftIcon, BookOpenIcon } from "lucide-react";
 
 const {reviewId} = Astro.params;
 if (!reviewId) {
@@ -15,9 +15,54 @@ if (!review) {
 }
 const text = await getReviewContent(Astro.locals, review.comment_path)
 ---
-<Layout 
+<VoidLayout 
 title={`Reseña de ${review.course_sigle}`}
 description={text}
 >
-	<Review review={review} />
-</Layout>
+
+	{/* Header con navegación y contexto */}
+	<div class="border-b border-border bg-background/50 backdrop-blur-sm sticky top-0 z-10">
+		<div class="container mx-auto px-4">
+			<div class="flex items-center justify-between py-4">
+				{/* Navegación */}
+				<div class="flex items-center gap-4">
+					<Button
+						variant="outline"
+						href={`/${review.course_sigle}`}
+						size="sm"
+						className="shadow-sm hover:shadow-md transition-all duration-200"
+					>
+						<ArrowLeftIcon className="h-4 w-4 mr-2" />
+						Volver al curso
+					</Button>
+					
+					{/* Breadcrumb visual */}
+					<div class="flex items-center gap-2 text-sm text-muted-foreground">
+						<BookOpenIcon className="h-4 w-4" />
+						<span class="font-medium text-foreground">{review.course_sigle}</span>
+						<span>•</span>
+						<span>Reseña individual</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{/* Contenido principal */}
+	<div class="px-4 py-8" id="review-content">
+		{/* Título de la sección */}
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold text-foreground mb-2">
+				Reseña de {review.course_sigle}
+			</h1>
+			<p class="text-muted-foreground">
+				Experiencia compartida por un estudiante que cursó esta asignatura
+			</p>
+		</div>
+
+		{/* Review component */}
+		<div class="w-full">
+			<Review review={review} index={1} />
+		</div>
+	</div>
+</VoidLayout>

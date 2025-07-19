@@ -1,0 +1,31 @@
+---
+import '@/styles/global.css'
+
+import MainHead from '@/layouts/MainHead.astro'
+
+const {
+	title = 'BuscaRamos',
+	description = 'Tu plataforma para explorar ramos, reseñarlos y mucho más. Encuentra ramos de la universidad, revisa sus reseñas y comparte tus experiencias.',
+	image,
+	frontmatter,
+	robots,
+} = Astro.props
+
+---
+
+<!doctype html>
+<html lang="es">
+	<MainHead
+		title={title}
+		description={description}
+		image={image}
+		frontmatter={frontmatter}
+		robots={robots}
+	/>
+	<body class="bg-background text-foreground min-h-screen">
+			<main class=" flex flex-col gap-4">
+				<slot />
+			</main>
+		</CommandWrapper>
+	</body>
+</html>

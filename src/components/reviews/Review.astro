@@ -7,137 +7,127 @@ import { actions } from "astro:actions";
 import { Button } from "../ui/button";
 import type { CourseReview } from "@/types";
 import VoteReview from "./VoteReview";
-import { ShareButton } from "./ShareButton";
 import type { title } from "process";
+import { ShareReviewButton } from "./ShareReviewButton";
 
-const {review, showStatus} = Astro.props as {
+const {review, showStatus, index} = Astro.props as {
 	review: CourseReview
+	index: number
 	showStatus?: boolean
 };
 ---
-<div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
-    {/* Header con sentiment y voting */}
-    <div class="flex justify-between items-start gap-4">
-        {/* Sentiment indicator */}
-        <div class={`flex gap-2 items-center p-2 border rounded-lg ${
-            review.like_dislike === 2
-                ? "bg-green-light text-green border-green/20"
-                : review.like_dislike === 1
-                ? "bg-blue-light text-blue border-blue/20" 
-                : "bg-red-light text-red border-red/20"
-        }`}>
-            {review.like_dislike === 2 ? (
-                <StarIcon className="h-5 w-5 fill-current" />
-            ) : review.like_dislike === 1 ? (
-                <ThumbUpIcon className="h-5 w-5 fill-current" />
-            ) : (
-                <ThumbDownIcon className="h-5 w-5 fill-current" />
-            )}
-            <span class="text-sm font-semibold">
-                {review.like_dislike === 2
-                    ? "Lo super recomiendo"
-                    : review.like_dislike === 1
-                      ? "Lo recomiendo"
-                      : "No lo recomiendo"}
-            </span>
-        </div>
-        
-        {/* Voting component - mantiene su tamaño natural */}
-        <div class="flex-shrink-0">
-            <VoteReview initialVotes={review.votes} reviewId={review.id} client:load></VoteReview>
-        </div>
+<div
+  id={`review-${index}`}
+  class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5 overflow-hidden w-full"
+>
+  {/* Header con sentimiento y votos */}
+  <div class="flex justify-between items-start gap-4 w-full">
+    {/* Sentimiento */}
+    <div
+      class={`flex gap-2 items-center p-2 border rounded-lg max-w-full ${
+        review.like_dislike === 2
+          ? 'bg-green-light text-green border-green/20'
+          : review.like_dislike === 1
+          ? 'bg-blue-light text-blue border-blue/20'
+          : 'bg-red-light text-red border-red/20'
+      }`}
+    >
+      {review.like_dislike === 2 ? (
+        <StarIcon className="h-5 w-5 fill-current" />
+      ) : review.like_dislike === 1 ? (
+        <ThumbUpIcon className="h-5 w-5 fill-current" />
+      ) : (
+        <ThumbDownIcon className="h-5 w-5 fill-current" />
+      )}
+      <span class="text-sm font-semibold whitespace-nowrap">
+        {review.like_dislike === 2
+          ? 'Lo super recomiendo'
+          : review.like_dislike === 1
+          ? 'Lo recomiendo'
+          : 'No lo recomiendo'}
+      </span>
     </div>
 
-    {/* Comentario */}
-    {review.comment_path && (
-        <div class="content-markdown">
-            <MarkdownReviewView
-                path={review.comment_path}
-                client:load
-            />
-        </div>
-    )}
-
-    {/* Footer con pills y acciones */}
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        {/* Pills informativos */}
-        <div class="flex flex-wrap gap-2">
-            <Pill
-                variant="ghost_green"
-                size="sm"
-                icon={CalendarIcon}
-            >
-                {review.year_taken} -{" "}
-                {review.semester_taken === 1
-                    ? "1er"
-                    : "2do"}{" "}
-                sem
-            </Pill>
-            <Pill
-                variant="ghost_blue"
-                size="sm"
-                icon={WorkloadIcon}
-            >
-                {review.workload_vote === 0
-                    ? "Dificultad Baja"
-                    : review.workload_vote === 1
-                    ? "Dificultad Normal"
-                    : "Dificultad Alta"}
-            </Pill>
-            <Pill
-                variant="ghost_purple"
-                size="sm"
-                icon={AttendanceIcon}
-            >
-                {review.attendance_type === 0
-                    ? "Asistencia Obligatoria"
-                    : review.attendance_type === 1
-                    ? "Asistencia Opcional"
-                    : "Sin Asistencia"}
-            </Pill>
-            {review.weekly_hours && (
-                <Pill
-                    variant="ghost_orange"
-                    size="sm"
-                    icon={ClockIcon}
-                >
-                    {formatWeeklyHours(review.weekly_hours)}/sem
-                </Pill>
-            )}
-            {
-                showStatus && (
-                <Pill
-                variant="pink"
-                size="sm"
-                >	
-                        Estado: {" "}
-                        {review.status === 3 ? "Baneada D:" : "Visible en la plataforma :D"}
-                </Pill>
-                )
-            }
-        </div>
-
-        {/* Acciones - más discretas y con confirmación */}
-        <div class="flex gap-1 items-center">
-            <ShareButton url={`/${review.course_sigle}/${review.id}`} client:load title={review.course_sigle}}></ShareButton>
-            
-            <form action={actions.reportCourseReview} method="post" onsubmit="return confirm('¿Estás seguro de que quieres reportar esta reseña?');">
-                <input
-                    type="hidden"
-                    name="review_id"
-                    value={review.id}
-                />
-                <Button
-                    type="submit"
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground hover:text-red-600 hover:bg-red-50 p-2"
-                    aria-label="Reportar reseña"
-                    title="Reportar reseña"
-                >
-                    <FlagIcon className="h-4 w-4" />
-                </Button>
-            </form>
-        </div>
+    {/* Botón de voto */}
+    <div class="flex-shrink-0">
+      <VoteReview
+        initialVotes={review.votes}
+        reviewId={review.id}
+        client:load
+      />
     </div>
+  </div>
+
+  {/* Comentario en markdown */}
+  {review.comment_path && (
+    <div class="content-markdown max-w-full">
+      <MarkdownReviewView path={review.comment_path} client:load />
+    </div>
+  )}
+
+  {/* Footer: Pills + botones */}
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+    {/* Pills */}
+    <div class="flex flex-wrap gap-2">
+      <Pill variant="ghost_green" size="sm" icon={CalendarIcon}>
+        {review.year_taken} -{' '}
+        {review.semester_taken === 1 ? '1er' : '2do'} sem
+      </Pill>
+      <Pill variant="ghost_blue" size="sm" icon={WorkloadIcon}>
+        {review.workload_vote === 0
+          ? 'Dificultad Baja'
+          : review.workload_vote === 1
+          ? 'Dificultad Normal'
+          : 'Dificultad Alta'}
+      </Pill>
+      <Pill variant="ghost_purple" size="sm" icon={AttendanceIcon}>
+        {review.attendance_type === 0
+          ? 'Asistencia Obligatoria'
+          : review.attendance_type === 1
+          ? 'Asistencia Opcional'
+          : 'Sin Asistencia'}
+      </Pill>
+      {review.weekly_hours && (
+        <Pill variant="ghost_orange" size="sm" icon={ClockIcon}>
+          {formatWeeklyHours(review.weekly_hours)}/sem
+        </Pill>
+      )}
+      {showStatus && (
+        <Pill variant="pink" size="sm">
+          Estado:{' '}
+          {review.status === 3
+            ? ' Baneada D:'
+            : ' Visible en la plataforma :D'}
+        </Pill>
+      )}
+    </div>
+
+    {/* Botones de acción */}
+    <div class="flex flex-wrap items-center gap-2 max-w-full">
+      <ShareReviewButton
+        url={`/${review.course_sigle}/${review.id}`}
+        title={review.course_sigle}
+        targetElementId={`review-${index}`}
+        client:load
+      />
+
+      <form
+        action={actions.reportCourseReview}
+        method="post"
+        onsubmit="return confirm('¿Estás seguro de que quieres reportar esta reseña?');"
+      >
+        <input type="hidden" name="review_id" value={review.id} />
+        <Button
+          type="submit"
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-red-600 hover:bg-red-50 p-2"
+          aria-label="Reportar reseña"
+          title="Reportar reseña"
+        >
+          <FlagIcon className="h-4 w-4" />
+        </Button>
+      </form>
+    </div>
+  </div>
 </div>
