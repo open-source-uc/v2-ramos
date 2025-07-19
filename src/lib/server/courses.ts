@@ -48,10 +48,11 @@ export const getCourseReviews = async (
       semester_taken,
       comment_path,
       created_at,
-      updated_at
+      updated_at,
+			votes
     FROM course_reviews 
     WHERE course_sigle = ? AND status != 3
-    ORDER BY votes DESC
+    ORDER BY votes DESC, created_at DESC
     LIMIT ?
   `
 	)

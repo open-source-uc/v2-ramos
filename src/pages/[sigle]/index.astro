@@ -20,7 +20,8 @@ import {
     ChevronDownIcon,
     CloseIcon,
     CheckIcon,
-    LanguageIcon
+    LanguageIcon,
+		VoteArrow
 } from "../../components/icons/icons";
 import { Pill } from "../../components/ui/pill";
 import { Sentiment } from "../../components/icons/sentiment";
@@ -50,6 +51,7 @@ import SectionsCollapsible from "@/components/features/courses/SectionsCollapsib
 import CourseCampuses from "@/components/features/courses/CourseCampuses";
 
 import { CURRENT_SEMESTER } from "@/lib/currentSemester"
+import VoteReview from "@/components/reviews/VoteReview";
 
 const courseData = await getEntry("coursesStatic", sigle);
 if (!courseData) {
@@ -101,7 +103,6 @@ const reportSuccessMessage = reportResult?.data?.message;
 
 // Get success message from URL params (from review creation/update)
 const successMessage = Astro.url.searchParams.get('success');
-
 
 ---
 
@@ -362,10 +363,12 @@ const successMessage = Astro.url.searchParams.get('success');
                             {reviews.map((review, index) => (
                                 <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
                                     {/* Número de reviews */}
-                                    <div class="absolute top-3 right-3 w-6 h-6 bg-muted text-muted-foreground rounded-full flex items-center justify-center text-xs font-medium opacity-50">
-                                        {index + 1}
-                                    </div>
-
+																		<VoteReview 
+																		client:load
+																		initialVotes={review.votes} 
+																		reviewId={review.id}>
+																		
+																		</VoteReview>
                                     {/* Header con sentiment y metadata */}
                                     <div class="items-start justify-between pr-8 gap-2">
                                         <div class="flex items-center gap-2">
