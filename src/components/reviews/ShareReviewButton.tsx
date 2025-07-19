@@ -55,15 +55,11 @@ export function ShareReviewButton({
 
 	const shareUrl = async () => {
 		setIsProcessing(true)
-		const shareText = description
-			? `${description}\n\nVer más en: ${url}`
-			: `${title}\n\nVer más en: ${url}`
 
 		try {
 			if (navigator.share) {
 				await navigator.share({
 					title,
-					text: shareText,
 					url,
 				})
 			} else {
