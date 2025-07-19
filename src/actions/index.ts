@@ -5,8 +5,9 @@ import { ActionError, defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
 import { getUserDataByToken } from '@/lib/server/auth'
 import { getToken } from '@/lib/auth'
-import type { CourseReview } from '@/types'
+import type { CourseReview, Organization, UserOrganization } from '@/types'
 import { isFutureSemester } from '@/lib/currentSemester'
+import config from '@/lib/const'
 
 const courseReviewSchema = z.object({
 	course_sigle: z
@@ -49,6 +50,87 @@ const courseReviewSchema = z.object({
 	comment: z.string().max(10000, 'El comentario no puede exceder 10,000 caracteres').optional(),
 })
 
+// Esquema para blogs
+const blogSchema = z.object({
+	title: z
+		.string()
+		.min(1, 'El título es requerido')
+		.max(200, 'El título no puede exceder 200 caracteres'),
+
+	period_time: z.string().min(1, 'El período es requerido'),
+
+	organization_id: z
+		.string()
+		.transform((val) => parseInt(val, 10))
+		.refine((val) => !isNaN(val) && val > 0, {
+			message: 'La organización es requerida',
+		}),
+
+	readtime: z
+		.string()
+		.transform((val) => parseInt(val, 10))
+		.refine((val) => !isNaN(val) && val >= 1, {
+			message: 'El tiempo de lectura debe ser un número entero mayor a 0',
+		}),
+
+	tags: z
+		.union([z.string(), z.null()])
+		.optional()
+		.transform((val) => {
+			if (val == null) return []
+			if (typeof val === 'string' && val.length > 0) {
+				return val.split(',').map((tag) => tag.trim())
+			}
+			return []
+		}),
+
+	content: z
+		.string()
+		.min(1, 'El contenido es requerido')
+		.max(50000, 'El contenido no puede exceder 50,000 caracteres'),
+})
+
+// Esquema para recomendaciones
+const recommendationSchema = z.object({
+	title: z
+		.string()
+		.min(1, 'El título es requerido')
+		.max(200, 'El título no puede exceder 200 caracteres'),
+
+	organization_id: z
+		.string()
+		.transform((val) => parseInt(val, 10))
+		.refine((val) => !isNaN(val) && val > 0, {
+			message: 'La organización es requerida',
+		}),
+
+	period_time: z.string().min(1, 'El período es requerido'),
+
+	readtime: z
+		.string()
+		.transform((val) => parseInt(val, 10))
+		.refine((val) => !isNaN(val) && val >= 1, {
+			message: 'El tiempo de lectura debe ser un número entero mayor a 0',
+		}),
+
+	code: z
+		.string()
+		.min(1, 'El código del curso es requerido')
+		.max(10, 'El código no puede exceder 10 caracteres'),
+
+	qualification: z
+		.string()
+		.transform((val) => parseInt(val, 10))
+		.refine((val) => !isNaN(val) && val >= 1 && val <= 5, {
+			message: 'La calificación debe ser un número entre 1 y 5',
+		}),
+
+	content: z
+		.string()
+		.min(1, 'El contenido es requerido')
+		.max(50000, 'El contenido no puede exceder 50,000 caracteres'),
+})
+
 // Función helper para subir texto Markdown a R2
 async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, filePath: string) {
 	try {
@@ -77,6 +159,16 @@ async function uploadMarkdownToR2(locals: App.Locals, markdownContent: string, f
 function generateReviewPath(courseId: string, reviewId: number) {
 	const timestamp = Date.now()
 	return `reviews/${courseId}/${reviewId}-${timestamp}.md`
+}
+
+function generateBlogPath(blogId: number) {
+	const timestamp = Date.now()
+	return `blogs/${blogId}-${timestamp}.mdx`
+}
+
+function generateRecommendationPath(recommendationId: number) {
+	const timestamp = Date.now()
+	return `recommendations/${recommendationId}-${timestamp}.mdx`
 }
 
 export const server = {
@@ -445,7 +537,7 @@ export const server = {
 				})
 			}
 
-			if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
 				throw new ActionError({
 					code: 'FORBIDDEN',
 					message: 'No tienes permisos para eliminar reseñas',
@@ -514,7 +606,7 @@ export const server = {
 				})
 			}
 
-			if (!user.permissions.includes(OsucPermissions.userIsRoot)) {
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
 				throw new ActionError({
 					code: 'FORBIDDEN',
 					message: 'No tienes permisos para eliminar reseñas',
@@ -576,6 +668,790 @@ export const server = {
 					code: 'INTERNAL_SERVER_ERROR',
 					message: 'Error interno del servidor al eliminar la reseña',
 				})
+			}
+		},
+	}),
+
+	// Crear un blog
+	createBlog: defineAction({
+		accept: 'form',
+		input: blogSchema,
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para crear un blog',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para crear blogs',
+				})
+			}
+
+			const organizationResult = await fetch(
+				new URL(`api/organization/${state.organization_id}`, config.AUTHURL)
+			)
+			if (!organizationResult.ok) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Organización no encontrada',
+				})
+			}
+			const organizationData = (await organizationResult.json()) as Organization
+
+			let userOrg
+			for (const org of user.organizations) {
+				if (org.id === state.organization_id) {
+					userOrg = org
+					break
+				}
+			}
+
+			try {
+				const existingBlog = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM blogs WHERE title = ? AND user_id = ?'
+				)
+					.bind(state.title, userId)
+					.first()
+
+				if (existingBlog) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya tienes un blog con este título',
+					})
+				}
+
+				// Crear el blog en la base de datos primero para obtener el ID
+				if (!userOrg) {
+					throw new ActionError({
+						code: 'FORBIDDEN',
+						message: 'No perteneces a la organización seleccionada',
+					})
+				}
+
+				const result = await locals.runtime.env.DB.prepare(
+					`
+                    INSERT INTO blogs (
+                        user_id, display_name, user_role, organization_id, organization_name, title, period_time, readtime, tags, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `
+				)
+					.bind(
+						userId,
+						userOrg.display_name,
+						userOrg.role,
+						state.organization_id,
+						organizationData.organization_name,
+						state.title,
+						state.period_time,
+						state.readtime,
+						(state.tags ?? []).join(','),
+						null // Temporalmente null, se actualizará después
+					)
+					.run()
+
+				if (!result.success) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al crear el blog',
+					})
+				}
+
+				const blogId = result.meta.last_row_id
+
+				// Generar el path del archivo y subirlo a R2
+				const filePath = generateBlogPath(blogId)
+
+				// Subir a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, filePath)
+
+				if (!uploadSuccess) {
+					// Si falla la subida, eliminar el blog de la base de datos
+					await locals.runtime.env.DB.prepare('DELETE FROM blogs WHERE id = ?').bind(blogId).run()
+
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido del blog',
+					})
+				}
+
+				// Actualizar el blog con el content_path
+				const updateResult = await locals.runtime.env.DB.prepare(
+					'UPDATE blogs SET content_path = ? WHERE id = ?'
+				)
+					.bind(filePath, blogId)
+					.run()
+
+				if (!updateResult.success) {
+					// Si falla la actualización, limpiar R2 y base de datos
+					await locals.runtime.env.R2.delete(filePath)
+					await locals.runtime.env.DB.prepare('DELETE FROM blogs WHERE id = ?').bind(blogId).run()
+
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar el blog con la ruta del archivo',
+					})
+				}
+
+				return {
+					message: 'Blog creado exitosamente',
+					code: 201,
+					organizationName: organizationData.organization_name,
+					blogTitle: state.title,
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+				console.error('Error creating blog:', error)
+
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al crear el blog',
+				})
+			}
+		},
+	}),
+
+	updateBlog: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive(),
+			title: z.string().min(1).max(255),
+			tags: z.array(z.string()).optional(),
+			readtime: z.number().int().positive(),
+			content: z.string().min(1),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para actualizar un blog',
+				})
+			}
+
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar blogs',
+				})
+			}
+
+			// Verificar que el blog existe y pertenece al usuario
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+
+			const blogCreatorId = await locals.runtime.env.DB.prepare(
+				'SELECT user_id FROM blogs WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number }>()
+			if (!blogCreatorId) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Blog no encontrado',
+				})
+			}
+			if (blogCreatorId.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar este blog',
+				})
+			}
+
+			try {
+				// Verificar que el blog existe y que el usuario es el dueño
+				const existingBlog = await locals.runtime.env.DB.prepare(
+					'SELECT id, user_id, title, content_path, organization_name FROM blogs WHERE id = ?'
+				)
+					.bind(state.id)
+					.first()
+
+				if (!existingBlog) {
+					throw new ActionError({
+						code: 'NOT_FOUND',
+						message: 'Blog no encontrado',
+					})
+				}
+
+				if (existingBlog.user_id !== userId) {
+					throw new ActionError({
+						code: 'FORBIDDEN',
+						message: 'No tienes permisos para actualizar este blog',
+					})
+				}
+
+				// Verificar si existe otro blog con el mismo título (excluyendo el actual)
+				const duplicateBlog = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM blogs WHERE title = ? AND user_id = ? AND id != ?'
+				)
+					.bind(state.title, userId, state.id)
+					.first()
+
+				if (duplicateBlog) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya tienes otro blog con este título',
+					})
+				}
+
+				// Generar nuevo path para el archivo
+				const newFilePath = generateBlogPath(state.id)
+
+				// Subir el nuevo contenido a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, newFilePath)
+				if (!uploadSuccess) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido actualizado del blog',
+					})
+				}
+
+				// Actualizar el blog en la base de datos
+				const updateResult = await locals.runtime.env.DB.prepare(
+					`UPDATE blogs SET 
+					title = ?, 
+					readtime = ?, 
+					tags = ?, 
+					content_path = ?,
+					updated_at = CURRENT_TIMESTAMP
+				WHERE id = ?`
+				)
+					.bind(state.title, state.readtime, (state.tags ?? []).join(','), newFilePath, state.id)
+					.run()
+
+				if (!updateResult.success) {
+					// Si falla la actualización de la DB, limpiar el nuevo archivo de R2
+					await locals.runtime.env.R2.delete(newFilePath)
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar el blog en la base de datos',
+					})
+				}
+
+				// Eliminar el archivo anterior de R2 si existe y es diferente al nuevo
+				if (existingBlog.content_path && existingBlog.content_path !== newFilePath) {
+					try {
+						await locals.runtime.env.R2.delete(existingBlog.content_path as string)
+					} catch (error) {
+						// Log del error pero no fallar la operación
+						console.warn('Warning: Could not delete old file from R2:', error)
+					}
+				}
+
+				return {
+					message: 'Blog actualizado exitosamente',
+					code: 200,
+					articleId: String(state.id),
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+				console.error('Error updating blog:', error)
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al actualizar el blog',
+				})
+			}
+		},
+	}),
+
+	deleteBlog: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive('ID de blog inválido'),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para borrar un blog',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar blogs',
+				})
+			}
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+			const blogInBD = await locals.runtime.env.DB.prepare(
+				'SELECT user_id, content_path FROM blogs WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number; content_path: string | null }>()
+			if (!blogInBD) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Blog no encontrado',
+				})
+			}
+			if (blogInBD.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar este blog',
+				})
+			}
+
+			// Eliminar el blog de la base de datos
+			const deleteResult = await locals.runtime.env.DB.prepare('DELETE FROM blogs WHERE id = ?')
+				.bind(state.id)
+				.run()
+
+			if (!deleteResult.success) {
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error al borrar el blog',
+				})
+			}
+
+			// Eliminar el archivo de R2 si existe
+			if (blogInBD.content_path) {
+				try {
+					await locals.runtime.env.R2.delete(blogInBD.content_path as string)
+				} catch (error) {
+					// Log del error pero no fallar la operación
+					console.warn('Warning: Could not delete blog file from R2:', error)
+				}
+			}
+
+			return {
+				message: 'Blog borrado exitosamente',
+				code: 200,
+				blogId: state.id,
+			}
+		},
+	}),
+
+	createRecommendation: defineAction({
+		accept: 'form',
+		input: recommendationSchema,
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para crear una recomendación',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para crear recomendaciones',
+				})
+			}
+
+			const organizationResult = await fetch(
+				new URL(`api/organization/${state.organization_id}`, config.AUTHURL)
+			)
+			if (!organizationResult.ok) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Organización no encontrada para este usuario',
+				})
+			}
+			const organizationData = (await organizationResult.json()) as Organization
+
+			let userOrg
+			for (const org of user.organizations) {
+				if (org.id === state.organization_id) {
+					userOrg = org
+					break
+				}
+			}
+
+			if (!userOrg) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No perteneces a la organización seleccionada',
+				})
+			}
+
+			// Verificar si la recomendación ya existe
+			try {
+				const existingRecommendation = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM recommendations WHERE title = ? AND user_id = ?'
+				)
+					.bind(state.title, userId)
+					.first()
+
+				if (existingRecommendation) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya tienes una recomendación con este título',
+					})
+				}
+
+				// Crear la recomendación en la base de datos primero para obtener el ID
+				const result = await locals.runtime.env.DB.prepare(
+					`
+                    INSERT INTO recommendations (
+                        user_id, display_name, user_role, organization_id, organization_name, faculty, title, period_time, readtime, code, qualification, content_path
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `
+				)
+					.bind(
+						userId,
+						userOrg.display_name,
+						userOrg.role,
+						state.organization_id,
+						userOrg.name,
+						organizationData.faculty,
+						state.title,
+						state.period_time,
+						state.readtime,
+						state.code,
+						state.qualification,
+						null // Temporalmente null, se actualizará después
+					)
+					.run()
+
+				if (!result.success) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al crear la recomendación',
+					})
+				}
+
+				const recommendationId = result.meta.last_row_id
+
+				// Generar el path del archivo y subirlo a R2
+				const filePath = generateRecommendationPath(recommendationId)
+
+				// Subir a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, filePath)
+
+				if (!uploadSuccess) {
+					// Si falla la subida, eliminar la recomendación de la base de datos
+					await locals.runtime.env.DB.prepare('DELETE FROM recommendations WHERE id = ?')
+						.bind(recommendationId)
+						.run()
+
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido de la recomendación',
+					})
+				}
+
+				// Actualizar la recomendación con el content_path
+				const updateResult = await locals.runtime.env.DB.prepare(
+					'UPDATE recommendations SET content_path = ? WHERE id = ?'
+				)
+					.bind(filePath, recommendationId)
+					.run()
+
+				if (!updateResult.success) {
+					// Si falla la actualización, limpiar R2 y base de datos
+					await locals.runtime.env.R2.delete(filePath)
+					await locals.runtime.env.DB.prepare('DELETE FROM recommendations WHERE id = ?')
+						.bind(recommendationId)
+						.run()
+
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar la recomendación con la ruta del archivo',
+					})
+				}
+
+				return {
+					message: 'Recomendación creada exitosamente',
+					code: 201,
+					organizationName: organizationData.organization_name,
+					recommendationTitle: state.title,
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+
+				console.error('Error creating recommendation:', error)
+
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al crear la recomendación',
+				})
+			}
+		},
+	}),
+
+	updateRecommendation: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive(),
+			title: z.string().min(1).max(200),
+			readtime: z.number().int().positive(),
+			qualification: z.number().int().min(1).max(5),
+			content: z.string().min(1),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para actualizar una recomendación',
+				})
+			}
+
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar recomendaciones',
+				})
+			}
+
+			// Verificar que la recomendación existe y pertenece al usuario
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de recomendación inválido',
+				})
+			}
+
+			const recommendationCreatorId = await locals.runtime.env.DB.prepare(
+				'SELECT user_id FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number }>()
+			if (!recommendationCreatorId) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Recomendación no encontrada',
+				})
+			}
+			if (recommendationCreatorId.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para actualizar esta recomendación',
+				})
+			}
+
+			try {
+				// Verificar que la recomendación existe y que el usuario es el dueño
+				const existingRecommendation = await locals.runtime.env.DB.prepare(
+					'SELECT id, user_id, title, organization_name, content_path FROM recommendations WHERE id = ?'
+				)
+					.bind(state.id)
+					.first()
+
+				if (!existingRecommendation) {
+					throw new ActionError({
+						code: 'NOT_FOUND',
+						message: 'Recomendación no encontrada',
+					})
+				}
+
+				if (existingRecommendation.user_id !== userId) {
+					throw new ActionError({
+						code: 'FORBIDDEN',
+						message: 'No tienes permisos para actualizar esta recomendación',
+					})
+				}
+
+				// Verificar si existe otra recomendación con el mismo título (excluyendo la actual)
+				const duplicateRecommendation = await locals.runtime.env.DB.prepare(
+					'SELECT id FROM recommendations WHERE title = ? AND user_id = ? AND id != ?'
+				)
+					.bind(state.title, userId, state.id)
+					.first()
+
+				if (duplicateRecommendation) {
+					throw new ActionError({
+						code: 'CONFLICT',
+						message: 'Ya existe una recomendación con el mismo título',
+					})
+				}
+
+				const newFilePath = generateRecommendationPath(state.id)
+				// Subir el nuevo contenido a R2
+				const uploadSuccess = await uploadMarkdownToR2(locals, state.content, newFilePath)
+				if (!uploadSuccess) {
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al subir el contenido actualizado de la recomendación',
+					})
+				}
+
+				const result = await locals.runtime.env.DB.prepare(
+					`
+					UPDATE recommendations SET
+						title = ?,
+						readtime = ?,
+						qualification = ?,
+						content_path = ?
+					WHERE id = ?
+				`
+				)
+					.bind(state.title, state.readtime, state.qualification, newFilePath, state.id)
+					.run()
+
+				if (!result.success) {
+					try {
+						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
+					} catch (error) {
+						console.warn('No se pudo eliminar el archivo anterior:', error)
+						return {
+							message:
+								'Recomendación actualizada exitosamente, pero no se pudo eliminar el archivo anterior',
+							code: 500,
+							organizationName: existingRecommendation.organization_name,
+							recommendationTitle: state.title,
+						}
+					}
+					throw new ActionError({
+						code: 'INTERNAL_SERVER_ERROR',
+						message: 'Error al actualizar la recomendación',
+					})
+				}
+				// Eliminar el archivo anterior de R2 si existe y es diferente al nuevo
+				if (
+					existingRecommendation.content_path &&
+					existingRecommendation.content_path !== newFilePath
+				) {
+					try {
+						await locals.runtime.env.R2.delete(existingRecommendation.content_path as string)
+					} catch (error) {
+						// Log del error pero no fallar la operación
+						console.warn('No se pudo eliminar el archivo anterior:', error)
+						return {
+							message:
+								'Recomendación actualizada exitosamente, pero no se pudo eliminar el archivo anterior',
+							code: 500,
+							organizationName: existingRecommendation.organization_name,
+							recommendationTitle: state.title,
+						}
+					}
+				}
+
+				return {
+					message: 'Recomendación actualizada exitosamente',
+					code: 200,
+					articleId: String(state.id),
+				}
+			} catch (error) {
+				if (error instanceof ActionError) {
+					throw error
+				}
+
+				console.error('Error updating recommendation:', error)
+
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error interno del servidor al actualizar la recomendación',
+				})
+			}
+		},
+	}),
+
+	deleteRecommendation: defineAction({
+		accept: 'form',
+		input: z.object({
+			id: z.number().int().positive('ID de la recomendación inválido'),
+		}),
+		handler: async (state, ctx) => {
+			const { locals, cookies } = ctx
+			const token = getToken(cookies)
+			const user = await getUserDataByToken(token)
+			const userId = user?.id
+
+			if (!userId) {
+				throw new ActionError({
+					code: 'UNAUTHORIZED',
+					message: 'Debes iniciar sesión para borrar una recomendación',
+				})
+			}
+			if (!user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar recomendaciones',
+				})
+			}
+			if (!state.id || isNaN(state.id) || state.id <= 0) {
+				throw new ActionError({
+					code: 'BAD_REQUEST',
+					message: 'ID de blog inválido',
+				})
+			}
+			const recommendationInBD = await locals.runtime.env.DB.prepare(
+				'SELECT user_id, content_path FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.first<{ user_id: number; content_path: string | null }>()
+			if (!recommendationInBD) {
+				throw new ActionError({
+					code: 'NOT_FOUND',
+					message: 'Recomendación no encontrada',
+				})
+			}
+			if (recommendationInBD.user_id !== Number(userId)) {
+				throw new ActionError({
+					code: 'FORBIDDEN',
+					message: 'No tienes permisos para borrar esta recomendación',
+				})
+			}
+
+			// Eliminar la recomendación de la base de datos
+			const deleteResult = await locals.runtime.env.DB.prepare(
+				'DELETE FROM recommendations WHERE id = ?'
+			)
+				.bind(state.id)
+				.run()
+
+			if (!deleteResult.success) {
+				throw new ActionError({
+					code: 'INTERNAL_SERVER_ERROR',
+					message: 'Error al borrar la recomendación',
+				})
+			}
+
+			// Eliminar el archivo de R2 si existe
+			if (recommendationInBD.content_path) {
+				try {
+					await locals.runtime.env.R2.delete(recommendationInBD.content_path as string)
+				} catch (error) {
+					// Log del error pero no fallar la operación
+					console.warn('Warning: Could not delete recommendation file from R2:', error)
+				}
+			}
+
+			return {
+				message: 'Recomendación borrada exitosamente',
+				code: 200,
+				blogId: state.id,
 			}
 		},
 	}),

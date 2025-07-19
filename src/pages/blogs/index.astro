@@ -1,13 +1,28 @@
 ---
-import { getCollection } from 'astro:content'
+import NewArticle from '@/components/features/article/NewArticle'
 import BlogCard from '@/components/features/blog/BlogCard.tsx'
 import Layout from '@/layouts/Layout.astro'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import type { Blogs } from '@/types'
+import { getBlogs } from '@/lib/server/articles'
 
-const blogs = await getCollection('blogs')
+let userData = null
+let blogsData = null
+try {
+	blogsData = await getBlogs(Astro.locals)
+	if (!blogsData) {
+		return Astro.redirect('/blogs')
+	}
+} catch (error) {
+	return Astro.redirect('/blogs')
+}
+const token = getToken(Astro.cookies)
+userData = await getUserDataByToken(token)
 ---
 
-<Layout>
-	<main class="grid md:grid-cols-2 lg:grid-cols-3">
+<Layout title="Blogs">
+	<div class="grid md:grid-cols-2 lg:grid-cols-3">
 		<div
 			class="flex h-[60vh] w-full flex-col justify-center md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4 lg:h-[70vh]"
 		>
@@ -15,23 +30,39 @@ const blogs = await getCollection('blogs')
 				Descubre blogs creados por la comunidad
 			</h1>
 		</div>
+		<div class="flex justify-end md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4">
+			<NewArticle
+				userData={userData}
+				contentType="blog"
+				className="mt-10 mr-2"
+				client:only="react"
+			/>
+		</div>
 		{
-			blogs.map((blog) => {
-				const { data } = blog
-				const { title, author, readtime, description, tags } = data
-
+			blogsData?.map((blog) => {
+				const { title, display_name, organization_name, period_time, readtime, tags, id } = blog
+				let newTags = null
+				if (tags) {
+					newTags = tags.split(',').map((tag) => tag.trim())
+				}
 				return (
-					<div class="flex justify-center p-2">
+					<div class="w-full p-2">
 						<BlogCard
+							articleId={id}
 							title={title}
-							authorName={author?.name || 'Desconocido'}
-							description={description}
+							type="blogs"
+							authorName={display_name}
+							organizationName={organization_name}
+							description=""
 							readtime={readtime}
-							tags={tags || []}
+							tags={newTags || []}
+							period_time={blog.period_time}
+							user_role={blog.user_role}
+							created_at={blog.created_at}
 						/>
 					</div>
 				)
 			})
 		}
-	</main>
+	</div>
 </Layout>

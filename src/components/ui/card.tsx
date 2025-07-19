@@ -13,9 +13,7 @@ export function Card({
 	children: React.ReactNode
 }) {
 	return (
-		<div
-			className={`rounded-2xl border border-zinc-200 bg-white p-4 text-black shadow-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-white ${className}`}
-		>
+		<div className={`bg-background text-foreground rounded-2xl border ${className}`}>
 			{children}
 		</div>
 	)

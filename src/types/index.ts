@@ -15,11 +15,11 @@ export interface CourseSummary {
 	credits?: number // Added for convenience
 	school?: string // Added for convenience
 	area?: string // Added for convenience
+	category?: string // Added for convenience.
 	req?: string
 	conn?: string
 	restr?: string
 	equiv?: string
-	categories?: Array<string> // Added for convenience.
 	format?: Array<string>
 	campus?: Array<string>
 	is_removable?: Array<boolean>
@@ -43,6 +43,79 @@ export interface CourseReview {
 	status: number // 0: pending, 1: approved, 2: reported, 3: hidden
 	created_at: string
 	updated_at: string
+}
+
+export interface Organization {
+	id: number
+	organization_name: string
+	organization_acronym: string
+	faculty: string
+	logo_url: string
+	page_link: string
+	created_at: string
+	updated_at: string
+}
+
+export interface UserOrganization {
+	id: number
+	organization_id: number
+	display_name: string // Name of the user
+	user_id: number
+	user_role: string // Role in the organization (e.g., admin, member)
+}
+
+export interface Blogs {
+	id: number
+	user_id: number
+	display_name: string
+	user_role: string
+	organization_id: number
+	organization_name: string
+	title: string
+	period_time: string // Format: YYYY-S
+	readtime: number // in minutes
+	tags: string
+	content_path: string
+	created_at: string
+	updated_at: string
+}
+
+export interface Recommendations {
+	id: number
+	user_id: number
+	display_name: string
+	organization_id: number
+	organization_name: string // Name of the organization
+	faculty: string
+	title: string
+	period_time: string // Format: YYYY-S
+	readtime: number // in minutes
+	code: string // Course code
+	qualification: number
+	content_path: string
+	created_at: string
+	updated_at: string
+}
+
+export interface CourseStaticInfo {
+	sigle: string
+	name: string
+	credits: number
+	schedules?: Schedule[]
+	req: string
+	conn: string
+	restr: string
+	equiv: string
+	format: Array<string>
+	campus: Array<string>
+	is_removable: Array<boolean>
+	is_special: Array<boolean>
+	is_english: Array<boolean>
+	description: string
+	school: string
+	area: string
+	category: string
+	last_semester: string // Format: YYYY-S
 }
 
 export interface RecommendationData {

@@ -1,0 +1,112 @@
+---
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { OsucPermissions } from '@/types/permissions'
+import { actions } from 'astro:actions'
+import EditorMDX from '@/components/EditorMDX.tsx'
+import Layout from '@/layouts/Layout.astro'
+import ContentHeader from '@/components/features/article/HeaderContent.astro'
+import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
+import { blogsTags } from '@/data/blogs'
+import { createSlug } from '@/lib/utils'
+
+// Authentication check
+const token = getToken(Astro.cookies)
+console.log(token)
+if (!token) {
+	return Astro.redirect('/')
+}
+
+const user = await getUserDataByToken(token)
+console.log(user)
+if (!user || !user.permissions.includes(OsucPermissions.userCanCreateBlogs)) {
+	return Astro.redirect('/')
+}
+
+let message = ''
+let messageType = ''
+
+// Verificar si hay un resultado de la acción
+const result = Astro.getActionResult(actions.createBlog)
+
+if (result && !result.error) {
+	return Astro.redirect(
+		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
+	)
+} else if (result?.error) {
+	return Astro.redirect('/blogs')
+}
+
+const tagsData = blogsTags
+---
+
+<Layout title="Crear Blog">
+	<main class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+		<!-- Estado del formulario -->
+		{
+			message && (
+				<section
+					class={`mb-6 rounded-md border p-4 sm:p-6 ${
+						messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+					}`}
+					role="alert"
+					aria-live="polite"
+				>
+					<div class="flex items-center gap-2">
+						<span
+							class={`flex-shrink-0 ${messageType === 'success' ? 'text-green-600' : 'text-red-600'}`}
+						>
+							{messageType === 'success' ? '✅' : '❌'}
+						</span>
+						<p
+							class={`text-xs font-medium sm:text-sm ${
+								messageType === 'success' ? 'text-green-800' : 'text-red-800'
+							}`}
+						>
+							{message}
+						</p>
+					</div>
+				</section>
+			)
+		}
+		<!-- Header Section -->
+		<ContentHeader
+			headerTitle="Crear Nuevo Blog"
+			headerSubtitle="Comparte tus experiencias y conocimientos con la comunidad estudiantil"
+		/>
+
+		<!-- Formulario Principal -->
+		<section aria-labelledby="form-title">
+			<article class="border-border min-w-0 rounded-md border">
+				<div class="p-4 sm:p-6 lg:p-8">
+					<h2 id="form-title" class="mb-4 text-lg font-semibold sm:mb-6 sm:text-xl">
+						Información del blog
+					</h2>
+
+					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.createBlog}>
+						<!-- Información básica del blog -->
+						<BlogBasicInfo user={user} blogTags={tagsData} />
+
+						<!-- Separador -->
+						<div class="border-border border-t pt-4 sm:pt-6">
+							<div class="mb-4 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Contenido del blog <span class="text-red-500">*</span>
+								</label>
+								<p class="text-muted-foreground text-xs sm:text-sm">
+									Utiliza el editor para crear contenido enriquecido con formato, imágenes y
+									componentes especiales.
+								</p>
+							</div>
+						</div>
+
+						<!-- Editor MDX -->
+						<div class="min-w-0">
+							<EditorMDX submitText="Publicar Blog" client:only="react" />
+						</div>
+					</form>
+				</div>
+			</article>
+		</section>
+	</main>
+</Layout>

@@ -1,108 +1,216 @@
 /* Markdown content styles */
-.content-markdown {
+.content-markdown,
+.mdxeditor-diff-source-wrapper {
 	@apply overflow-hidden break-words;
 	word-wrap: break-word;
 	hyphens: auto;
 }
 
-.content-markdown h1 {
+.content-markdown h1,
+.mdxeditor-diff-source-wrapper h1 {
 	@apply text-foreground mb-4 text-xl font-bold break-words sm:text-2xl;
 }
 
-.content-markdown h2 {
+.content-markdown h2,
+.mdxeditor-diff-source-wrapper h2 {
 	@apply text-foreground mt-6 mb-3 text-lg font-semibold break-words sm:text-xl;
 }
 
-.content-markdown h3 {
+.content-markdown h3,
+.mdxeditor-diff-source-wrapper h3 {
 	@apply text-foreground mt-4 mb-2 text-base font-medium break-words sm:text-lg;
 }
 
-.content-markdown h4 {
+.content-markdown h4,
+.mdxeditor-diff-source-wrapper h4 {
 	@apply text-foreground mt-3 mb-2 text-sm font-medium break-words sm:text-base;
 }
 
-.content-markdown p {
+.content-markdown p,
+.mdxeditor-diff-source-wrapper p {
 	@apply text-foreground mb-4 leading-relaxed break-words;
 }
 
 .content-markdown ul,
-.content-markdown ol {
+.content-markdown ol,
+.mdxeditor-diff-source-wrapper ul,
+.mdxeditor-diff-source-wrapper ol {
 	@apply text-foreground mb-4 pl-4 sm:pl-6;
 }
 
-.content-markdown ul {
+.content-markdown ul,
+.mdxeditor-diff-source-wrapper ul {
 	@apply list-disc;
 }
 
-.content-markdown ol {
+.content-markdown ol,
+.mdxeditor-diff-source-wrapper ol {
 	@apply list-decimal;
 }
 
-.content-markdown li {
+.content-markdown li,
+.mdxeditor-diff-source-wrapper li {
 	@apply mb-1 break-words;
 }
 
-.content-markdown li::marker {
+.content-markdown li::marker,
+.mdxeditor-diff-source-wrapper li::marker {
 	@apply text-foreground;
 }
 
-.content-markdown a {
+.content-markdown a,
+.mdxeditor-diff-source-wrapper a {
 	@apply text-blue break-words hover:underline;
 	word-break: break-all;
 }
 
-.content-markdown blockquote {
+.content-markdown blockquote,
+.mdxeditor-diff-source-wrapper blockquote {
 	@apply border-blue text-muted-foreground mb-4 border-l-4 pl-4 break-words italic;
 }
 
-.content-markdown code {
+.content-markdown code,
+.mdxeditor-diff-source-wrapper code {
 	@apply bg-muted rounded px-1 py-0.5 text-xs break-all sm:text-sm;
 	word-break: break-all;
 }
 
-.content-markdown pre {
+.content-markdown pre,
+.mdxeditor-diff-source-wrapper pre {
 	@apply bg-muted mb-4 overflow-x-auto rounded p-2 text-xs sm:p-4 sm:text-sm;
 	max-width: 100%;
 }
 
-.content-markdown pre code {
+.content-markdown pre code,
+.mdxeditor-diff-source-wrapper pre code {
 	@apply bg-transparent p-0;
 	word-break: normal;
 }
 
-.content-markdown table {
+.content-markdown table,
+.mdxeditor-diff-source-wrapper table {
 	@apply mb-4 w-full border-collapse;
 	font-size: 0.875rem;
 }
 
 .content-markdown th,
-.content-markdown td {
+.content-markdown td,
+.mdxeditor-diff-source-wrapper th,
+.mdxeditor-diff-source-wrapper td {
 	@apply border-border border px-2 py-2 text-left break-words sm:px-4;
 }
 
-.content-markdown th {
+.content-markdown th,
+.mdxeditor-diff-source-wrapper th {
 	@apply bg-muted font-medium;
 }
 
-.content-markdown img {
+.content-markdown img,
+.mdxeditor-diff-source-wrapper img {
 	@apply mb-4 h-auto max-w-full rounded;
 }
 
-.content-markdown strong {
+.content-markdown strong,
+.mdxeditor-diff-source-wrapper strong {
 	@apply font-semibold;
 }
 
-.content-markdown em {
+.content-markdown em,
+.mdxeditor-diff-source-wrapper em {
 	@apply italic;
 }
 
 /* Responsive table wrapper */
-.content-markdown table {
+.content-markdown table,
+.mdxeditor-diff-source-wrapper table {
 	@apply block overflow-x-auto whitespace-nowrap;
 }
 
 @media (min-width: 640px) {
-	.content-markdown table {
+	.content-markdown table,
+	.mdxeditor-diff-source-wrapper table {
 		@apply table whitespace-normal;
 	}
+}
+
+/* MDX Editor specific fixes */
+.mdxeditor-toolbar svg {
+	max-width: none;
+}
+
+.mdxeditor-toolbar :last-child {
+	position: unset;
+}
+
+/* MDXEditor theming usando el sistema nativo */
+.mdxeditor-theme,
+.mdxeditor,
+.mdxeditor-popup-container,
+.mdxeditor-toolbar,
+.mdxeditor-root-contenteditable,
+.mdxeditor-diff-source-wrapper,
+.mdxeditor-rich-text-editor,
+.mdxeditor-source-editor,
+.mdxeditor-diff-editor,
+.mdxeditor-select-content {
+	--baseBorderHover: var(--color-input) !important;
+	--baseBorder: var(--border) !important;
+	--baseSolid: var(--foreground) !important;
+	--baseSolidHover: var(--foreground) !important;
+	--baseBase: var(--background) !important;
+	--baseBgSubtle: var(--muted) !important;
+	--baseBg: var(--background) !important;
+	--baseBgHover: var(--muted) !important;
+	--baseBgActive: var(--accent) !important;
+	--baseLine: var(--border) !important;
+	--baseText: var(--foreground) !important;
+	--baseTextContrast: var(--foreground) !important;
+	--basePageBg: var(--background) !important;
+
+	/* Accent colors (primary) */
+	--accentBase: var(--blue-light) !important;
+	--accentBgSubtle: var(--blue-light) !important;
+	--accentBg: var(--blue-light) !important;
+	--accentBgHover: var(--blue) !important;
+	--accentBgActive: var(--blue) !important;
+	--accentLine: var(--blue) !important;
+	--accentBorder: var(--blue) !important;
+	--accentBorderHover: var(--blue) !important;
+	--accentSolid: var(--blue) !important;
+	--accentSolidHover: var(--blue) !important;
+	--accentText: var(--blue) !important;
+	--accentTextContrast: var(--background) !important;
+
+	/* Background page color */
+	background: var(--background) !important;
+	color: var(--foreground) !important;
+
+	/* Admonition colors */
+	--admonitionTipBg: var(--blue-light) !important;
+	--admonitionTipBorder: var(--blue) !important;
+	--admonitionInfoBg: var(--green-light) !important;
+	--admonitionInfoBorder: var(--green) !important;
+	--admonitionCautionBg: var(--orange-light) !important;
+	--admonitionCautionBorder: var(--orange) !important;
+	--admonitionDangerBg: var(--red-light) !important;
+	--admonitionDangerBorder: var(--red) !important;
+	--admonitionNoteBg: var(--muted) !important;
+	--admonitionNoteBorder: var(--border) !important;
+
+	/* Typography */
+	font-family:
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Open Sans',
+		'Helvetica Neue',
+		sans-serif !important;
+	--font-mono:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+		monospace !important;
 }

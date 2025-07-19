@@ -1,22 +1,15 @@
 ---
+import type { Blogs, Recommendations, Organization } from '@/types'
 import { Pill } from '../ui/pill'
+import ConditionalEdit from '@/components/features/article/ConditionalEdit.tsx'
 
 interface Props {
-	title: string
-	description: string
-	author?:
-		| string
-		| {
-				name: string
-				title?: string
-				picture?: string
-				link?: string
-		  }
-	readtime?: number
-	contentType: 'resource' | 'blog'
-	tags?: string[]
+	contentData: Blogs | Recommendations
+	organizationData: Organization
+	contentType: 'resource' | 'blog' | 'recommendation'
 	primaryPillIcon?: any
 	secondaryPillIcon?: any
+	userData: any
 	navigationSection?: {
 		title: string
 		description: string
@@ -24,39 +17,59 @@ interface Props {
 		buttonHref: string
 	}
 }
-
 const {
-	title,
-	description,
-	author,
-	readtime,
+	contentData,
+	userData,
+	organizationData,
 	contentType,
 	primaryPillIcon,
 	secondaryPillIcon,
 	navigationSection,
 } = Astro.props
 
-// Author can be a string or an object with name, title, picture, and link
-const authorData =
-	typeof author === 'string' ? { name: author, title: null, picture: null, link: null } : author
+const isRecommendation = contentType === 'recommendation'
+const isBlog = contentType === 'blog'
+const isResource = contentType === 'resource'
 
-// Default labels based on content type
-const contentTypeLabel = contentType === 'resource' ? 'Recurso' : 'Artículo'
+// Etiquetas y campos según tipo
+const contentTypeLabel = isResource ? 'Recursos' : isBlog ? 'Blogs' : 'Recomendaciónes'
+
+const tags =
+	isBlog || isResource
+		? (contentData as Blogs).tags
+			? (contentData as Blogs).tags.split(',').map((tag: string) => tag.trim())
+			: []
+		: []
+
+// Para recomendaciones, mostrar campos extra
+const recommendationFields = isRecommendation
+	? {
+			faculty: (contentData as Recommendations).faculty,
+			code: (contentData as Recommendations).code,
+			qualification: (contentData as Recommendations).qualification,
+		}
+	: null
 
 // Default navigation section
-const defaultNavigationSection =
-	contentType === 'resource'
+const defaultNavigationSection = isResource
+	? {
+			title: '¿Te resultó útil este recurso?',
+			description: 'Explora más recursos y guías en nuestra sección de ayuda.',
+			buttonText: 'Ver Todos los Recursos',
+			buttonHref: '/resources',
+		}
+	: isBlog
 		? {
-				title: '¿Te resultó útil este recurso?',
-				description: 'Explora más recursos y guías en nuestra sección de ayuda.',
-				buttonText: 'Ver Todos los Recursos',
-				buttonHref: '/resources',
+				title: '¿Te gustó este blog?',
+				description: 'Descubre más artículos y contenido en nuestro blog.',
+				buttonText: 'Ver Todos los Blogs',
+				buttonHref: '/blogs',
 			}
 		: {
-				title: '¿Te gustó este artículo?',
-				description: 'Descubre más artículos y contenido en nuestro blog.',
-				buttonText: 'Ver Todos los Artículos',
-				buttonHref: '/blog',
+				title: '¿Te resultó útil esta recomendación?',
+				description: 'Explora más recomendaciones de cursos y experiencias estudiantiles.',
+				buttonText: 'Ver Todas las Recomendaciones',
+				buttonHref: '/recommendations',
 			}
 
 const finalNavigationSection = navigationSection || defaultNavigationSection
@@ -64,90 +77,121 @@ const finalNavigationSection = navigationSection || defaultNavigationSection
 
 <div class="mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 py-8 sm:px-6">
 	<!-- Header Section -->
-	<a
-		class="inline-flex items-center gap-2 text-blue-600 transition-colors hover:text-blue-800 hover:underline"
-		href={`/${contentType}s`}
-	>
-		← Ver más {contentTypeLabel}s
-	</a>
-	<section class="border-border rounded-md border px-4 py-6 sm:px-6 sm:py-8">
-		<div>
-			<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">{title}</h1>
-			<p class="max-w-full text-sm break-words opacity-60 sm:max-w-[80%]">
-				{description}
-			</p>
-			{
-				authorData && (
-					<div class="mt-4 flex items-center gap-3 overflow-hidden">
-						<div class="flex min-w-0 flex-1 items-center gap-3">
-							{authorData.picture ? (
-								<a
-									href={authorData.link || '#'}
-									target={authorData.link ? '_blank' : undefined}
-									rel={authorData.link ? 'noopener noreferrer' : undefined}
-									class="block"
-								>
-									<img
-										src={authorData.picture}
-										alt={`Foto de ${authorData.name}`}
-										class="border-border hover:border-blue h-10 w-10 rounded-full border-2 object-cover transition-colors"
-									/>
-								</a>
-							) : (
-								<div class="bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border-2">
-									<span class="text-muted-foreground text-sm font-medium">
-										{authorData.name?.charAt(0).toUpperCase()}
-									</span>
-								</div>
-							)}
-							<div class="flex min-w-0 flex-col">
-								<div class="text-muted-foreground truncate text-sm">
-									Por{' '}
-									{authorData.link ? (
-										<a
-											href={authorData.link}
-											target="_blank"
-											rel="noopener noreferrer"
-											class="text-foreground hover:text-blue font-medium transition-colors"
-										>
-											{authorData.name}
-										</a>
-									) : (
-										<span class="text-foreground font-medium">{authorData.name}</span>
-									)}
-								</div>{' '}
-								{authorData.title && (
-									<div class="text-muted-foreground truncate text-xs">{authorData.title}</div>
-								)}
-							</div>
-						</div>
-					</div>
-				)
-			}
+	<div class="mb-3 flex items-center justify-between">
+		<a
+			class="inline-flex items-center gap-2 text-blue-500 transition-colors hover:text-blue-800 hover:underline"
+			href={isRecommendation ? '/recommendations' : `/${contentType}s`}
+		>
+			← Ver más {contentTypeLabel}
+		</a>
+		<ConditionalEdit
+			userData={userData}
+			articleId={contentData.id}
+			articleUserId={contentData.user_id}
+			contentType={contentType}
+			client:only="react"
+		/>
+	</div>
+	<!-- Encabezado: título y metadatos -->
+	<header class="border-border mb-4 rounded-md border px-4 py-6 sm:px-6 sm:py-8">
+		<div class="flex items-center justify-between gap-4">
+			<h1 class="pb-4 text-2xl font-bold break-words sm:text-3xl">
+				{contentData.title}
+			</h1>
+		</div>
+		<div class="mt-2 flex items-center gap-3 overflow-hidden">
+			<a
+				href={`/${organizationData.page_link}` || '#'}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="block"
+			>
+				<img
+					src={organizationData.logo_url}
+					alt={`Logo de ${organizationData.organization_name}`}
+					class="border-border hover:border-blue h-10 w-10 rounded-full border-2 object-cover transition-colors"
+				/>
+			</a>
+			<div class="flex min-w-0 flex-col">
+				<div class="text-muted-foreground truncate text-sm">
+					Por
+					<a
+						href={`/${organizationData.page_link}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-foreground hover:text-blue font-medium transition-colors"
+					>
+						{organizationData.organization_name}
+					</a>
+				</div>
+				<div class="text-muted-foreground mt-1 flex flex-wrap gap-2 text-xs">
+					<span>Autor: <span class="text-foreground">{contentData.display_name}</span></span>
+					{
+						isBlog && (
+							<span>
+								Rol: <span class="text-foreground">{(contentData as Blogs).user_role}</span>
+							</span>
+						)
+					}
+					{
+						isRecommendation && (
+							<span>
+								Facultad:{' '}
+								<span class="text-foreground">{(contentData as Recommendations).faculty}</span>
+							</span>
+						)
+					}
+					{
+						contentData.period_time && (
+							<span>
+								Periodo: <span class="text-foreground">{contentData.period_time}</span>
+							</span>
+						)
+					}
+					{
+						contentData.created_at && (
+							<span>
+								Creado:{' '}
+								<span class="text-foreground">
+									{new Date(contentData.created_at).toLocaleDateString()}
+								</span>
+							</span>
+						)
+					}
+					{
+						isRecommendation && (
+							<span>
+								Código: <span class="text-foreground">{(contentData as Recommendations).code}</span>
+							</span>
+						)
+					}
+				</div>
+			</div>
 		</div>
 		<div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-8">
 			<Pill variant="blue" size="sm" icon={primaryPillIcon} className="">
 				{contentTypeLabel}
 			</Pill>
+			<Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
+				{contentData.readtime} Minutos de lectura
+			</Pill>
 			{
-				readtime && (
-					<Pill variant="green" size="sm" icon={secondaryPillIcon} className="">
-						{readtime} Minutos de lectura
+				isRecommendation && (
+					<Pill variant="orange" size="sm" className="">
+						Calificación: {(contentData as Recommendations).qualification} / 5
 					</Pill>
 				)
 			}
 			{
-				Astro.props.tags &&
-					Astro.props.tags.length > 0 &&
-					Astro.props.tags.map((tag) => (
-						<Pill variant="ghost_red" size="sm" className="">
-							{tag}
-						</Pill>
-					))
+				tags.map((tag: string) => (
+					<Pill variant="ghost_red" size="sm" className="">
+						{tag}
+					</Pill>
+				))
 			}
 		</div>
-	</section>
-	<!-- Content Section -->
+	</header>
+	<!-- Sección de contenido principal -->
 	<article class="border-border min-w-0 overflow-hidden rounded-md border">
 		<div class="px-4 py-6 sm:px-6 sm:py-8">
 			<div
@@ -157,7 +201,7 @@ const finalNavigationSection = navigationSection || defaultNavigationSection
 			</div>
 		</div>
 	</article>
-	<!-- Navigation Section -->
+	<!-- Sección de navegación -->
 	<section class="mt-6">
 		<div class="border-border rounded-md border p-4 sm:p-6">
 			<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

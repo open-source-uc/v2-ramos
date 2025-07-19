@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # Claude
 CLAUDE.md
+
+# Nix shell config
+shell.nix

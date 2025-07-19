@@ -1,0 +1,225 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import ContentHeader from '@/components/features/article/HeaderContent.astro'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { createSlug } from '@/lib/utils'
+import type { Blogs, Organization } from '@/types'
+import { OsucPermissions } from '@/types/permissions'
+import { actions } from 'astro:actions'
+import BlogBasicInfo from '@/components/features/article/BlogBasicInfo.astro'
+import EditorMDX from '@/components/EditorMDX'
+import { blogsTags } from '@/data/blogs'
+import { getBlogById } from '@/lib/server/articles'
+
+export const prerender = false
+
+// Obtener parámetros de la query string (?id=...)
+let blogId = null
+let blogData: Blogs | null = null
+let user = null
+let token = null
+let tags: string[] = []
+let message = ''
+let messageType = ''
+let tagsData = { blogTags: [] }
+let mdxContent = ''
+
+// Verificar si hay un resultado de la acción
+const result = Astro.getActionResult(actions.updateBlog)
+if (result && !result.error) {
+	return Astro.redirect(`/blogs/view?id=${result.data.articleId}`)
+} else if (result?.error) {
+	return Astro.redirect('/blogs')
+}
+try {
+	const url = new URL(Astro.request.url)
+	blogId = url.searchParams.get('id')
+	if (!blogId) {
+		return Astro.redirect('/blogs')
+	}
+
+	token = getToken(Astro.cookies)
+	user = await getUserDataByToken(token)
+	if (!user) {
+		return Astro.redirect('/')
+	}
+
+	const blogResult = await getBlogById(Astro.locals, blogId)
+	blogData = blogResult ?? null
+	if (!blogData) {
+		return Astro.redirect('/blogs')
+	}
+
+	if (
+		(user && String(user.id) !== String(blogData.user_id)) ||
+		!user?.permissions?.includes(OsucPermissions.userCanCreateBlogs)
+	) {
+		return Astro.redirect(`/blogs/view?id=${blogData.id}`)
+	}
+
+	if (blogData.tags) {
+		tags = blogData.tags.split(',')
+	}
+
+	const tagsData = blogsTags
+	mdxContent = await fetch(`/api/articles/article?path=${blogData.content_path}`)
+		.then((res) => res.text())
+		.catch(() => '')
+} catch (e) {
+	return Astro.redirect('/blogs')
+}
+
+// Código duplicado eliminado: la lógica y variables ya están declaradas y asignadas arriba en el bloque try/catch.
+---
+
+<Layout title={`Edita: ${blogData.title}`}>
+	<main class="relative mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+		<!-- Estado del formulario -->
+		{
+			message && (
+				<section
+					class={`mb-6 rounded-md border p-4 sm:p-6 ${
+						messageType === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
+					}`}
+					role="alert"
+					aria-live="polite"
+				>
+					<div class="flex items-center gap-2">
+						<span
+							class={`flex-shrink-0 ${
+								messageType === 'success' ? 'text-green-600' : 'text-red-600'
+							}`}
+						>
+							{messageType === 'success' ? '✅' : '❌'}
+						</span>
+						<p
+							class={`text-xs font-medium sm:text-sm ${
+								messageType === 'success' ? 'text-green-800' : 'text-red-800'
+							}`}
+						>
+							{message}
+						</p>
+					</div>
+				</section>
+			)
+		}
+		<div class="mb-6 flex justify-between">
+			<a
+				href={`/blogs?author=${createSlug(blogData.organization_name)}&title=${createSlug(blogData.title)}`}
+				class="ver:underline text-blue-500">{`<-`} Volver al blog</a
+			>
+			<button
+				onclick="document.getElementById('delete-modal').classList.remove('hidden');document.getElementById('delete-modal').classList.add('flex')"
+				class="rounded bg-red-700 px-4 py-2 font-semibold text-white shadow transition-colors hover:bg-red-800"
+				>ELIMINAR BLOG</button
+			>
+
+			<!-- POP UP PARA ELIMINAR -->
+			<div
+				id="delete-modal"
+				class="tablet:max-w-[420px] desktop:max-w-[700px] bg-background border-border desktop:flex-row tablet:rounded-2xl desktop:rounded-2xl fixed top-0 right-0 bottom-0 left-0 z-[100] m-auto hidden max-h-[92vh] w-[92vw] max-w-[400px] flex-col rounded-2xl border shadow-xl"
+				style="inset:0"
+			>
+				<div
+					class="tablet:top-4 tablet:right-6 desktop:top-4 desktop:right-6 absolute top-2 right-2 z-10"
+				>
+					<button
+						onclick="document.getElementById('delete-modal').classList.add('hidden');document.getElementById('delete-modal').classList.remove('flex')"
+						class="text-foreground/80 hover:text-foreground hover:bg-foreground/10 focus-visible:ring-foreground rounded-full p-2 text-xl transition-colors focus:outline-none focus-visible:ring-2"
+						aria-label="Cerrar modal"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="2"
+							stroke="currentColor"
+							class="h-6 w-6"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+						</svg>
+					</button>
+				</div>
+				<div
+					class="tablet:p-6 desktop:gap-8 desktop:flex-col desktop:items-center desktop:justify-center flex flex-1 flex-col items-center justify-center gap-5 p-4"
+				>
+					<h2
+						class="text-foreground tablet:text-2xl desktop:text-3xl w-full text-center text-lg font-bold"
+					>
+						¿Estás seguro de que deseas eliminar este blog?
+					</h2>
+					<form
+						method="post"
+						action={actions.deleteBlog}
+						class="desktop:gap-4 desktop:w-full desktop:justify-center desktop:items-center flex w-full flex-col items-center gap-2"
+					>
+						<input type="number" name="id" value={blogData.id} hidden />
+						<button
+							type="submit"
+							class="tablet:w-auto desktop:w-40 w-full rounded-md bg-red-600 px-4 py-2 font-semibold text-white shadow-md transition-colors hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-300 active:bg-red-800"
+							>Eliminar</button
+						>
+						<button
+							type="button"
+							onclick="document.getElementById('delete-modal').classList.add('hidden');document.getElementById('delete-modal').classList.remove('flex')"
+							class="bg-muted hover:bg-muted/80 text-foreground tablet:w-auto desktop:w-40 border-border w-full rounded-md border px-4 py-2 transition-colors"
+							>Cancelar</button
+						>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Header Section -->
+		<ContentHeader
+			headerTitle="Edita tu blog"
+			headerSubtitle="Edita el contenido de tu blog y compártelo con la comunidad"
+		/>
+
+		<!-- Formulario Principal -->
+		<section aria-labelledby="form-title">
+			<article class="border-border min-w-0 rounded-md border">
+				<div class="p-4 sm:p-6 lg:p-8">
+					<h2 id="form-title" class="mb-4 text-lg font-semibold sm:mb-6 sm:text-xl">
+						Información del blog
+					</h2>
+
+					<form class="min-w-0 space-y-4 sm:space-y-6" method="POST" action={actions.updateBlog}>
+						<!-- Información básica del blog -->
+						<BlogBasicInfo
+							user={user}
+							blogTags={tagsData}
+							title={blogData.title}
+							organization_name={blogData.organization_name}
+							period_time={blogData.period_time}
+							readtime={String(blogData.readtime)}
+							tags={tags}
+						/>
+						<input type="number" value={blogData.id} name="id" hidden />
+						<!-- Separador -->
+						<div class="border-border border-t pt-4 sm:pt-6">
+							<div class="mb-4 space-y-2">
+								<label class="text-foreground block text-sm font-medium">
+									Contenido del blog <span class="text-red-500">*</span>
+								</label>
+								<p class="text-muted-foreground text-xs sm:text-sm">
+									Utiliza el editor para crear contenido enriquecido con formato, imágenes y
+									componentes especiales.
+								</p>
+							</div>
+						</div>
+
+						<!-- Editor MDX -->
+						<div class="min-w-0">
+							<EditorMDX
+								initialContent={mdxContent}
+								submitText="Actualizar Blog"
+								client:only="react"
+							/>
+						</div>
+					</form>
+				</div>
+			</article>
+		</section>
+	</main>
+</Layout>
