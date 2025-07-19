@@ -28,6 +28,8 @@ import {
 	// Para botones de inserción personalizados
 	useCellValues,
 	usePublisher,
+	sub,
+	ListsToggle,
 } from '@mdxeditor/editor'
 import '@mdxeditor/editor/style.css'
 
@@ -42,19 +44,22 @@ import { Separator } from '@radix-ui/react-select'
 import { ComponentDropdownMenu, PillMenuContent } from '@/components/editor'
 
 interface EditorMDXProps {
-	// Contenido inicial del editor
 	initialContent?: string
-	// Texto del botón de envío
+	submitTextEnabled?: boolean
+	nameInput?: string
 	submitText?: string
-	// Función que se ejecuta cuando cambia el contenido
 	onContentChange?: (content: string) => void
+	imgEnabled?: boolean
 }
 
 export default function EditorMDX({
 	initialContent,
 	submitText = 'Guardar Contenido',
+	nameInput = 'content',
+	submitTextEnabled = false,
 	onContentChange,
-}: EditorMDXProps = {}) {
+	imgEnabled = false,
+}: EditorMDXProps) {
 	// Create a ref to the editor component
 	const ref = React.useRef<MDXEditorMethods>(null)
 
@@ -206,18 +211,20 @@ También puedes combinar **texto en negrita** con <Pill variant="pink" size="md"
 	]
 
 	return (
-		<div>
-			<div className="flex flex-wrap items-center justify-center gap-2 pb-4">
-				<Button type="button" variant="outline" size="sm" onClick={clearEditor}>
-					<span className="hidden sm:inline">Limpiar</span>
-					<span className="sm:hidden">🗑️</span>
-				</Button>
+		<div className="min-w-0">
+			{submitTextEnabled ? (
+				<div className="flex flex-wrap items-center justify-center gap-2 pb-4">
+					<Button type="button" variant="outline" size="sm" onClick={clearEditor}>
+						<span className="hidden sm:inline">Limpiar</span>
+						<span className="sm:hidden">🗑️</span>
+					</Button>
 
-				<Button type="submit" variant="default" size="sm">
-					<span className="hidden sm:inline">{submitText}</span>
-					<span className="sm:hidden">💾</span>
-				</Button>
-			</div>
+					<Button type="submit" variant="default" size="sm">
+						<span className="hidden sm:inline">{submitText}</span>
+						<span className="sm:hidden">💾</span>
+					</Button>
+				</div>
+			) : null}
 
 			{/* MDX Editor */}
 			<div className="border-border relative rounded-lg border p-1">
@@ -255,7 +262,8 @@ También puedes combinar **texto en negrita** con <Pill variant="pink" size="md"
 
 									<InsertTable />
 									<CreateLink />
-									<InsertImage />
+									<ListsToggle />
+									{imgEnabled && <InsertImage />}
 
 									<Separator />
 
