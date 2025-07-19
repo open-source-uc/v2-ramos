@@ -25,7 +25,7 @@ const resources = await getCollection('resources')
 			resourceURL="/resources/documentation"
 		/>
 		{
-			resources.map((resource) => {
+			resources?.map((resource) => {
 				const { title, description, readtime, author } = resource.data
 				return (
 					<ResourceCard
