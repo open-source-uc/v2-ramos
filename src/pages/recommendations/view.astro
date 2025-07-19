@@ -58,7 +58,7 @@ try {
 					buttonHref: '/recommendations',
 				}}
 			>
-				<MarkdownReviewView path={recommendation.content_path} client:load />
+				<MarkdownReviewView imgDisabled={false} path={recommendation.content_path} client:load />
 			</ContentPage>
 		) : null
 	}

@@ -58,7 +58,7 @@ try {
 					buttonHref: '/blogs',
 				}}
 			>
-				<MarkdownReviewView path={blog.content_path} client:load />
+				<MarkdownReviewView imgDisabled={false} path={blog.content_path} client:load />
 			</ContentPage>
 		) : null
 	}
