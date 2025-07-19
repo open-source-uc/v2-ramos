@@ -47,6 +47,7 @@ export function MarkdownReviewView({ path }: { path: string }) {
 							</Pill>
 						)
 					},
+					img: (str) => null,
 				}}
 			>
 				{text}
