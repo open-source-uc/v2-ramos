@@ -30,7 +30,7 @@ export function ShareReviewButton({
 		return await toPng(element, {
 			cacheBust: true,
 			backgroundColor: '#ffffff',
-			pixelRatio: 2,
+			pixelRatio: 1,
 		})
 	}
 
@@ -40,7 +40,7 @@ export function ShareReviewButton({
 			const dataUrl = await getImageDataUrl()
 			const link = document.createElement('a')
 
-			link.download = 'resena.png'
+			link.download = `review-${targetElementId}.png`
 			link.href = dataUrl
 			document.body.appendChild(link)
 			link.click()
