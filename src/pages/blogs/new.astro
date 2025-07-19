@@ -30,9 +30,7 @@ let messageType = ''
 const result = Astro.getActionResult(actions.createBlog)
 
 if (result && !result.error) {
-	return Astro.redirect(
-		`/blogs/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.blogTitle)}`
-	)
+	return Astro.redirect(`/blogs/view?id=${result.data.articleId}`)
 } else if (result?.error) {
 	return Astro.redirect('/blogs')
 }

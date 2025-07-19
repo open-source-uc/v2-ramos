@@ -27,9 +27,7 @@ let messageType = ''
 const result = Astro.getActionResult(actions.createRecommendation)
 
 if (result && !result.error) {
-	return Astro.redirect(
-		`/recommendations/view?author=${createSlug(result.data.organizationName)}&title=${createSlug(result.data.recommendationTitle)}`
-	)
+	return Astro.redirect(`/recommendations/view?id=${result.data.articleId}`)
 } else if (result?.error) {
 	return Astro.redirect('/recommendations')
 }

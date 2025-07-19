@@ -803,8 +803,7 @@ export const server = {
 				return {
 					message: 'Blog creado exitosamente',
 					code: 201,
-					organizationName: organizationData.organization_name,
-					blogTitle: state.title,
+					articleId: String(blogId),
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {
@@ -1187,8 +1186,7 @@ export const server = {
 				return {
 					message: 'Recomendación creada exitosamente',
 					code: 201,
-					organizationName: organizationData.organization_name,
-					recommendationTitle: state.title,
+					articleId: String(recommendationId),
 				}
 			} catch (error) {
 				if (error instanceof ActionError) {

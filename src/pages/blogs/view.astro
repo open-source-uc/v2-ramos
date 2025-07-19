@@ -21,12 +21,12 @@ try {
 	const articleId = url.searchParams.get('id')
 
 	if (!articleId) {
-		return Astro.redirect('/recommendations')
+		return Astro.redirect('/blogs')
 	}
 
 	blog = (await getBlogById(Astro.locals, articleId)) ?? null
 	if (!blog) {
-		return Astro.redirect('/recommendations')
+		return Astro.redirect('/blogs')
 	}
 
 	const organizationRes = await fetch(

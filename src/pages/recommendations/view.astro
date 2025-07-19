@@ -25,6 +25,9 @@ try {
 	}
 
 	recommendation = await getRecommendationById(Astro.locals, recommendationId)
+	if (!recommendation) {
+		return Astro.redirect('/recommendations')
+	}
 
 	const organizationRes = await fetch(
 		new URL(`/api/organization/${recommendation?.organization_id}`, config.AUTHURL)
