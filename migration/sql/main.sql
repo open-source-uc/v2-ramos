@@ -70,9 +70,6 @@ CREATE TABLE user_vote_review (
     FOREIGN KEY (review_id) REFERENCES course_reviews(id)
 );
 
-CREATE INDEX idx_user_vote_review_reviewid_vote
-ON user_vote_review(review_id, vote);
-
 
 -- Índices simples para course_summary (orden descendente para métricas numéricas)
 CREATE INDEX idx_course_summary_likes ON course_summary(likes DESC);
