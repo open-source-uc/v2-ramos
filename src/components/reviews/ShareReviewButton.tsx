@@ -39,6 +39,7 @@ export function ShareReviewButton({
 		try {
 			const dataUrl = await getImageDataUrl()
 			const link = document.createElement('a')
+
 			link.download = 'resena.png'
 			link.href = dataUrl
 			document.body.appendChild(link)
