@@ -31,15 +31,8 @@ export const getCourseBySigle = async (locals: App.Locals, sigle: string) => {
 export const getCourseReviews = async (
 	locals: App.Locals,
 	sigle: string,
-	limit: number = 20,
-	sortBy: 'recent' | 'positivity' = 'recent'
+	limit: number = 40,
 ) => {
-	let orderClause = 'ORDER BY updated_at DESC'
-
-	if (sortBy === 'positivity') {
-		// Sort by positivity: superlikes (2) first, then likes (1), then dislikes (0)
-		orderClause = 'ORDER BY like_dislike DESC, updated_at DESC'
-	}
 
 	const result = await locals.runtime.env.DB.prepare(
 		`
@@ -55,10 +48,11 @@ export const getCourseReviews = async (
       semester_taken,
       comment_path,
       created_at,
-      updated_at
+      updated_at,
+			votes
     FROM course_reviews 
     WHERE course_sigle = ? AND status != 3
-    ${orderClause}
+    ORDER BY votes DESC, created_at DESC
     LIMIT ?
   `
 	)
@@ -86,6 +80,7 @@ export const getCourseReviewByUserIdAndSigle = async (
       year_taken,
       semester_taken,
       comment_path,
+			votes,
       created_at,
       updated_at
     FROM course_reviews 

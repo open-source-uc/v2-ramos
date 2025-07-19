@@ -21,7 +21,7 @@ const { headerTitle, headerSubtitle } = Astro.props as Props
 			>
 				{headerTitle}
 			</h1>
-			<p class="text-muted-foreground text-sm sm:text-base lg:text-lg">
+			<p class="text-muted-foreground sm: text-sm lg:text-lg">
 				{headerSubtitle}
 			</p>
 		</div>
@@ -32,10 +32,10 @@ const { headerTitle, headerSubtitle } = Astro.props as Props
 <div class="mb-8 grid min-w-0 grid-cols-1 gap-4 sm:mb-12 sm:gap-6 lg:grid-cols-2 lg:gap-8">
 	<!-- Consejos para escribir -->
 	<section class="border-border min-w-0 rounded-md border p-4 sm:p-6" aria-labelledby="tips-title">
-		<h3 id="tips-title" class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg">
+		<h3 id="tips-title" class="text-foreground mb-3 text-lg font-semibold sm:mb-4">
 			💡 Consejos para escribir
 		</h3>
-		<ul class="text-muted-foreground space-y-2 text-xs sm:text-sm" role="list">
+		<ul class="text-muted-foreground space-y-2 text-lg" role="list">
 			<li class="flex items-start gap-2">
 				<span class="mt-1 flex-shrink-0 text-green-500">•</span>
 				<span class="min-w-0">Usa un título descriptivo y atractivo</span>
@@ -60,25 +60,22 @@ const { headerTitle, headerSubtitle } = Astro.props as Props
 		class="border-border min-w-0 rounded-md border p-4 sm:p-6"
 		aria-labelledby="components-title"
 	>
-		<h3
-			id="components-title"
-			class="text-foreground mb-3 text-base font-semibold sm:mb-4 sm:text-lg"
-		>
+		<h3 id="components-title" class="text-foreground mb-3 text-lg font-semibold sm:mb-4">
 			🧩 Componentes disponibles
 		</h3>
 		<div class="space-y-2 sm:space-y-3">
 			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Pills</h4>
+				<h4 class="text-foreground mb-1 text-lg font-medium">Pills</h4>
 				<p class="text-muted-foreground text-xs">
 					Etiquetas coloridas para destacar información importante
 				</p>
 			</div>
 			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Tablas</h4>
+				<h4 class="text-foreground mb-1 text-lg font-medium">Tablas</h4>
 				<p class="text-muted-foreground text-xs">Organiza datos de manera clara y estructurada</p>
 			</div>
 			<div class="bg-muted/50 min-w-0 rounded-lg p-2 sm:p-3">
-				<h4 class="text-foreground mb-1 text-xs font-medium sm:text-sm">Imágenes</h4>
+				<h4 class="text-foreground mb-1 text-lg font-medium">Imágenes</h4>
 				<p class="text-muted-foreground text-xs">Añade imágenes para complementar tu contenido</p>
 			</div>
 		</div>

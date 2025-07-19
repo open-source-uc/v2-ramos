@@ -43,6 +43,7 @@ export interface CourseReview {
 	status: number // 0: pending, 1: approved, 2: reported, 3: hidden
 	created_at: string
 	updated_at: string
+	votes: number
 }
 
 export interface Organization {

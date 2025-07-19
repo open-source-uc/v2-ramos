@@ -39,7 +39,7 @@ const tagsData = blogsTags
 ---
 
 <Layout title="Crear Blog">
-	<main class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+	<div class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
 		<!-- Estado del formulario -->
 		{
 			message && (
@@ -100,11 +100,16 @@ const tagsData = blogsTags
 
 						<!-- Editor MDX -->
 						<div class="min-w-0">
-							<EditorMDX submitText="Publicar Blog" client:only="react" />
+							<EditorMDX
+								submitTextEnabled
+								imgEnabled
+								submitText="Publicar Blog"
+								client:only="react"
+							/>
 						</div>
 					</form>
 				</div>
 			</article>
 		</section>
-	</main>
+	</div>
 </Layout>

@@ -6,6 +6,7 @@ import { Banner } from '@/components/ui/banner'
 import { Toaster } from '@/components/ui/sonner'
 import CommandWrapper from '@/components/features/command/CommandWrapper'
 import MainHead from '@/layouts/MainHead.astro'
+import { getToken } from '@/lib/auth'
 
 const {
 	title = 'BuscaRamos',
@@ -14,6 +15,7 @@ const {
 	frontmatter,
 	robots,
 } = Astro.props
+
 ---
 
 <!doctype html>

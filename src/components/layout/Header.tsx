@@ -120,10 +120,7 @@ export default function Header() {
 
 						<div className="flex items-center gap-2 text-nowrap">
 							<CommandSearchTrigger />
-							<ButtonNavbar
-								text="CUENTA OSUC"
-								url={`https://auth.osuc.dev/?ref=${typeof window !== 'undefined' ? new URL(window.location.href).toString() : ''}`}
-							/>
+							<ButtonNavbar text="CUENTA OSUC" url="/profile" />
 						</div>
 					</div>
 					<div className="flex w-full items-center justify-between">
