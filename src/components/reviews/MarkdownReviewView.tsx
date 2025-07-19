@@ -12,7 +12,7 @@ export function MarkdownReviewView({
 	imgDisabled = true,
 }: {
 	path: string
-	imgDisabled: boolean
+	imgDisabled?: boolean
 }) {
 	const [text, setText] = useState('Cargando...')
 	const [error, setError] = useState(false)

@@ -104,6 +104,7 @@ const reportSuccessMessage = reportResult?.data?.message;
 // Get success message from URL params (from review creation/update)
 const successMessage = Astro.url.searchParams.get('success');
 
+
 ---
 
 <Layout>
@@ -362,13 +363,7 @@ const successMessage = Astro.url.searchParams.get('success');
                         <div class="space-y-6">
                             {reviews.map((review, index) => (
                                 <div class="relative bg-background border border-border flex flex-col gap-4 rounded-sm p-5">
-                                    {/* Número de reviews */}
-																		<VoteReview 
-																		client:load
-																		initialVotes={review.votes} 
-																		reviewId={review.id}>
-																		
-																		</VoteReview>
+																		<VoteReview initialVotes={review.votes} reviewId={review.id} client:load></VoteReview>
                                     {/* Header con sentiment y metadata */}
                                     <div class="items-start justify-between pr-8 gap-2">
                                         <div class="flex items-center gap-2">

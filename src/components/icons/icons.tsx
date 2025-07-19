@@ -772,25 +772,25 @@ export function ColorIcon({ className }: { className?: string }) {
 }
 
 export function VoteArrow({
-  className,
-  direction = "up"
+	className,
+	direction = "up"
 }: {
-  className?: string;
-  direction?: "up" | "down";
+	className?: string;
+	direction?: "up" | "down";
 }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg"
-      height="24px"
-      viewBox="0 -960 960 960" 
-      width="24px" 
-      fill="#e3e3e3"
-      className={className}
-      style={{
-        transform: direction === "down" ? "rotate(180deg)" : "none"
-      }}
-    >
-      <path d="M200-200v-80h560v80H200Zm14-160 266-400 266 400H214Zm266-80Zm-118 0h236L480-616 362-440Z"/>
-    </svg>
-  )
+	return (
+		<svg 
+			xmlns="http://www.w3.org/2000/svg"
+			height="24px"
+			viewBox="0 -960 960 960" 
+			width="24px" 
+			fill="#e3e3e3"
+			className={className}
+			style={{
+				transform: direction === "down" ? "rotate(180deg)" : "none"
+			}}
+		>
+			<path d="M200-200v-80h560v80H200Zm14-160 266-400 266 400H214Zm266-80Zm-118 0h236L480-616 362-440Z"/>
+		</svg>
+	)
 }
