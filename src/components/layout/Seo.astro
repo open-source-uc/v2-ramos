@@ -2,7 +2,7 @@
 import siteData from '../../data/siteData.json'
 import jsonLDGenerator from '../../ts/jsonLD'
 
-const { title, description, url = Astro.url, image, frontmatter, robots } = Astro.props
+const { title, description, url = Astro.url, image, frontmatter } = Astro.props
 
 const jsonLD = jsonLDGenerator({
 	type: frontmatter ? 'post' : 'website',
@@ -34,8 +34,6 @@ const jsonLD = jsonLDGenerator({
 <meta name="twitter:image" content={image?.src || siteData.image.src} />
 <meta name="twitter:image:alt" content={title} />
 <meta name="twitter:domain" content={import.meta.env.SITE} />
-
-{robots && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- JSON LD -->
 <Fragment set:html={jsonLD} />
