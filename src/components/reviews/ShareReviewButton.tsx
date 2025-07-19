@@ -60,7 +60,7 @@ export function ShareReviewButton({
 			if (navigator.share) {
 				await navigator.share({
 					title,
-					url: `${window.location.origin}/${path}`,
+					url: `${window.location.origin}${path}`,
 				})
 			} else {
 				await navigator.clipboard.writeText(url)
