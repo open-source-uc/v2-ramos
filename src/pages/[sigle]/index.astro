@@ -58,7 +58,7 @@ if (!courseData) {
 const course = courseData.data;
 
 const c = await getCourseBySigle(Astro.locals, sigle);
-const reviews = await getCourseReviews(Astro.locals, sigle, 10);
+const reviews = await getCourseReviews(Astro.locals, sigle);
 
 // Get prerequisites with names
 const prerequisites = await getPrerequisitesWithNames(course.req);

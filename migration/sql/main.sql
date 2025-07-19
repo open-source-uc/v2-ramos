@@ -3,8 +3,9 @@
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
--- DROP TABLE IF EXISTS course_reviews;
--- DROP TABLE IF EXISTS course_summary;
+DROP TABLE IF EXISTS course_reviews;
+DROP TABLE IF EXISTS course_summary;
+DROP TABLE IF EXISTS user_vote_review;
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
@@ -30,7 +31,8 @@ CREATE TABLE course_summary (
     votes_optional_attendance INTEGER DEFAULT 0,
 
     avg_weekly_hours REAL DEFAULT 0.0,
-    sort_index INTEGER DEFAULT 0
+    sort_index INTEGER DEFAULT 0,
+    votes INTEGER DEFAULT 0
 );
 
 -- Luego se crea course_reviews
@@ -57,6 +59,43 @@ CREATE TABLE course_reviews (
 
     FOREIGN KEY (course_sigle) REFERENCES course_summary(sigle)
 );
+
+CREATE TABLE user_vote_review (
+    user_id INTEGER NOT NULL,
+    review_id INTEGER NOT NULL,
+    vote INTEGER CHECK (vote IN (-1, 1)) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, review_id),
+    FOREIGN KEY (review_id) REFERENCES course_reviews(id)
+);
+
+CREATE TRIGGER trg_vote_insert
+AFTER INSERT ON user_vote_review
+BEGIN
+    UPDATE course_reviews
+    SET votes = votes + NEW.vote
+    WHERE id = NEW.review_id;
+END;
+
+CREATE TRIGGER trg_vote_update
+AFTER UPDATE ON user_vote_review
+WHEN OLD.vote != NEW.vote
+BEGIN
+    UPDATE course_reviews
+    SET votes = votes - OLD.vote + NEW.vote
+    WHERE id = NEW.review_id;
+END;
+
+CREATE TRIGGER trg_vote_delete
+AFTER DELETE ON user_vote_review
+BEGIN
+    UPDATE course_reviews
+    SET votes = votes - OLD.vote
+    WHERE id = OLD.review_id;
+END;
+
+CREATE INDEX idx_user_vote_review_reviewid_vote
+ON user_vote_review(review_id, vote);
 
 
 -- Índices simples para course_summary (orden descendente para métricas numéricas)
