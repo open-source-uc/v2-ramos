@@ -39,7 +39,7 @@ export default function Header() {
 			<MobileHeader />
 
 			{/* Desktop/Tablet Header */}
-			<header className="space-between tablet:space-x-8 tablet:flex hidden w-full items-center px-4 py-8">
+			<header className="space-between tablet:space-x-8 tablet:flex hidden w-full items-center px-8 py-8">
 				<a href="/">
 					<img
 						src="/logos/Placeholder.svg"

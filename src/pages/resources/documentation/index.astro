@@ -2,6 +2,15 @@
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { CodeSquare } from 'lucide-react'
+import {
+	BuildingIcon,
+	ClockIcon,
+	QuestionIcon,
+	CalendarIcon,
+	SearchIcon,
+} from '@/components/icons/icons'
+import { Pill } from '@/components/ui/pill'
+import { Button } from '@/components/ui/button'
 
 const docs = await getCollection('docs')
 const length = docs.length
@@ -9,44 +18,270 @@ docs.sort((a, b) => a.data.order - b.data.order)
 // Put faq at the end
 const faq = docs.shift()
 docs.push(faq)
+
+// Group docs by category for better organization
+const guideDocs = docs.filter((doc) => doc.data.order > 0 && doc.data.order <= 3)
+const advancedDocs = docs.filter((doc) => doc.data.order > 3)
+const faqDocs = docs.filter((doc) => doc.data.order === 0)
 ---
 
 <Layout>
-	<section class="tablet:py-20 mx-auto max-w-4xl px-4 py-16">
-		<div class="mb-12 text-center">
-			<h2 class="tablet:text-3xl desktop:text-4xl text-foreground mb-4 text-2xl font-bold">
-				Documentación de BuscaRamos
-			</h2>
-			<p class="text-muted-foreground mx-auto max-w-2xl text-lg">
-				Encuentra guías, tutoriales y ayuda para sacarle el máximo provecho a la plataforma.
-			</p>
-		</div>
-		<div class="tablet:grid-cols-2 grid grid-cols-1 gap-6">
-			{
-				docs.map((doc) => (
-					<a
-						href={`/resources/documentation/${doc.slug}`}
-						tabindex="0"
-						aria-label={`Ver documentación: ${doc.data.title}`}
-					>
-						<article class="border-border bg-background hover:bg-card flex items-center gap-4 rounded-md border-2 p-6 transition-colors duration-300 focus-within:ring-2 hover:border-yellow-600 active:border-indigo-600">
-							<div class="bg-primary-100 text-primary-700 flex h-12 w-12 items-center justify-center rounded-lg p-3 text-lg font-bold">
-								{doc.data.order > 0 ? <span>{doc.data.order}</span> : <span>•</span>}
-							</div>
-							<div class="min-w-0 flex-1">
-								<h3 class="text-card-foreground truncate text-xl font-semibold transition-colors">
-									{doc.data.title}
-								</h3>
-								{doc.data.description && (
-									<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">
-										{doc.data.description}
+	<div class="mx-auto max-w-6xl px-4 py-6">
+		<!-- Documentation Header -->
+		<header class="border-border mb-8 border-b pb-8">
+			<div class="mb-6 flex items-center justify-between">
+				<div>
+					<div class="mb-2 flex items-center gap-3">
+						<h1 class="text-foreground text-4xl font-bold">Documentación</h1>
+						<Pill variant="blue" size="sm">
+							{length} guías
+						</Pill>
+					</div>
+					<p class="text-muted-foreground text-lg">Tu manual completo para dominar BuscaRamos</p>
+				</div>
+				<div class="tablet:flex text-muted-foreground hidden items-center gap-2 text-sm">
+					<CalendarIcon className="h-4 w-4" />
+					<span>Última actualización: Enero 2025</span>
+				</div>
+			</div>
+
+			<!-- Quick Navigation -->
+			<nav class="flex flex-wrap gap-2">
+				<Button variant="ghost" size="sm" className="hover:bg-accent text-sm">
+					🚀 Primeros Pasos
+					<span class="bg-muted text-muted-foreground ml-2 rounded-full px-2 py-1 text-xs">
+						{guideDocs.length}
+					</span>
+				</Button>
+				<Button variant="ghost" size="sm" className="hover:bg-accent text-sm">
+					⚡ Avanzado
+					<span class="bg-muted text-muted-foreground ml-2 rounded-full px-2 py-1 text-xs">
+						{advancedDocs.length}
+					</span>
+				</Button>
+				<Button variant="ghost" size="sm" className="hover:bg-accent text-sm">
+					❓ FAQ
+					<span class="bg-muted text-muted-foreground ml-2 rounded-full px-2 py-1 text-xs">
+						{faqDocs.length}
+					</span>
+				</Button>
+			</nav>
+		</header>
+
+		<!-- Main Content Layout -->
+		<div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+			<!-- Main Documentation Content -->
+			<main class="lg:col-span-3">
+				<!-- Featured Guide -->
+				{
+					guideDocs.length > 0 && (
+						<section class="mb-8">
+							<div class="border-border overflow-hidden rounded-lg border bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20">
+								<div class="p-8">
+									<div class="mb-4 flex items-center gap-2">
+										<Pill variant="green" size="sm">
+											Recomendado
+										</Pill>
+										<span class="text-muted-foreground text-sm">·</span>
+										<span class="text-muted-foreground text-sm">Comienza aquí</span>
+									</div>
+									<h2 class="mb-4 text-2xl font-bold">{guideDocs[0].data.title}</h2>
+									<p class="text-muted-foreground mb-6 max-w-2xl text-lg">
+										{guideDocs[0].data.description ||
+											'Guía esencial para empezar a usar BuscaRamos de manera efectiva.'}
 									</p>
-								)}
+									<div class="flex items-center gap-4">
+										<Button
+											variant="default"
+											href={`/resources/documentation/${guideDocs[0].slug}`}
+										>
+											Empezar ahora
+										</Button>
+										<div class="text-muted-foreground flex items-center gap-2 text-sm">
+											<ClockIcon className="h-4 w-4" />
+											<span>5 min de lectura</span>
+										</div>
+									</div>
+								</div>
 							</div>
-						</article>
-					</a>
-				))
-			}
+						</section>
+					)
+				}
+
+				<!-- Documentation Sections -->
+				<div class="space-y-8">
+					<!-- Getting Started -->
+					{
+						guideDocs.length > 0 && (
+							<section>
+								<div class="mb-6 flex items-center justify-between">
+									<h3 class="text-xl font-semibold">🚀 Primeros Pasos</h3>
+									<span class="text-muted-foreground text-sm">{guideDocs.length} guías</span>
+								</div>
+								<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+									{guideDocs.map((doc) => (
+										<a
+											href={`/resources/documentation/${doc.slug}`}
+											class="group block"
+											aria-label={`Ver documentación: ${doc.data.title}`}
+										>
+											<article class="border-border bg-accent hover:bg-accent/80 rounded-lg border p-6 transition-all duration-200 group-hover:shadow-md">
+												<div class="flex items-start gap-4">
+													<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-sm font-bold text-green-700 dark:bg-green-900/20 dark:text-green-400">
+														{doc.data.order}
+													</div>
+													<div class="min-w-0 flex-1">
+														<h4 class="text-foreground line-clamp-1 font-semibold transition-colors group-hover:text-blue-600">
+															{doc.data.title}
+														</h4>
+														{doc.data.description && (
+															<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">
+																{doc.data.description}
+															</p>
+														)}
+													</div>
+												</div>
+											</article>
+										</a>
+									))}
+								</div>
+							</section>
+						)
+					}
+
+					<!-- Advanced Guides -->
+					{
+						advancedDocs.length > 0 && (
+							<section>
+								<div class="mb-6 flex items-center justify-between">
+									<h3 class="text-xl font-semibold">⚡ Guías Avanzadas</h3>
+									<span class="text-muted-foreground text-sm">{advancedDocs.length} guías</span>
+								</div>
+								<div class="grid grid-cols-1 gap-4">
+									{advancedDocs.map((doc) => (
+										<a
+											href={`/resources/documentation/${doc.slug}`}
+											class="group block"
+											aria-label={`Ver documentación: ${doc.data.title}`}
+										>
+											<article class="border-border bg-accent hover:bg-accent/80 rounded-lg border p-6 transition-all duration-200 group-hover:shadow-md">
+												<div class="flex items-start gap-4">
+													<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-sm font-bold text-purple-700 dark:bg-purple-900/20 dark:text-purple-400">
+														{doc.data.order}
+													</div>
+													<div class="min-w-0 flex-1">
+														<h4 class="text-foreground font-semibold transition-colors group-hover:text-purple-600">
+															{doc.data.title}
+														</h4>
+														{doc.data.description && (
+															<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">
+																{doc.data.description}
+															</p>
+														)}
+													</div>
+												</div>
+											</article>
+										</a>
+									))}
+								</div>
+							</section>
+						)
+					}
+
+					<!-- FAQ Section -->
+					{
+						faqDocs.length > 0 && (
+							<section>
+								<div class="mb-6 flex items-center justify-between">
+									<h3 class="text-xl font-semibold">❓ Preguntas Frecuentes</h3>
+									<span class="text-muted-foreground text-sm">{faqDocs.length} temas</span>
+								</div>
+								<div class="grid grid-cols-1 gap-4">
+									{faqDocs.map((doc) => (
+										<a
+											href={`/resources/documentation/${doc.slug}`}
+											class="group block"
+											aria-label={`Ver documentación: ${doc.data.title}`}
+										>
+											<article class="border-border bg-accent hover:bg-accent/80 rounded-lg border p-6 transition-all duration-200 group-hover:shadow-md">
+												<div class="flex items-start gap-4">
+													<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400">
+														<QuestionIcon className="h-5 w-5 fill-current" />
+													</div>
+													<div class="min-w-0 flex-1">
+														<h4 class="text-foreground font-semibold transition-colors group-hover:text-orange-600">
+															{doc.data.title}
+														</h4>
+														{doc.data.description && (
+															<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">
+																{doc.data.description}
+															</p>
+														)}
+													</div>
+												</div>
+											</article>
+										</a>
+									))}
+								</div>
+							</section>
+						)
+					}
+				</div>
+			</main>
+
+			<!-- Documentation Sidebar -->
+			<aside class="lg:col-span-1">
+				<div class="sticky top-8 space-y-6">
+					<!-- Progress Tracker -->
+					<div class="bg-accent border-border rounded-lg border p-6">
+						<h4 class="mb-4 font-semibold">Tu Progreso</h4>
+						<div class="space-y-3">
+							<div class="flex justify-between text-sm">
+								<span class="text-muted-foreground">Completado:</span>
+								<span class="font-medium">0/{length}</span>
+							</div>
+							<div class="bg-muted h-2 w-full rounded-full">
+								<div class="h-2 w-0 rounded-full bg-blue-500"></div>
+							</div>
+							<p class="text-muted-foreground text-xs">¡Comienza con la primera guía!</p>
+						</div>
+					</div>
+
+					<!-- Quick Actions -->
+					<div class="bg-accent border-border rounded-lg border p-6">
+						<h4 class="mb-4 font-semibold">Acciones Rápidas</h4>
+						<div class="space-y-3">
+							<Button variant="outline" size="sm" className="w-full justify-start">
+								<SearchIcon className="mr-2 h-4 w-4" />
+								Buscar en docs
+							</Button>
+							<a
+								href="#"
+								class="text-muted-foreground hover:text-foreground block text-sm transition-colors"
+							>
+								📋 Imprimir todo
+							</a>
+							<a
+								href="#"
+								class="text-muted-foreground hover:text-foreground block text-sm transition-colors"
+							>
+								📧 Reportar error
+							</a>
+						</div>
+					</div>
+
+					<!-- Help -->
+					<div
+						class="border-border rounded-lg border bg-gradient-to-br from-blue-50 to-indigo-50 p-6 dark:from-blue-950/20 dark:to-indigo-950/20"
+					>
+						<h4 class="mb-2 font-semibold">¿Necesitas Ayuda?</h4>
+						<p class="text-muted-foreground mb-4 text-sm">
+							¿No encuentras lo que buscas? Contáctanos directamente.
+						</p>
+						<Button variant="outline" size="sm" className="w-full"> Contactar Soporte </Button>
+					</div>
+				</div>
+			</aside>
 		</div>
-	</section>
+	</div>
 </Layout>
