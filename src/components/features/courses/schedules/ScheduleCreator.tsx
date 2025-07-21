@@ -190,6 +190,7 @@ function ScheduleGrid({
 	selectedCourses,
 	courseSectionsData,
 	courseOptions,
+	hiddenCourses = [],
 	onApplySuggestions,
 	colorMode,
 }: {
@@ -197,6 +198,7 @@ function ScheduleGrid({
 	selectedCourses: string[]
 	courseSectionsData: CourseSections
 	courseOptions: CourseOption[]
+	hiddenCourses?: string[]
 	onApplySuggestions: (newCourses: string[]) => void
 	colorMode: 'course' | 'class-type'
 }) {
@@ -247,6 +249,9 @@ function ScheduleGrid({
 													colorMode === 'class-type'
 														? getClassTypeColor(classInfo.type)
 														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
+												const courseIsHidden = hiddenCourses.includes(`${classInfo.courseId}-${classInfo.section}-${day}-${dayIndex}`)
+												console.log('class', classInfo.courseId,'day', day,'dayIndex', dayIndex, 'index', index)
+												if (courseIsHidden) return null
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
