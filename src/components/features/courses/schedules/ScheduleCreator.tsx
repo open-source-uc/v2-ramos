@@ -247,7 +247,6 @@ function ScheduleGrid({
 													colorMode === 'class-type'
 														? getClassTypeColor(classInfo.type)
 														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
-												console.log(classInfo)
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
