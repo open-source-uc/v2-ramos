@@ -169,6 +169,7 @@ export interface ScheduleBlock {
 	classroom: string // Ubicación del aula
 	courseId: string // Identificador del curso
 	section: string // Identificador de la sección
+	campus?: string // Campus de la sección
 }
 
 export interface CourseSection {

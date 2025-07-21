@@ -33,3 +33,5 @@ CLAUDE.md
 
 # Nix shell config
 shell.nix
+# Backup files
+.backup-*
