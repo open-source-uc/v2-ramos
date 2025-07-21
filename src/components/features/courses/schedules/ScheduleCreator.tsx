@@ -63,6 +63,7 @@ interface CourseOption {
 	seccion: string
 	nombre: string
 	nrc: string
+	campus: string
 }
 
 // Helper to generate course options from fetched data
@@ -75,6 +76,7 @@ function getCourseOptions(courses: any[]): CourseOption[] {
 			seccion,
 			nombre: course.name || 'Sin nombre',
 			nrc: course.sections[seccion].nrc || 'N/A',
+			campus: course.sections[seccion].campus || 'Sin campus',
 		}))
 	})
 }
@@ -166,7 +168,7 @@ function CourseSearch({
 														{option.sigle} - {option.nombre}
 													</span>
 													<span className="text-muted-foreground text-sm">
-														Sección {option.seccion}
+														Sección {option.seccion} - {option.campus}
 													</span>
 												</div>
 											</CommandItem>
@@ -245,7 +247,7 @@ function ScheduleGrid({
 													colorMode === 'class-type'
 														? getClassTypeColor(classInfo.type)
 														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
-
+												console.log(classInfo)
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
@@ -262,6 +264,9 @@ function ScheduleGrid({
 																</div>
 																<div className="tablet:text-[10px] text-[9px] opacity-80">
 																	{getClassTypeLong(classInfo.type)}
+																</div>
+																<div className='tablet:text-[10px] text-[9px] opacity-80'>
+																	{classInfo.campus}
 																</div>
 															</div>
 														</Pill>
@@ -459,7 +464,7 @@ export default function ScheduleCreator() {
 	const getCourseInfo = (courseId: string) => {
 		const option = courseOptions.find((opt) => opt.id === courseId)
 		return (
-			option || { id: courseId, sigle: '', seccion: '', nombre: 'Curso no encontrado', nrc: 'N/A' }
+			option || { id: courseId, sigle: '', seccion: '', nombre: 'Curso no encontrado', nrc: 'N/A', campus: 'Sin campus' }
 		)
 	}
 
@@ -588,6 +593,9 @@ export default function ScheduleCreator() {
 												</span>
 												<span className="text-xs opacity-80">
 													Sección {courseInfo.seccion} - NRC {courseInfo.nrc}
+												</span>
+												<span className='text-xs opacity-80'>
+													Campus: {courseInfo.campus || 'Sin campus'}
 												</span>
 											</div>
 											{!locked && (
