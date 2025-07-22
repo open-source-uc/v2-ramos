@@ -198,7 +198,7 @@ function ScheduleGrid({
 	selectedCourses: string[]
 	courseSectionsData: CourseSections
 	courseOptions: CourseOption[]
-	hiddenCourses?: string[]
+	hiddenCourses?: `${string}-${string}-${string}-${string}`[]
 	onApplySuggestions: (newCourses: string[]) => void
 	colorMode: 'course' | 'class-type'
 }) {
@@ -249,9 +249,28 @@ function ScheduleGrid({
 													colorMode === 'class-type'
 														? getClassTypeColor(classInfo.type)
 														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
-												const courseIsHidden = hiddenCourses.includes(`${classInfo.courseId}-${classInfo.section}-${day}-${dayIndex}`)
-												console.log('class', classInfo.courseId,'day', day,'dayIndex', dayIndex, 'index', index)
-												if (courseIsHidden) return null
+												const courseIsHidden = hiddenCourses.includes(
+													`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+												)
+												console.log(
+													`${classInfo.courseId}-${classInfo.section}-${day}-${time}`,
+													courseIsHidden
+												)
+												if (courseIsHidden)
+													return (
+														<div
+															key={`${classInfo.courseId}-${classInfo.section}-${index}`}
+															className="w-full"
+														>
+															<Pill className="tablet:text-xs w-full min-w-0 justify-center bg-gray-800 fill-gray-800 px-1.5 py-0.5 text-[10px] text-gray-600">
+																<div className="text-center">
+																	<span className="font-medium">
+																		{classInfo.courseId}-{classInfo.section}
+																	</span>
+																</div>
+															</Pill>
+														</div>
+													)
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
@@ -269,7 +288,7 @@ function ScheduleGrid({
 																<div className="tablet:text-[10px] text-[9px] opacity-80">
 																	{getClassTypeLong(classInfo.type)}
 																</div>
-																<div className='tablet:text-[10px] text-[9px] opacity-80'>
+																<div className="tablet:text-[10px] text-[9px] opacity-80">
 																	{classInfo.campus}
 																</div>
 															</div>
@@ -281,16 +300,15 @@ function ScheduleGrid({
 									)
 								})}
 							</div>
-							
+
 							{/* Lunch break stripe between 12:20 and 14:50 */}
 							{time === '12:20' && (
-								<div className="border-border border-b grid grid-cols-7">
-									<div className="bg-orange-light py-6 px-4 text-left text-sm font-medium">
+								<div className="border-border grid grid-cols-7 border-b">
+									<div className="bg-orange-light px-4 py-6 text-left text-sm font-medium">
 										13:30 - 14:50 <br />
 										Horario de Almuerzo
 									</div>
-									<div className="bg-orange-light/70 col-span-6 flex items-center justify-center p-2 text-center text-sm font-semibold">
-									</div>
+									<div className="bg-orange-light/70 col-span-6 flex items-center justify-center p-2 text-center text-sm font-semibold"></div>
 								</div>
 							)}
 						</div>
@@ -468,7 +486,14 @@ export default function ScheduleCreator() {
 	const getCourseInfo = (courseId: string) => {
 		const option = courseOptions.find((opt) => opt.id === courseId)
 		return (
-			option || { id: courseId, sigle: '', seccion: '', nombre: 'Curso no encontrado', nrc: 'N/A', campus: 'Sin campus' }
+			option || {
+				id: courseId,
+				sigle: '',
+				seccion: '',
+				nombre: 'Curso no encontrado',
+				nrc: 'N/A',
+				campus: 'Sin campus',
+			}
 		)
 	}
 
@@ -598,7 +623,7 @@ export default function ScheduleCreator() {
 												<span className="text-xs opacity-80">
 													Sección {courseInfo.seccion} - NRC {courseInfo.nrc}
 												</span>
-												<span className='text-xs opacity-80'>
+												<span className="text-xs opacity-80">
 													Campus: {courseInfo.campus || 'Sin campus'}
 												</span>
 											</div>
@@ -641,6 +666,7 @@ export default function ScheduleCreator() {
 									selectedCourses={selectedCourses}
 									courseSectionsData={courseSectionsData}
 									courseOptions={courseOptions}
+									hiddenCourses={['MAT1207-1-L-08:20']}
 									onApplySuggestions={handleApplySuggestions}
 									colorMode={colorMode}
 								/>
