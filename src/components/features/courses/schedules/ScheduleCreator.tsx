@@ -33,6 +33,7 @@ import {
 } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { getClassTypeLong, getClassTypeColor } from './ScheduleLegend'
+import generateICSFromSchedule from '@/lib/generateICSFromSchedule'
 import { Search } from '@/components/features/search/SearchInput'
 import { useFuseSearch } from '@/components/hooks/useFuseSearch'
 import {
@@ -42,7 +43,13 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/ui/command'
-
+import {
+	NavigationMenu,
+	NavigationMenuList,
+	NavigationMenuItem,
+	NavigationMenuContent,
+	NavigationMenuTrigger,
+} from '@/components/ui/navigation-menu'
 const ConflictResolver = lazy(() => import('./ConflictResolver'))
 const ScheduleCombinations = lazy(() => import('./ScheduleCombinations'))
 
@@ -186,24 +193,25 @@ function CourseSearch({
 
 // Schedule grid component
 function ScheduleGrid({
-	matrix,
-	selectedCourses,
-	courseSectionsData,
-	courseOptions,
-	hiddenCourses = [],
-	onApplySuggestions,
-	colorMode,
+  matrix,
+  selectedCourses,
+  courseSectionsData,
+  courseOptions,
+  selectedHiddenCourses = [],
+  onApplySuggestions,
+  colorMode,
 }: {
-	matrix: ScheduleMatrix
-	selectedCourses: string[]
-	courseSectionsData: CourseSections
-	courseOptions: CourseOption[]
-	hiddenCourses?: `${string}-${string}-${string}-${string}`[]
-	onApplySuggestions: (newCourses: string[]) => void
-	colorMode: 'course' | 'class-type'
+  matrix: ScheduleMatrix
+  selectedCourses: string[]
+  courseSectionsData: CourseSections
+  courseOptions: CourseOption[]
+  selectedHiddenCourses?: string[]
+  onApplySuggestions: (newCourses: string[]) => void
+  colorMode: 'course' | 'class-type'
 }) {
 	const conflicts = detectScheduleConflicts(matrix)
 	const hasConflicts = conflicts.length > 0
+	const [hiddenCourses, setHiddenCourses] = useState<string[]>(selectedHiddenCourses)
 
 	return (
 		<div className="bg-background border-border overflow-hidden rounded-lg border">
@@ -252,15 +260,20 @@ function ScheduleGrid({
 												const courseIsHidden = hiddenCourses.includes(
 													`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
 												)
-												console.log(
-													`${classInfo.courseId}-${classInfo.section}-${day}-${time}`,
-													courseIsHidden
-												)
 												if (courseIsHidden)
 													return (
 														<div
 															key={`${classInfo.courseId}-${classInfo.section}-${index}`}
-															className="w-full"
+															onClick={() => {
+																setHiddenCourses((prev) =>
+																	prev.filter(
+																		(c) =>
+																			c !==
+																			`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+																	)
+																)
+															}}
+															className="w-full hover:cursor-pointer"
 														>
 															<Pill className="tablet:text-xs w-full min-w-0 justify-center bg-gray-800 fill-gray-800 px-1.5 py-0.5 text-[10px] text-gray-600">
 																<div className="text-center">
@@ -271,10 +284,19 @@ function ScheduleGrid({
 															</Pill>
 														</div>
 													)
+
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
-														className="w-full"
+														onClick={() => {
+															setHiddenCourses((prev) => {
+																prev.push(
+																	`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+																)
+																return [...prev]
+															})
+														}}
+														className="w-full hover:cursor-pointer"
 													>
 														<Pill
 															variant={colorVariant}
@@ -358,6 +380,7 @@ export default function ScheduleCreator() {
 	const hookResult = useCoursesSections()
 	const courses = Array.isArray(hookResult[0]) ? hookResult[0] : []
 	const isLoading = typeof hookResult[1] === 'boolean' ? hookResult[1] : false
+	const [hiddenCourses, setHiddenCourses] = useState<string[]>([])
 
 	// Generate course options from fetched data
 	const courseOptions = getCourseOptions(courses)
@@ -378,6 +401,13 @@ export default function ScheduleCreator() {
 		const availableSections = getAvailableSections(courseId, courseSectionsData)
 		return availableSections.length > 1
 	})
+
+	// Obtener los tipos de clase disponibles en la matriz actual
+	const availableClassTypes = Array.from(
+		new Set(
+			scheduleMatrix.flat(2).map((block) => block.type)
+		)
+	).filter(Boolean)
 
 	const handleCourseSelect = (courseId: string) => {
 		if (addCourseToSchedule(courseId)) {
@@ -464,6 +494,20 @@ export default function ScheduleCreator() {
 		}
 	}
 
+	// Exportar solo un tipo de clase
+	const handleExportICSForType = (type: string) => {
+		generateICSFromSchedule({
+			matrix: scheduleMatrix,
+			courseSectionsData,
+			selectedCourses,
+			semesterStart: new Date(2025, 7, 4), // 4 de agosto 2025
+			semesterEnd: new Date(2025, 11, 5), // 5 de diciembre 2025
+			semesterCode: '2025-2',
+			hiddenCourses,
+			filterType: type,
+		})
+	}
+
 	const getCourseColor = (courseId: string) => {
 		if (colorMode === 'class-type') {
 			// Get the class type from the first schedule block of this course section
@@ -500,6 +544,35 @@ export default function ScheduleCreator() {
 	return (
 		<>
 			<div className="mx-auto max-w-7xl px-4 py-8">
+				{/* Exportar a ICS */}
+				{selectedCourses.length > 0 && availableClassTypes.length > 0 && (
+					<div className="mb-4 flex justify-end">
+						<NavigationMenu>
+							<NavigationMenuList>
+								<NavigationMenuItem>
+									<NavigationMenuTrigger className="gap-2">
+										<CalendarIcon className="h-5 w-5" />
+										Exportar a .ics
+									</NavigationMenuTrigger>
+									<NavigationMenuContent className="min-w-[180px]">
+										<div className="flex flex-col gap-1 p-2">
+											{availableClassTypes.map((type) => (
+												<Button
+													key={type}
+													variant="ghost"
+													className="justify-start"
+													onClick={() => handleExportICSForType(type)}
+												>
+													Exportar {getClassTypeLong(type)}
+												</Button>
+											))}
+										</div>
+									</NavigationMenuContent>
+								</NavigationMenuItem>
+							</NavigationMenuList>
+						</NavigationMenu>
+					</div>
+				)}
 				{/* Course Search */}
 				<div className="bg-accent mb-8">
 					<div className="border-border rounded-lg border p-6">
@@ -666,7 +739,7 @@ export default function ScheduleCreator() {
 									selectedCourses={selectedCourses}
 									courseSectionsData={courseSectionsData}
 									courseOptions={courseOptions}
-									hiddenCourses={['MAT1207-1-L-08:20']}
+									selectedHiddenCourses={hiddenCourses}
 									onApplySuggestions={handleApplySuggestions}
 									colorMode={colorMode}
 								/>
