@@ -1,18 +1,60 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getCollection } from 'astro:content'
-import { SearchableRecommendationsDisplay } from '../../components/features/catalog/SearchableRecommendationsDisplay'
+import type { Recommendations } from '@/types'
+import ContentCard from '@/components/features/blog/BlogCard'
+import NewArticle from '@/components/features/article/NewArticle'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import { getRecommendations } from '@/lib/server/articles'
+let userData = null
+let recommendationsData = null
 
-const recommendations = await getCollection('recommendations')
-const searchParam = Astro.url.searchParams.get('search') || ''
+recommendationsData = await getRecommendations(Astro.locals)
+const token = getToken(Astro.cookies)
+userData = await getUserDataByToken(token)
 ---
 
-<Layout>
-	<main class="container mx-auto py-4">
-		<SearchableRecommendationsDisplay
-			recommendations={recommendations}
-			initialSearchValue={searchParam}
-			client:load
-		/>
-	</main>
+<Layout title="Recomendaciones">
+	<div class="grid md:grid-cols-2 lg:grid-cols-3">
+		<div
+			class="flex h-[60vh] w-full flex-col justify-center md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4 lg:h-[70vh]"
+		>
+			<h1 class="text-center text-3xl font-bold md:text-5xl">
+				Descubre las recomendaciones creadas por la comunidad
+			</h1>
+		</div>
+		<div class="flex justify-end md:col-start-1 md:col-end-3 lg:col-start-1 lg:col-end-4">
+			<NewArticle
+				userData={userData}
+				contentType="recommendation"
+				className="mt-10 mr-2"
+				client:only="react"
+			/>
+		</div>
+		{
+			recommendationsData?.map((rec) => (
+				<div class="w-full p-2">
+					<ContentCard
+						articleId={rec.id}
+						title={rec.title}
+						type="recommendations"
+						authorName={rec.display_name}
+						organizationName={rec.organization_name}
+						description=""
+						readtime={rec.readtime}
+						tags={[]}
+						period_time={rec.period_time}
+						faculty={'faculty' in rec ? rec.faculty : undefined}
+						code={'code' in rec ? rec.code : undefined}
+						qualification={'qualification' in rec ? rec.qualification : undefined}
+						organization_id={'organization_id' in rec ? rec.organization_id : undefined}
+						user_role={'user_role' in rec ? rec.user_role : undefined}
+						user_id={'user_id' in rec ? rec.user_id : undefined}
+						created_at={'created_at' in rec ? rec.created_at : undefined}
+						updated_at={'updated_at' in rec ? rec.updated_at : undefined}
+					/>
+				</div>
+			))
+		}
+	</div>
 </Layout>

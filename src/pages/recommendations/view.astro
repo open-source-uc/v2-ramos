@@ -1,0 +1,65 @@
+---
+import { ContentPage } from '@/components/common'
+import { ClockIcon, EditIcon } from '@/components/icons/icons'
+import { MarkdownReviewView } from '@/components/reviews/MarkdownReviewView'
+import Layout from '@/layouts/Layout.astro'
+
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+import type { Organization, Recommendations } from '@/types'
+import { getRecommendationById } from '@/lib/server/articles'
+import config from '@/lib/const'
+
+let recommendation: Recommendations | null | undefined = null
+let organizationData: Organization | null = null
+let showButton = false
+let token = null
+let userData = null
+
+try {
+	const url = new URL(Astro.request.url)
+	const recommendationId = url.searchParams.get('id')
+
+	if (!recommendationId) {
+		return Astro.redirect('/404')
+	}
+
+	recommendation = await getRecommendationById(Astro.locals, recommendationId)
+	if (!recommendation) {
+		return Astro.redirect('/recommendations')
+	}
+
+	const organizationRes = await fetch(
+		new URL(`/api/organization/${recommendation?.organization_id}`, config.AUTHURL)
+	)
+	organizationData = (await organizationRes.json()) as Organization
+	token = getToken(Astro.cookies)
+	userData = await getUserDataByToken(token)
+} catch (e) {
+	return Astro.redirect('/404')
+}
+---
+
+<Layout>
+	{
+		recommendation && organizationData ? (
+			<ContentPage
+				userData={userData}
+				contentData={recommendation}
+				organizationData={organizationData}
+				contentType="recommendation"
+				primaryPillIcon={EditIcon}
+				secondaryPillIcon={ClockIcon}
+				navigationSection={{
+					title: '¿Te gustó esta recomendación?',
+					description:
+						'Descubre más contenido interesante en las recomendaciones que tenemos para ofrecerte.',
+					buttonText: 'Ver Más Recomendaciones',
+					buttonHref: '/recommendations',
+				}}
+			>
+				<MarkdownReviewView imgDisabled={false} path={recommendation.content_path} client:load />
+			</ContentPage>
+		) : null
+	}
+</Layout>

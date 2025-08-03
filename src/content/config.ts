@@ -20,38 +20,15 @@ const resources = defineCollection({
 	schema: resourcesSchema,
 })
 
-const blogs = defineCollection({
-	schema: resourcesSchema.extend({
-		tags: z.array(z.string()),
-	}),
+const docsSchema = z.object({
+	title: z.string(),
+	order: z.number(),
+	readtime: z.number(),
+	description: z.string(),
 })
 
-const initiatives = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		name: z.string(),
-		picture: z.string().optional(),
-		faculty: z.string(),
-		rrss: z.object({
-			instagram: z.string().optional(),
-			github: z.string().optional(),
-			linkedin: z.string().optional(),
-			twitter: z.string().optional(),
-		}),
-	}),
-})
-
-const recommendations = defineCollection({
-	schema: z.object({
-		title: z.string(),
-		code: z.string(),
-		initiative: z.string(),
-		period: z.string(),
-		faculty: z.string(),
-		qualification: z.number().min(1).max(7),
-		tags: z.array(z.string()),
-		resume: z.string(),
-	}),
+const docs = defineCollection({
+	schema: docsSchema,
 })
 
 const coursesStatic = defineCollection({
@@ -105,7 +82,20 @@ const contribuidores = defineCollection({
 		imagen: z.string(),
 	}),
 })
-
+const organizations = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		name: z.string(),
+		picture: z.string().optional(),
+		faculty: z.string(),
+		rrss: z.object({
+			instagram: z.string().optional(),
+			github: z.string().optional(),
+			linkedin: z.string().optional(),
+			twitter: z.string().optional(),
+		}),
+	}),
+})
 const agradecimientos = defineCollection({
 	loader: file('src/content/agradecimientos/data.json', {
 		parser: (content) => {
@@ -123,11 +113,10 @@ const agradecimientos = defineCollection({
 })
 
 export const collections = {
+	docs,
 	resources,
-	blogs,
-	initiatives,
-	recommendations,
 	coursesStatic,
 	contribuidores,
 	agradecimientos,
+	organizations,
 }

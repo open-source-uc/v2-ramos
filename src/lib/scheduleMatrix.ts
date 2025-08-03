@@ -109,12 +109,13 @@ export function createScheduleMatrix(
 
 			if (timeIndex === -1 || dayIndex === -1) continue
 
-			// Agregar la clase a la matriz
+			// Agregar la clase a la matriz, incluyendo campus si existe
 			const scheduleBlock: ScheduleBlock = {
 				type,
 				classroom,
 				courseId,
 				section: sectionId,
+				campus: sectionData.campus,
 			}
 
 			matrix[timeIndex][dayIndex].push(scheduleBlock)
@@ -228,6 +229,7 @@ export function convertNDJSONToSections(coursesArray: any[]): CourseSections {
 				const section = sectionData as any
 				sections[course.sigle][sectionId] = {
 					schedule: section.schedule || {},
+					campus: section.campus || undefined,
 				}
 			}
 		}

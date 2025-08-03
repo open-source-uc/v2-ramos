@@ -1,9 +1,18 @@
 import type { AstroCookies } from 'astro'
+import config from '../const'
 
-export async function getUserDataByToken(
-	token: string
-): Promise<{ message: string; permissions: string[]; id: string } | null> {
-	const response = await fetch('https://auth.osuc.dev/api', {
+export async function getUserDataByToken(token: string): Promise<{
+	id: string
+	message: string
+	permissions: string[]
+	organizations: {
+		id: number
+		name: string
+		display_name: string
+		role: string
+	}[]
+} | null> {
+	const response = await fetch(`${config.AUTHURL}/api`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -17,6 +26,7 @@ export async function getUserDataByToken(
 			message: data.message,
 			permissions: data.permissions,
 			id: data.userId,
+			organizations: data.organizations,
 		}
 	}
 

@@ -1,0 +1,65 @@
+---
+import ContentPage from '@/components/common/ContentPage.astro'
+import { EditIcon, ClockIcon } from '@/components/icons/icons'
+import Layout from '@/layouts/Layout.astro'
+import { createSlug } from '@/lib/utils'
+import type { Blogs, Organization } from '@/types'
+import { MarkdownReviewView } from '@/components'
+import config from '@/lib/const'
+import { getToken } from '@/lib/auth'
+import { getUserDataByToken } from '@/lib/server/auth'
+
+import { getBlogById } from '@/lib/server/articles'
+
+let blog: Blogs | null = null
+let organizationData: Organization | null = null
+let token = null
+let userData = null
+
+try {
+	const url = new URL(Astro.request.url)
+	const articleId = url.searchParams.get('id')
+
+	if (!articleId) {
+		return Astro.redirect('/blogs')
+	}
+
+	blog = (await getBlogById(Astro.locals, articleId)) ?? null
+	if (!blog) {
+		return Astro.redirect('/blogs')
+	}
+
+	const organizationRes = await fetch(
+		new URL(`/api/organization/${blog.organization_id}`, config.AUTHURL)
+	)
+	token = getToken(Astro.cookies)
+	userData = await getUserDataByToken(token)
+	organizationData = (await organizationRes.json()) as Organization
+} catch (e) {
+	return Astro.redirect('/404')
+}
+---
+
+<Layout>
+	{
+		blog && organizationData ? (
+			<ContentPage
+				userData={userData}
+				contentData={blog}
+				organizationData={organizationData}
+				contentType="blog"
+				primaryPillIcon={EditIcon}
+				secondaryPillIcon={ClockIcon}
+				navigationSection={{
+					title: '¿Te gustó este blog?',
+					description:
+						'Descubre más contenido interesante en los blogs que tenemos para ofrecerte.',
+					buttonText: 'Ver Más Blogs',
+					buttonHref: '/blogs',
+				}}
+			>
+				<MarkdownReviewView imgDisabled={false} path={blog.content_path} client:load />
+			</ContentPage>
+		) : null
+	}
+</Layout>
