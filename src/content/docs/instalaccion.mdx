@@ -1,0 +1,67 @@
+---
+title: Instalación / Levantar proyecto
+order: 2
+readtime: 1
+description: 'Guía para instalar, desarrollar y desplegar BuscaRamos.'
+---
+
+# Instalación y Primeros Pasos
+
+Esta guía te ayudará a levantar BuscaRamos en tu máquina local y a entender los pasos básicos para contribuir o probar el proyecto.
+
+## 1. Instalar dependencias
+
+Usa pnpm (o npm/yarn si lo prefieres) para instalar todas las dependencias:
+
+```bash
+pnpm install
+```
+
+## 2. Configurar variables de entorno
+
+Copia el archivo de ejemplo y edítalo con tus valores locales:
+
+```bash
+cp .env.local.example .env.local
+# Edita .env.local según tu entorno
+```
+
+Variables importantes:
+
+- `MODE_ENV`: "development" o "production".
+- `API_SECRET`: Un valor único y seguro.
+- `USER_TOKEN`: Este token es **solo para simular un usuario autenticado en desarrollo**. Debes obtenerlo desde [auth.osuc.dev](https://auth.osuc.dev/home/sessions) con tu cuenta. **No lo expongas ni lo uses en producción.**
+
+## 3. Ejecutar migraciones y poblar la base de datos
+
+Desde la raíz del proyecto:
+
+```bash
+cd migration
+bash setup-DANGER.sh       # Inicializa la base de datos de las reviews.
+bash setup-articles.sh     # Inicializa la base de datos de los blogs y recomendaciónes.
+cd ..
+```
+
+Cuando el script lo solicite, selecciona la opción **1) Local**.
+
+## 4. Iniciar el servidor de desarrollo
+
+```bash
+pnpm dev
+```
+
+La aplicación estará disponible en [http://localhost:4321](http://localhost:4321).
+
+## 5. Comandos útiles
+
+| Comando        | Acción                                                    |
+| -------------- | --------------------------------------------------------- |
+| `pnpm install` | Instala las dependencias.                                 |
+| `pnpm dev`     | Inicia el servidor de desarrollo en `localhost:4321`.     |
+| `pnpm build`   | Compila el sitio para producción en la carpeta `./dist/`. |
+| `pnpm preview` | Previsualiza la build de producción localmente.           |
+
+---
+
+¿Dudas? Consulta la documentación interna o el README principal del repositorio.

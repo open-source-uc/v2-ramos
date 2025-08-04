@@ -1,0 +1,32 @@
+---
+import { MarkdownTextView } from '@/components/common/MarkdownTextView'
+import ResourcePage from '@/components/common/ResourcePage.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+	const resources = await getCollection('resources')
+	return resources.map((resource) => ({
+		params: { slug: resource.slug },
+	}))
+}
+
+const { slug } = Astro.params
+const resource = await getCollection('resources', (item) => item.slug === slug)
+if (!resource || resource.length === 0) {
+	Astro.redirect('/resources')
+}
+const { title, description, readtime, author } = resource[0].data
+---
+
+<Layout>
+	<ResourcePage
+		type="resource"
+		title={title}
+		description={description}
+		readtime={readtime}
+		author={author}
+	>
+		<MarkdownTextView text={resource[0].body} />
+	</ResourcePage>
+</Layout>

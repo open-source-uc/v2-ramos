@@ -1,0 +1,57 @@
+---
+// Importaciones
+import * as icons from "@/components/icons/icons";
+import Review from "@/components/reviews/Review.astro";
+import { Button } from "@/components/ui/button";
+import Layout from "@/layouts/Layout.astro";
+import { getToken } from "@/lib/auth";
+import { getUserDataByToken } from "@/lib/server/auth";
+import { getUserReviews } from "@/lib/server/user.reviews";
+
+const token = getToken(Astro.cookies);
+const user = await getUserDataByToken(token);
+
+if (!user) {
+	return Astro.redirect("/to-auth");
+}
+
+const reviews = await getUserReviews(Astro.locals, user.id);
+---
+
+<Layout>
+	<h2
+		id="page-title"
+		class="text-foreground mb-2 text-2xl font-bold break-words"
+	>
+		Tus reseñas
+	</h2>
+
+	{reviews && reviews.length > 0 ? (
+		<div class="p-3">
+			<div class="space-y-3">
+				{reviews.map((review) => (
+					<Review review={review} showStatus />
+					<Button
+					variant="outline"
+					href={`/${review.course_sigle}/review`}
+					size="sm"
+					icon={icons.EditIcon}
+					>
+					Editar reseña
+					</Button>
+				))}
+			</div>
+		</div>
+	) : (
+		<div class="p-6 text-center">
+			<div class="py-12">
+				<p class="text-lg font-medium text-muted-foreground mb-2">
+					Aún no has escrito reseñas D:
+				</p>
+				<p class="text-sm text-muted-foreground mb-6">
+					Comparte tu experiencia y ayuda a otros estudiantes.
+				</p>
+			</div>
+		</div>
+	)}
+</Layout>

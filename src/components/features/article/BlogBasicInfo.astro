@@ -1,0 +1,111 @@
+---
+import TagSelector from '@/components/ui/TagSelector.tsx'
+interface Props {
+	user: any
+	blogTags: { blogTags: string[] }
+	title?: string
+	organization_name?: string
+	period_time?: string
+	readtime?: string
+	tags?: string[]
+}
+
+const {
+	user,
+	title = '',
+	blogTags,
+	organization_name = '',
+	period_time,
+	readtime,
+	tags,
+} = Astro.props as Props
+---
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Título del blog <span class="text-red-500">*</span>
+		</label>
+		<input
+			name="title"
+			value=`${title}`
+			placeholder="Ingrese el título del blog"
+			class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+			required
+		/>
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Organización <span class="text-red-500">*</span>
+		</label>
+		{
+			organization_name ? (
+				<input
+					type="text"
+					name="organization_name"
+					value={organization_name}
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 hover:cursor-not-allowed focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+					readonly
+				/>
+			) : (
+				<select
+					name="organization_id"
+					class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3"
+					required
+				>
+					<option value="" disabled selected>
+						Seleccione una organización
+					</option>
+					{user.organizations.map((org: any) => (
+						<option value={org.id}>{org.name}</option>
+					))}
+				</select>
+			)
+		}
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Período <span class="text-red-500">*</span>
+		</label>
+		<input
+			name="period_time"
+			value={period_time}
+			placeholder="Ej: 2024-1, 2024-2"
+			class={`border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 rounded-lg border px-3 py-2 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 ${period_time ? 'hover:cursor-not-allowed' : ''}`}
+			required
+			readonly={period_time}
+		/>
+	</div>
+	<div class="min-w-0 space-y-2">
+		<label class="text-foreground block text-sm font-medium">
+			Tiempo de lectura <span class="text-red-500">*</span>
+		</label>
+		<div class="relative min-w-0">
+			<input
+				name="readtime"
+				type="number"
+				value={`${readtime}`}
+				min="1"
+				max="60"
+				placeholder="5"
+				class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:ring-ring w-full min-w-0 [appearance:textfield] rounded-lg border px-3 py-2 pr-12 transition-all duration-200 focus:border-transparent focus:ring-2 focus:outline-none sm:px-4 sm:py-3 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+				required
+				oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0+/, '') || ''"
+			/>
+			<span
+				class="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transform text-sm"
+			>
+				min
+			</span>
+		</div>
+	</div>
+	<TagSelector
+		name="tags"
+		label="Tags"
+		selectedTags={tags}
+		tags={blogTags.blogTags}
+		placeholder="Selecciona las etiquetas..."
+		client:load
+	/>
+</div>

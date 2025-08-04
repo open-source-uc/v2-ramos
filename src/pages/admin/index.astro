@@ -38,6 +38,7 @@ if (!token) {
 }
 
 const user = await getUserDataByToken(token)
+console.log(user)
 if (!user || !user.permissions.includes(OsucPermissions.userIsRoot)) {
 	return Astro.redirect('/')
 }

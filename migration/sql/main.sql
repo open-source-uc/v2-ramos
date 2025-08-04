@@ -3,20 +3,20 @@
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
 -- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
--- DROP TABLE IF EXISTS course_reviews;
--- DROP TABLE IF EXISTS course_summary;
--- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
--- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
--- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
--- EJECUTA ESO MENJOR MANUALMENTE ASI NOS EVITAMOS BORRAR LA BASE DE DATOS DE PRODUCCIÓN
+-- ⚠️ IMPORTANTE: NO EJECUTES ESTO EN PRODUCCIÓN
+-- Ejecuta estas sentencias manualmente para evitar borrar datos de producción
+-- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS user_vote_review;
+DROP TABLE IF EXISTS course_reviews;
+DROP TABLE IF EXISTS course_summary;
 
 -- #############################
 
--- Primero se crea course_summary
+-- Crear tabla: course_summary
 CREATE TABLE course_summary (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sigle TEXT UNIQUE,  -- "UNIQUE KEY" no es válido en SQLite; solo usa UNIQUE
+    sigle TEXT UNIQUE,  -- Código único del curso (ej: INF1000)
 
     likes INTEGER DEFAULT 0,
     superlikes INTEGER DEFAULT 0,
@@ -33,29 +33,41 @@ CREATE TABLE course_summary (
     sort_index INTEGER DEFAULT 0
 );
 
--- Luego se crea course_reviews
-CREATE TABLE course_reviews ( 
+-- Crear tabla: course_reviews
+CREATE TABLE course_reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     course_sigle TEXT NOT NULL,
 
-    like_dislike INTEGER CHECK (like_dislike IN (0, 1, 2)),
-    workload_vote INTEGER CHECK (workload_vote IN (0, 1, 2)),
-    attendance_type INTEGER CHECK (attendance_type IN (0, 1)),  -- Solo 0 (mandatory) y 1 (optional)
+    like_dislike INTEGER CHECK (like_dislike IN (0, 1, 2)),           -- 0: dislike, 1: like, 2: superlike
+    workload_vote INTEGER CHECK (workload_vote IN (0, 1, 2)),         -- 0: baja, 1: media, 2: alta
+    attendance_type INTEGER CHECK (attendance_type IN (0, 1)),        -- 0: obligatoria, 1: opcional
 
     weekly_hours INTEGER CHECK (weekly_hours >= 0),
 
     year_taken INTEGER,
-    semester_taken INTEGER CHECK (semester_taken IN (1, 2, 3)), -- 1: Spring, 2: Summer, 3: TAV
+    semester_taken INTEGER CHECK (semester_taken IN (1, 2, 3)),       -- 1: Primavera, 2: Verano, 3: TAV
 
-    comment_path TEXT, --url al documento de la review que es en un bucket de R2
-
-    status INTEGER DEFAULT 0, -- 0: pending, 1: approved, 2: reported, 3: hidden
+    comment_path TEXT,                                                -- Ruta al documento (en bucket R2)
+    
+    status INTEGER DEFAULT 0,                                         -- 0: pendiente, 1: aprobada, 2: reportada, 3: oculta
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    votes INTEGER DEFAULT 0,
 
     FOREIGN KEY (course_sigle) REFERENCES course_summary(sigle)
+);
+
+-- Crear tabla: user_vote_review
+CREATE TABLE user_vote_review (
+    user_id INTEGER NOT NULL,
+    review_id INTEGER NOT NULL,
+    vote INTEGER NOT NULL CHECK (vote IN (-1, 1)),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, review_id),
+    FOREIGN KEY (review_id) REFERENCES course_reviews(id)
 );
 
 
