@@ -6,6 +6,7 @@ export { default as ButtonNavbar } from './button-navbar'
 export { Button, buttonVariants } from './button'
 export { Card } from './card'
 export { Combobox } from './combobox'
+export { DropdownMenu, DropdownMenuItem } from './dropdown-menu'
 export { Input } from './input'
 export {
 	NavigationMenu,

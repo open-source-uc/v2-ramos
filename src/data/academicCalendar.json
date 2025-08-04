@@ -1,0 +1,329 @@
+{
+  "2025-1": {
+    "semesterStart": "2025-03-05",
+    "semesterEnd": "2025-06-27",
+    "excludedDates": [
+      {
+        "date": "2025-03-28",
+        "name": "Viernes Santo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-03-29",
+        "name": "Sábado Santo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-04-17",
+        "name": "Jueves Santo - Suspensión de actividades académicas",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-04-18",
+        "name": "Viernes Santo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-04-19",
+        "name": "Sábado Santo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-04-21",
+        "name": "No se realizarán evaluaciones académicas - Lunes post Semana Santa",
+        "type": "custom"
+      },
+      {
+        "date": "2025-04-22",
+        "name": "No se realizarán evaluaciones académicas - Martes post Semana Santa",
+        "type": "custom"
+      },
+      {
+        "date": "2025-04-28",
+        "name": "Receso de docencia bimestral - Lunes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-04-29",
+        "name": "Receso de docencia bimestral - Martes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-04-30",
+        "name": "Receso de docencia bimestral - Miércoles",
+        "type": "custom"
+      },
+      {
+        "date": "2025-05-01",
+        "name": "Día del Trabajo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-05-02",
+        "name": "Suspensión de actividades académicas y administrativas - Viernes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-05-03",
+        "name": "Receso de docencia bimestral - Sábado",
+        "type": "custom"
+      },
+      {
+        "date": "2025-05-21",
+        "name": "Día de las Glorias Navales",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-06-20",
+        "name": "Día Nacional de los Pueblos Indígenas",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-06-21",
+        "name": "Suspensión de actividades académicas y administrativas - Sábado",
+        "type": "custom"
+      },
+      {
+        "date": "2025-06-27",
+        "name": "Día del Sagrado Corazón de Jesús - Suspensión desde las 13:30 horas",
+        "type": "custom"
+      },
+      {
+        "date": "2025-06-29",
+        "name": "San Pedro y San Pablo",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-06-30",
+        "name": "Período de evaluación académica final - Lunes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-01",
+        "name": "Período de evaluación académica final - Martes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-02",
+        "name": "Período de evaluación académica final - Miércoles",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-03",
+        "name": "Período de evaluación académica final - Jueves",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-04",
+        "name": "Período de evaluación académica final - Viernes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-05",
+        "name": "Período de evaluación académica final - Sábado",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-07",
+        "name": "Período de evaluación académica final - Lunes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-08",
+        "name": "Período de evaluación académica final - Martes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-09",
+        "name": "Período de evaluación académica final - Miércoles",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-10",
+        "name": "Período de evaluación académica final - Jueves",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-11",
+        "name": "Período de evaluación académica final - Viernes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-07-14",
+        "name": "Período de evaluación académica final - Lunes",
+        "type": "final_exam"
+      }
+    ]
+  },
+  "2025-2": {
+    "semesterStart": "2025-08-04",
+    "semesterEnd": "2025-11-28",
+    "excludedDates": [
+      {
+        "date": "2025-08-15",
+        "name": "Asunción de la Santísima Virgen",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-08-16",
+        "name": "Suspensión de actividades académicas y administrativas - Sábado",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-25",
+        "name": "Semana Universitaria - Lunes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-26",
+        "name": "Semana Universitaria - Martes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-27",
+        "name": "Semana Universitaria - Miércoles",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-28",
+        "name": "Semana Universitaria - Jueves",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-29",
+        "name": "Semana Universitaria - Viernes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-08-30",
+        "name": "Semana Universitaria - Sábado",
+        "type": "custom"
+      },
+      {
+        "date": "2025-09-15",
+        "name": "Receso de docencia bimestral - Lunes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-09-16",
+        "name": "Receso de docencia bimestral - Martes",
+        "type": "custom"
+      },
+      {
+        "date": "2025-09-17",
+        "name": "Receso de docencia bimestral - Miércoles",
+        "type": "custom"
+      },
+      {
+        "date": "2025-09-18",
+        "name": "Independencia Nacional",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-09-19",
+        "name": "Día de las Glorias del Ejército",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-09-20",
+        "name": "Receso de docencia bimestral - Sábado",
+        "type": "custom"
+      },
+      {
+        "date": "2025-10-03",
+        "name": "Día de la Trayectoria Laboral - Suspensión desde las 13:30 horas",
+        "type": "custom"
+      },
+      {
+        "date": "2025-10-12",
+        "name": "Día del Encuentro de Dos Mundos",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-10-31",
+        "name": "Día de las Iglesias Evangélicas y Protestantes",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-11-01",
+        "name": "Día de Todos los Santos",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-12-01",
+        "name": "Período de evaluación académica final - Lunes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-02",
+        "name": "Período de evaluación académica final - Martes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-03",
+        "name": "Período de evaluación académica final - Miércoles",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-04",
+        "name": "Período de evaluación académica final - Jueves",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-05",
+        "name": "Período de evaluación académica final - Viernes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-06",
+        "name": "Período de evaluación académica final - Sábado",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-08",
+        "name": "Día de la Inmaculada Concepción",
+        "type": "holiday"
+      },
+      {
+        "date": "2025-12-09",
+        "name": "Período de evaluación académica final - Martes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-10",
+        "name": "Período de evaluación académica final - Miércoles",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-11",
+        "name": "Período de evaluación académica final - Jueves",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-12",
+        "name": "Período de evaluación académica final - Viernes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-13",
+        "name": "Período de evaluación académica final - Sábado",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-15",
+        "name": "Período de evaluación académica final - Lunes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-16",
+        "name": "Período de evaluación académica final - Martes",
+        "type": "final_exam"
+      },
+      {
+        "date": "2025-12-17",
+        "name": "Período de evaluación académica final - Miércoles",
+        "type": "final_exam"
+      }
+    ]
+  }
+}

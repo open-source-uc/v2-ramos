@@ -15,6 +15,10 @@ import {
 	saveCourses,
 	addCourseToSchedule,
 	removeCourseFromSchedule,
+	getSavedHiddenCourses,
+	saveHiddenCourses,
+	addHiddenCourse,
+	removeHiddenCourse,
 } from '@/lib/scheduleStorage'
 import type { ScheduleMatrix, CourseSections } from '@/types'
 import { Pill } from '@/components/ui/pill'
@@ -43,13 +47,7 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/ui/command'
-import {
-	NavigationMenu,
-	NavigationMenuList,
-	NavigationMenuItem,
-	NavigationMenuContent,
-	NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu'
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
 const ConflictResolver = lazy(() => import('./ConflictResolver'))
 const ScheduleCombinations = lazy(() => import('./ScheduleCombinations'))
 
@@ -197,21 +195,22 @@ function ScheduleGrid({
   selectedCourses,
   courseSectionsData,
   courseOptions,
-  selectedHiddenCourses = [],
+  hiddenCourses = [],
   onApplySuggestions,
+  onHiddenCoursesChange,
   colorMode,
 }: {
   matrix: ScheduleMatrix
   selectedCourses: string[]
   courseSectionsData: CourseSections
   courseOptions: CourseOption[]
-  selectedHiddenCourses?: string[]
+  hiddenCourses?: string[]
   onApplySuggestions: (newCourses: string[]) => void
+  onHiddenCoursesChange: (hiddenCourses: string[]) => void
   colorMode: 'course' | 'class-type'
 }) {
 	const conflicts = detectScheduleConflicts(matrix)
 	const hasConflicts = conflicts.length > 0
-	const [hiddenCourses, setHiddenCourses] = useState<string[]>(selectedHiddenCourses)
 
 	return (
 		<div className="bg-background border-border overflow-hidden rounded-lg border">
@@ -265,13 +264,9 @@ function ScheduleGrid({
 														<div
 															key={`${classInfo.courseId}-${classInfo.section}-${index}`}
 															onClick={() => {
-																setHiddenCourses((prev) =>
-																	prev.filter(
-																		(c) =>
-																			c !==
-																			`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
-																	)
-																)
+																const courseKey = `${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+																removeHiddenCourse(courseKey)
+																onHiddenCoursesChange(getSavedHiddenCourses())
 															}}
 															className="w-full hover:cursor-pointer"
 														>
@@ -289,12 +284,9 @@ function ScheduleGrid({
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
 														onClick={() => {
-															setHiddenCourses((prev) => {
-																prev.push(
-																	`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
-																)
-																return [...prev]
-															})
+															const courseKey = `${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+															addHiddenCourse(courseKey)
+															onHiddenCoursesChange(getSavedHiddenCourses())
 														}}
 														className="w-full hover:cursor-pointer"
 													>
@@ -380,7 +372,7 @@ export default function ScheduleCreator() {
 	const hookResult = useCoursesSections()
 	const courses = Array.isArray(hookResult[0]) ? hookResult[0] : []
 	const isLoading = typeof hookResult[1] === 'boolean' ? hookResult[1] : false
-	const [hiddenCourses, setHiddenCourses] = useState<string[]>([])
+	const [hiddenCourses, setHiddenCourses] = useState<string[]>(() => getSavedHiddenCourses())
 
 	// Generate course options from fetched data
 	const courseOptions = getCourseOptions(courses)
@@ -495,16 +487,43 @@ export default function ScheduleCreator() {
 	}
 
 	// Exportar solo un tipo de clase
-	const handleExportICSForType = (type: string) => {
+	const handleExportICSForType = (type: string, options: {
+		excludeHolidays?: boolean,
+		excludeExamWeeks?: boolean,
+		excludeFinalExams?: boolean
+	} = {}) => {
 		generateICSFromSchedule({
 			matrix: scheduleMatrix,
 			courseSectionsData,
 			selectedCourses,
 			semesterStart: new Date(2025, 7, 4), // 4 de agosto 2025
-			semesterEnd: new Date(2025, 11, 5), // 5 de diciembre 2025
+			semesterEnd: new Date(2025, 10, 28), // 28 de noviembre 2025
 			semesterCode: '2025-2',
 			hiddenCourses,
 			filterType: type,
+			excludeHolidays: options.excludeHolidays ?? true,
+			excludeExamWeeks: options.excludeExamWeeks ?? true,
+			excludeFinalExams: options.excludeFinalExams ?? true,
+		})
+	}
+
+	// Exportar todos los cursos
+	const handleExportAll = (options: {
+		excludeHolidays?: boolean,
+		excludeExamWeeks?: boolean,
+		excludeFinalExams?: boolean
+	} = {}) => {
+		generateICSFromSchedule({
+			matrix: scheduleMatrix,
+			hiddenCourses,
+			courseSectionsData,
+			selectedCourses,
+			semesterStart: new Date(2025, 7, 4), // 4 de agosto 2025
+			semesterEnd: new Date(2025, 10, 28), // 28 de noviembre 2025
+			semesterCode: '2025-2',
+			excludeHolidays: options.excludeHolidays ?? true,
+			excludeExamWeeks: options.excludeExamWeeks ?? true,
+			excludeFinalExams: options.excludeFinalExams ?? true,
 		})
 	}
 
@@ -547,30 +566,28 @@ export default function ScheduleCreator() {
 				{/* Exportar a ICS */}
 				{selectedCourses.length > 0 && availableClassTypes.length > 0 && (
 					<div className="mb-4 flex justify-end">
-						<NavigationMenu>
-							<NavigationMenuList>
-								<NavigationMenuItem>
-									<NavigationMenuTrigger className="gap-2">
-										<CalendarIcon className="h-5 w-5" />
-										Exportar a .ics
-									</NavigationMenuTrigger>
-									<NavigationMenuContent className="min-w-[180px]">
-										<div className="flex flex-col gap-1 p-2">
-											{availableClassTypes.map((type) => (
-												<Button
-													key={type}
-													variant="ghost"
-													className="justify-start"
-													onClick={() => handleExportICSForType(type)}
-												>
-													Exportar {getClassTypeLong(type)}
-												</Button>
-											))}
-										</div>
-									</NavigationMenuContent>
-								</NavigationMenuItem>
-							</NavigationMenuList>
-						</NavigationMenu>
+						<DropdownMenu
+							trigger={
+								<>
+									<CalendarIcon className="h-5 w-5" />
+									Exportar a .ics
+								</>
+							}
+						>
+							<DropdownMenuItem
+								onClick={() => handleExportAll()}
+							>
+								Exportar todo
+							</DropdownMenuItem>
+							{availableClassTypes.map((type) => (
+								<DropdownMenuItem
+									key={type}
+									onClick={() => handleExportICSForType(type)}
+								>
+									Exportar {getClassTypeLong(type)}
+								</DropdownMenuItem>
+							))}
+						</DropdownMenu>
 					</div>
 				)}
 				{/* Course Search */}
@@ -739,8 +756,9 @@ export default function ScheduleCreator() {
 									selectedCourses={selectedCourses}
 									courseSectionsData={courseSectionsData}
 									courseOptions={courseOptions}
-									selectedHiddenCourses={hiddenCourses}
+									hiddenCourses={hiddenCourses}
 									onApplySuggestions={handleApplySuggestions}
+									onHiddenCoursesChange={setHiddenCourses}
 									colorMode={colorMode}
 								/>
 							) : (
