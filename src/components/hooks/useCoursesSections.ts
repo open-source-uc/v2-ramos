@@ -12,11 +12,7 @@ export function useCoursesSections(): [Course[], boolean] {
 	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
-		console.log('hoal')
-
 		const fetchData = async () => {
-			console.log('Fetching courses sections...')
-
 			const cache = sessionStorage.getItem(CACHE_KEY)
 			if (cache) {
 				setCourses(JSON.parse(cache))

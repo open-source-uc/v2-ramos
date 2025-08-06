@@ -41,6 +41,6 @@ const docData = {
 		order={docData.order}
 		type="documentation"
 	>
-		<MarkdownTextView text={entry.body} />
+		<MarkdownTextView text={entry.body} client:load />
 	</ResourcePage>
 </Layout>
