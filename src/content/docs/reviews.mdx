@@ -86,13 +86,13 @@ Solo usuarios con permisos especiales pueden aprobar, ocultar o eliminar reviews
 
 ```mermaid
 graph TD
-    U[Usuario] -->|Envía formulario| AA[AstroAction]
-    AA -->|Valida y guarda metadatos| DB[(D1: course_reviews)]
-    AA -->|Guarda comentario largo| R2[(R2 Storage)]
-    Admin[Admin] -->|Modera| DB
-    DB -->|Actualiza estadísticas| CS[(D1: course_summary)]
-    P[Catálogo] <--|Muestra reviews y promedios| DB
-    P <--|Muestra comentario largo| R2
+    U["Usuario"] -->|"Envía formulario"| AA["AstroAction"]
+    AA -->|"Valida y guarda metadatos"| DB[("D1: course_reviews")]
+    AA -->|"Guarda comentario largo"| R2[("R2 Storage")]
+    Admin["Admin"] -->|"Modera"| DB
+    DB -->|"Actualiza estadísticas"| CS[("D1: course_summary")]
+    DB -->|"Muestra reviews y promedios"| P["Catálogo"]
+    R2 -->|"Muestra comentario largo"| P
 ```
 
 ---

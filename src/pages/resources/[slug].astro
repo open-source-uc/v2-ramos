@@ -27,6 +27,6 @@ const { title, description, readtime, author } = resource[0].data
 		readtime={readtime}
 		author={author}
 	>
-		<MarkdownTextView text={resource[0].body} />
+		<MarkdownTextView text={resource[0].body} client:load />
 	</ResourcePage>
 </Layout>
