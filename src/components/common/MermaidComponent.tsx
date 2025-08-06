@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface MermaidComponentProps {
 	chart: string
@@ -6,96 +6,117 @@ interface MermaidComponentProps {
 }
 
 export function MermaidComponent({ chart, className = '' }: MermaidComponentProps) {
-	const chartRef = useRef<HTMLDivElement>(null)
-	const [isClient, setIsClient] = useState(false)
+	const [imageUrl, setImageUrl] = useState<string | null>(null)
+	const [isLoading, setIsLoading] = useState(true)
+	const [error, setError] = useState<string | null>(null)
 	const [isDark, setIsDark] = useState(false)
 
+	// Detect theme changes
 	useEffect(() => {
-		setIsClient(true)
-		// Check initial theme
-		setIsDark(document.documentElement.classList.contains('dark'))
-	}, [])
+		const checkTheme = () => {
+			setIsDark(document.documentElement.classList.contains('dark'))
+		}
 
-	useEffect(() => {
-		if (!isClient) return
+		// Initial check
+		checkTheme()
 
 		// Listen for theme changes
-		const observer = new MutationObserver((mutations) => {
-			mutations.forEach((mutation) => {
-				if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-					setIsDark(document.documentElement.classList.contains('dark'))
-				}
-			})
-		})
-
+		const observer = new MutationObserver(checkTheme)
 		observer.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ['class'],
 		})
 
 		return () => observer.disconnect()
-	}, [isClient])
+	}, [])
 
 	useEffect(() => {
-		if (!isClient || !chartRef.current) return
-
-		const renderMermaid = async () => {
+		const generateDiagram = async () => {
 			try {
-				// Dynamic import to ensure mermaid only loads on client
-				const mermaid = (await import('mermaid')).default
+				setIsLoading(true)
+				setError(null)
 
-				// Initialize mermaid with theme based on current mode
+				// Clean and prepare the chart
+				const cleanChart = chart.trim()
+
+				// Encode using base64 like the working example
+				const encodedChart = btoa(unescape(encodeURIComponent(cleanChart)))
+
+				// Configure theme parameters based on current theme
 				const theme = isDark ? 'dark' : 'neutral'
+				const bgColor = isDark ? '1e1e1e' : 'transparent'
 
-				mermaid.initialize({
-					startOnLoad: false,
-					theme: theme,
-					securityLevel: 'loose',
-					flowchart: {
-						useMaxWidth: true,
-						htmlLabels: true,
-					},
-					sequence: {
-						useMaxWidth: true,
-					},
-					gantt: {
-						useMaxWidth: true,
-					},
-				})
+				// Use Mermaid.ink service with theme parameters
+				const mermaidUrl = `https://mermaid.ink/img/${encodedChart}?theme=${theme}&bgColor=${bgColor}`
 
-				// Generate unique ID for the chart
-				const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`
+				console.log('Chart:', cleanChart)
+				console.log('Encoded:', encodedChart)
+				console.log('Theme:', theme)
+				console.log('URL:', mermaidUrl)
 
-				// Render the chart
-				const { svg } = await mermaid.render(id, chart)
-				if (chartRef.current) {
-					chartRef.current.innerHTML = svg
+				// Verify the image loads correctly
+				const img = new Image()
+				img.onload = () => {
+					setImageUrl(mermaidUrl)
+					setIsLoading(false)
 				}
-			} catch (error) {
-				console.error('Mermaid rendering error:', error)
-				if (chartRef.current) {
-					const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-					chartRef.current.innerHTML = `<p class="text-red-500">Error rendering diagram: ${errorMessage}</p>`
+				img.onerror = () => {
+					console.error('Failed to load image from:', mermaidUrl)
+					setError('Failed to render diagram')
+					setIsLoading(false)
 				}
+				img.src = mermaidUrl
+			} catch (err) {
+				console.error('Error generating Mermaid diagram:', err)
+				setError('Error generating diagram')
+				setIsLoading(false)
 			}
 		}
 
-		renderMermaid()
-	}, [chart, isClient, isDark])
+		if (chart.trim()) {
+			generateDiagram()
+		}
+	}, [chart, isDark])
 
-	if (!isClient) {
+	if (isLoading) {
 		return (
 			<div className={`mermaid-container ${className}`} style={{ textAlign: 'center' }}>
-				<div className="text-muted-foreground">Loading diagram...</div>
+				<div className="text-muted-foreground py-8">
+					<div className="animate-pulse">Generando diagrama...</div>
+				</div>
 			</div>
 		)
 	}
 
+	if (error) {
+		return (
+			<div className={`mermaid-container ${className}`} style={{ textAlign: 'center' }}>
+				<div className="rounded border border-red-200 bg-red-50 py-4 text-red-500 dark:border-red-800 dark:bg-red-900/20">
+					<p className="font-medium">Error al renderizar diagrama</p>
+					<p className="mt-1 text-sm">Los servicios externos de Mermaid no están disponibles</p>
+					<details className="mt-2">
+						<summary className="cursor-pointer text-sm opacity-70">Ver código fuente</summary>
+						<pre className="mt-2 overflow-x-auto rounded bg-gray-100 p-2 text-left text-xs dark:bg-gray-800">
+							{chart}
+						</pre>
+					</details>
+				</div>
+			</div>
+		)
+	}
+
+	if (!imageUrl) {
+		return null
+	}
+
 	return (
-		<div
-			ref={chartRef}
-			className={`mermaid-container ${className}`}
-			style={{ textAlign: 'center' }}
-		/>
+		<div className={`mermaid-container ${className}`} style={{ textAlign: 'center' }}>
+			<img
+				src={imageUrl}
+				alt="Mermaid diagram"
+				className="mx-auto h-auto max-w-full"
+				style={{ maxWidth: '100%', height: 'auto' }}
+			/>
+		</div>
 	)
 }
