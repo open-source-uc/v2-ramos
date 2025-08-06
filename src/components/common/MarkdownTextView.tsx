@@ -20,7 +20,6 @@ export function MarkdownTextView({ text }: { text: string }) {
 
 							// Check if it's a code block (not inline) and if it's mermaid
 							if (className && language === 'mermaid') {
-								console.log('Detected Mermaid code block:', String(children))
 								return <MermaidComponent chart={String(children).replace(/\n$/, '')} />
 							}
 

@@ -49,11 +49,6 @@ export function MermaidComponent({ chart, className = '' }: MermaidComponentProp
 				// Use Mermaid.ink service with theme parameters
 				const mermaidUrl = `https://mermaid.ink/img/${encodedChart}?theme=${theme}&bgColor=${bgColor}`
 
-				console.log('Chart:', cleanChart)
-				console.log('Encoded:', encodedChart)
-				console.log('Theme:', theme)
-				console.log('URL:', mermaidUrl)
-
 				// Verify the image loads correctly
 				const img = new Image()
 				img.onload = () => {
@@ -61,13 +56,11 @@ export function MermaidComponent({ chart, className = '' }: MermaidComponentProp
 					setIsLoading(false)
 				}
 				img.onerror = () => {
-					console.error('Failed to load image from:', mermaidUrl)
 					setError('Failed to render diagram')
 					setIsLoading(false)
 				}
 				img.src = mermaidUrl
 			} catch (err) {
-				console.error('Error generating Mermaid diagram:', err)
 				setError('Error generating diagram')
 				setIsLoading(false)
 			}
@@ -94,12 +87,6 @@ export function MermaidComponent({ chart, className = '' }: MermaidComponentProp
 				<div className="rounded border border-red-200 bg-red-50 py-4 text-red-500 dark:border-red-800 dark:bg-red-900/20">
 					<p className="font-medium">Error al renderizar diagrama</p>
 					<p className="mt-1 text-sm">Los servicios externos de Mermaid no están disponibles</p>
-					<details className="mt-2">
-						<summary className="cursor-pointer text-sm opacity-70">Ver código fuente</summary>
-						<pre className="mt-2 overflow-x-auto rounded bg-gray-100 p-2 text-left text-xs dark:bg-gray-800">
-							{chart}
-						</pre>
-					</details>
 				</div>
 			</div>
 		)
