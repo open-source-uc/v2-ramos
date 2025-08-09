@@ -112,7 +112,7 @@ const successMessage = Astro.url.searchParams.get('success');
 title={`${course.sigle} - ${course.name}`}
 description={course.description || "Reseñas y estadísticas del curso"}
 >
-    <SuccessToast successMessage={successMessage || undefined} client:load />
+    <SuccessToast successMessage={successMessage || undefined} client:only="react" />
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- Información Fundamental del Curso -->
         <section class="border border-border rounded-md bg-accent px-6 py-8">
@@ -133,7 +133,7 @@ description={course.description || "Reseñas y estadísticas del curso"}
                 <p class="text-sm text-accent-foreground max-w-[75%]">{course.description}</p>
             </div>
             <div class="flex items-center flex-wrap gap-2 mt-8">
-                <CourseCampuses campus={course.campus} lastSemester={course.last_semester} client:load />
+                <CourseCampuses campus={course.campus} lastSemester={course.last_semester} client:only="react" />
                 <Pill
                     variant="green"
                     icon={HourglassIcon}
@@ -284,11 +284,11 @@ description={course.description || "Reseñas y estadísticas del curso"}
         </section>
 
         <!-- Prerequisites Section -->
-        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:load />
+        <PrerequisitesSection prerequisites={prerequisites} className="mt-8" client:only="react" />
 
         <!-- Secciones Section -->
         <SectionsCollapsible
-            client:load
+						client:only="react"
             className="mt-8"
             courseSigle={course.sigle}
         />
@@ -398,5 +398,5 @@ description={course.description || "Reseñas y estadísticas del curso"}
             </div>
         </section>
     </div>
-    <ReportToast result={reportResult} client:load />
+    <ReportToast result={reportResult} client:only="react" />
 </Layout>

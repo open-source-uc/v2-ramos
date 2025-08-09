@@ -442,6 +442,6 @@ const allowedSemestersCurrentYear = getAllowedSemestersForYear(currentYear)
 			</div>
 		</section>
 	</div>
-	<ReviewFormToast result={result} client:load />
+	<ReviewFormToast result={result} client:only="react" />
 	<RedirectLogin userIsNull={userIsNull} client:only="react" />
 </Layout>
