@@ -48,6 +48,7 @@ import {
 	CommandList,
 } from '@/components/ui/command'
 import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { CURRENT_SEMESTER } from '@/lib/currentSemester'
 const ConflictResolver = lazy(() => import('./ConflictResolver'))
 const ScheduleCombinations = lazy(() => import('./ScheduleCombinations'))
 
@@ -191,23 +192,23 @@ function CourseSearch({
 
 // Schedule grid component
 function ScheduleGrid({
-  matrix,
-  selectedCourses,
-  courseSectionsData,
-  courseOptions,
-  hiddenCourses = [],
-  onApplySuggestions,
-  onHiddenCoursesChange,
-  colorMode,
+	matrix,
+	selectedCourses,
+	courseSectionsData,
+	courseOptions,
+	hiddenCourses = [],
+	onApplySuggestions,
+	onHiddenCoursesChange,
+	colorMode,
 }: {
-  matrix: ScheduleMatrix
-  selectedCourses: string[]
-  courseSectionsData: CourseSections
-  courseOptions: CourseOption[]
-  hiddenCourses?: string[]
-  onApplySuggestions: (newCourses: string[]) => void
-  onHiddenCoursesChange: (hiddenCourses: string[]) => void
-  colorMode: 'course' | 'class-type'
+	matrix: ScheduleMatrix
+	selectedCourses: string[]
+	courseSectionsData: CourseSections
+	courseOptions: CourseOption[]
+	hiddenCourses?: string[]
+	onApplySuggestions: (newCourses: string[]) => void
+	onHiddenCoursesChange: (hiddenCourses: string[]) => void
+	colorMode: 'course' | 'class-type'
 }) {
 	const conflicts = detectScheduleConflicts(matrix)
 	const hasConflicts = conflicts.length > 0
@@ -396,9 +397,7 @@ export default function ScheduleCreator() {
 
 	// Obtener los tipos de clase disponibles en la matriz actual
 	const availableClassTypes = Array.from(
-		new Set(
-			scheduleMatrix.flat(2).map((block) => block.type)
-		)
+		new Set(scheduleMatrix.flat(2).map((block) => block.type))
 	).filter(Boolean)
 
 	const handleCourseSelect = (courseId: string) => {
@@ -487,43 +486,32 @@ export default function ScheduleCreator() {
 	}
 
 	// Exportar solo un tipo de clase
-	const handleExportICSForType = (type: string, options: {
-		excludeHolidays?: boolean,
-		excludeExamWeeks?: boolean,
-		excludeFinalExams?: boolean
-	} = {}) => {
+	const handleExportICSForType = (
+		type: string,
+		options: {
+			excludeHolidays?: boolean
+			excludeExamWeeks?: boolean
+			excludeFinalExams?: boolean
+		} = {}
+	) => {
 		generateICSFromSchedule({
 			matrix: scheduleMatrix,
-			courseSectionsData,
-			selectedCourses,
-			semesterStart: new Date(2025, 7, 4), // 4 de agosto 2025
-			semesterEnd: new Date(2025, 10, 28), // 28 de noviembre 2025
-			semesterCode: '2025-2',
 			hiddenCourses,
 			filterType: type,
-			excludeHolidays: options.excludeHolidays ?? true,
-			excludeExamWeeks: options.excludeExamWeeks ?? true,
-			excludeFinalExams: options.excludeFinalExams ?? true,
 		})
 	}
 
 	// Exportar todos los cursos
-	const handleExportAll = (options: {
-		excludeHolidays?: boolean,
-		excludeExamWeeks?: boolean,
-		excludeFinalExams?: boolean
-	} = {}) => {
+	const handleExportAll = (
+		options: {
+			excludeHolidays?: boolean
+			excludeExamWeeks?: boolean
+			excludeFinalExams?: boolean
+		} = {}
+	) => {
 		generateICSFromSchedule({
 			matrix: scheduleMatrix,
 			hiddenCourses,
-			courseSectionsData,
-			selectedCourses,
-			semesterStart: new Date(2025, 7, 4), // 4 de agosto 2025
-			semesterEnd: new Date(2025, 10, 28), // 28 de noviembre 2025
-			semesterCode: '2025-2',
-			excludeHolidays: options.excludeHolidays ?? true,
-			excludeExamWeeks: options.excludeExamWeeks ?? true,
-			excludeFinalExams: options.excludeFinalExams ?? true,
 		})
 	}
 
@@ -574,16 +562,9 @@ export default function ScheduleCreator() {
 								</>
 							}
 						>
-							<DropdownMenuItem
-								onClick={() => handleExportAll()}
-							>
-								Exportar todo
-							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => handleExportAll()}>Exportar todo</DropdownMenuItem>
 							{availableClassTypes.map((type) => (
-								<DropdownMenuItem
-									key={type}
-									onClick={() => handleExportICSForType(type)}
-								>
+								<DropdownMenuItem key={type} onClick={() => handleExportICSForType(type)}>
 									Exportar {getClassTypeLong(type)}
 								</DropdownMenuItem>
 							))}
