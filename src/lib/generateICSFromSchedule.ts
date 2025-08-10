@@ -15,6 +15,16 @@ function downloadICS(filename: string, content: string) {
 	URL.revokeObjectURL(url)
 }
 
+// Función para escapar texto según RFC 5545
+function escapeICSText(text: string): string {
+	return text
+		.replace(/\\/g, '\\\\')  // Escapar backslashes
+		.replace(/;/g, '\\;')    // Escapar semicolons
+		.replace(/,/g, '\\,')    // Escapar comas
+		.replace(/\n/g, '\\n')   // Escapar saltos de línea
+		.replace(/\r/g, '')      // Remover retornos de carro
+}
+
 // Mapea el nombre del día a RFC5545 (ics)
 const DAY_TO_ICS: Record<string, icsEvent['day']> = {
 	L: 'MO',
@@ -106,12 +116,17 @@ export default function generateICSFromSchedule({
 				endDate.setHours(endHour, endMinute, 0, 0)
 
 				// Crear el evento ICS
+				const courseName = classInfo.courseName || classInfo.courseId
+				const summary = escapeICSText(`${courseName} (${getClassTypeDescription(classInfo.type)})`)
+				const description = escapeICSText(`${courseName} (${classInfo.courseId}) - ${getClassTypeDescription(classInfo.type)}\nCampus: ${classInfo.campus || 'Sin campus'}\nSemestre: ${ACTUAL_SEMESTER.name}`)
+				const location = classInfo.classroom == "(Por Asignar)" ? escapeICSText(classInfo.campus || '') : escapeICSText(classInfo.classroom)
+
 				const event: icsEvent = {
 					start: startDate,
 					end: endDate,
-					summary: `${classInfo.courseId} - ${getClassTypeDescription(classInfo.type)}`,
-					description: `${classInfo.courseId} - ${getClassTypeDescription(classInfo.type)}\\n${classInfo.campus || 'Sin campus'}\\nSemestre: ${ACTUAL_SEMESTER.name}`,
-					location: classInfo.classroom,
+					summary,
+					description,
+					location,
 					day: icsDay,
 				}
 

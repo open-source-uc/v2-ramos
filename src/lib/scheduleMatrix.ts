@@ -114,6 +114,7 @@ export function createScheduleMatrix(
 				type,
 				classroom,
 				courseId,
+				courseName: sectionData.name,
 				section: sectionId,
 				campus: sectionData.campus,
 			}
@@ -230,6 +231,7 @@ export function convertNDJSONToSections(coursesArray: any[]): CourseSections {
 				sections[course.sigle][sectionId] = {
 					schedule: section.schedule || {},
 					campus: section.campus || undefined,
+					name: course.name || undefined, // Agregar el nombre del curso
 				}
 			}
 		}
