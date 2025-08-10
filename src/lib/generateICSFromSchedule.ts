@@ -110,7 +110,7 @@ export default function generateICSFromSchedule({
 					start: startDate,
 					end: endDate,
 					summary: `${classInfo.courseId} - ${getClassTypeDescription(classInfo.type)}`,
-					description: `${classInfo.courseId} - ${classInfo.type}\\n${classInfo.campus || 'Sin campus'}\\nSemestre: ${ACTUAL_SEMESTER.name}`,
+					description: `${classInfo.courseId} - ${getClassTypeDescription(classInfo.type)}\\n${classInfo.campus || 'Sin campus'}\\nSemestre: ${ACTUAL_SEMESTER.name}`,
 					location: classInfo.classroom,
 					day: icsDay,
 				}
