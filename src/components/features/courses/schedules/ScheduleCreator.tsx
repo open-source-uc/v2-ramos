@@ -502,13 +502,7 @@ export default function ScheduleCreator() {
 	}
 
 	// Exportar todos los cursos
-	const handleExportAll = (
-		options: {
-			excludeHolidays?: boolean
-			excludeExamWeeks?: boolean
-			excludeFinalExams?: boolean
-		} = {}
-	) => {
+	const handleExportAll = () => {
 		generateICSFromSchedule({
 			matrix: scheduleMatrix,
 			hiddenCourses,

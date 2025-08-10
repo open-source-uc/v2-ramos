@@ -60,13 +60,16 @@ DTSTAMP:${toICSDatetime(new Date())}
 DTSTART;TZID=America/Santiago:${toICSDatetime(e.start)}
 DTEND;TZID=America/Santiago:${toICSDatetime(e.end)}
 RRULE:FREQ=WEEKLY;UNTIL=${toICSDatetime(s.end)};BYDAY=${e.day}
-${s.excludedDates.map((date) => exDate(date)).join('\n')}
+${exDate(s.excludedDates)}
 UID:${event_id++}
 DESCRIPTION:${e.description}
 SUMMARY:${e.summary}
 END:VEVENT
 `
 
-export const exDate = (date: Date) => `EXDATE;TZID=America/Santiago:${toICSDatetime(date)}`
+export const exDate = (dates: Date[]) => {
+	if (dates.length === 0) return ''
+	return `EXDATE;TZID=America/Santiago:${dates.map((date) => toICSDatetime(date)).join(',')}`
+}
 
 // Thanks bv
