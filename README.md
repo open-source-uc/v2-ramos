@@ -69,4 +69,4 @@ Para dudas específicas, revisa la documentación interna o abre un issue.
 
 ## 📄 Licencia
 
-Distribuido bajo licencia MIT.
+Distribuido bajo licencia AGPL-3.
