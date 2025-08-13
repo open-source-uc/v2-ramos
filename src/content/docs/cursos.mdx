@@ -89,10 +89,10 @@ Cada vez que un usuario deja una review, los contadores y promedios del curso se
 ```mermaid
 graph TD
     A[Curso creado en migración SQL] --> B[Se agrega a course_summary en D1]
-    B --> C[Se exporta a NDJSON público]
-    C --> D[El catálogo descarga y muestra el curso]
-    D --> E[Usuarios dejan reviews]
-    E --> F[Se actualizan estadísticas en D1]
+    B --> C["Se exporta a NDJSON público"]
+    C --> D["El catálogo descarga y muestra el curso"]
+    D --> E["Usuarios dejan reviews"]
+    E --> F["Se actualizan estadísticas en D1"]
     F --> C
 ```
 
@@ -122,7 +122,5 @@ Por normativa de la Ley N° 19.628 sobre Protección de la Vida Privada (Ley de 
 
 **¿Cómo se asegura la actualización de los datos?**  
 Cada vez que se deja una review, los datos agregados se actualizan en D1 y se reflejan en el próximo volcado NDJSON.
-
----
 
 Esta arquitectura permite que el catálogo de BuscaRamos sea rápido, transparente y refleje la voz real de la comunidad estudiantil.

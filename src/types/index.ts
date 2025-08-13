@@ -168,6 +168,7 @@ export interface ScheduleBlock {
 	type: string // Tipo de clase (CLAS, LAB, AYUD)
 	classroom: string // Ubicación del aula
 	courseId: string // Identificador del curso
+	courseName?: string // Nombre del curso
 	section: string // Identificador de la sección
 	campus?: string // Campus de la sección
 }

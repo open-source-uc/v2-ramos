@@ -91,6 +91,7 @@ export function createScheduleMatrix(
 	for (const courseSelection of selectedCourses) {
 		const [courseId, sectionId] = courseSelection.split('-')
 
+		const courseName = 'test'
 		// Obtener los datos de la sección del curso
 		const courseData = courseSections[courseId]
 		if (!courseData) continue
@@ -102,7 +103,6 @@ export function createScheduleMatrix(
 		for (const [blockCode, [type, classroom]] of Object.entries(sectionData.schedule)) {
 			const blockInfo = BLOCK_MAP[blockCode]
 			if (!blockInfo) continue
-
 			// Encontrar los índices de franja horaria y día
 			const timeIndex = TIME_SLOTS.indexOf(blockInfo.hora)
 			const dayIndex = DAYS.indexOf(blockInfo.dia)
@@ -114,6 +114,7 @@ export function createScheduleMatrix(
 				type,
 				classroom,
 				courseId,
+				courseName: sectionData.name,
 				section: sectionId,
 				campus: sectionData.campus,
 			}
@@ -230,6 +231,7 @@ export function convertNDJSONToSections(coursesArray: any[]): CourseSections {
 				sections[course.sigle][sectionId] = {
 					schedule: section.schedule || {},
 					campus: section.campus || undefined,
+					name: course.name || undefined, // Agregar el nombre del curso
 				}
 			}
 		}

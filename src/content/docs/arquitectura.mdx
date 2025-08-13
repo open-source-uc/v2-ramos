@@ -92,12 +92,12 @@ El siguiente diagrama resume cómo interactúan los distintos componentes y serv
 
 ```mermaid
 graph TD
-    U[Usuario] -->|Navega| P[Página Astro]
-    P -->|Formulario| AA[AstroAction]
-    AA -->|Valida y guarda metadatos| DB[(DB)]
-    AA -->|Guarda comentario/archivo| R2[(R2 Storage)]
-    P <--|Renderiza review| C[Componentes de UI]
-    Admin[Admin] -->|Modera| S[Funciones admin.reviews.ts]
+    U["Usuario"] -->|"Navega"| P["Página Astro"]
+    P -->|"Formulario"| AA["AstroAction"]
+    AA -->|"Valida y guarda metadatos"| DB[("DB")]
+    AA -->|"Guarda comentario/archivo"| R2[("R2 Storage")]
+    C["Componentes de UI"] -->|"Renderiza review"| P
+    Admin["Admin"] -->|"Modera"| S["Funciones admin.reviews.ts"]
 ```
 
 ---
