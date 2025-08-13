@@ -545,26 +545,7 @@ export default function ScheduleCreator() {
 	return (
 		<>
 			<div className="mx-auto max-w-7xl px-4 py-8">
-				{/* Exportar a ICS */}
-				{selectedCourses.length > 0 && availableClassTypes.length > 0 && (
-					<div className="mb-4 flex justify-end">
-						<DropdownMenu
-							trigger={
-								<>
-									<CalendarIcon className="h-5 w-5" />
-									Exportar a .ics
-								</>
-							}
-						>
-							<DropdownMenuItem onClick={() => handleExportAll()}>Exportar todo</DropdownMenuItem>
-							{availableClassTypes.map((type) => (
-								<DropdownMenuItem key={type} onClick={() => handleExportICSForType(type)}>
-									Exportar {getClassTypeLong(type)}
-								</DropdownMenuItem>
-							))}
-						</DropdownMenu>
-					</div>
-				)}
+				
 				{/* Course Search */}
 				<div className="bg-accent mb-8">
 					<div className="border-border rounded-lg border p-6">
@@ -713,14 +694,36 @@ export default function ScheduleCreator() {
 				<div className="bg-accent mb-8">
 					<div className="border-border overflow-hidden rounded-lg border">
 						<div className="border-border border-b px-6 py-4">
-							<div className="flex items-center gap-3">
-								<div className="bg-orange-light text-orange border-orange/20 rounded-lg border p-2">
-									<CalendarIcon className="h-5 w-5 fill-current" />
-								</div>
-								<div>
-									<h2 className="text-lg font-semibold">Tu Horario</h2>
-									<p className="text-muted-foreground text-sm">Visualiza tu horario semanal</p>
-								</div>
+							<div className="flex flex-col tablet:flex-row gap-3 items-start justify-between">
+									<div className='flex items-center gap-3'>
+										<div className="bg-orange-light text-orange border-orange/20 rounded-lg border p-2">
+											<CalendarIcon className="h-5 w-5 fill-current" />
+										</div>
+										<div>
+											<h2 className="text-lg font-semibold">Tu Horario</h2>
+											<p className="text-muted-foreground text-sm">Visualiza tu horario semanal</p>
+										</div>
+									</div>
+								{/* Exportar a ICS */}
+								{selectedCourses.length > 0 && availableClassTypes.length > 0 && (
+									<div className="mb-4 flex justify-end align-middle">
+										<DropdownMenu
+											trigger={
+												<>
+													<CalendarIcon className="h-5 w-5" />
+													Exportar a .ics
+												</>
+											}
+										>
+											<DropdownMenuItem onClick={() => handleExportAll()}>Exportar todo</DropdownMenuItem>
+											{availableClassTypes.map((type) => (
+												<DropdownMenuItem key={type} onClick={() => handleExportICSForType(type)}>
+													Exportar {getClassTypeLong(type)}
+												</DropdownMenuItem>
+											))}
+										</DropdownMenu>
+									</div>
+								)}
 							</div>
 						</div>
 

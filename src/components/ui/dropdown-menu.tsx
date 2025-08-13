@@ -38,10 +38,11 @@ export function DropdownMenu({ children, trigger, className }: DropdownMenuProps
 				className={cn(
 					'inline-flex items-center justify-center gap-2 rounded-md',
 					'bg-background hover:bg-accent hover:text-accent-foreground',
-					'border border-border px-4 py-2 text-sm font-medium',
+					'border border-border px-3 py-2 tablet:px-4 tablet:py-2 text-sm font-medium',
 					'transition-colors focus-visible:outline-none focus-visible:ring-2',
 					'focus-visible:ring-ring focus-visible:ring-offset-2',
-					'disabled:pointer-events-none disabled:opacity-50'
+					'disabled:pointer-events-none disabled:opacity-50',
+					'min-w-0'
 				)}
 				aria-expanded={isOpen}
 				aria-haspopup="true"
@@ -58,9 +59,10 @@ export function DropdownMenu({ children, trigger, className }: DropdownMenuProps
 			{isOpen && (
 				<div
 					className={cn(
-						'absolute right-0 z-50 mt-1 min-w-[180px] rounded-md border',
+						'absolute left-0 tablet:right-0 tablet:left-auto z-50 mt-1 min-w-[180px] rounded-md border',
 						'bg-popover text-popover-foreground shadow-md',
-						'animate-in fade-in-0 zoom-in-95'
+						'animate-in fade-in-0 zoom-in-95',
+						'w-auto'
 					)}
 				>
 					<div className="p-1">
@@ -73,9 +75,15 @@ export function DropdownMenu({ children, trigger, className }: DropdownMenuProps
 }
 
 export function DropdownMenuItem({ children, onClick, className }: DropdownMenuItemProps) {
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		onClick()
+		// Remove focus after click to ensure hover works properly
+		event.currentTarget.blur()
+	}
+
 	return (
 		<button
-			onClick={onClick}
+			onClick={handleClick}
 			className={cn(
 				'relative flex w-full cursor-default select-none items-center rounded-sm',
 				'px-2 py-1.5 text-sm outline-none transition-colors',
