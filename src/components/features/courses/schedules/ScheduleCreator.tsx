@@ -15,6 +15,10 @@ import {
 	saveCourses,
 	addCourseToSchedule,
 	removeCourseFromSchedule,
+	getSavedHiddenCourses,
+	saveHiddenCourses,
+	addHiddenCourse,
+	removeHiddenCourse,
 } from '@/lib/scheduleStorage'
 import type { ScheduleMatrix, CourseSections } from '@/types'
 import { Pill } from '@/components/ui/pill'
@@ -33,6 +37,7 @@ import {
 } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { getClassTypeLong, getClassTypeColor } from './ScheduleLegend'
+import generateICSFromSchedule from '@/lib/generateICSFromSchedule'
 import { Search } from '@/components/features/search/SearchInput'
 import { useFuseSearch } from '@/components/hooks/useFuseSearch'
 import {
@@ -42,7 +47,8 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/components/ui/command'
-
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { CURRENT_SEMESTER } from '@/lib/currentSemester'
 const ConflictResolver = lazy(() => import('./ConflictResolver'))
 const ScheduleCombinations = lazy(() => import('./ScheduleCombinations'))
 
@@ -190,14 +196,18 @@ function ScheduleGrid({
 	selectedCourses,
 	courseSectionsData,
 	courseOptions,
+	hiddenCourses = [],
 	onApplySuggestions,
+	onHiddenCoursesChange,
 	colorMode,
 }: {
 	matrix: ScheduleMatrix
 	selectedCourses: string[]
 	courseSectionsData: CourseSections
 	courseOptions: CourseOption[]
+	hiddenCourses?: string[]
 	onApplySuggestions: (newCourses: string[]) => void
+	onHiddenCoursesChange: (hiddenCourses: string[]) => void
 	colorMode: 'course' | 'class-type'
 }) {
 	const conflicts = detectScheduleConflicts(matrix)
@@ -247,10 +257,39 @@ function ScheduleGrid({
 													colorMode === 'class-type'
 														? getClassTypeColor(classInfo.type)
 														: COLOR_VARIANTS[courseIndex % COLOR_VARIANTS.length]
+												const courseIsHidden = hiddenCourses.includes(
+													`${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+												)
+												if (courseIsHidden)
+													return (
+														<div
+															key={`${classInfo.courseId}-${classInfo.section}-${index}`}
+															onClick={() => {
+																const courseKey = `${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+																removeHiddenCourse(courseKey)
+																onHiddenCoursesChange(getSavedHiddenCourses())
+															}}
+															className="w-full hover:cursor-pointer"
+														>
+															<Pill className="tablet:text-xs w-full min-w-0 justify-center bg-gray-800 fill-gray-800 px-1.5 py-0.5 text-[10px] text-gray-600">
+																<div className="text-center">
+																	<span className="font-medium">
+																		{classInfo.courseId}-{classInfo.section}
+																	</span>
+																</div>
+															</Pill>
+														</div>
+													)
+
 												return (
 													<div
 														key={`${classInfo.courseId}-${classInfo.section}-${index}`}
-														className="w-full"
+														onClick={() => {
+															const courseKey = `${classInfo.courseId}-${classInfo.section}-${day}-${time}`
+															addHiddenCourse(courseKey)
+															onHiddenCoursesChange(getSavedHiddenCourses())
+														}}
+														className="w-full hover:cursor-pointer"
 													>
 														<Pill
 															variant={colorVariant}
@@ -264,7 +303,7 @@ function ScheduleGrid({
 																<div className="tablet:text-[10px] text-[9px] opacity-80">
 																	{getClassTypeLong(classInfo.type)}
 																</div>
-																<div className='tablet:text-[10px] text-[9px] opacity-80'>
+																<div className="tablet:text-[10px] text-[9px] opacity-80">
 																	{classInfo.campus}
 																</div>
 															</div>
@@ -276,16 +315,15 @@ function ScheduleGrid({
 									)
 								})}
 							</div>
-							
+
 							{/* Lunch break stripe between 12:20 and 14:50 */}
 							{time === '12:20' && (
-								<div className="border-border border-b grid grid-cols-7">
-									<div className="bg-orange-light py-6 px-4 text-left text-sm font-medium">
+								<div className="border-border grid grid-cols-7 border-b">
+									<div className="bg-orange-light px-4 py-6 text-left text-sm font-medium">
 										13:30 - 14:50 <br />
 										Horario de Almuerzo
 									</div>
-									<div className="bg-orange-light/70 col-span-6 flex items-center justify-center p-2 text-center text-sm font-semibold">
-									</div>
+									<div className="bg-orange-light/70 col-span-6 flex items-center justify-center p-2 text-center text-sm font-semibold"></div>
 								</div>
 							)}
 						</div>
@@ -335,6 +373,7 @@ export default function ScheduleCreator() {
 	const hookResult = useCoursesSections()
 	const courses = Array.isArray(hookResult[0]) ? hookResult[0] : []
 	const isLoading = typeof hookResult[1] === 'boolean' ? hookResult[1] : false
+	const [hiddenCourses, setHiddenCourses] = useState<string[]>(() => getSavedHiddenCourses())
 
 	// Generate course options from fetched data
 	const courseOptions = getCourseOptions(courses)
@@ -355,6 +394,11 @@ export default function ScheduleCreator() {
 		const availableSections = getAvailableSections(courseId, courseSectionsData)
 		return availableSections.length > 1
 	})
+
+	// Obtener los tipos de clase disponibles en la matriz actual
+	const availableClassTypes = Array.from(
+		new Set(scheduleMatrix.flat(2).map((block) => block.type))
+	).filter(Boolean)
 
 	const handleCourseSelect = (courseId: string) => {
 		if (addCourseToSchedule(courseId)) {
@@ -441,6 +485,30 @@ export default function ScheduleCreator() {
 		}
 	}
 
+	// Exportar solo un tipo de clase
+	const handleExportICSForType = (
+		type: string,
+		options: {
+			excludeHolidays?: boolean
+			excludeExamWeeks?: boolean
+			excludeFinalExams?: boolean
+		} = {}
+	) => {
+		generateICSFromSchedule({
+			matrix: scheduleMatrix,
+			hiddenCourses,
+			filterType: type,
+		})
+	}
+
+	// Exportar todos los cursos
+	const handleExportAll = () => {
+		generateICSFromSchedule({
+			matrix: scheduleMatrix,
+			hiddenCourses,
+		})
+	}
+
 	const getCourseColor = (courseId: string) => {
 		if (colorMode === 'class-type') {
 			// Get the class type from the first schedule block of this course section
@@ -463,13 +531,21 @@ export default function ScheduleCreator() {
 	const getCourseInfo = (courseId: string) => {
 		const option = courseOptions.find((opt) => opt.id === courseId)
 		return (
-			option || { id: courseId, sigle: '', seccion: '', nombre: 'Curso no encontrado', nrc: 'N/A', campus: 'Sin campus' }
+			option || {
+				id: courseId,
+				sigle: '',
+				seccion: '',
+				nombre: 'Curso no encontrado',
+				nrc: 'N/A',
+				campus: 'Sin campus',
+			}
 		)
 	}
 
 	return (
 		<>
 			<div className="mx-auto max-w-7xl px-4 py-8">
+				
 				{/* Course Search */}
 				<div className="bg-accent mb-8">
 					<div className="border-border rounded-lg border p-6">
@@ -593,7 +669,7 @@ export default function ScheduleCreator() {
 												<span className="text-xs opacity-80">
 													Sección {courseInfo.seccion} - NRC {courseInfo.nrc}
 												</span>
-												<span className='text-xs opacity-80'>
+												<span className="text-xs opacity-80">
 													Campus: {courseInfo.campus || 'Sin campus'}
 												</span>
 											</div>
@@ -618,14 +694,36 @@ export default function ScheduleCreator() {
 				<div className="bg-accent mb-8">
 					<div className="border-border overflow-hidden rounded-lg border">
 						<div className="border-border border-b px-6 py-4">
-							<div className="flex items-center gap-3">
-								<div className="bg-orange-light text-orange border-orange/20 rounded-lg border p-2">
-									<CalendarIcon className="h-5 w-5 fill-current" />
-								</div>
-								<div>
-									<h2 className="text-lg font-semibold">Tu Horario</h2>
-									<p className="text-muted-foreground text-sm">Visualiza tu horario semanal</p>
-								</div>
+							<div className="flex flex-col tablet:flex-row gap-3 items-start justify-between">
+									<div className='flex items-center gap-3'>
+										<div className="bg-orange-light text-orange border-orange/20 rounded-lg border p-2">
+											<CalendarIcon className="h-5 w-5 fill-current" />
+										</div>
+										<div>
+											<h2 className="text-lg font-semibold">Tu Horario</h2>
+											<p className="text-muted-foreground text-sm">Visualiza tu horario semanal</p>
+										</div>
+									</div>
+								{/* Exportar a ICS */}
+								{selectedCourses.length > 0 && availableClassTypes.length > 0 && (
+									<div className="mb-4 flex justify-end align-middle">
+										<DropdownMenu
+											trigger={
+												<>
+													<CalendarIcon className="h-5 w-5" />
+													Exportar a .ics
+												</>
+											}
+										>
+											<DropdownMenuItem onClick={() => handleExportAll()}>Exportar todo</DropdownMenuItem>
+											{availableClassTypes.map((type) => (
+												<DropdownMenuItem key={type} onClick={() => handleExportICSForType(type)}>
+													Exportar {getClassTypeLong(type)}
+												</DropdownMenuItem>
+											))}
+										</DropdownMenu>
+									</div>
+								)}
 							</div>
 						</div>
 
@@ -636,7 +734,9 @@ export default function ScheduleCreator() {
 									selectedCourses={selectedCourses}
 									courseSectionsData={courseSectionsData}
 									courseOptions={courseOptions}
+									hiddenCourses={hiddenCourses}
 									onApplySuggestions={handleApplySuggestions}
+									onHiddenCoursesChange={setHiddenCourses}
 									colorMode={colorMode}
 								/>
 							) : (
