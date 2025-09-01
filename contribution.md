@@ -1,10 +1,3 @@
----
-title: Cómo Contribuir a BuscaRamos
-order: 6
-readtime: 2
-description: 'Guía para contribuir al desarrollo de BuscaRamos, tanto para miembros internos como externos.'
----
-
 # Cómo Contribuir a BuscaRamos
 
 ¡Gracias por tu interés en mejorar BuscaRamos! Aceptamos contribuciones tanto de miembros del equipo como de la comunidad externa. Aquí te explicamos cómo puedes participar.
