@@ -1,4 +1,3 @@
-import { parsePrerequisites } from '@/lib/courseReq'
 import type { PrerequisiteGroup, PrerequisiteCourse } from '@/types'
 import { Pill } from '@/components/ui/pill'
 import { DocsIcon, DeceasedIcon, TextureIcon, OpenInFullIcon } from '@/components/icons/icons'

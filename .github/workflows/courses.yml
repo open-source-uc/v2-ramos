@@ -1,9 +1,5 @@
 name: Reload Courses Every Hour
 
-on:
-  schedule:
-    - cron: '0 * * * *' # Cada hora en minuto 0
-
 jobs:
   reload:
     runs-on: ubuntu-latest

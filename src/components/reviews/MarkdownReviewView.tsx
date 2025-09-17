@@ -1,11 +1,15 @@
+'use client'
+
 import { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import dynamic from 'next/dynamic'
 
 import { Pill } from '@/components/ui/pill'
 import remarkGfm from 'remark-gfm'
-
 import rehypeRaw from 'rehype-raw'
 import remarkBreaks from 'remark-breaks'
+
+// ✅ Import dinámico para evitar SSR issues
+const ReactMarkdown = dynamic(() => import('react-markdown'), { ssr: false })
 
 export function MarkdownReviewView({
 	path,
@@ -38,6 +42,7 @@ export function MarkdownReviewView({
 	if (error) {
 		return <blockquote>Error cargando contenido.</blockquote>
 	}
+
 	return (
 		<article className="prose max-w-none">
 			<ReactMarkdown

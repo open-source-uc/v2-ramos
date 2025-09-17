@@ -359,7 +359,6 @@ export const server = {
 			}
 		},
 	}),
-
 	// Acción para eliminar una reseña
 	deleteCourseReview: defineAction({
 		accept: 'form',
@@ -671,7 +670,6 @@ export const server = {
 			}
 		},
 	}),
-
 	// Crear un blog
 	createBlog: defineAction({
 		accept: 'form',
@@ -818,7 +816,6 @@ export const server = {
 			}
 		},
 	}),
-
 	updateBlog: defineAction({
 		accept: 'form',
 		input: z.object({
