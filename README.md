@@ -1,5 +1,7 @@
 # BuscaRamos
 
+> Este repositorio es la version legacy con Astro de BuscaRamos. Version actual en nextjs en el [repositorio nuevo](https://github.com/open-source-uc/BuscaRamos-v2) 
+
 BuscaRamos es una plataforma creada por y para estudiantes de la Pontificia Universidad Católica de Chile (UC), diseñada para revolucionar la forma en que la comunidad universitaria explora, compara e inscribe cursos.
 
 El objetivo principal es empoderar a los estudiantes con información real, transparente y útil sobre los ramos, permitiendo tomar decisiones informadas y colaborativas.
